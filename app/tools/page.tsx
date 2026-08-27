@@ -15,13 +15,15 @@ import {
   Sparkles,
   CheckCircle2,
   ShieldAlert,
-  Bot
+  Bot,
+  Search
 } from "lucide-react";
 import AITradingBotTerminal from "@/components/tools/AITradingBotTerminal";
 
 export default function ToolsPage() {
   const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter">("bot");
   const [chartSymbol, setChartSymbol] = useState("BINANCE:BTCUSDT");
+  const [customChartInput, setCustomChartInput] = useState("");
 
   // DCA Simulator State
   const [monthlyInvest, setMonthlyInvest] = useState(250);
@@ -31,9 +33,9 @@ export default function ToolsPage() {
   // Position Sizer State
   const [accountSize, setAccountSize] = useState(10000);
   const [riskPercent, setRiskPercent] = useState(1.5);
-  const [entryPrice, setEntryPrice] = useState(65000);
-  const [stopLoss, setStopLoss] = useState(62000);
-  const [takeProfit, setTakeProfit] = useState(74000);
+  const [entryPrice, setEntryPrice] = useState(78000);
+  const [stopLoss, setStopLoss] = useState(76000);
+  const [takeProfit, setTakeProfit] = useState(84000);
 
   // Spot Converter State
   const [convertAmount, setConvertAmount] = useState(1);
@@ -41,9 +43,9 @@ export default function ToolsPage() {
   const [toAsset, setToAsset] = useState<"USD" | "EUR" | "GBP" | "BTC" | "ETH">("USD");
 
   const rates: Record<string, number> = {
-    BTC: 66200,
-    ETH: 3480,
-    SOL: 165,
+    BTC: 78780,
+    ETH: 2490,
+    SOL: 101,
     USDT: 1.0,
     USD: 1.0,
     EUR: 1.08,
@@ -67,6 +69,15 @@ export default function ToolsPage() {
 
   const fromValueInUSD = convertAmount * (rates[fromAsset] || 1);
   const convertedResult = toAsset === "USD" ? fromValueInUSD : fromValueInUSD / (rates[toAsset] || 1);
+
+  const handleCustomChartSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = customChartInput.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (!clean) return;
+    const full = clean.endsWith("USDT") ? clean : `${clean}USDT`;
+    setChartSymbol(`BINANCE:${full}`);
+    setCustomChartInput("");
+  };
 
   return (
     <div className="min-h-screen bg-slate-50/50 py-12 sm:py-20">
@@ -146,19 +157,23 @@ export default function ToolsPage() {
         {/* TAB 2: STANDALONE TRADINGVIEW TERMINAL */}
         {activeTab === "terminal" && (
           <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-              <div className="flex items-center gap-3">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Select Pair:</span>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Popular Pairs:</span>
                 {[
                   { label: "BTC/USDT", symbol: "BINANCE:BTCUSDT" },
                   { label: "ETH/USDT", symbol: "BINANCE:ETHUSDT" },
                   { label: "SOL/USDT", symbol: "BINANCE:SOLUSDT" },
-                  { label: "BTC/USD (Coinbase)", symbol: "COINBASE:BTCUSD" },
+                  { label: "BNB/USDT", symbol: "BINANCE:BNBUSDT" },
+                  { label: "XRP/USDT", symbol: "BINANCE:XRPUSDT" },
+                  { label: "SUI/USDT", symbol: "BINANCE:SUIUSDT" },
+                  { label: "PEPE/USDT", symbol: "BINANCE:PEPEUSDT" },
+                  { label: "DOGE/USDT", symbol: "BINANCE:DOGEUSDT" },
                 ].map((pair) => (
                   <button
                     key={pair.symbol}
                     onClick={() => setChartSymbol(pair.symbol)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                       chartSymbol === pair.symbol
                         ? "bg-slate-900 text-white"
                         : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -168,14 +183,28 @@ export default function ToolsPage() {
                   </button>
                 ))}
               </div>
-              <div className="flex items-center gap-2 text-xs text-emerald-600 font-mono font-semibold">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Live WebSocket Feed
-              </div>
+
+              {/* Custom Search Form for ANY Binance pair */}
+              <form onSubmit={handleCustomChartSearch} className="flex gap-2 w-full sm:w-auto">
+                <input
+                  type="text"
+                  placeholder="Load any pair (e.g. NEAR, WIF)..."
+                  value={customChartInput}
+                  onChange={(e) => setCustomChartInput(e.target.value)}
+                  className="px-3 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 w-44"
+                />
+                <button
+                  type="submit"
+                  className="px-3 py-1.5 bg-amber-400 text-slate-950 text-xs font-bold rounded-xl hover:bg-amber-300 transition"
+                >
+                  Load
+                </button>
+              </form>
             </div>
 
-            <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm h-[620px] flex flex-col justify-between overflow-hidden">
+            <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm h-[640px] flex flex-col justify-between overflow-hidden">
               <iframe
+                key={chartSymbol}
                 title="TradingView Real-Time Candlestick Chart"
                 src={`https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=${encodeURIComponent(
                   chartSymbol
@@ -215,11 +244,6 @@ export default function ToolsPage() {
                   onChange={(e) => setMonthlyInvest(Number(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                  <span>$25</span>
-                  <span>$1,500</span>
-                  <span>$3,000</span>
-                </div>
               </div>
 
               <div className="space-y-2">
