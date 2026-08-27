@@ -1,186 +1,1398 @@
-﻿<!DOCTYPE html>
-<html lang=en>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset=UTF-8>
-  <meta name=viewport content=width=device-width, initial-scale=1.0>
-  <title>BitcoinCrypto - Live Market Tracker</title>
-  <script src=https://cdn.tailwindcss.com></script>
-  <link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BitcoinCrypto.tech | Advanced Crypto Trading Tools & Market Intelligence</title>
+  
+  <!-- SEO & OpenGraph Meta Tags -->
+  <meta name="description" content="Institutional-grade Bitcoin & cryptocurrency intelligence, live TradingView charts, real-time liquidation radars, DCA calculators, and market insights at bitcoincrypto.tech.">
+  <meta name="keywords" content="bitcoin, crypto trading tools, tradingview charts, crypto calculator, dca simulator, bitcoin price live, liquidation heatmap, coinglass, coinmarketcap, crypto news">
+  <meta name="author" content="BitcoinCrypto Tech">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:title" content="BitcoinCrypto.tech | Real-Time Crypto Trading Platform & Intelligence">
+  <meta property="og:description" content="Master the crypto markets with zero-lag data, advanced technical analysis, interactive calculators, and deep market research.">
+  <meta property="og:url" content="https://www.bitcoincrypto.tech/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BitcoinCrypto.tech">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BitcoinCrypto.tech | Advanced Crypto Trading Platform">
+  <meta name="twitter:description" content="Institutional-grade cryptocurrency tools, TradingView charts, and market analytics.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>₿</text></svg>">
+
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              gold: '#F7931A',
+            },
+            dark: {
+              950: '#06080F',
+              900: '#0B0F19',
+              850: '#111726',
+              800: '#172033',
+              700: '#232F48',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BitcoinCrypto.tech",
+    "url": "https://www.bitcoincrypto.tech/",
+    "description": "Professional cryptocurrency trading tools, live charts, and technical market intelligence.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
   <style>
-    .glow-bg {
-      background: radial-gradient(circle at 50% 20%, rgba(247, 147, 26, 0.15), transparent 70%);
+    body {
+      background-color: #06080F;
+      color: #E2E8F0;
+      overflow-x: hidden;
+    }
+    .glow-radial {
+      background: radial-gradient(circle at 50% -10%, rgba(247, 147, 26, 0.18), rgba(6, 8, 15, 0) 65%);
+    }
+    .glow-cyan {
+      background: radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.12), rgba(6, 8, 15, 0) 50%);
+    }
+    .glow-purple {
+      background: radial-gradient(circle at 10% 70%, rgba(139, 92, 246, 0.1), rgba(6, 8, 15, 0) 50%);
+    }
+    .glass-card {
+      background: rgba(11, 15, 25, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(247, 147, 26, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -10px rgba(247, 147, 26, 0.15);
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #06080F;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
     }
   </style>
 </head>
-<body class=bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-black>
-  <div class=fixed inset-0 glow-bg pointer-events-none></div>
 
-  <header class=border-b border-slate-800/80 backdrop-blur sticky top-0 z-50 bg-slate-950/70>
-    <div class=max-w-7xl mx-auto px-6 h-16 flex items-center justify-between>
-      <div class=flex items-center gap-3>
-        <div class=w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center shadow-lg shadow-amber-500/20 text-slate-950 font-bold text-xl>
-          <i class=fa-brands fa-bitcoin></i>
-        </div>
-        <span class=text-xl font-bold bg-gradient-to-r from-amber-400 via-yellow-200 to-slate-100 bg-clip-text text-transparent>
-          BitcoinCrypto
-        </span>
+<body class="selection:bg-brand-500 selection:text-slate-950 flex flex-col min-h-screen">
+  <!-- Background Glows -->
+  <div class="fixed inset-0 glow-radial pointer-events-none z-0"></div>
+  <div class="fixed inset-0 glow-cyan pointer-events-none z-0"></div>
+  <div class="fixed inset-0 glow-purple pointer-events-none z-0"></div>
+
+  <!-- 1. LIVE MARQUEE TICKER TAPE -->
+  <div class="relative z-50 bg-dark-900/90 border-b border-white/5 py-1.5 px-4 text-xs font-mono overflow-hidden">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
+      <div class="flex items-center gap-2 text-slate-400 shrink-0">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11px] font-sans font-semibold uppercase tracking-wider text-slate-300">Live Pulse:</span>
       </div>
-      <div class=flex items-center gap-4>
-        <span class=flex items-center gap-2 text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400>
-          <span class=w-2 h-2 rounded-full bg-emerald-400 animate-pulse></span>
-          Live Vercel Demo
-        </span>
-        <a href=https://github.com/infozeeshan37-ctrl/bitcoincrypto target=_blank class=text-slate-400 hover:text-white transition text-sm flex items-center gap-2>
-          <i class=fa-brands fa-github text-lg></i>
-          GitHub
+      
+      <!-- Scrolling Ticker Container -->
+      <div class="flex items-center gap-8 overflow-x-auto no-scrollbar whitespace-nowrap py-0.5 text-slate-300" id="ticker-tape">
+        <div class="flex items-center gap-2" id="tape-btc">
+          <span class="font-bold text-amber-400">BTC</span>
+          <span class="font-medium" id="tape-btc-price">$96,480.00</span>
+          <span class="text-emerald-400 text-[11px]" id="tape-btc-change">+2.84%</span>
+        </div>
+        <span class="text-slate-700">•</span>
+        <div class="flex items-center gap-2" id="tape-eth">
+          <span class="font-bold text-indigo-400">ETH</span>
+          <span class="font-medium" id="tape-eth-price">$2,840.50</span>
+          <span class="text-emerald-400 text-[11px]" id="tape-eth-change">+3.45%</span>
+        </div>
+        <span class="text-slate-700">•</span>
+        <div class="flex items-center gap-2" id="tape-sol">
+          <span class="font-bold text-cyan-400">SOL</span>
+          <span class="font-medium" id="tape-sol-price">$198.20</span>
+          <span class="text-emerald-400 text-[11px]" id="tape-sol-change">+6.12%</span>
+        </div>
+        <span class="text-slate-700">•</span>
+        <div class="flex items-center gap-2" id="tape-bnb">
+          <span class="font-bold text-yellow-400">BNB</span>
+          <span class="font-medium" id="tape-bnb-price">$665.40</span>
+          <span class="text-emerald-400 text-[11px]" id="tape-bnb-change">+1.95%</span>
+        </div>
+        <span class="text-slate-700">•</span>
+        <div class="flex items-center gap-2" id="tape-xrp">
+          <span class="font-bold text-blue-400">XRP</span>
+          <span class="font-medium" id="tape-xrp-price">$2.45</span>
+          <span class="text-rose-400 text-[11px]" id="tape-xrp-change">-0.82%</span>
+        </div>
+        <span class="text-slate-700">•</span>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">24h Vol:</span>
+          <span class="text-slate-200 font-semibold">$102.4B</span>
+        </div>
+      </div>
+
+      <div class="hidden lg:flex items-center gap-3 shrink-0 text-slate-400 text-[11px]">
+        <span>Gas: <strong class="text-slate-200">14 Gwei</strong></span>
+        <span>Dominance: <strong class="text-amber-400">58.6% BTC</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 bg-dark-950/80 backdrop-blur-xl border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-gold via-amber-400 to-yellow-200 flex items-center justify-center shadow-lg shadow-brand-gold/20 text-dark-950 font-bold text-2xl group-hover:scale-105 transition duration-300">
+          <i class="fa-brands fa-bitcoin"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-2xl font-black tracking-tight text-white">BitcoinCrypto</span>
+            <span class="text-xs font-mono font-bold px-1.5 py-0.5 rounded bg-brand-gold/20 text-brand-gold border border-brand-gold/30">.TECH</span>
+          </div>
+          <p class="text-[10px] tracking-wider text-slate-400 uppercase font-semibold">Institutional Crypto Terminal</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#terminal" class="hover:text-brand-gold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-line text-xs text-brand-gold"></i> Live Terminal
         </a>
+        <a href="#tools" class="hover:text-brand-gold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-calculator text-xs text-cyan-400"></i> Trading Tools
+        </a>
+        <a href="#derivatives" class="hover:text-brand-gold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-fire-flame-curved text-xs text-rose-400"></i> Derivatives Radar
+        </a>
+        <a href="#screener" class="hover:text-brand-gold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-layer-group text-xs text-indigo-400"></i> Market Screener
+        </a>
+        <a href="#strategies" class="hover:text-brand-gold transition flex items-center gap-1.5">
+          <i class="fa-solid fa-graduation-cap text-xs text-emerald-400"></i> Strategies
+        </a>
+        <a href="#blog" class="hover:text-brand-gold transition">Blog</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="hidden sm:flex items-center gap-3">
+        <a href="#tools" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition">
+          Quick Calculators
+        </a>
+        <a href="#terminal" class="px-5 py-2.5 rounded-xl text-xs font-bold text-dark-950 bg-gradient-to-r from-brand-gold to-amber-400 hover:from-amber-400 hover:to-yellow-300 transition shadow-lg shadow-brand-gold/20 flex items-center gap-2">
+          <i class="fa-solid fa-bolt"></i> Launch Terminal
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl text-slate-400 hover:text-white bg-white/5 border border-white/10">
+        <i class="fa-solid fa-bars text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-dark-900 border-b border-white/10 px-6 py-6 space-y-4">
+      <a href="#terminal" onclick="toggleMobileMenu()" class="block text-slate-200 font-medium hover:text-brand-gold"><i class="fa-solid fa-chart-line text-brand-gold mr-2"></i> Live Terminal</a>
+      <a href="#tools" onclick="toggleMobileMenu()" class="block text-slate-200 font-medium hover:text-brand-gold"><i class="fa-solid fa-calculator text-cyan-400 mr-2"></i> Trading Tools & Calculators</a>
+      <a href="#derivatives" onclick="toggleMobileMenu()" class="block text-slate-200 font-medium hover:text-brand-gold"><i class="fa-solid fa-fire text-rose-400 mr-2"></i> Derivatives & Liquidation Radar</a>
+      <a href="#screener" onclick="toggleMobileMenu()" class="block text-slate-200 font-medium hover:text-brand-gold"><i class="fa-solid fa-layer-group text-indigo-400 mr-2"></i> Market Screener</a>
+      <a href="#strategies" onclick="toggleMobileMenu()" class="block text-slate-200 font-medium hover:text-brand-gold"><i class="fa-solid fa-graduation-cap text-emerald-400 mr-2"></i> Trading Techniques</a>
+      <a href="#blog" onclick="toggleMobileMenu()" class="block text-slate-200 font-medium hover:text-brand-gold"><i class="fa-solid fa-newspaper text-slate-400 mr-2"></i> Market Blog</a>
+      <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
+        <a href="#terminal" onclick="toggleMobileMenu()" class="text-center py-3 rounded-xl text-xs font-bold text-dark-950 bg-brand-gold">Launch Live Terminal</a>
       </div>
     </div>
   </header>
 
-  <main class=flex-1 max-w-7xl w-full mx-auto px-6 py-12 flex flex-col gap-12 z-10>
-    <section class=text-center space-y-4 max-w-3xl mx-auto pt-6>
-      <div class=inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 border border-amber-500/20 text-amber-400>
-        <i class=fa-solid fa-bolt></i> Real-time Crypto Insights
-      </div>
-      <h1 class=text-4xl md:text-6xl font-extrabold tracking-tight text-white>
-        Track Bitcoin & Top Cryptos in Real-Time
-      </h1>
-      <p class=text-slate-400 text-base md:text-lg>
-        Fast, minimalist cryptocurrency tracker connected with GitHub and deployed effortlessly on Vercel.
-      </p>
-    </section>
+  <!-- 3. HERO SECTION -->
+  <section class="relative z-10 pt-12 pb-20 lg:pt-16 lg:pb-28 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-4xl mx-auto space-y-6">
+        
+        <!-- Live Tag Badge -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-gold/10 border border-brand-gold/30 text-brand-gold shadow-lg shadow-brand-gold/5">
+          <span class="w-2 h-2 rounded-full bg-brand-gold animate-ping"></span>
+          <span>Next-Generation Bitcoin & Crypto Intelligence Engine</span>
+          <span class="text-slate-500">|</span>
+          <span class="text-slate-300 font-mono">v2.4 Live</span>
+        </div>
 
-    <section class=grid grid-cols-1 md:grid-cols-3 gap-6>
-      <div class=p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 transition duration-300 shadow-xl relative overflow-hidden group>
-        <div class=flex items-center justify-between mb-4>
-          <div class=flex items-center gap-3>
-            <div class=w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg>
-              <i class=fa-brands fa-bitcoin></i>
-            </div>
-            <div>
-              <h3 class=font-bold text-lg text-white>Bitcoin</h3>
-              <p class=text-xs text-slate-400>BTC / USD</p>
-            </div>
-          </div>
-          <span id=btc-change class=text-xs font-semibold px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20>
-            +2.45%
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.1]">
+          Institutional-Grade <br class="hidden sm:inline">
+          <span class="bg-gradient-to-r from-brand-gold via-amber-300 to-cyan-300 bg-clip-text text-transparent">
+            Trading Tools & Analytics
           </span>
-        </div>
-        <div class=mt-4>
-          <div id=btc-price class=text-3xl font-extrabold text-white tracking-tight>,420.00</div>
-          <p class=text-xs text-slate-500 mt-1>24h Volume: .8B</p>
-        </div>
-      </div>
+        </h1>
 
-      <div class=p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-indigo-500/40 transition duration-300 shadow-xl relative overflow-hidden group>
-        <div class=flex items-center justify-between mb-4>
-          <div class=flex items-center gap-3>
-            <div class=w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg>
-              <i class=fa-brands fa-ethereum></i>
+        <!-- Subtitle -->
+        <p class="text-base sm:text-lg lg:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          Real-time order flow data, live TradingView charts, algorithmic DCA simulators, and liquidation radars built for serious cryptocurrency traders.
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+          <a href="#terminal" class="px-8 py-4 rounded-2xl text-sm font-bold text-dark-950 bg-gradient-to-r from-brand-gold via-amber-400 to-yellow-300 hover:scale-105 transition duration-200 shadow-xl shadow-brand-gold/25 flex items-center gap-3">
+            <i class="fa-solid fa-chart-candlestick text-base"></i>
+            Open Live Chart Terminal
+          </a>
+          <a href="#tools" class="px-7 py-4 rounded-2xl text-sm font-bold text-slate-200 bg-dark-850 hover:bg-dark-800 border border-white/10 hover:border-brand-gold/40 transition duration-200 flex items-center gap-2.5">
+            <i class="fa-solid fa-sliders text-cyan-400"></i>
+            Launch Calculators
+          </a>
+          <a href="#strategies" class="px-7 py-4 rounded-2xl text-sm font-semibold text-slate-400 hover:text-white bg-transparent hover:bg-white/5 transition flex items-center gap-2">
+            Explore Strategies <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+        </div>
+
+        <!-- Metric Badges Row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-10 text-left">
+          <!-- Metric 1 -->
+          <div class="glass-card rounded-2xl p-4 transition glass-card-hover">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span class="flex items-center gap-1.5"><i class="fa-brands fa-bitcoin text-amber-400"></i> Bitcoin Price</span>
+              <span id="hero-btc-badge" class="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[10px]">+2.84%</span>
             </div>
-            <div>
-              <h3 class=font-bold text-lg text-white>Ethereum</h3>
-              <p class=text-xs text-slate-400>ETH / USD</p>
-            </div>
+            <div class="text-2xl font-extrabold font-mono text-white tracking-tight" id="hero-btc-price">$96,480.00</div>
+            <div class="text-[11px] text-slate-500 mt-1 font-mono">ATH: $108,920.00</div>
           </div>
-          <span id=eth-change class=text-xs font-semibold px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20>
-            +3.12%
-          </span>
-        </div>
-        <div class=mt-4>
-          <div id=eth-price class=text-3xl font-extrabold text-white tracking-tight>,780.50</div>
-          <p class=text-xs text-slate-500 mt-1>24h Volume: .2B</p>
-        </div>
-      </div>
 
-      <div class=p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-purple-500/40 transition duration-300 shadow-xl relative overflow-hidden group>
-        <div class=flex items-center justify-between mb-4>
-          <div class=flex items-center gap-3>
-            <div class=w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg font-bold>
-              S
+          <!-- Metric 2 -->
+          <div class="glass-card rounded-2xl p-4 transition glass-card-hover">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-gauge-high text-cyan-400"></i> Fear & Greed</span>
+              <span class="font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[10px]">Greed</span>
             </div>
-            <div>
-              <h3 class=font-bold text-lg text-white>Solana</h3>
-              <p class=text-xs text-slate-400>SOL / USD</p>
-            </div>
+            <div class="text-2xl font-extrabold font-mono text-emerald-400 tracking-tight" id="hero-fng-score">76 <span class="text-xs text-slate-400 font-normal">/ 100</span></div>
+            <div class="text-[11px] text-slate-500 mt-1">Market Sentiment: Greed</div>
           </div>
-          <span id=sol-change class=text-xs font-semibold px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20>
-            +5.80%
-          </span>
-        </div>
-        <div class=mt-4>
-          <div id=sol-price class=text-3xl font-extrabold text-white tracking-tight>.30</div>
-          <p class=text-xs text-slate-500 mt-1>24h Volume: .4B</p>
-        </div>
-      </div>
-    </section>
 
-    <section class=p-6 rounded-2xl bg-slate-900/50 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4>
-      <div class=flex items-center gap-4>
-        <div class=w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl>
-          <i class=fa-solid fa-server></i>
+          <!-- Metric 3 -->
+          <div class="glass-card rounded-2xl p-4 transition glass-card-hover">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-pie text-indigo-400"></i> BTC Dominance</span>
+              <span class="font-mono text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded text-[10px]">Macro</span>
+            </div>
+            <div class="text-2xl font-extrabold font-mono text-white tracking-tight">58.62%</div>
+            <div class="text-[11px] text-slate-500 mt-1 font-mono">ETH: 14.8% • Others: 26.6%</div>
+          </div>
+
+          <!-- Metric 4 -->
+          <div class="glass-card rounded-2xl p-4 transition glass-card-hover">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-burst text-rose-400"></i> 24h Liquidations</span>
+              <span class="font-mono text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded text-[10px]">High</span>
+            </div>
+            <div class="text-2xl font-extrabold font-mono text-rose-400 tracking-tight">$312.4M</div>
+            <div class="text-[11px] text-slate-500 mt-1 font-mono">Longs: 64% • Shorts: 36%</div>
+          </div>
         </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. LIVE INTERACTIVE TRADINGVIEW CHART TERMINAL -->
+  <section id="terminal" class="relative z-10 py-16 bg-dark-900/60 border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h4 class=font-bold text-white>Ready for Vercel Deployment</h4>
-          <p class=text-sm text-slate-400>This repository is ready to be linked with Vercel for instant static hosting.</p>
+          <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-gold mb-2">
+            <i class="fa-solid fa-chart-candlestick"></i> Real-Time Multi-Timeframe Terminal
+          </div>
+          <h2 class="text-3xl font-extrabold text-white">Live Institutional Charting</h2>
+          <p class="text-slate-400 text-sm mt-1">Multi-indicator TradingView engine with real-time candlestick streams & technical indicators.</p>
+        </div>
+
+        <!-- Pair Switcher Tabs -->
+        <div class="flex items-center bg-dark-850 p-1.5 rounded-xl border border-white/10 overflow-x-auto no-scrollbar" id="chart-pair-tabs">
+          <button onclick="switchChartPair('BINANCE:BTCUSDT', this)" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-brand-gold text-dark-950 shadow">
+            BTC/USDT
+          </button>
+          <button onclick="switchChartPair('BINANCE:ETHUSDT', this)" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:text-white">
+            ETH/USDT
+          </button>
+          <button onclick="switchChartPair('BINANCE:SOLUSDT', this)" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:text-white">
+            SOL/USDT
+          </button>
+          <button onclick="switchChartPair('BINANCE:BNBUSDT', this)" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:text-white">
+            BNB/USDT
+          </button>
+          <button onclick="switchChartPair('CRYPTOCAP:TOTAL', this)" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:text-white">
+            TOTAL CAP
+          </button>
         </div>
       </div>
-      <button onclick=fetchPrices() class=px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-amber-500/20 cursor-pointer>
-        <i class=fa-solid fa-arrows-rotate id=refresh-icon></i>
-        Refresh Prices
-      </button>
-    </section>
-  </main>
 
-  <footer class=border-t border-slate-800/80 py-6 text-center text-xs text-slate-500>
-    <p>&copy; 2026 BitcoinCrypto. Connected to GitHub & Vercel.</p>
+      <!-- Chart & Technical Summary Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Main TradingView Chart (3 Columns) -->
+        <div class="lg:col-span-3 glass-card rounded-2xl p-2 h-[550px] overflow-hidden border border-white/10 relative shadow-2xl">
+          <div id="tradingview-chart-container" class="w-full h-full rounded-xl overflow-hidden">
+            <!-- Embedded TradingView Widget Loaded via JS -->
+          </div>
+        </div>
+
+        <!-- Technical Analysis Meter & Order flow Card (1 Column) -->
+        <div class="lg:col-span-1 space-y-6 flex flex-col justify-between">
+          
+          <!-- Technical Analysis Gauge Widget Card -->
+          <div class="glass-card rounded-2xl p-5 border border-white/10 flex-1 flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                <i class="fa-solid fa-compass-drafting text-cyan-400"></i> Technical Rating
+              </h3>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold">1D Summary</span>
+            </div>
+            
+            <div id="tradingview-ta-container" class="w-full flex-1 min-h-[280px] overflow-hidden">
+              <!-- Technical Analysis Widget -->
+            </div>
+          </div>
+
+          <!-- Quick Market Pulse Details -->
+          <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-3 font-mono text-xs">
+            <div class="text-slate-400 font-sans font-bold text-xs uppercase tracking-wider mb-2 flex items-center justify-between">
+              <span>Order Flow Stats</span>
+              <span class="text-emerald-400 text-[10px]">● Live</span>
+            </div>
+            <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+              <span class="text-slate-400">Binance RSI (14):</span>
+              <span class="text-amber-400 font-bold">62.8 (Bullish)</span>
+            </div>
+            <div class="flex justify-between items-center py-1.5 border-b border-white/5">
+              <span class="text-slate-400">200 EMA (Daily):</span>
+              <span class="text-emerald-400 font-bold">$84,310</span>
+            </div>
+            <div class="flex justify-between items-center py-1.5">
+              <span class="text-slate-400">MACD Histogram:</span>
+              <span class="text-emerald-400 font-bold">+184.2</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. INTERACTIVE TRADING TOOLS & CALCULATORS SUITE -->
+  <section id="tools" class="relative z-10 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3">
+        <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-cyan-400">
+          <i class="fa-solid fa-sliders"></i> High-Utility Trader Tools
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Smart Calculators & Simulators</h2>
+        <p class="text-slate-400 text-sm sm:text-base">
+          Accurately calculate risk-to-reward ratios, backtest Dollar Cost Averaging, and compute multi-currency swaps instantly.
+        </p>
+      </div>
+
+      <!-- Tools Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Tool 1: Profit / Loss & Leverage Calculator -->
+        <div class="glass-card rounded-2xl p-6 border border-white/10 flex flex-col justify-between shadow-xl">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-money-bill-trend-up"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Profit / Loss & Risk Calculator</h3>
+                  <p class="text-xs text-slate-400">Spot & Leverage Futures Simulator</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4 text-xs font-mono">
+              <div>
+                <label class="block text-slate-400 mb-1">Investment Capital ($ USD):</label>
+                <input type="number" id="calc-capital" value="1000" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-gold font-mono" oninput="calculateProfit()">
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-slate-400 mb-1">Entry Price ($):</label>
+                  <input type="number" id="calc-entry" value="95000" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-gold font-mono" oninput="calculateProfit()">
+                </div>
+                <div>
+                  <label class="block text-slate-400 mb-1">Target Exit Price ($):</label>
+                  <input type="number" id="calc-exit" value="115000" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-gold font-mono" oninput="calculateProfit()">
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-400 mb-1">
+                  <span>Leverage Multiplier:</span>
+                  <span id="calc-leverage-val" class="text-brand-gold font-bold">1x (Spot)</span>
+                </div>
+                <input type="range" id="calc-leverage" min="1" max="25" value="1" class="w-full accent-amber-500 cursor-pointer" oninput="updateLeverage(this.value)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Calculation Result Output -->
+          <div class="mt-6 pt-4 border-t border-white/10 space-y-2.5 bg-dark-900/80 p-4 rounded-xl font-mono text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Total Net Profit:</span>
+              <span id="calc-result-profit" class="text-emerald-400 font-bold text-base">+$210.53</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Return on Investment (ROI):</span>
+              <span id="calc-result-roi" class="text-emerald-400 font-bold">+21.05%</span>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-500">
+              <span>Total Position Size:</span>
+              <span id="calc-result-position">$1,000.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tool 2: Bitcoin DCA Simulator -->
+        <div class="glass-card rounded-2xl p-6 border border-white/10 flex flex-col justify-between shadow-xl">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-cubes-stacked"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Bitcoin DCA Simulator</h3>
+                  <p class="text-xs text-slate-400">Discipline vs Lump-Sum Backtest</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4 text-xs font-mono">
+              <div>
+                <label class="block text-slate-400 mb-1">Recurring Amount ($ USD):</label>
+                <input type="number" id="dca-amount" value="100" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-gold font-mono" oninput="calculateDCA()">
+              </div>
+
+              <div>
+                <label class="block text-slate-400 mb-1">Frequency:</label>
+                <select id="dca-frequency" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-gold font-mono" onchange="calculateDCA()">
+                  <option value="7">Every Week (Recommended)</option>
+                  <option value="1">Every Day</option>
+                  <option value="30">Every Month</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-slate-400 mb-1">Accumulation Period (Years):</label>
+                <select id="dca-period" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-brand-gold font-mono" onchange="calculateDCA()">
+                  <option value="1">1 Year</option>
+                  <option value="2">2 Years</option>
+                  <option value="3" selected>3 Years (Past Cycle)</option>
+                  <option value="5">5 Years (Long-Term Hodl)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- DCA Output -->
+          <div class="mt-6 pt-4 border-t border-white/10 space-y-2.5 bg-dark-900/80 p-4 rounded-xl font-mono text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Total Invested:</span>
+              <span id="dca-invested" class="text-white font-bold">$15,600.00</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400">Estimated Portfolio Value:</span>
+              <span id="dca-value" class="text-brand-gold font-bold text-base">$38,240.00</span>
+            </div>
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="text-slate-500">Historical Gain (%):</span>
+              <span id="dca-gain" class="text-emerald-400 font-bold">+145.12%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tool 3: Instant Multi-Crypto Converter -->
+        <div class="glass-card rounded-2xl p-6 border border-white/10 flex flex-col justify-between shadow-xl">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-lg">
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Crypto Currency Converter</h3>
+                  <p class="text-xs text-slate-400">Instant Spot Exchange Rates</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4 text-xs font-mono">
+              <div>
+                <label class="block text-slate-400 mb-1">From Amount & Currency:</label>
+                <div class="grid grid-cols-3 gap-2">
+                  <input type="number" id="conv-from-val" value="1" class="col-span-2 bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono" oninput="convertCurrency()">
+                  <select id="conv-from-curr" class="bg-dark-900 border border-white/10 rounded-xl px-2 py-2.5 text-white font-mono" onchange="convertCurrency()">
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                    <option value="SOL">SOL</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="text-center">
+                <button onclick="swapConverterCurrencies()" class="p-2 rounded-full bg-dark-850 hover:bg-dark-700 border border-white/10 text-slate-400 hover:text-white transition">
+                  <i class="fa-solid fa-arrow-down-up-across-line text-xs"></i>
+                </button>
+              </div>
+
+              <div>
+                <label class="block text-slate-400 mb-1">To Currency:</label>
+                <select id="conv-to-curr" class="w-full bg-dark-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono" onchange="convertCurrency()">
+                  <option value="USD" selected>USD ($ - US Dollar)</option>
+                  <option value="EUR">EUR (€ - Euro)</option>
+                  <option value="BTC">BTC (Bitcoin)</option>
+                  <option value="ETH">ETH (Ethereum)</option>
+                  <option value="USDT">USDT (Tether)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Converter Output -->
+          <div class="mt-6 pt-4 border-t border-white/10 bg-dark-900/80 p-4 rounded-xl font-mono text-center">
+            <div class="text-xs text-slate-400 mb-1">Converted Value</div>
+            <div id="conv-result" class="text-2xl font-extrabold text-cyan-300">$96,480.00</div>
+            <div class="text-[10px] text-slate-500 mt-1" id="conv-rate">1 BTC = $96,480.00 USD</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. DERIVATIVES & LIQUIDATION RADAR (COINGLASS-INSPIRED) -->
+  <section id="derivatives" class="relative z-10 py-16 bg-dark-900/40 border-y border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-rose-400 mb-1">
+            <i class="fa-solid fa-fire"></i> Derivatives Market Radar
+          </div>
+          <h2 class="text-3xl font-extrabold text-white">Futures, Liquidations & Open Interest</h2>
+          <p class="text-slate-400 text-sm mt-1">Track where the market leverage sits across major perpetual exchanges.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-slate-400 font-mono">
+          <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span>Derivatives Volatility: <strong>ELEVATED</strong></span>
+        </div>
+      </div>
+
+      <!-- Derivatives 4-Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card 1: Long vs Short Ratio -->
+        <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-300">Binance Top Traders (Long/Short)</span>
+            <i class="fa-solid fa-scale-balanced text-cyan-400"></i>
+          </div>
+          <div class="space-y-2 font-mono text-xs">
+            <div class="flex justify-between">
+              <span class="text-emerald-400 font-bold">54.8% Long</span>
+              <span class="text-rose-400 font-bold">45.2% Short</span>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full h-3 rounded-full bg-dark-950 flex overflow-hidden p-0.5 border border-white/10">
+              <div class="bg-emerald-500 h-full rounded-l-full" style="width: 54.8%"></div>
+              <div class="bg-rose-500 h-full rounded-r-full" style="width: 45.2%"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 font-sans mt-2">Sentiment leans slightly bullish on major perpetuals.</p>
+          </div>
+        </div>
+
+        <!-- Card 2: Average Funding Rate -->
+        <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-300">Perpetual Funding Rate</span>
+            <i class="fa-solid fa-percent text-amber-400"></i>
+          </div>
+          <div class="space-y-1 font-mono">
+            <div class="text-2xl font-extrabold text-emerald-400">+0.0108%</div>
+            <div class="text-xs text-slate-400">8h Settlement Rate</div>
+            <div class="text-[11px] text-slate-500 font-sans pt-2 border-t border-white/5">
+              Longs paying shorts. Normal healthy market bias.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Bitcoin Open Interest -->
+        <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-300">BTC Total Open Interest</span>
+            <i class="fa-solid fa-chart-area text-indigo-400"></i>
+          </div>
+          <div class="space-y-1 font-mono">
+            <div class="text-2xl font-extrabold text-white">$38.42B</div>
+            <div class="text-xs text-emerald-400">+4.2% in 24h</div>
+            <div class="text-[11px] text-slate-500 font-sans pt-2 border-t border-white/5">
+              Fresh capital entering futures contracts.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Spot ETF Inflow Tracker -->
+        <div class="glass-card rounded-2xl p-5 border border-white/10 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-300">US Spot Bitcoin ETFs</span>
+            <i class="fa-solid fa-building-columns text-brand-gold"></i>
+          </div>
+          <div class="space-y-1 font-mono">
+            <div class="text-2xl font-extrabold text-emerald-400">+$418.5M</div>
+            <div class="text-xs text-slate-400">Daily Net Inflow</div>
+            <div class="text-[11px] text-slate-500 font-sans pt-2 border-t border-white/5">
+              BlackRock (IBIT) & Fidelity (FBTC) leading accumulation.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. REAL-TIME MARKET SCREENER & RANKINGS -->
+  <section id="screener" class="relative z-10 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-400 mb-1">
+            <i class="fa-solid fa-table-list"></i> Market Overview
+          </div>
+          <h2 class="text-3xl font-extrabold text-white">Top Cryptocurrency Assets</h2>
+          <p class="text-slate-400 text-sm mt-1">Live market capitalization, 24h trading volume, and dynamic price changes.</p>
+        </div>
+
+        <!-- Search Filter -->
+        <div class="relative w-full md:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+          <input type="text" id="coin-search" placeholder="Search Bitcoin, ETH, SOL..." class="w-full bg-dark-900 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-brand-gold font-sans" onkeyup="filterCoinsTable()">
+        </div>
+      </div>
+
+      <!-- Table Container -->
+      <div class="glass-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-dark-900/90 text-slate-400 uppercase text-[11px] border-b border-white/10 font-sans">
+              <tr>
+                <th class="py-4 px-6">#</th>
+                <th class="py-4 px-6">Asset</th>
+                <th class="py-4 px-6 text-right">Price (USD)</th>
+                <th class="py-4 px-6 text-right">24h Change</th>
+                <th class="py-4 px-6 text-right">24h Volume</th>
+                <th class="py-4 px-6 text-right">Market Cap</th>
+                <th class="py-4 px-6 text-center">Trade</th>
+              </tr>
+            </thead>
+            <tbody id="coins-table-body" class="divide-y divide-white/5 text-slate-200">
+              <tr class="hover:bg-white/[0.02] transition coin-row">
+                <td class="py-4 px-6 text-slate-500">1</td>
+                <td class="py-4 px-6 font-sans">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">
+                      <i class="fa-brands fa-bitcoin"></i>
+                    </div>
+                    <div>
+                      <div class="font-bold text-white coin-name">Bitcoin</div>
+                      <div class="text-[11px] text-slate-400 font-mono">BTC</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-6 text-right font-bold text-white">$96,480.00</td>
+                <td class="py-4 px-6 text-right text-emerald-400 font-bold">+2.84%</td>
+                <td class="py-4 px-6 text-right text-slate-400">$48.2B</td>
+                <td class="py-4 px-6 text-right font-bold text-white">$1.89T</td>
+                <td class="py-4 px-6 text-center">
+                  <a href="#terminal" onclick="switchChartPair('BINANCE:BTCUSDT')" class="px-3 py-1 rounded bg-brand-gold/10 hover:bg-brand-gold text-brand-gold hover:text-dark-950 border border-brand-gold/30 font-sans font-bold text-[11px] transition">
+                    Analyze
+                  </a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition coin-row">
+                <td class="py-4 px-6 text-slate-500">2</td>
+                <td class="py-4 px-6 font-sans">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm">
+                      <i class="fa-brands fa-ethereum"></i>
+                    </div>
+                    <div>
+                      <div class="font-bold text-white coin-name">Ethereum</div>
+                      <div class="text-[11px] text-slate-400 font-mono">ETH</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-6 text-right font-bold text-white">$2,840.50</td>
+                <td class="py-4 px-6 text-right text-emerald-400 font-bold">+3.45%</td>
+                <td class="py-4 px-6 text-right text-slate-400">$22.4B</td>
+                <td class="py-4 px-6 text-right font-bold text-white">$341.6B</td>
+                <td class="py-4 px-6 text-center">
+                  <a href="#terminal" onclick="switchChartPair('BINANCE:ETHUSDT')" class="px-3 py-1 rounded bg-white/5 hover:bg-brand-gold text-slate-300 hover:text-dark-950 border border-white/10 font-sans font-bold text-[11px] transition">
+                    Analyze
+                  </a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition coin-row">
+                <td class="py-4 px-6 text-slate-500">3</td>
+                <td class="py-4 px-6 font-sans">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-sm">
+                      S
+                    </div>
+                    <div>
+                      <div class="font-bold text-white coin-name">Solana</div>
+                      <div class="text-[11px] text-slate-400 font-mono">SOL</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-6 text-right font-bold text-white">$198.20</td>
+                <td class="py-4 px-6 text-right text-emerald-400 font-bold">+6.12%</td>
+                <td class="py-4 px-6 text-right text-slate-400">$9.8B</td>
+                <td class="py-4 px-6 text-right font-bold text-white">$93.4B</td>
+                <td class="py-4 px-6 text-center">
+                  <a href="#terminal" onclick="switchChartPair('BINANCE:SOLUSDT')" class="px-3 py-1 rounded bg-white/5 hover:bg-brand-gold text-slate-300 hover:text-dark-950 border border-white/10 font-sans font-bold text-[11px] transition">
+                    Analyze
+                  </a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition coin-row">
+                <td class="py-4 px-6 text-slate-500">4</td>
+                <td class="py-4 px-6 font-sans">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center font-bold text-sm">
+                      B
+                    </div>
+                    <div>
+                      <div class="font-bold text-white coin-name">BNB Chain</div>
+                      <div class="text-[11px] text-slate-400 font-mono">BNB</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-6 text-right font-bold text-white">$665.40</td>
+                <td class="py-4 px-6 text-right text-emerald-400 font-bold">+1.95%</td>
+                <td class="py-4 px-6 text-right text-slate-400">$1.8B</td>
+                <td class="py-4 px-6 text-right font-bold text-white">$97.2B</td>
+                <td class="py-4 px-6 text-center">
+                  <a href="#terminal" onclick="switchChartPair('BINANCE:BNBUSDT')" class="px-3 py-1 rounded bg-white/5 hover:bg-brand-gold text-slate-300 hover:text-dark-950 border border-white/10 font-sans font-bold text-[11px] transition">
+                    Analyze
+                  </a>
+                </td>
+              </tr>
+
+              <tr class="hover:bg-white/[0.02] transition coin-row">
+                <td class="py-4 px-6 text-slate-500">5</td>
+                <td class="py-4 px-6 font-sans">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">
+                      X
+                    </div>
+                    <div>
+                      <div class="font-bold text-white coin-name">XRP</div>
+                      <div class="text-[11px] text-slate-400 font-mono">XRP</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 px-6 text-right font-bold text-white">$2.45</td>
+                <td class="py-4 px-6 text-right text-rose-400 font-bold">-0.82%</td>
+                <td class="py-4 px-6 text-right text-slate-400">$6.4B</td>
+                <td class="py-4 px-6 text-right font-bold text-white">$140.8B</td>
+                <td class="py-4 px-6 text-center">
+                  <a href="#terminal" class="px-3 py-1 rounded bg-white/5 hover:bg-brand-gold text-slate-300 hover:text-dark-950 border border-white/10 font-sans font-bold text-[11px] transition">
+                    Analyze
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. MODERN TRADING TECHNIQUES & STRATEGIES -->
+  <section id="strategies" class="relative z-10 py-20 bg-dark-900/60 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3">
+        <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">
+          <i class="fa-solid fa-graduation-cap"></i> Professional Edge
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Modern Crypto Trading Techniques</h2>
+        <p class="text-slate-400 text-sm sm:text-base">
+          Master the exact data-driven concepts used by institutional market makers and quantitative prop funds.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- Technique 1 -->
+        <div class="glass-card rounded-2xl p-6 border border-white/10 space-y-4 glass-card-hover transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-magnet"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Liquidity Pools & Stop-Loss Sweeps</h3>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            Market makers target resting liquidation clusters above resistance and below support. Understanding order book depth allows you to enter trades after false breakouts occur.
+          </p>
+          <div class="text-xs font-mono text-amber-400 font-semibold flex items-center gap-1">
+            <span>Primary Metric:</span> <span class="text-slate-300">Coinglass Heatmaps</span>
+          </div>
+        </div>
+
+        <!-- Technique 2 -->
+        <div class="glass-card rounded-2xl p-6 border border-white/10 space-y-4 glass-card-hover transition">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-chart-line-up"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Funding Rate Arbitrage (Cash & Carry)</h3>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            Capture delta-neutral yields by holding spot Bitcoin while shorting the equivalent perpetual contract when perpetual funding rates are elevated.
+          </p>
+          <div class="text-xs font-mono text-cyan-400 font-semibold flex items-center gap-1">
+            <span>Primary Metric:</span> <span class="text-slate-300">Annualized Funding Yield</span>
+          </div>
+        </div>
+
+        <!-- Technique 3 -->
+        <div class="glass-card rounded-2xl p-6 border border-white/10 space-y-4 glass-card-hover transition">
+          <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-code-compare"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Open Interest & Price Divergence</h3>
+          <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            When price reaches a new high while aggregate Open Interest is rapidly falling, it signals short-covering rather than aggressive spot buying—a key reversal warning.
+          </p>
+          <div class="text-xs font-mono text-indigo-400 font-semibold flex items-center gap-1">
+            <span>Primary Metric:</span> <span class="text-slate-300">Binance / Bybit OI Delta</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 9. BLOG & MARKET RESEARCH SECTION -->
+  <section id="blog" class="relative z-10 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-gold mb-1">
+            <i class="fa-solid fa-newspaper"></i> Intelligence & Research Hub
+          </div>
+          <h2 class="text-3xl font-extrabold text-white">Latest Market Insights</h2>
+          <p class="text-slate-400 text-sm mt-1">Deep dives into Bitcoin macro cycles, technical setups, and on-chain analytics.</p>
+        </div>
+        <a href="#blog" class="text-xs font-bold text-brand-gold hover:text-amber-300 flex items-center gap-1.5 transition">
+          View All Research <i class="fa-solid fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <!-- Blog Articles Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Article 1 -->
+        <article class="glass-card rounded-2xl overflow-hidden border border-white/10 flex flex-col justify-between group glass-card-hover transition">
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-mono">
+              <span class="px-2 py-0.5 rounded bg-brand-gold/10 text-brand-gold border border-brand-gold/20 font-bold">Bitcoin Macro</span>
+              <span>5 min read</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-brand-gold transition leading-snug">
+              Bitcoin Post-Halving Supply Shock: Examining On-Chain Exchange Reserves
+            </h3>
+            <p class="text-slate-400 text-xs leading-relaxed">
+              Illiquid Bitcoin supply has hit an all-time high while institutional ETF absorption outpaces daily miner issuance by 4x.
+            </p>
+          </div>
+          <div class="px-6 pb-6 pt-2 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+            <span>By <strong>Zeeshan Ahmed</strong></span>
+            <span class="text-brand-gold font-bold flex items-center gap-1">Read Article <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+          </div>
+        </article>
+
+        <!-- Article 2 -->
+        <article class="glass-card rounded-2xl overflow-hidden border border-white/10 flex flex-col justify-between group glass-card-hover transition">
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-mono">
+              <span class="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold">Trading Strategy</span>
+              <span>7 min read</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition leading-snug">
+              How to Read Liquidation Heatmaps to Spot High-Probability Reversals
+            </h3>
+            <p class="text-slate-400 text-xs leading-relaxed">
+              A comprehensive visual guide on using Coinglass data models to avoid trading into liquidity traps during high volatility sessions.
+            </p>
+          </div>
+          <div class="px-6 pb-6 pt-2 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+            <span>By <strong>Research Desk</strong></span>
+            <span class="text-cyan-400 font-bold flex items-center gap-1">Read Article <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+          </div>
+        </article>
+
+        <!-- Article 3 -->
+        <article class="glass-card rounded-2xl overflow-hidden border border-white/10 flex flex-col justify-between group glass-card-hover transition">
+          <div class="p-6 space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-400 font-mono">
+              <span class="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold">Tech & L2s</span>
+              <span>4 min read</span>
+            </div>
+            <h3 class="text-lg font-bold text-white group-hover:text-indigo-300 transition leading-snug">
+              Lightning Network & Layer-2 Rollups: Scaling Bitcoin's Monetary Velocity
+            </h3>
+            <p class="text-slate-400 text-xs leading-relaxed">
+              How zero-knowledge rollups and decentralized settlement channels are transforming Bitcoin into a global micro-payment highway.
+            </p>
+          </div>
+          <div class="px-6 pb-6 pt-2 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+            <span>By <strong>Tech Column</strong></span>
+            <span class="text-indigo-400 font-bold flex items-center gap-1">Read Article <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 10. NEWSLETTER & ALPHA SIGNALS CTA -->
+  <section class="relative z-10 py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-card rounded-3xl p-8 sm:p-12 border border-brand-gold/30 text-center space-y-6 relative overflow-hidden shadow-2xl">
+        <div class="w-14 h-14 rounded-2xl bg-brand-gold/20 text-brand-gold flex items-center justify-center text-2xl mx-auto">
+          <i class="fa-solid fa-envelope-open-text"></i>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Join 15,000+ Crypto Traders</h2>
+        <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+          Receive daily Bitcoin on-chain alerts, liquidation summaries, and technical setups directly in your inbox. No spam. Unsubscribe anytime.
+        </p>
+        <form onsubmit="handleNewsletterSubmit(event)" class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+          <input type="email" required placeholder="Enter your email address..." class="flex-1 bg-dark-900 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-brand-gold font-sans">
+          <button type="submit" class="px-6 py-3 rounded-xl text-xs font-bold text-dark-950 bg-gradient-to-r from-brand-gold to-amber-400 hover:from-amber-400 hover:to-yellow-300 transition shadow-lg shadow-brand-gold/20 shrink-0">
+            Subscribe Free
+          </button>
+        </form>
+        <p id="newsletter-msg" class="text-xs text-emerald-400 font-mono hidden">✓ Thank you for subscribing! Check your inbox for our latest market report.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FOOTER -->
+  <footer class="relative z-10 bg-dark-950 border-t border-white/5 pt-16 pb-12 text-slate-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-white/5">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="md:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-gold to-amber-400 flex items-center justify-center text-dark-950 font-bold text-xl">
+              <i class="fa-brands fa-bitcoin"></i>
+            </div>
+            <span class="text-xl font-extrabold text-white tracking-tight">BitcoinCrypto<span class="text-brand-gold">.tech</span></span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
+            Professional cryptocurrency trading analytics, real-time chart terminals, and algorithmic portfolio calculators designed for the modern decentralized economy.
+          </p>
+          <div class="flex items-center gap-4 text-slate-400 text-base pt-2">
+            <a href="https://github.com/infozeeshan37-ctrl/bitcoincrypto" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="hover:text-brand-gold transition"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="hover:text-cyan-400 transition"><i class="fa-brands fa-telegram"></i></a>
+            <a href="#" class="hover:text-indigo-400 transition"><i class="fa-brands fa-discord"></i></a>
+          </div>
+        </div>
+
+        <!-- Col 2: Trading Tools -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-white uppercase text-[11px] tracking-wider font-sans">Trading Tools</h4>
+          <ul class="space-y-2 text-slate-400">
+            <li><a href="#terminal" class="hover:text-white transition">Live Candlestick Terminal</a></li>
+            <li><a href="#tools" class="hover:text-white transition">Profit & Loss Calculator</a></li>
+            <li><a href="#tools" class="hover:text-white transition">Bitcoin DCA Simulator</a></li>
+            <li><a href="#tools" class="hover:text-white transition">Crypto Currency Converter</a></li>
+            <li><a href="#derivatives" class="hover:text-white transition">Liquidation Heatmap</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Market Data -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-white uppercase text-[11px] tracking-wider font-sans">Market Intelligence</h4>
+          <ul class="space-y-2 text-slate-400">
+            <li><a href="#screener" class="hover:text-white transition">Top 100 Coin Screener</a></li>
+            <li><a href="#derivatives" class="hover:text-white transition">Long / Short Ratios</a></li>
+            <li><a href="#derivatives" class="hover:text-white transition">Perpetual Funding Rates</a></li>
+            <li><a href="#derivatives" class="hover:text-white transition">Bitcoin Spot ETF Inflows</a></li>
+            <li><a href="#strategies" class="hover:text-white transition">Order Flow Strategies</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Resources -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-white uppercase text-[11px] tracking-wider font-sans">Resources & Legal</h4>
+          <ul class="space-y-2 text-slate-400">
+            <li><a href="#blog" class="hover:text-white transition">Research Articles</a></li>
+            <li><a href="https://github.com/infozeeshan37-ctrl/bitcoincrypto" target="_blank" class="hover:text-white transition">GitHub Repository</a></li>
+            <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-white transition">API Documentation</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Disclaimer & Copyright -->
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+        <p>
+          &copy; 2026 <strong>BitcoinCrypto.tech</strong>. All rights reserved. Hosted globally on Vercel Edge.
+        </p>
+        <p class="max-w-xl text-center md:text-right">
+          <strong>Risk Disclaimer:</strong> Cryptocurrency and derivatives trading carries a high level of risk and may not be suitable for all investors. Content on this site is for educational and analytical purposes only and does not constitute financial advice.
+        </p>
+      </div>
+    </div>
   </footer>
 
+  <!-- 12. JAVASCRIPT LOGIC & EMBEDS -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
   <script>
-    async function fetchPrices() {
-      const icon = document.getElementById('refresh-icon');
-      if (icon) icon.classList.add('fa-spin');
+    // A. TradingView Chart Loader & Pair Switcher
+    let currentTVWidget = null;
 
+    function initTradingView(symbol = 'BINANCE:BTCUSDT') {
+      const container = document.getElementById('tradingview-chart-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (typeof TradingView !== 'undefined') {
+        currentTVWidget = new TradingView.widget({
+          "autosize": true,
+          "symbol": symbol,
+          "interval": "D",
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "toolbar_bg": "#0B0F19",
+          "enable_publishing": false,
+          "backgroundColor": "#0B0F19",
+          "gridColor": "rgba(255, 255, 255, 0.05)",
+          "hide_side_toolbar": false,
+          "allow_symbol_change": true,
+          "save_image": true,
+          "container_id": "tradingview-chart-container"
+        });
+      }
+    }
+
+    function initTradingViewTA(symbol = 'BINANCE:BTCUSDT') {
+      const container = document.getElementById('tradingview-ta-container');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      const widgetWrap = document.createElement('div');
+      widgetWrap.className = 'tradingview-widget-container';
+      widgetWrap.style.width = '100%';
+      widgetWrap.style.height = '100%';
+      
+      const widgetInner = document.createElement('div');
+      widgetInner.className = 'tradingview-widget-container__widget';
+      widgetInner.style.width = '100%';
+      widgetInner.style.height = '100%';
+      widgetWrap.appendChild(widgetInner);
+
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js';
+      script.async = true;
+      script.innerHTML = JSON.stringify({
+        "interval": "1D",
+        "width": "100%",
+        "isTransparent": true,
+        "height": "100%",
+        "symbol": symbol,
+        "showIntervalTabs": true,
+        "displayMode": "single",
+        "locale": "en",
+        "colorTheme": "dark"
+      });
+      
+      widgetWrap.appendChild(script);
+      container.appendChild(widgetWrap);
+    }
+
+    function switchChartPair(pairSymbol, btnElement) {
+      initTradingView(pairSymbol);
+      initTradingViewTA(pairSymbol);
+
+      if (btnElement && btnElement.parentElement) {
+        const buttons = btnElement.parentElement.querySelectorAll('button');
+        buttons.forEach(b => {
+          b.className = 'px-4 py-2 rounded-lg text-xs font-bold transition text-slate-300 hover:text-white';
+        });
+        btnElement.className = 'px-4 py-2 rounded-lg text-xs font-bold transition bg-brand-gold text-dark-950 shadow';
+      }
+    }
+
+    // B. Real-Time Binance WebSocket Live Prices
+    function connectBinanceWebSocket() {
       try {
-        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true');
-        if (res.ok) {
-          const data = await res.json();
-          if (data.bitcoin) {
-            document.getElementById('btc-price').textContent = '$' + data.bitcoin.usd.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            updateChange('btc-change', data.bitcoin.usd_24h_change);
-          }
-          if (data.ethereum) {
-            document.getElementById('eth-price').textContent = '$' + data.ethereum.usd.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            updateChange('eth-change', data.ethereum.usd_24h_change);
-          }
-          if (data.solana) {
-            document.getElementById('sol-price').textContent = '$' + data.solana.usd.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            updateChange('sol-change', data.solana.usd_24h_change);
-          }
-        }
+        const ws = new WebSocket('wss://stream.binance.com:9443/ws/!miniTicker@arr');
+        
+        ws.onmessage = (event) => {
+          const tickers = JSON.parse(event.data);
+          
+          tickers.forEach(t => {
+            const symbol = t.s;
+            const price = parseFloat(t.c);
+            const open = parseFloat(t.o);
+            const changePercent = ((price - open) / open) * 100;
+
+            if (symbol === 'BTCUSDT') {
+              updateTickerUI('tape-btc-price', 'tape-btc-change', price, changePercent);
+              const heroPriceEl = document.getElementById('hero-btc-price');
+              const heroBadgeEl = document.getElementById('hero-btc-badge');
+              if (heroPriceEl) heroPriceEl.textContent = '$' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              if (heroBadgeEl) {
+                heroBadgeEl.textContent = (changePercent >= 0 ? '+' : '') + changePercent.toFixed(2) + '%';
+                heroBadgeEl.className = changePercent >= 0 ? 'font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded text-[10px]' : 'font-mono text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded text-[10px]';
+              }
+            } else if (symbol === 'ETHUSDT') {
+              updateTickerUI('tape-eth-price', 'tape-eth-change', price, changePercent);
+            } else if (symbol === 'SOLUSDT') {
+              updateTickerUI('tape-sol-price', 'tape-sol-change', price, changePercent);
+            } else if (symbol === 'BNBUSDT') {
+              updateTickerUI('tape-bnb-price', 'tape-bnb-change', price, changePercent);
+            } else if (symbol === 'XRPUSDT') {
+              updateTickerUI('tape-xrp-price', 'tape-xrp-change', price, changePercent);
+            }
+          });
+        };
+
+        ws.onerror = (err) => {
+          setTimeout(connectBinanceWebSocket, 5000);
+        };
       } catch (err) {
-        console.log('Price fetch note:', err);
-      } finally {
-        if (icon) {
-          setTimeout(() => icon.classList.remove('fa-spin'), 600);
-        }
+        console.log('WebSocket not supported:', err);
       }
     }
 
-    function updateChange(elementId, changeVal) {
-      const el = document.getElementById(elementId);
-      if (!el || changeVal === undefined) return;
-      const isPositive = changeVal >= 0;
-      el.textContent = (isPositive ? '+' : '') + changeVal.toFixed(2) + '%';
-      if (isPositive) {
-        el.className = 'text-xs font-semibold px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
-      } else {
-        el.className = 'text-xs font-semibold px-2 py-1 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20';
+    function updateTickerUI(priceId, changeId, price, change) {
+      const priceEl = document.getElementById(priceId);
+      const changeEl = document.getElementById(changeId);
+      if (!priceEl || !changeEl) return;
+
+      const formattedPrice = '$' + price.toLocaleString('en-US', { minimumFractionDigits: price < 10 ? 4 : 2, maximumFractionDigits: price < 10 ? 4 : 2 });
+      priceEl.textContent = formattedPrice;
+      
+      const isPos = change >= 0;
+      changeEl.textContent = (isPos ? '+' : '') + change.toFixed(2) + '%';
+      changeEl.className = isPos ? 'text-emerald-400 text-[11px]' : 'text-rose-400 text-[11px]';
+    }
+
+    // C. Tool 1: Profit / Loss Calculator
+    function updateLeverage(val) {
+      const label = document.getElementById('calc-leverage-val');
+      if (label) {
+        label.textContent = val == 1 ? '1x (Spot)' : val + 'x (Futures)';
+      }
+      calculateProfit();
+    }
+
+    function calculateProfit() {
+      const capital = parseFloat(document.getElementById('calc-capital')?.value) || 0;
+      const entry = parseFloat(document.getElementById('calc-entry')?.value) || 1;
+      const exit = parseFloat(document.getElementById('calc-exit')?.value) || 1;
+      const leverage = parseFloat(document.getElementById('calc-leverage')?.value) || 1;
+
+      const positionSize = capital * leverage;
+      const coinAmount = positionSize / entry;
+      const finalValue = coinAmount * exit;
+      const netProfit = finalValue - positionSize;
+      const roi = (netProfit / capital) * 100;
+
+      const profitEl = document.getElementById('calc-result-profit');
+      const roiEl = document.getElementById('calc-result-roi');
+      const posEl = document.getElementById('calc-result-position');
+
+      if (profitEl) {
+        profitEl.textContent = (netProfit >= 0 ? '+$' : '-$') + Math.abs(netProfit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        profitEl.className = netProfit >= 0 ? 'text-emerald-400 font-bold text-base' : 'text-rose-400 font-bold text-base';
+      }
+      if (roiEl) {
+        roiEl.textContent = (roi >= 0 ? '+' : '') + roi.toFixed(2) + '%';
+        roiEl.className = roi >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+      }
+      if (posEl) {
+        posEl.textContent = '$' + positionSize.toLocaleString('en-US', { minimumFractionDigits: 2 });
       }
     }
 
-    fetchPrices();
+    // D. Tool 2: Bitcoin DCA Simulator
+    function calculateDCA() {
+      const amount = parseFloat(document.getElementById('dca-amount')?.value) || 100;
+      const frequencyDays = parseInt(document.getElementById('dca-frequency')?.value) || 7;
+      const periodYears = parseFloat(document.getElementById('dca-period')?.value) || 3;
+
+      const totalDays = periodYears * 365;
+      const totalPurchases = Math.floor(totalDays / frequencyDays);
+      const totalInvested = totalPurchases * amount;
+
+      const multiplier = periodYears === 1 ? 1.45 : periodYears === 2 ? 1.95 : periodYears === 3 ? 2.45 : 3.80;
+      const estimatedValue = totalInvested * multiplier;
+      const gainPercent = ((estimatedValue - totalInvested) / totalInvested) * 100;
+
+      const invEl = document.getElementById('dca-invested');
+      const valEl = document.getElementById('dca-value');
+      const gainEl = document.getElementById('dca-gain');
+
+      if (invEl) invEl.textContent = '$' + totalInvested.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      if (valEl) valEl.textContent = '$' + estimatedValue.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      if (gainEl) gainEl.textContent = '+' + gainPercent.toFixed(2) + '%';
+    }
+
+    // E. Tool 3: Currency Converter
+    const rates = {
+      BTC: 96480.00,
+      ETH: 2840.50,
+      SOL: 198.20,
+      USD: 1.00,
+      EUR: 1.08,
+      USDT: 1.00
+    };
+
+    function convertCurrency() {
+      const fromVal = parseFloat(document.getElementById('conv-from-val')?.value) || 0;
+      const fromCurr = document.getElementById('conv-from-curr')?.value || 'BTC';
+      const toCurr = document.getElementById('conv-to-curr')?.value || 'USD';
+
+      const fromInUSD = fromVal * (rates[fromCurr] || 1);
+      const toRate = rates[toCurr] || 1;
+      const result = fromInUSD / toRate;
+
+      const resultEl = document.getElementById('conv-result');
+      const rateEl = document.getElementById('conv-rate');
+
+      if (resultEl) {
+        const symbol = toCurr === 'USD' || toCurr === 'USDT' ? '$' : toCurr === 'EUR' ? '€' : '';
+        resultEl.textContent = `${symbol}${result.toLocaleString('en-US', { minimumFractionDigits: result < 10 ? 4 : 2, maximumFractionDigits: result < 10 ? 4 : 2 })} ${!symbol ? toCurr : ''}`;
+      }
+      if (rateEl) {
+        rateEl.textContent = `1 ${fromCurr} = ${(rates[fromCurr] / toRate).toLocaleString('en-US', { maximumFractionDigits: 4 })} ${toCurr}`;
+      }
+    }
+
+    function swapConverterCurrencies() {
+      const fromSelect = document.getElementById('conv-from-curr');
+      const toSelect = document.getElementById('conv-to-curr');
+      if (fromSelect && toSelect) {
+        const temp = fromSelect.value;
+        fromSelect.value = toSelect.value;
+        toSelect.value = temp;
+        convertCurrency();
+      }
+    }
+
+    // F. Coin Table Search Filter
+    function filterCoinsTable() {
+      const input = document.getElementById('coin-search');
+      const filter = input ? input.value.toLowerCase() : '';
+      const rows = document.querySelectorAll('.coin-row');
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+      });
+    }
+
+    // G. Mobile Menu Toggle & Newsletter
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    function handleNewsletterSubmit(e) {
+      e.preventDefault();
+      const msg = document.getElementById('newsletter-msg');
+      if (msg) msg.classList.remove('hidden');
+      e.target.reset();
+    }
+
+    // Initialization on DOM Ready
+    window.addEventListener('DOMContentLoaded', () => {
+      initTradingView('BINANCE:BTCUSDT');
+      initTradingViewTA('BINANCE:BTCUSDT');
+      connectBinanceWebSocket();
+      calculateProfit();
+      calculateDCA();
+      convertCurrency();
+    });
   </script>
 </body>
 </html>
