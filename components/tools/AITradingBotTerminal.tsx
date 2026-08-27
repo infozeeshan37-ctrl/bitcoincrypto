@@ -22,8 +22,12 @@ import {
   Lock,
   ChevronRight,
   Info,
-  Radio
+  Radio,
+  Gauge,
+  Maximize2
 } from "lucide-react";
+import TradingViewAdvancedChart from "./TradingViewAdvancedChart";
+import TechnicalAnalysisPanel from "./TechnicalAnalysisPanel";
 
 export interface CoinConfig {
   symbol: string; // e.g. BTCUSDT
@@ -107,6 +111,7 @@ export default function AITradingBotTerminal() {
   const [timeframeFilter, setTimeframeFilter] = useState<"ALL" | "15M" | "1H" | "4H" | "1D">("ALL");
   const [search, setSearch] = useState("");
   const [customPairInput, setCustomPairInput] = useState("");
+  const [chartViewMode, setChartViewMode] = useState<"chart" | "analysis" | "both">("chart");
 
   // AI Copilot State
   const [copilotCapital, setCopilotCapital] = useState(10000);
@@ -746,35 +751,77 @@ export default function AITradingBotTerminal() {
 
             </div>
 
-            {/* SYNCHRONIZED REAL-TIME TRADINGVIEW CANDLESTICK CHART */}
-            <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <BarChart2 className="w-4 h-4 text-amber-500" />
-                  <h4 className="text-sm font-bold text-slate-900">
-                    Live TradingView Candlestick Chart: BINANCE:{activeCoin.symbol}
-                  </h4>
+            {/* VIEW SELECTOR BAR: ADVANCED CHART / TA GAUGE & PIVOTS / SPLIT VIEW */}
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 sm:px-4 sm:py-3 rounded-2xl border border-slate-200 shadow-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Analysis View:</span>
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                  <button
+                    onClick={() => setChartViewMode("chart")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                      chartViewMode === "chart"
+                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <BarChart2 className="w-3.5 h-3.5" />
+                    <span>Advanced Chart & Drawing</span>
+                  </button>
+                  <button
+                    onClick={() => setChartViewMode("analysis")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                      chartViewMode === "analysis"
+                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Gauge className="w-3.5 h-3.5" />
+                    <span>Technical Gauge & Pivots</span>
+                  </button>
+                  <button
+                    onClick={() => setChartViewMode("both")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                      chartViewMode === "both"
+                        ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Split Matrix View</span>
+                  </button>
                 </div>
-                <span className="text-[11px] font-mono text-slate-500">
-                  Resolution: <strong className="text-slate-800">{activeCoin.timeframe}</strong>
-                </span>
               </div>
 
-              <div className="h-[520px] w-full rounded-2xl overflow-hidden border border-slate-100">
-                <iframe
-                  key={activeCoin.symbol}
-                  title={`TradingView Real-Time Chart ${activeCoin.tvSymbol}`}
-                  src={`https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=${encodeURIComponent(
-                    activeCoin.tvSymbol
-                  )}&interval=${activeCoin.timeframe === "15M" ? "15" : activeCoin.timeframe === "1H" ? "60" : activeCoin.timeframe === "4H" ? "240" : "D"}&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=localhost&utm_medium=widget&utm_campaign=chart&utm_term=${encodeURIComponent(
-                    activeCoin.tvSymbol
-                  )}`}
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                  allowFullScreen
-                />
+              <div className="text-[11px] font-mono text-slate-500">
+                Pair: <strong className="text-slate-900">{activeCoin.tvSymbol}</strong>
               </div>
             </div>
+
+            {/* ADVANCED TRADINGVIEW INTERACTIVE CHART (WITH DRAWING TOOLS & INDICATORS) */}
+            {(chartViewMode === "chart" || chartViewMode === "both") && (
+              <div className="space-y-2">
+                <TradingViewAdvancedChart
+                  symbol={activeCoin.tvSymbol}
+                  defaultInterval={activeCoin.timeframe}
+                  height={560}
+                  showIndicatorBar={true}
+                  showTimeframeBar={true}
+                  showStyleBar={true}
+                />
+              </div>
+            )}
+
+            {/* TECHNICAL ANALYSIS GAUGE, PIVOT POINTS & FIBONACCI LADDER */}
+            {(chartViewMode === "analysis" || chartViewMode === "both") && (
+              <TechnicalAnalysisPanel
+                symbol={activeCoin.tvSymbol}
+                price={activeCoin.price}
+                high24h={activeCoin.high24h}
+                low24h={activeCoin.low24h}
+                change24h={activeCoin.change24h}
+                defaultInterval={activeCoin.timeframe === "15M" ? "15m" : activeCoin.timeframe === "1H" ? "1h" : activeCoin.timeframe === "4H" ? "4h" : "1D"}
+              />
+            )}
 
           </div>
         )}

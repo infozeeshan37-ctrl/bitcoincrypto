@@ -1,4 +1,5 @@
 import Hero from "@/components/home/Hero";
+import HomeAISignalsBots from "@/components/home/HomeAISignalsBots";
 import HardwareTeardown3D from "@/components/home/HardwareTeardown3D";
 import ValuePillars from "@/components/home/ValuePillars";
 import PlatformOverview from "@/components/home/PlatformOverview";
@@ -11,6 +12,7 @@ export default function HomePage() {
   return (
     <div className="space-y-0">
       <Hero />
+      <HomeAISignalsBots />
       <HardwareTeardown3D />
       <ValuePillars />
       <PlatformOverview />

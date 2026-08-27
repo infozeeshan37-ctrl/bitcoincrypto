@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Cpu,
   BarChart2,
@@ -16,14 +16,43 @@ import {
   CheckCircle2,
   ShieldAlert,
   Bot,
-  Search
+  Search,
+  Gauge,
+  Activity
 } from "lucide-react";
 import AITradingBotTerminal from "@/components/tools/AITradingBotTerminal";
+import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChart";
+import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 
 export default function ToolsPage() {
   const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter">("bot");
   const [chartSymbol, setChartSymbol] = useState("BINANCE:BTCUSDT");
   const [customChartInput, setCustomChartInput] = useState("");
+  const [chartTerminalMode, setChartTerminalMode] = useState<"chart" | "analysis" | "split">("chart");
+  const [terminalTicker, setTerminalTicker] = useState<{ price: number; high24h: number; low24h: number; change24h: number }>({
+    price: 78780,
+    high24h: 81200,
+    low24h: 76500,
+    change24h: 2.4
+  });
+
+  // Fetch real-time ticker data for the selected chart symbol
+  useEffect(() => {
+    const rawSymbol = chartSymbol.replace("BINANCE:", "");
+    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${rawSymbol}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.lastPrice) {
+          setTerminalTicker({
+            price: parseFloat(data.lastPrice) || 1,
+            high24h: parseFloat(data.highPrice) || parseFloat(data.lastPrice) * 1.04,
+            low24h: parseFloat(data.lowPrice) || parseFloat(data.lastPrice) * 0.96,
+            change24h: parseFloat(data.priceChangePercent) || 0
+          });
+        }
+      })
+      .catch((e) => console.warn("Failed to fetch ticker for TA panel:", e));
+  }, [chartSymbol]);
 
   // DCA Simulator State
   const [monthlyInvest, setMonthlyInvest] = useState(250);
@@ -202,20 +231,81 @@ export default function ToolsPage() {
               </form>
             </div>
 
-            <div className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm h-[640px] flex flex-col justify-between overflow-hidden">
-              <iframe
-                key={chartSymbol}
-                title="TradingView Real-Time Candlestick Chart"
-                src={`https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=${encodeURIComponent(
-                  chartSymbol
-                )}&interval=D&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=%5B%5D&theme=light&style=1&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=localhost&utm_medium=widget&utm_campaign=chart&utm_term=${encodeURIComponent(
-                  chartSymbol
-                )}`}
-                className="w-full h-full border-0 rounded-2xl"
-                loading="lazy"
-                allowFullScreen
-              />
+            {/* View Mode Switcher */}
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 sm:px-4 sm:py-3 rounded-2xl border border-slate-200 shadow-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Terminal Mode:</span>
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                  <button
+                    onClick={() => setChartTerminalMode("chart")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                      chartTerminalMode === "chart"
+                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <BarChart2 className="w-3.5 h-3.5" />
+                    <span>Advanced Chart & Drawing Suite</span>
+                  </button>
+                  <button
+                    onClick={() => setChartTerminalMode("analysis")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                      chartTerminalMode === "analysis"
+                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Gauge className="w-3.5 h-3.5" />
+                    <span>Technical Gauge & Pivots</span>
+                  </button>
+                  <button
+                    onClick={() => setChartTerminalMode("split")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                      chartTerminalMode === "split"
+                        ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Split Dual View</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-mono">
+                <span className="text-slate-500">Live Price:</span>
+                <strong className="text-slate-900">
+                  ${terminalTicker.price >= 1000 ? terminalTicker.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : terminalTicker.price}
+                </strong>
+                <span className={`px-2 py-0.5 rounded-md font-bold text-[11px] ${terminalTicker.change24h >= 0 ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
+                  {terminalTicker.change24h >= 0 ? "+" : ""}{terminalTicker.change24h.toFixed(2)}%
+                </span>
+              </div>
             </div>
+
+            {/* ADVANCED REAL-TIME CHART */}
+            {(chartTerminalMode === "chart" || chartTerminalMode === "split") && (
+              <TradingViewAdvancedChart
+                symbol={chartSymbol}
+                defaultInterval="D"
+                height={620}
+                showIndicatorBar={true}
+                showTimeframeBar={true}
+                showStyleBar={true}
+              />
+            )}
+
+            {/* TECHNICAL ANALYSIS PANEL */}
+            {(chartTerminalMode === "analysis" || chartTerminalMode === "split") && (
+              <TechnicalAnalysisPanel
+                symbol={chartSymbol}
+                price={terminalTicker.price}
+                high24h={terminalTicker.high24h}
+                low24h={terminalTicker.low24h}
+                change24h={terminalTicker.change24h}
+                defaultInterval="1D"
+              />
+            )}
           </div>
         )}
 
