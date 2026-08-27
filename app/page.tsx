@@ -12,8 +12,8 @@ export default function HomePage() {
   return (
     <div className="space-y-0">
       <Hero />
-      <LiveEcosystemOverview />
       <HomeAISignalsBots />
+      <LiveEcosystemOverview />
       <ValuePillars />
       <PlatformOverview />
       <TradingConcepts />
