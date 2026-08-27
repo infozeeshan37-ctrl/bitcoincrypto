@@ -70,17 +70,15 @@ export default function LiveEcosystemOverview() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-mono font-bold text-emerald-700 uppercase tracking-wider">
-                Live Data Feeds Connected
-              </span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Market & Macro Intelligence</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               Live Market & Macro Ecosystem
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Synchronized real-time feeds across CoinMarketCap, Coinglass derivatives, and US CPI inflation releases.
+              Real-time cryptocurrency analytics across CoinMarketCap spot rankings, Coinglass derivatives, and US macroeconomic releases.
             </p>
           </div>
 
@@ -118,12 +116,12 @@ export default function LiveEcosystemOverview() {
                     <Coins className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-black text-slate-900">CoinMarketCap Live</h3>
+                    <h3 className="text-sm font-black text-slate-900">CoinMarketCap Spot</h3>
                     <span className="text-[10px] text-slate-400">Spot Market Rankings</span>
                   </div>
                 </div>
                 <span className="text-[10px] font-mono font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded">
-                  CMC Feed
+                  Spot Rankings
                 </span>
               </div>
 
@@ -172,7 +170,7 @@ export default function LiveEcosystemOverview() {
                   </div>
                 </div>
                 <span className="text-[10px] font-mono font-bold bg-rose-100 text-rose-900 px-2 py-0.5 rounded">
-                  Perp Feeds
+                  Derivatives
                 </span>
               </div>
 
@@ -241,7 +239,7 @@ export default function LiveEcosystemOverview() {
               href="/news"
               className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold text-center transition flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20 mt-2"
             >
-              <span>Explore CPI Tracker & News Feed</span>
+              <span>Explore CPI Tracker & News</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

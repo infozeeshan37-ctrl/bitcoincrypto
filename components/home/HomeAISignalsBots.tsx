@@ -433,12 +433,8 @@ export default function HomeAISignalsBots() {
           <div className="space-y-3 max-w-3xl">
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-spin" />
-                <span>Real-Time AI Trading Engine & Verified Bots</span>
-              </span>
-              <span className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-800 font-bold bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-                Live Binance Spot & Futures Feeds ({lastSyncTime || "Syncing..."})
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                <span>Algorithmic Trading & Signal Copilot</span>
               </span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
@@ -799,7 +795,7 @@ export default function HomeAISignalsBots() {
 
           </div>
 
-          {/* RIGHT COLUMN: 1:1 SYNCHRONIZED EXECUTION BLUEPRINT & LIVE TRADINGVIEW CHART (Col 7) */}
+          {/* RIGHT COLUMN: 1:1 SYNCHRONIZED EXECUTION BLUEPRINT (Col 7) */}
           {activeCoin && (
             <div className="lg:col-span-7 space-y-6">
 
@@ -952,66 +948,93 @@ export default function HomeAISignalsBots() {
 
               </div>
 
-              {/* VIEW SELECTOR BAR: ADVANCED CHART / TA GAUGE / SPLIT VIEW */}
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 sm:px-4 sm:py-3 rounded-2xl border border-slate-200 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Terminal Chart:</span>
-                  <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-                    <button
-                      onClick={() => setChartViewMode("chart")}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                        chartViewMode === "chart"
-                          ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      <BarChart2 className="w-3.5 h-3.5" />
-                      <span>Live Chart</span>
-                    </button>
-                    <button
-                      onClick={() => setChartViewMode("analysis")}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                        chartViewMode === "analysis"
-                          ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      <Gauge className="w-3.5 h-3.5" />
-                      <span>Technical Gauge</span>
-                    </button>
-                    <button
-                      onClick={() => setChartViewMode("both")}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                        chartViewMode === "both"
-                          ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      <Layers className="w-3.5 h-3.5" />
-                      <span>Split View</span>
-                    </button>
-                  </div>
-                </div>
+            </div>
+          )}
 
-                <div className="text-[11px] font-mono text-slate-500">
-                  Candles: <strong className="text-slate-900">{activeCoin.tvSymbol}</strong>
+        </div>
+
+        {/* 3. DEDICATED FULL-WIDTH RESPONSIVE TRADINGVIEW CHART & TA TERMINAL (PLACED BELOW) */}
+        {activeCoin && (
+          <div className="w-full space-y-6 pt-4">
+            
+            {/* View Selector Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 sm:px-6 sm:py-4 rounded-3xl border border-slate-200 shadow-sm">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 rounded-xl bg-amber-100 text-amber-800">
+                    <BarChart2 className="w-4 h-4 text-amber-600" />
+                  </span>
+                  <h3 className="text-base sm:text-lg font-black text-slate-900">
+                    Interactive Live Terminal & Technical Analysis Engine
+                  </h3>
+                </div>
+                
+                {/* View Mode Switcher */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
+                  <button
+                    onClick={() => setChartViewMode("chart")}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                      chartViewMode === "chart"
+                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <BarChart2 className="w-3.5 h-3.5" />
+                    <span>Full Live Chart & Drawing Suite</span>
+                  </button>
+                  <button
+                    onClick={() => setChartViewMode("analysis")}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                      chartViewMode === "analysis"
+                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Gauge className="w-3.5 h-3.5" />
+                    <span>Institutional TA Gauge & Pivots</span>
+                  </button>
+                  <button
+                    onClick={() => setChartViewMode("both")}
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                      chartViewMode === "both"
+                        ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Split Dual View</span>
+                  </button>
                 </div>
               </div>
 
-              {/* ADVANCED TRADINGVIEW INTERACTIVE CHART */}
-              {(chartViewMode === "chart" || chartViewMode === "both") && (
+              <div className="flex items-center gap-3 text-xs font-mono ml-auto sm:ml-0">
+                <span className="text-slate-400">Selected Market:</span>
+                <span className="font-black text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">
+                  {activeCoin.tvSymbol}
+                </span>
+                <span className={`px-2 py-0.5 rounded-lg font-bold ${activeCoin.change24h >= 0 ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
+                  {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
+                </span>
+              </div>
+            </div>
+
+            {/* FULL-WIDTH RESPONSIVE ADVANCED TRADINGVIEW CHART */}
+            {(chartViewMode === "chart" || chartViewMode === "both") && (
+              <div className="w-full">
                 <TradingViewAdvancedChart
                   symbol={activeCoin.tvSymbol}
                   defaultInterval={activeCoin.timeframe}
-                  height={520}
+                  height={660}
                   showIndicatorBar={true}
                   showTimeframeBar={true}
                   showStyleBar={true}
                 />
-              )}
+              </div>
+            )}
 
-              {/* TECHNICAL ANALYSIS PANEL */}
-              {(chartViewMode === "analysis" || chartViewMode === "both") && (
+            {/* FULL-WIDTH TECHNICAL ANALYSIS PANEL */}
+            {(chartViewMode === "analysis" || chartViewMode === "both") && (
+              <div className="w-full">
                 <TechnicalAnalysisPanel
                   symbol={activeCoin.tvSymbol}
                   price={activeCoin.price}
@@ -1020,12 +1043,11 @@ export default function HomeAISignalsBots() {
                   change24h={activeCoin.change24h}
                   defaultInterval={activeCoin.timeframe === "15M" ? "15m" : activeCoin.timeframe === "1H" ? "1h" : activeCoin.timeframe === "4H" ? "4h" : "1D"}
                 />
-              )}
+              </div>
+            )}
 
-            </div>
-          )}
-
-        </div>
+          </div>
+        )}
 
       </div>
     </section>

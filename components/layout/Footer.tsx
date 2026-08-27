@@ -68,7 +68,7 @@ export default function Footer() {
           <div className="space-y-3">
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Data Transparency</h4>
             <ul className="space-y-2 text-slate-400">
-              <li><span className="text-slate-400">Connected to Binance & BLS Feeds</span></li>
+              <li><span className="text-slate-400">Institutional Market Intelligence</span></li>
               <li>
                 <a
                   href="https://github.com/infozeeshan37-ctrl/bitcoincrypto"

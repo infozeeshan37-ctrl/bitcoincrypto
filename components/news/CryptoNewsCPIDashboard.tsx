@@ -129,11 +129,7 @@ export default function CryptoNewsCPIDashboard() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-blue-500/20 text-blue-300 border border-blue-500/30">
                   <Newspaper className="w-3.5 h-3.5 text-blue-400" />
-                  Live Crypto News & Macroeconomic Intelligence
-                </span>
-                <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-800/60 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Wire (Refreshes in {countdown}s)
+                  Crypto News & Macroeconomic Intelligence
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
@@ -393,7 +389,7 @@ export default function CryptoNewsCPIDashboard() {
               <span>Real-Time Breaking Crypto & Macro News Wire</span>
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Curated and verified news from institutional and decentralized intelligence feeds.
+              Curated and verified news from institutional and decentralized intelligence sources.
             </p>
           </div>
 

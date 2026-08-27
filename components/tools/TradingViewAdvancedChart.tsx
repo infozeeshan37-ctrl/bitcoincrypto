@@ -164,7 +164,7 @@ function mapIntervalToTv(val: string) {
 function TradingViewAdvancedChartComponent({
   symbol,
   defaultInterval = "60",
-  height = 580,
+  height = 640,
   theme: initialTheme = "light",
   showIndicatorBar = true,
   showTimeframeBar = true,
@@ -264,13 +264,13 @@ function TradingViewAdvancedChartComponent({
             hide_side_toolbar: false, // FULL DRAWING SUITE (Long/Short, Fib, Trendlines, etc.)
             withdateranges: true,
             save_image: true,
-            details: true,
-            hotlist: true,
-            calendar: true,
+            details: false,
+            hotlist: false,
+            calendar: false,
             studies: activeIndicators,
             show_popup_button: true,
-            popup_width: "1100",
-            popup_height: "700",
+            popup_width: "1000",
+            popup_height: "650",
             disabled_features: ["use_localstorage_for_settings"],
             enabled_features: [
               "study_templates",
@@ -553,8 +553,8 @@ function TradingViewAdvancedChartComponent({
       {/* CHART EMBED CONTAINER - Stably mounted */}
       <div
         ref={containerRef}
-        style={{ height: isFullscreen ? "calc(100vh - 120px)" : `${height}px` }}
-        className="w-full relative overflow-hidden bg-slate-900"
+        style={{ height: isFullscreen ? "calc(100vh - 110px)" : typeof height === "number" ? `${height}px` : height }}
+        className="w-full relative overflow-hidden bg-slate-900 min-h-[440px] sm:min-h-[520px] md:min-h-[580px]"
       >
         {/* Fallback placeholder while TradingView loads */}
         <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-xs bg-slate-900/40 pointer-events-none">

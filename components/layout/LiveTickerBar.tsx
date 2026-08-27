@@ -91,9 +91,9 @@ export default function LiveTickerBar() {
         
         {/* Left: Global Metrics Quick Bar */}
         <div className="flex items-center gap-4 text-slate-400 font-medium">
-          <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] tracking-wider uppercase">Live APIs Connected</span>
+          <div className="flex items-center gap-1.5 text-slate-300 font-bold">
+            <Sparkles className="w-3 h-3 text-amber-400" />
+            <span className="text-[10px] tracking-wider uppercase font-extrabold text-slate-200">Markets</span>
           </div>
 
           <span className="text-slate-700 hidden sm:inline">|</span>

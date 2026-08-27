@@ -168,10 +168,6 @@ export default function CoinglassDashboard() {
                   <Flame className="w-3.5 h-3.5 text-rose-400" />
                   Coinglass Derivatives Analytics
                 </span>
-                <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-800/60 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Futures Feeds (Sync in {countdown}s)
-                </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
                 Futures Open Interest, <br className="hidden sm:inline" />

@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     title: "BitcoinCrypto.tech | Crypto Market Intelligence",
     description: "Transparent market structure and digital asset research.",
   },
+  verification: {
+    google: "udO3ekn-GvP9ijsju7oeWcay_BGJN-TzI9V7Gt3IvtE",
+  },
 };
 
 export default function RootLayout({

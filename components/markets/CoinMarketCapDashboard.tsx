@@ -189,11 +189,7 @@ export default function CoinMarketCapDashboard() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-amber-400/20 text-amber-300 border border-amber-400/30">
                   <Coins className="w-3.5 h-3.5 text-amber-400" />
-                  CoinMarketCap Live Intelligence
-                </span>
-                <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-800/60 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Sync (Refreshes in {countdown}s)
+                  CoinMarketCap Intelligence
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
@@ -203,7 +199,7 @@ export default function CoinMarketCapDashboard() {
                 </span>
               </h1>
               <p className="text-slate-400 text-xs sm:text-sm max-w-2xl mt-2 leading-relaxed">
-                Real-time market valuation, 24h spot volume, dominance indexes, and algorithmic momentum indicators connected directly to live Binance & global crypto exchange endpoints.
+                Real-time market valuation, 24h spot volume, dominance indexes, and algorithmic momentum indicators across global crypto assets.
               </p>
             </div>
 
@@ -574,10 +570,10 @@ export default function CoinMarketCapDashboard() {
         {/* Footer info in table */}
         <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 font-medium">
           <div>
-            Showing <strong>{filteredCoins.length}</strong> cryptocurrencies with real-time WebSocket feeds
+            Showing <strong>{filteredCoins.length}</strong> top cryptocurrencies
           </div>
           <div className="font-mono text-[11px]">
-            Last API Sync: <strong className="text-slate-800">{lastSyncTime || "Real-time Connected"}</strong>
+            Last Updated: <strong className="text-slate-800">{lastSyncTime || "Just now"}</strong>
           </div>
         </div>
       </div>

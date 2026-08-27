@@ -369,12 +369,8 @@ export default function AITradingBotTerminal() {
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-spin" />
-              <span>Real-Time Binance Spot & Derivatives Engine</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-700 font-bold bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-              Direct Binance API Connected ({lastUpdated || "Syncing..."})
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <span>Algorithmic Spot & Derivatives Execution Engine</span>
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -392,7 +388,7 @@ export default function AITradingBotTerminal() {
             className="px-4 py-2.5 rounded-2xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition flex items-center gap-2 shadow-sm"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-            <span>Force Live Sync</span>
+            <span>Refresh Signals</span>
           </button>
         </div>
       </div>
@@ -610,7 +606,7 @@ export default function AITradingBotTerminal() {
 
         </div>
 
-        {/* RIGHT COLUMN: 1:1 SYNCHRONIZED TRADINGVIEW TERMINAL & EXECUTION BLUEPRINT */}
+        {/* RIGHT COLUMN: 1:1 SYNCHRONIZED EXECUTION BLUEPRINT */}
         {activeCoin && (
           <div className="lg:col-span-7 space-y-6">
 
@@ -751,25 +747,41 @@ export default function AITradingBotTerminal() {
 
             </div>
 
-            {/* VIEW SELECTOR BAR: ADVANCED CHART / TA GAUGE & PIVOTS / SPLIT VIEW */}
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 sm:px-4 sm:py-3 rounded-2xl border border-slate-200 shadow-sm">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Analysis View:</span>
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+          </div>
+        )}
+
+        {/* DEDICATED FULL-WIDTH RESPONSIVE TRADINGVIEW CHART & TA TERMINAL (PLACED BELOW) */}
+        {activeCoin && (
+          <div className="w-full space-y-6 pt-4">
+            
+            {/* View Selector & Header Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 sm:px-6 sm:py-4 rounded-3xl border border-slate-200 shadow-sm">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 rounded-xl bg-amber-100 text-amber-800">
+                    <BarChart2 className="w-4 h-4 text-amber-600" />
+                  </span>
+                  <h3 className="text-base sm:text-lg font-black text-slate-900">
+                    Live Candlestick Terminal & Indicator Matrix
+                  </h3>
+                </div>
+                
+                {/* View Mode Switcher */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
                   <button
                     onClick={() => setChartViewMode("chart")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
                       chartViewMode === "chart"
                         ? "bg-slate-900 text-white shadow-sm font-extrabold"
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
                     <BarChart2 className="w-3.5 h-3.5" />
-                    <span>Advanced Chart & Drawing</span>
+                    <span>Live Chart & Drawing Suite</span>
                   </button>
                   <button
                     onClick={() => setChartViewMode("analysis")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
                       chartViewMode === "analysis"
                         ? "bg-slate-900 text-white shadow-sm font-extrabold"
                         : "text-slate-600 hover:text-slate-900"
@@ -780,7 +792,7 @@ export default function AITradingBotTerminal() {
                   </button>
                   <button
                     onClick={() => setChartViewMode("both")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
                       chartViewMode === "both"
                         ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
                         : "text-slate-600 hover:text-slate-900"
@@ -792,18 +804,24 @@ export default function AITradingBotTerminal() {
                 </div>
               </div>
 
-              <div className="text-[11px] font-mono text-slate-500">
-                Pair: <strong className="text-slate-900">{activeCoin.tvSymbol}</strong>
+              <div className="flex items-center gap-3 text-xs font-mono ml-auto sm:ml-0">
+                <span className="text-slate-400">Pair:</span>
+                <span className="font-black text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">
+                  {activeCoin.tvSymbol}
+                </span>
+                <span className={`px-2 py-0.5 rounded-lg font-bold ${activeCoin.change24h >= 0 ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
+                  {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
+                </span>
               </div>
             </div>
 
-            {/* ADVANCED TRADINGVIEW INTERACTIVE CHART (WITH DRAWING TOOLS & INDICATORS) */}
+            {/* FULL-WIDTH RESPONSIVE ADVANCED TRADINGVIEW CHART */}
             {(chartViewMode === "chart" || chartViewMode === "both") && (
-              <div className="space-y-2">
+              <div className="w-full">
                 <TradingViewAdvancedChart
                   symbol={activeCoin.tvSymbol}
                   defaultInterval={activeCoin.timeframe}
-                  height={560}
+                  height={660}
                   showIndicatorBar={true}
                   showTimeframeBar={true}
                   showStyleBar={true}
@@ -811,16 +829,18 @@ export default function AITradingBotTerminal() {
               </div>
             )}
 
-            {/* TECHNICAL ANALYSIS GAUGE, PIVOT POINTS & FIBONACCI LADDER */}
+            {/* FULL-WIDTH TECHNICAL ANALYSIS GAUGE & PIVOTS */}
             {(chartViewMode === "analysis" || chartViewMode === "both") && (
-              <TechnicalAnalysisPanel
-                symbol={activeCoin.tvSymbol}
-                price={activeCoin.price}
-                high24h={activeCoin.high24h}
-                low24h={activeCoin.low24h}
-                change24h={activeCoin.change24h}
-                defaultInterval={activeCoin.timeframe === "15M" ? "15m" : activeCoin.timeframe === "1H" ? "1h" : activeCoin.timeframe === "4H" ? "4h" : "1D"}
-              />
+              <div className="w-full">
+                <TechnicalAnalysisPanel
+                  symbol={activeCoin.tvSymbol}
+                  price={activeCoin.price}
+                  high24h={activeCoin.high24h}
+                  low24h={activeCoin.low24h}
+                  change24h={activeCoin.change24h}
+                  defaultInterval={activeCoin.timeframe === "15M" ? "15m" : activeCoin.timeframe === "1H" ? "1h" : activeCoin.timeframe === "4H" ? "4h" : "1D"}
+                />
+              </div>
             )}
 
           </div>
