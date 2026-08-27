@@ -1,4 +1,5 @@
 import Hero from "@/components/home/Hero";
+import HardwareTeardown3D from "@/components/home/HardwareTeardown3D";
 import ValuePillars from "@/components/home/ValuePillars";
 import PlatformOverview from "@/components/home/PlatformOverview";
 import TradingConcepts from "@/components/home/TradingConcepts";
@@ -10,6 +11,7 @@ export default function HomePage() {
   return (
     <div className="space-y-0">
       <Hero />
+      <HardwareTeardown3D />
       <ValuePillars />
       <PlatformOverview />
       <TradingConcepts />
