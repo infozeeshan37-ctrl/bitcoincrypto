@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Coins, BookOpen, Compass, Info, Menu, X, ArrowUpRight, Cpu } from "lucide-react";
+import { Coins, BookOpen, Compass, Info, Menu, X, ArrowUpRight, Cpu, Bot, Sparkles } from "lucide-react";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,11 +29,13 @@ export default function Navbar() {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-          <Link href="/concepts" className="hover:text-amber-600 transition flex items-center gap-1.5">
-            <Compass className="w-4 h-4 text-amber-500" /> Concepts & Tech
+          <Link href="/tools" className="hover:text-amber-600 transition flex items-center gap-1.5 font-bold text-slate-900">
+            <Bot className="w-4 h-4 text-amber-500" />
+            <span>AI Trading Bot</span>
+            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-400 text-slate-950">LIVE</span>
           </Link>
-          <Link href="/tools" className="hover:text-amber-600 transition flex items-center gap-1.5">
-            <Cpu className="w-4 h-4 text-slate-500" /> Platform Tools
+          <Link href="/concepts" className="hover:text-amber-600 transition flex items-center gap-1.5">
+            <Compass className="w-4 h-4 text-slate-500" /> Concepts & Tech
           </Link>
           <Link href="/blog" className="hover:text-amber-600 transition flex items-center gap-1.5">
             <BookOpen className="w-4 h-4 text-slate-500" /> Research & Blog
@@ -46,10 +48,10 @@ export default function Navbar() {
         {/* Action Button */}
         <div className="hidden sm:flex items-center gap-3">
           <Link
-            href="/concepts"
+            href="/tools"
             className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-900 bg-amber-400 hover:bg-amber-300 shadow-sm hover:shadow transition flex items-center gap-1.5"
           >
-            Explore Intelligence <ArrowUpRight className="w-3.5 h-3.5" />
+            Launch AI Signals <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
@@ -67,17 +69,20 @@ export default function Navbar() {
       {isOpen && (
         <div className="md:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-4 text-sm font-medium text-slate-700 animate-in fade-in slide-in-from-top duration-200">
           <Link href="/" onClick={() => setIsOpen(false)} className="block hover:text-amber-600">Home</Link>
-          <Link href="/concepts" onClick={() => setIsOpen(false)} className="block hover:text-amber-600">Trading Concepts & Tech</Link>
-          <Link href="/tools" onClick={() => setIsOpen(false)} className="block hover:text-amber-600">Platform Tools Directory</Link>
+          <Link href="/tools" onClick={() => setIsOpen(false)} className="block font-bold text-amber-600 flex items-center justify-between">
+            <span>AI Trading Bot & Signals</span>
+            <span className="text-[10px] bg-amber-400 text-slate-950 font-bold px-2 py-0.5 rounded">LIVE</span>
+          </Link>
+          <Link href="/concepts" onClick={() => setIsOpen(false)} className="block hover:text-amber-600">Trading Concepts & Masterclasses</Link>
           <Link href="/blog" onClick={() => setIsOpen(false)} className="block hover:text-amber-600">Research & Market Blog</Link>
           <Link href="/about" onClick={() => setIsOpen(false)} className="block hover:text-amber-600">About BitcoinCrypto.tech</Link>
           <div className="pt-4 border-t border-slate-100">
             <Link
-              href="/concepts"
+              href="/tools"
               onClick={() => setIsOpen(false)}
               className="block text-center py-2.5 rounded-xl text-xs font-bold text-slate-900 bg-amber-400"
             >
-              Explore Intelligence
+              Launch AI Signals
             </Link>
           </div>
         </div>
