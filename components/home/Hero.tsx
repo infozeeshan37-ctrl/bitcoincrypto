@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles, Shield, Cpu, BookOpen, Layers } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden bg-gradient-to-b from-amber-50/40 via-white to-white">
+    <section className="relative pt-16 pb-12 lg:pt-20 lg:pb-14 overflow-hidden bg-gradient-to-b from-amber-50/40 via-white to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <div className="text-center max-w-3xl mx-auto space-y-6">
@@ -41,41 +41,6 @@ export default function Hero() {
             >
               Read Research Desk
             </Link>
-          </div>
-
-        </div>
-
-        {/* 3 Core Highlights (Informational Cards) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16 max-w-5xl mx-auto">
-          
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4">
-              <Cpu className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 mb-1.5">Algorithmic Precision</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Transparent mathematical formulas for Dollar Cost Averaging, position risk sizing, and market cycle simulations.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
-              <Layers className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 mb-1.5">Order Flow Mechanics</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Understand liquidity clusters, funding rate arbitrage, and perpetual open interest dynamics without confusion.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
-              <BookOpen className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 mb-1.5">Unbiased Research</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              In-depth commentary on Bitcoin halving supply dynamics, Layer-2 rollups, and global institutional ETF inflows.
-            </p>
           </div>
 
         </div>
