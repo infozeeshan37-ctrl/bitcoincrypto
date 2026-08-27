@@ -1,23 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, useId } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import {
   Maximize2,
   Minimize2,
   Sun,
   Moon,
-  TrendingUp,
-  Layers,
   Activity,
-  BarChart2,
-  Sliders,
-  Sparkles,
-  RefreshCw,
-  Eye,
   Check,
   Zap,
-  Info,
-  Compass
+  Sliders,
+  Compass,
+  RefreshCw
 } from "lucide-react";
 
 export interface IndicatorOption {
@@ -157,7 +151,17 @@ declare global {
   }
 }
 
-export default function TradingViewAdvancedChart({
+// Timeframe mapping helper
+function mapIntervalToTv(val: string) {
+  if (val === "15M") return "15";
+  if (val === "1H") return "60";
+  if (val === "4H") return "240";
+  if (val === "1D") return "D";
+  if (val === "1W") return "W";
+  return val || "60";
+}
+
+function TradingViewAdvancedChartComponent({
   symbol,
   defaultInterval = "60",
   height = 580,
@@ -168,29 +172,26 @@ export default function TradingViewAdvancedChart({
   onTimeframeChange,
   className = ""
 }: TradingViewAdvancedChartProps) {
-  const rawId = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const containerId = `tv_chart_${rawId}_${Math.floor(Math.random() * 10000)}`;
-  const containerRef = useRef<HTMLDivElement>(null);
-
   // Normalize symbol (ensure BINANCE: prefix if missing crypto pair)
-  const cleanSymbol = symbol.includes(":") ? symbol : `BINANCE:${symbol.toUpperCase()}`;
+  const cleanSymbol = useMemo(() => {
+    return symbol.includes(":") ? symbol : `BINANCE:${symbol.toUpperCase()}`;
+  }, [symbol]);
 
-  // Timeframe mapping helper
-  const mapIntervalToTv = (val: string) => {
-    if (val === "15M") return "15";
-    if (val === "1H") return "60";
-    if (val === "4H") return "240";
-    if (val === "1D") return "D";
-    if (val === "1W") return "W";
-    return val;
-  };
+  // STABLE container ID tied solely to cleanSymbol to avoid any re-render churn
+  const containerId = useMemo(() => {
+    const safe = cleanSymbol.replace(/[^a-zA-Z0-9]/g, "_");
+    return `tv_chart_${safe}`;
+  }, [cleanSymbol]);
 
-  const [interval, setInterval] = useState<string>(mapIntervalToTv(defaultInterval));
+  const containerRef = useRef<HTMLDivElement>(null);
+  const currentIntervalRef = useRef<string>(mapIntervalToTv(defaultInterval));
+
+  const [interval, setIntervalState] = useState<string>(mapIntervalToTv(defaultInterval));
   const [chartStyle, setChartStyle] = useState<string>("1"); // 1 = Candles
   const [theme, setTheme] = useState<"light" | "dark">(initialTheme);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [showIndicatorModal, setShowIndicatorModal] = useState<boolean>(false);
-  
+
   // Active technical indicator studies
   const [activeIndicators, setActiveIndicators] = useState<string[]>([
     "RSI@tv-basicstudies",
@@ -198,9 +199,13 @@ export default function TradingViewAdvancedChart({
     "BB@tv-basicstudies"
   ]);
 
-  // Update interval when defaultInterval prop changes
+  // Update interval state only when defaultInterval actually changes to a different value
   useEffect(() => {
-    setInterval(mapIntervalToTv(defaultInterval));
+    const mapped = mapIntervalToTv(defaultInterval);
+    if (mapped !== currentIntervalRef.current) {
+      currentIntervalRef.current = mapped;
+      setIntervalState(mapped);
+    }
   }, [defaultInterval]);
 
   // Toggle Indicator
@@ -233,7 +238,7 @@ export default function TradingViewAdvancedChart({
     }
   };
 
-  // Render TradingView Chart Widget
+  // Render TradingView Chart Widget - ONLY when cleanSymbol, interval, chartStyle, theme, or activeIndicators change
   useEffect(() => {
     let isMounted = true;
 
@@ -256,7 +261,7 @@ export default function TradingViewAdvancedChart({
             enable_publishing: false,
             allow_symbol_change: true,
             container_id: containerId,
-            hide_side_toolbar: false, // FULL DRAWING SUITE ENABLED
+            hide_side_toolbar: false, // FULL DRAWING SUITE (Long/Short, Fib, Trendlines, etc.)
             withdateranges: true,
             save_image: true,
             details: true,
@@ -267,7 +272,13 @@ export default function TradingViewAdvancedChart({
             popup_width: "1100",
             popup_height: "700",
             disabled_features: ["use_localstorage_for_settings"],
-            enabled_features: ["study_templates", "header_indicators", "header_chart_type", "header_settings", "side_toolbar_in_fullscreen_mode"]
+            enabled_features: [
+              "study_templates",
+              "header_indicators",
+              "header_chart_type",
+              "header_settings",
+              "side_toolbar_in_fullscreen_mode"
+            ]
           });
         } catch (e) {
           console.warn("TradingView widget init error:", e);
@@ -295,9 +306,6 @@ export default function TradingViewAdvancedChart({
 
     return () => {
       isMounted = false;
-      if (containerRef.current) {
-        containerRef.current.innerHTML = "";
-      }
     };
   }, [cleanSymbol, interval, chartStyle, theme, activeIndicators, containerId]);
 
@@ -317,6 +325,9 @@ export default function TradingViewAdvancedChart({
             <span className="font-mono text-xs font-black tracking-wide text-amber-400">
               {cleanSymbol}
             </span>
+            <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-800/40">
+              LIVE WebSocket
+            </span>
           </div>
 
           {/* Timeframe Selector */}
@@ -328,7 +339,8 @@ export default function TradingViewAdvancedChart({
                   <button
                     key={tf.value}
                     onClick={() => {
-                      setInterval(tf.value);
+                      currentIntervalRef.current = tf.value;
+                      setIntervalState(tf.value);
                       if (onTimeframeChange) onTimeframeChange(tf.value);
                     }}
                     title={tf.desc}
@@ -530,15 +542,15 @@ export default function TradingViewAdvancedChart({
         <div className="flex items-center gap-1.5">
           <Compass className="w-3.5 h-3.5 text-amber-600" />
           <span>
-            <strong>Drawing Tools Active:</strong> Use the left toolbar for Trendlines, Fibonacci Retracements, Channels, and Long/Short Position tools.
+            <strong>Drawing Tools Active:</strong> Use the left toolbar for Long/Short Position tools, Trendlines, Channels, and Fibonacci Retracements without interruption.
           </span>
         </div>
         <span className="hidden sm:inline font-mono text-[10px] text-slate-400">
-          TradingView Professional Engine
+          TradingView Professional Engine (Persistent)
         </span>
       </div>
 
-      {/* CHART EMBED CONTAINER */}
+      {/* CHART EMBED CONTAINER - Stably mounted */}
       <div
         ref={containerRef}
         style={{ height: isFullscreen ? "calc(100vh - 120px)" : `${height}px` }}
@@ -548,7 +560,7 @@ export default function TradingViewAdvancedChart({
         <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-xs bg-slate-900/40 pointer-events-none">
           <div className="flex items-center gap-2 font-mono">
             <RefreshCw className="w-4 h-4 animate-spin text-amber-400" />
-            <span>Loading TradingView Engine & Indicators...</span>
+            <span>Connecting TradingView Live WebSocket Engine...</span>
           </div>
         </div>
       </div>
@@ -556,3 +568,21 @@ export default function TradingViewAdvancedChart({
     </div>
   );
 }
+
+// Wrap with React.memo to prevent parent state re-renders (like Binance ticker polling) from resetting chart & drawings
+const TradingViewAdvancedChart = React.memo(
+  TradingViewAdvancedChartComponent,
+  (prevProps, nextProps) => {
+    return (
+      prevProps.symbol === nextProps.symbol &&
+      prevProps.defaultInterval === nextProps.defaultInterval &&
+      prevProps.height === nextProps.height &&
+      prevProps.theme === nextProps.theme &&
+      prevProps.showIndicatorBar === nextProps.showIndicatorBar &&
+      prevProps.showTimeframeBar === nextProps.showTimeframeBar &&
+      prevProps.showStyleBar === nextProps.showStyleBar
+    );
+  }
+);
+
+export default TradingViewAdvancedChart;
