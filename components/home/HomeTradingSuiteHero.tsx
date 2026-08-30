@@ -839,29 +839,6 @@ export default function HomeTradingSuiteHero() {
                     </div>
                   </div>
 
-                  {/* EMBEDDED REAL-TIME CHART LINK */}
-                  <div className="bg-slate-950 rounded-3xl p-6 sm:p-8 text-white border-2 border-amber-400/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="space-y-1">
-                      <div className="text-xs font-mono font-bold text-amber-400 uppercase">TradingView Candlestick Studio</div>
-                      <h4 className="text-lg font-black text-white">
-                        Analyze {activeCoin.base}/USDT Live on Advanced Terminal
-                      </h4>
-                      <p className="text-xs text-slate-300">
-                        100+ technical indicators, full drawing tools, and oscillator gauges.
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setChartSymbol(activeCoin.tvSymbol);
-                        setActiveTab("terminal");
-                      }}
-                      className="px-5 py-3 rounded-2xl bg-amber-400 text-slate-950 font-black text-xs hover:bg-amber-300 transition whitespace-nowrap flex items-center gap-1.5 shadow-md"
-                    >
-                      <span>Open in Terminal</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-
                 </div>
               )}
 
