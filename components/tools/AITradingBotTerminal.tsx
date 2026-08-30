@@ -5,37 +5,21 @@ import {
   Bot,
   TrendingUp,
   TrendingDown,
-  Activity,
-  Zap,
   Clock,
   ShieldAlert,
   Sliders,
-  DollarSign,
   Target,
-  ArrowRight,
   Sparkles,
   CheckCircle2,
   RefreshCw,
   Search,
   Layers,
-  BarChart2,
-  Gauge,
   Copy,
   Check,
-  Flame,
-  Scale,
-  Crosshair,
-  Percent,
   Compass,
-  Award,
   AlertTriangle,
-  Radio,
-  ExternalLink,
-  ChevronRight,
-  LineChart
+  Radio
 } from "lucide-react";
-import TradingViewAdvancedChart from "./TradingViewAdvancedChart";
-import TechnicalAnalysisPanel from "./TechnicalAnalysisPanel";
 import {
   SignalTimeframe,
   CoinConfig,
@@ -86,7 +70,6 @@ export default function AITradingBotTerminal() {
   const [signalFilter, setSignalFilter] = useState<"ALL" | "BUY" | "SHORT" | "HIGH_CONF">("ALL");
   const [search, setSearch] = useState("");
   const [customPairInput, setCustomPairInput] = useState("");
-  const [chartViewMode, setChartViewMode] = useState<"chart" | "analysis" | "both">("chart");
   const [copied, setCopied] = useState(false);
 
   // AI Copilot & Futures Leverage Simulator State
@@ -883,102 +866,6 @@ export default function AITradingBotTerminal() {
                 ))}
               </div>
             </div>
-
-          </div>
-        )}
-
-        {/* FULL-WIDTH RESPONSIVE TRADINGVIEW CHART & TA TERMINAL (BELOW) */}
-        {activeCoin && (
-          <div className="w-full space-y-6 pt-4">
-            
-            {/* View Selector & Header Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 sm:px-6 sm:py-4 rounded-3xl border border-slate-200 shadow-sm">
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="p-1.5 rounded-xl bg-amber-100 text-amber-800">
-                    <BarChart2 className="w-4 h-4 text-amber-600" />
-                  </span>
-                  <h3 className="text-base sm:text-lg font-black text-slate-900">
-                    Live Candlestick Terminal & Technical Gauge
-                  </h3>
-                </div>
-                
-                {/* View Mode Switcher */}
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
-                  <button
-                    onClick={() => setChartViewMode("chart")}
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-                      chartViewMode === "chart"
-                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <BarChart2 className="w-3.5 h-3.5" />
-                    <span>Live Chart & Drawing Suite</span>
-                  </button>
-                  <button
-                    onClick={() => setChartViewMode("analysis")}
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-                      chartViewMode === "analysis"
-                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <Gauge className="w-3.5 h-3.5" />
-                    <span>Technical Gauge & Pivots</span>
-                  </button>
-                  <button
-                    onClick={() => setChartViewMode("both")}
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-                      chartViewMode === "both"
-                        ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <Layers className="w-3.5 h-3.5" />
-                    <span>Split Matrix View</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 text-xs font-mono ml-auto sm:ml-0">
-                <span className="text-slate-400">Pair:</span>
-                <span className="font-black text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">
-                  {activeCoin.tvSymbol}
-                </span>
-                <span className={`px-2 py-0.5 rounded-lg font-bold ${activeCoin.change24h >= 0 ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
-                  {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
-                </span>
-              </div>
-            </div>
-
-            {/* FULL-WIDTH RESPONSIVE ADVANCED TRADINGVIEW CHART */}
-            {(chartViewMode === "chart" || chartViewMode === "both") && (
-              <div className="w-full">
-                <TradingViewAdvancedChart
-                  symbol={activeCoin.tvSymbol}
-                  defaultInterval={activeCoin.timeframe === "5M" ? "5" : activeCoin.timeframe === "15M" ? "15" : activeCoin.timeframe === "1H" ? "60" : activeCoin.timeframe === "4H" ? "240" : "D"}
-                  height={660}
-                  showIndicatorBar={true}
-                  showTimeframeBar={true}
-                  showStyleBar={true}
-                />
-              </div>
-            )}
-
-            {/* FULL-WIDTH TECHNICAL ANALYSIS GAUGE & PIVOTS */}
-            {(chartViewMode === "analysis" || chartViewMode === "both") && (
-              <div className="w-full">
-                <TechnicalAnalysisPanel
-                  symbol={activeCoin.tvSymbol}
-                  price={activeCoin.price}
-                  high24h={activeCoin.high24h}
-                  low24h={activeCoin.low24h}
-                  change24h={activeCoin.change24h}
-                  defaultInterval={activeCoin.timeframe === "5M" ? "5m" : activeCoin.timeframe === "15M" ? "15m" : activeCoin.timeframe === "1H" ? "1h" : activeCoin.timeframe === "4H" ? "4h" : "1D"}
-                />
-              </div>
-            )}
 
           </div>
         )}
