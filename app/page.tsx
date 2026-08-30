@@ -1,5 +1,4 @@
-import Hero from "@/components/home/Hero";
-import HomeAISignalsBots from "@/components/home/HomeAISignalsBots";
+import HomeTradingSuiteHero from "@/components/home/HomeTradingSuiteHero";
 import LiveEcosystemOverview from "@/components/home/LiveEcosystemOverview";
 import PlatformOverview from "@/components/home/PlatformOverview";
 import ValuePillars from "@/components/home/ValuePillars";
@@ -11,11 +10,8 @@ import NewsletterCTA from "@/components/home/NewsletterCTA";
 export default function HomePage() {
   return (
     <div className="space-y-0">
-      {/* 1. Clean, AdSense-Friendly Hero Header with Feature Badges */}
-      <Hero />
-
-      {/* 2. Compact AI Trading Signals & Algorithmic Bots Summary Hub */}
-      <HomeAISignalsBots />
+      {/* 1. Cryptocurrency Trading Suite & Signals Engine Hero (Matches User Design) */}
+      <HomeTradingSuiteHero />
 
       {/* 2. Real-Time Crypto Ecosystem & Derivatives Intelligence */}
       <LiveEcosystemOverview />
