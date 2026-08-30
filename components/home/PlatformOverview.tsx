@@ -1,16 +1,8 @@
 import Link from "next/link";
-import { Terminal, Calculator, Flame, Newspaper, ArrowRight, Bot, Coins } from "lucide-react";
+import { Calculator, Flame, Newspaper, ArrowRight, Coins, BookOpen } from "lucide-react";
 
 export default function PlatformOverview() {
   const sections = [
-    {
-      icon: Terminal,
-      badge: "Real-Time Terminal",
-      title: "TradingView Institutional Charts & TA",
-      desc: "Full multi-timeframe candlestick terminal equipped with 100+ technical indicators (RSI, MACD, Bollinger Bands, 200 EMA) and complete drawing suites.",
-      link: "/tools",
-      ctaText: "Launch Chart Terminal"
-    },
     {
       icon: Coins,
       badge: "Market Intelligence",
@@ -44,7 +36,7 @@ export default function PlatformOverview() {
       ctaText: "Check CPI & Macro News"
     },
     {
-      icon: Bot,
+      icon: BookOpen,
       badge: "Educational Architecture",
       title: "Research Desk & Trading Concepts",
       desc: "In-depth breakdowns of Bitcoin halving supply schedules, Lightning Network velocity, institutional ETF flows, and order flow dynamics.",
