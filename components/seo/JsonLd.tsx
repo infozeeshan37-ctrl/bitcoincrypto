@@ -77,24 +77,33 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
 }
 
 export interface ArticleJsonLdProps {
-  title: string;
-  description: string;
-  url: string;
-  publishedAt: string;
-  author: string;
-  category: string;
-  tags: string[];
+  article?: {
+    title: string;
+    excerpt: string;
+    slug: string;
+    publishedAt: string;
+    author: string;
+    category: string;
+    tags: string[];
+  };
+  title?: string;
+  description?: string;
+  url?: string;
+  publishedAt?: string;
+  author?: string;
+  category?: string;
+  tags?: string[];
 }
 
-export function ArticleJsonLd({
-  title,
-  description,
-  url,
-  publishedAt,
-  author,
-  category,
-  tags,
-}: ArticleJsonLdProps) {
+export function ArticleJsonLd(props: ArticleJsonLdProps) {
+  const title = props.article?.title || props.title || "Bitcoin Research";
+  const description = props.article?.excerpt || props.description || "";
+  const url = props.url || `https://www.bitcoincrypto.tech/blog/${props.article?.slug || ""}`;
+  const publishedAt = props.article?.publishedAt || props.publishedAt || new Date().toISOString();
+  const author = props.article?.author || props.author || "BitcoinCrypto Research Desk";
+  const category = props.article?.category || props.category || "Cryptocurrency";
+  const tags = props.article?.tags || props.tags || [];
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -128,16 +137,20 @@ export function ArticleJsonLd({
   );
 }
 
-export function FAQJsonLd({ faqs }: { faqs: { q: string; a: string }[] }) {
+export function FAQJsonLd({
+  faqs,
+}: {
+  faqs: { q?: string; a?: string; question?: string; answer?: string }[];
+}) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: faqs.map((faq) => ({
       "@type": "Question",
-      name: faq.q,
+      name: faq.q || faq.question || "",
       acceptedAnswer: {
         "@type": "Answer",
-        text: faq.a,
+        text: faq.a || faq.answer || "",
       },
     })),
   };

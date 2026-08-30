@@ -8,7 +8,7 @@ export default function PlatformOverview() {
       badge: "Real-Time Terminal",
       title: "TradingView Institutional Charts & TA",
       desc: "Full multi-timeframe candlestick terminal equipped with 100+ technical indicators (RSI, MACD, Bollinger Bands, 200 EMA) and complete drawing suites.",
-      link: "/tools?tab=terminal",
+      link: "/tools",
       ctaText: "Launch Chart Terminal"
     },
     {
@@ -32,7 +32,7 @@ export default function PlatformOverview() {
       badge: "Financial Models",
       title: "Algorithmic DCA & Risk Sizing Calculators",
       desc: "Simulate recurring accumulation strategies across multi-year cycles and calculate exact position risk-to-reward ratios before placing orders.",
-      link: "/tools?tab=dca",
+      link: "/concepts",
       ctaText: "Open Financial Calculators"
     },
     {
@@ -54,39 +54,39 @@ export default function PlatformOverview() {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white dark:bg-slate-950 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600">Ecosystem Architecture</span>
-          <h2 className="text-3xl font-extrabold text-slate-900">What BitcoinCrypto.tech Offers</h2>
-          <p className="text-sm text-slate-600">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">Ecosystem Architecture</span>
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">What BitcoinCrypto.tech Offers</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-300">
             A comprehensive suite of modules designed to support your crypto research journey from fundamental to technical analysis.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sections.map((sec, idx) => (
-            <div key={idx} className="bg-slate-50/70 rounded-3xl p-7 border border-slate-200 hover:border-amber-300 hover:bg-white transition group flex flex-col justify-between shadow-xs hover:shadow-md">
+            <div key={idx} className="bg-slate-50/70 dark:bg-slate-900/80 rounded-3xl p-7 border border-slate-200 dark:border-slate-800 hover:border-amber-300 dark:hover:border-amber-400/50 hover:bg-white dark:hover:bg-slate-900 transition group flex flex-col justify-between shadow-xs hover:shadow-md">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-white text-amber-600 shadow-sm border border-slate-200 flex items-center justify-center group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
+                  <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-400 shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
                     <sec.icon className="w-6 h-6" />
                   </div>
-                  <span className="text-[11px] font-semibold font-mono text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-200/60">
+                  <span className="text-[11px] font-semibold font-mono text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2.5 py-1 rounded-full border border-amber-200/60 dark:border-amber-700/60">
                     {sec.badge}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-amber-700 transition">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">
                   {sec.title}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   {sec.desc}
                 </p>
               </div>
 
-              <div className="pt-5 mt-5 border-t border-slate-200/80">
-                <Link href={sec.link} className="text-xs font-bold text-slate-900 group-hover:text-amber-600 inline-flex items-center gap-1.5 transition">
+              <div className="pt-5 mt-5 border-t border-slate-200/80 dark:border-slate-800">
+                <Link href={sec.link} className="text-xs font-bold text-slate-900 dark:text-slate-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 inline-flex items-center gap-1.5 transition">
                   <span>{sec.ctaText}</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </Link>

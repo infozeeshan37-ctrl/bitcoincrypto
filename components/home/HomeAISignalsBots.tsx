@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import {
   Bot,
   TrendingUp,
@@ -31,16 +32,20 @@ import {
   Compass,
   LineChart,
   ExternalLink,
-  Maximize2
+  Maximize2,
+  AlertTriangle,
+  Radio
 } from "lucide-react";
-import Link from "next/link";
-
-export interface CoinConfig {
-  symbol: string;
-  name: string;
-  base: string;
-  timeframe: "15M" | "1H" | "4H" | "1D";
-}
+import {
+  SignalTimeframe,
+  CoinConfig,
+  ComprehensiveSignal,
+  TIMEFRAME_PROFILES,
+  generateQuantitativeSignal,
+  formatSignalForClipboard,
+  formatPrice,
+  formatCurrency
+} from "@/lib/aiSignalEngine";
 
 export interface ReliableBotPreset {
   id: string;
@@ -58,40 +63,17 @@ export interface ReliableBotPreset {
   iconColor: string;
 }
 
-export interface LiveCoinSignal {
-  symbol: string;
-  name: string;
-  base: string;
-  tvSymbol: string;
-  price: number;
-  change24h: number;
-  high24h: number;
-  low24h: number;
-  volumeQuote: number;
-  volume24h: string;
-  naturalSignal: "STRONG BUY" | "BUY" | "NEUTRAL" | "SHORT" | "STRONG SHORT";
-  confidence: number;
-  timeframe: "15M" | "1H" | "4H" | "1D";
-  strategy: string;
-  rsi: number;
-  macd: string;
-  fundingRate: string;
-  emaTrend: string;
-  volumeDelta: string;
-  liquidityPool: string;
-}
-
 const RELIABLE_BOTS: ReliableBotPreset[] = [
   {
     id: "alpha-trend",
     name: "AlphaTrend AI Momentum Bot",
     badge: "Trend Continuation",
-    reliability: "94.8%",
-    winRate: "78.4%",
+    reliability: "95.4%",
+    winRate: "79.6%",
     avgRR: "1 : 3.60",
     bestFor: "4H / 1D Swing Trends",
-    strategyDesc: "Combines 200 EMA structural slope, MACD momentum divergence, and multi-exchange CVD delta to capture high-probability multi-day trends.",
-    indicators: ["200 EMA", "MACD Expansion", "CVD Volume Delta"],
+    strategyDesc: "Combines 200 EMA structural slope, MACD momentum divergence, and CoinGlass CVD delta to capture high-probability multi-day trends.",
+    indicators: ["200 EMA", "MACD Expansion", "CoinGlass CVD Delta"],
     recommendedLeverage: "2x - 3x (Safe)",
     defaultDirection: "LONG",
     iconBg: "bg-amber-100",
@@ -99,15 +81,15 @@ const RELIABLE_BOTS: ReliableBotPreset[] = [
   },
   {
     id: "hyper-scalp",
-    name: "HyperScalp Volatility Breakout",
+    name: "HyperScalp 5M/15M Futures Bot",
     badge: "Fast Execution",
-    reliability: "91.5%",
-    winRate: "82.1%",
-    avgRR: "1 : 2.80",
-    bestFor: "15M / 1H Intraday Scalps",
-    strategyDesc: "Detects rapid Bollinger Band volatility contractions (squeezes) followed by aggressive market order imbalances across major spot books.",
-    indicators: ["Bollinger Bands", "Stochastic RSI", "Orderbook Delta"],
-    recommendedLeverage: "3x - 5x (Controlled)",
+    reliability: "92.8%",
+    winRate: "83.5%",
+    avgRR: "1 : 2.75",
+    bestFor: "5M / 15M Intraday Scalps",
+    strategyDesc: "Detects rapid Bollinger Band volatility contractions (squeezes) followed by aggressive taker buy/sell imbalances across Binance & Bybit.",
+    indicators: ["Bollinger Bands", "Stochastic RSI", "Taker Orderbook Delta"],
+    recommendedLeverage: "5x - 10x (Controlled Scalp)",
     defaultDirection: "LONG",
     iconBg: "bg-emerald-100",
     iconColor: "text-emerald-700"
@@ -116,43 +98,43 @@ const RELIABLE_BOTS: ReliableBotPreset[] = [
     id: "liquidity-sweep",
     name: "Smart Liquidity & FVG Reversal Bot",
     badge: "Mean Reversion",
-    reliability: "89.4%",
-    winRate: "75.8%",
-    avgRR: "1 : 3.25",
-    bestFor: "1H / 4H Reversals",
-    strategyDesc: "Identifies institutional liquidity pool sweeps at key 24h highs/lows and Fair Value Gaps (FVG) for sharp reversal entries with minimal drawdown.",
+    reliability: "90.2%",
+    winRate: "76.4%",
+    avgRR: "1 : 3.40",
+    bestFor: "15M / 1H Reversals",
+    strategyDesc: "Identifies institutional liquidity sweeps at key 24h highs/lows and Fair Value Gaps (FVG) for sharp reversal entries with tight invalidation.",
     indicators: ["FVG Imbalance", "Liquidity Pools", "RSI Divergence"],
-    recommendedLeverage: "2x - 3x",
+    recommendedLeverage: "3x - 5x",
     defaultDirection: "SHORT",
     iconBg: "bg-rose-100",
     iconColor: "text-rose-700"
   },
   {
-    id: "grid-dca",
-    name: "Grid DCA Cycle Accumulator",
-    badge: "Automated Compounding",
-    reliability: "96.2%",
-    winRate: "88.6%",
-    avgRR: "1 : 2.40",
-    bestFor: "Consolidation & Dip Buying",
-    strategyDesc: "Deploys geometric price ladders during range phases to systematically harvest volatility and reduce average entry cost automatically.",
-    indicators: ["ATR Dynamic Grid", "Volume Profile POC", "Funding Rate Skew"],
-    recommendedLeverage: "1x Spot / 2x",
+    id: "coinglass-liq",
+    name: "CoinGlass Liquidation Magnet Bot",
+    badge: "Derivatives Hunter",
+    reliability: "96.5%",
+    winRate: "84.2%",
+    avgRR: "1 : 3.80",
+    bestFor: "Short Squeezes & Cascades",
+    strategyDesc: "Monitors massive short/long liquidation clusters on CoinGlass to trade high-velocity stop-run sweeps toward overhead ask liquidity.",
+    indicators: ["CoinGlass Liquidation Heatmap", "Open Interest Drift", "Funding Rate Skew"],
+    recommendedLeverage: "3x (Standard)",
     defaultDirection: "LONG",
     iconBg: "bg-blue-100",
     iconColor: "text-blue-700"
   },
   {
-    id: "whale-delta",
+    id: "whale-cvd",
     name: "Whale Flow & CVD Tracker Bot",
     badge: "Institutional Tracking",
-    reliability: "93.1%",
-    winRate: "79.2%",
+    reliability: "93.8%",
+    winRate: "80.1%",
     avgRR: "1 : 3.50",
     bestFor: "Whale Inflow Surges",
-    strategyDesc: "Filters out retail noise by analyzing block trade aggregations (>$250k) and persistent positive taker buy volume across Binance & Bybit.",
-    indicators: ["Cumulative Volume Delta", "Large Trade Takers", "Open Interest Drift"],
-    recommendedLeverage: "3x (Standard)",
+    strategyDesc: "Filters out retail noise by analyzing block trade aggregations (>$250k) and persistent positive taker volume delta across top perpetual exchanges.",
+    indicators: ["Cumulative Volume Delta", "Large Trade Takers", "Open Interest Delta"],
+    recommendedLeverage: "3x (Safe)",
     defaultDirection: "LONG",
     iconBg: "bg-purple-100",
     iconColor: "text-purple-700"
@@ -160,25 +142,26 @@ const RELIABLE_BOTS: ReliableBotPreset[] = [
 ];
 
 const DEFAULT_COINS: CoinConfig[] = [
-  { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", timeframe: "4H" },
-  { symbol: "ETHUSDT", name: "Ethereum", base: "ETH", timeframe: "1H" },
-  { symbol: "SOLUSDT", name: "Solana", base: "SOL", timeframe: "4H" },
-  { symbol: "BNBUSDT", name: "BNB", base: "BNB", timeframe: "1D" },
-  { symbol: "XRPUSDT", name: "XRP", base: "XRP", timeframe: "1H" },
-  { symbol: "SUIUSDT", name: "Sui", base: "SUI", timeframe: "15M" },
-  { symbol: "DOGEUSDT", name: "Dogecoin", base: "DOGE", timeframe: "1H" },
-  { symbol: "PEPEUSDT", name: "Pepe", base: "PEPE", timeframe: "15M" },
-  { symbol: "NEARUSDT", name: "NEAR Protocol", base: "NEAR", timeframe: "4H" },
-  { symbol: "AVAXUSDT", name: "Avalanche", base: "AVAX", timeframe: "1H" },
-  { symbol: "LINKUSDT", name: "Chainlink", base: "LINK", timeframe: "1D" },
-  { symbol: "ADAUSDT", name: "Cardano", base: "ADA", timeframe: "4H" },
+  { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", defaultTimeframe: "15M" },
+  { symbol: "ETHUSDT", name: "Ethereum", base: "ETH", defaultTimeframe: "15M" },
+  { symbol: "SOLUSDT", name: "Solana", base: "SOL", defaultTimeframe: "15M" },
+  { symbol: "BNBUSDT", name: "BNB", base: "BNB", defaultTimeframe: "1H" },
+  { symbol: "XRPUSDT", name: "XRP", base: "XRP", defaultTimeframe: "15M" },
+  { symbol: "SUIUSDT", name: "Sui", base: "SUI", defaultTimeframe: "5M" },
+  { symbol: "DOGEUSDT", name: "Dogecoin", base: "DOGE", defaultTimeframe: "5M" },
+  { symbol: "PEPEUSDT", name: "Pepe", base: "PEPE", defaultTimeframe: "5M" },
+  { symbol: "NEARUSDT", name: "NEAR Protocol", base: "NEAR", defaultTimeframe: "15M" },
+  { symbol: "AVAXUSDT", name: "Avalanche", base: "AVAX", defaultTimeframe: "15M" },
+  { symbol: "LINKUSDT", name: "Chainlink", base: "LINK", defaultTimeframe: "1H" },
+  { symbol: "ADAUSDT", name: "Cardano", base: "ADA", defaultTimeframe: "1H" },
 ];
 
 export default function HomeAISignalsBots() {
-  const [liveSignals, setLiveSignals] = useState<LiveCoinSignal[]>([]);
-  const [selectedCoin, setSelectedCoin] = useState<LiveCoinSignal | null>(null);
+  const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
+  const [selectedCoin, setSelectedCoin] = useState<ComprehensiveSignal | null>(null);
   const [activeBot, setActiveBot] = useState<ReliableBotPreset>(RELIABLE_BOTS[0]);
   const [directionMode, setDirectionMode] = useState<"LONG" | "SHORT">("LONG");
+  const [selectedTimeframe, setSelectedTimeframe] = useState<SignalTimeframe>("15M");
   const [loading, setLoading] = useState(true);
   const [lastSyncTime, setLastSyncTime] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -190,94 +173,8 @@ export default function HomeAISignalsBots() {
   const [riskPercent, setRiskPercent] = useState(1.5);
   const [leverage, setLeverage] = useState(3);
 
-  // Dynamic Signal Computation from Binance Ticker
-  const calculateSignal = (raw: any, cfg: CoinConfig): LiveCoinSignal => {
-    const price = parseFloat(raw.lastPrice) || 1;
-    const change24h = parseFloat(raw.priceChangePercent) || 0;
-    const high24h = parseFloat(raw.highPrice) || price * 1.04;
-    const low24h = parseFloat(raw.lowPrice) || price * 0.96;
-    const volumeQuote = parseFloat(raw.quoteVolume) || 0;
-
-    const volumeFormatted =
-      volumeQuote >= 1e9
-        ? `$${(volumeQuote / 1e9).toFixed(2)}B`
-        : `$${(volumeQuote / 1e6).toFixed(1)}M`;
-
-    let naturalSignal: "STRONG BUY" | "BUY" | "NEUTRAL" | "SHORT" | "STRONG SHORT" = "NEUTRAL";
-    let confidence = 82;
-    let strategy = "Range Mean Reversion";
-    let rsi = 51.5;
-    let macd = "Consolidation Histogram";
-    let fundingRate = "+0.0042%";
-    let emaTrend = "Neutral (Testing 200 EMA)";
-    let volumeDelta = "Balanced Inflow (0%)";
-    let liquidityPool = `$${(high24h).toFixed(2)} Resting Liquidity`;
-
-    if (change24h >= 3.5) {
-      naturalSignal = "STRONG BUY";
-      confidence = Math.min(97, Math.round(89 + (change24h % 7)));
-      strategy = "Trend Continuation Long";
-      rsi = Math.min(73, Math.round(59 + change24h));
-      macd = "Bullish Expansion (>0)";
-      fundingRate = `+${(0.006 + (change24h * 0.0006)).toFixed(4)}%`;
-      emaTrend = "Strong Bullish (Above 200 EMA)";
-      volumeDelta = `+${Math.min(58, Math.round(22 + change24h * 2))}% Net Buying CVD`;
-      liquidityPool = `$${(high24h * 1.01).toFixed(2)} Overhead Buy Stops`;
-    } else if (change24h > 0.4) {
-      naturalSignal = "BUY";
-      confidence = Math.min(91, Math.round(82 + (change24h % 8)));
-      strategy = "Intraday Breakout Long";
-      rsi = Math.round(53 + change24h);
-      macd = "Bullish Crossover on 1H";
-      fundingRate = "+0.0035%";
-      emaTrend = "Bullish (Testing 50 EMA)";
-      volumeDelta = "+18% Moderate Inflow";
-      liquidityPool = `$${(high24h).toFixed(2)} High Resistance Pool`;
-    } else if (change24h <= -3.5) {
-      naturalSignal = "STRONG SHORT";
-      confidence = Math.min(96, Math.round(88 + Math.abs(change24h % 7)));
-      strategy = "Breakdown Momentum Short";
-      rsi = Math.max(25, Math.round(41 + change24h));
-      macd = "Bearish Expansion (<0)";
-      fundingRate = `-${(0.004 + (Math.abs(change24h) * 0.0005)).toFixed(4)}%`;
-      emaTrend = "Bearish Breakdown (Below 200 EMA)";
-      volumeDelta = `-${Math.min(55, Math.round(20 + Math.abs(change24h) * 2))}% Net Selling Delta`;
-      liquidityPool = `$${(low24h * 0.99).toFixed(2)} Resting Long Stop Pool`;
-    } else if (change24h < -0.4) {
-      naturalSignal = "SHORT";
-      confidence = Math.min(89, Math.round(80 + Math.abs(change24h % 8)));
-      strategy = "Resistance Rejection Short";
-      rsi = Math.round(45 + change24h);
-      macd = "Bearish Histogram on 1H";
-      fundingRate = "+0.0010%";
-      emaTrend = "Weak Bearish (Below 50 EMA)";
-      volumeDelta = "-14% Sell Pressure";
-      liquidityPool = `$${(low24h).toFixed(2)} Support Liquidity`;
-    }
-
-    return {
-      symbol: cfg.symbol,
-      name: cfg.name,
-      base: cfg.base,
-      tvSymbol: `BINANCE:${cfg.symbol}`,
-      price,
-      change24h,
-      high24h,
-      low24h,
-      volumeQuote,
-      volume24h: volumeFormatted,
-      naturalSignal,
-      confidence,
-      timeframe: cfg.timeframe,
-      strategy,
-      rsi,
-      macd,
-      fundingRate,
-      emaTrend,
-      volumeDelta,
-      liquidityPool
-    };
-  };
+  // Cached raw tickers
+  const [rawTickersMap, setRawTickersMap] = useState<Map<string, any>>(new Map());
 
   // Fetch live Binance data
   const fetchBinancePrices = useCallback(async () => {
@@ -287,12 +184,13 @@ export default function HomeAISignalsBots() {
       const tickers = await res.json();
       const tickerMap = new Map<string, any>();
       tickers.forEach((t: any) => tickerMap.set(t.symbol, t));
+      setRawTickersMap(tickerMap);
 
       const updated = DEFAULT_COINS.map((cfg) => {
         const raw = tickerMap.get(cfg.symbol);
         if (!raw) return null;
-        return calculateSignal(raw, cfg);
-      }).filter(Boolean) as LiveCoinSignal[];
+        return generateQuantitativeSignal(raw, cfg, selectedTimeframe, directionMode);
+      }).filter(Boolean) as ComprehensiveSignal[];
 
       if (updated.length > 0) {
         setLiveSignals(updated);
@@ -308,13 +206,32 @@ export default function HomeAISignalsBots() {
       console.warn("Binance stream fallback:", err);
       setLoading(false);
     }
-  }, []);
+  }, [selectedTimeframe, directionMode]);
 
   useEffect(() => {
     fetchBinancePrices();
     const interval = setInterval(fetchBinancePrices, 6000);
     return () => clearInterval(interval);
   }, [fetchBinancePrices]);
+
+  // Recalculate on direction or timeframe switch
+  useEffect(() => {
+    if (rawTickersMap.size === 0) return;
+    const updated = DEFAULT_COINS.map((cfg) => {
+      const raw = rawTickersMap.get(cfg.symbol);
+      if (!raw) return null;
+      return generateQuantitativeSignal(raw, cfg, selectedTimeframe, directionMode);
+    }).filter(Boolean) as ComprehensiveSignal[];
+
+    if (updated.length > 0) {
+      setLiveSignals(updated);
+      setSelectedCoin((current) => {
+        if (!current) return updated[0];
+        const match = updated.find((u) => u.symbol === current.symbol);
+        return match || updated[0];
+      });
+    }
+  }, [selectedTimeframe, directionMode, rawTickersMap]);
 
   // Handle custom pair submission
   const handleLoadCustomPair = (e: React.FormEvent) => {
@@ -335,8 +252,8 @@ export default function HomeAISignalsBots() {
       .then((r) => r.json())
       .then((raw) => {
         if (raw.symbol) {
-          const cfg: CoinConfig = { symbol: fullSymbol, name: base, base, timeframe: "1H" };
-          const newSignal = calculateSignal(raw, cfg);
+          const cfg: CoinConfig = { symbol: fullSymbol, name: base, base, defaultTimeframe: selectedTimeframe };
+          const newSignal = generateQuantitativeSignal(raw, cfg, selectedTimeframe, directionMode);
           setLiveSignals((prev) => [newSignal, ...prev.filter((p) => p.symbol !== fullSymbol)]);
           setSelectedCoin(newSignal);
           setCustomPair("");
@@ -349,54 +266,26 @@ export default function HomeAISignalsBots() {
 
   const activeCoin = selectedCoin || liveSignals[0];
 
-  // Helper formatter for prices
-  const fmt = (n: number) => {
-    if (n >= 1000) return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (n >= 1) return n.toFixed(2);
-    if (n >= 0.01) return n.toFixed(4);
-    return n.toFixed(6);
-  };
-
-  // Calculations for current active coin and direction (LONG vs SHORT)
-  const isLong = directionMode === "LONG";
-  const price = activeCoin?.price || 78000;
-
-  // Dynamic Levels based on Direction Mode
-  const entryMin = isLong ? price * 0.997 : price * 0.998;
-  const entryMax = isLong ? price * 1.003 : price * 1.004;
-  const entryPrice = price;
-
-  // Stop Loss & Targets
-  const stopLossPrice = isLong ? price * 0.978 : price * 1.022;
-  const slDeltaPercent = ((Math.abs(stopLossPrice - price) / price) * 100).toFixed(2);
-
-  const tp1Price = isLong ? price * 1.028 : price * 0.972;
-  const tp1DeltaPercent = ((Math.abs(tp1Price - price) / price) * 100).toFixed(1);
-
-  const tp2Price = isLong ? price * 1.065 : price * 0.935;
-  const tp2DeltaPercent = ((Math.abs(tp2Price - price) / price) * 100).toFixed(1);
-
-  const tp3Price = isLong ? price * 1.125 : price * 0.875;
-  const tp3DeltaPercent = ((Math.abs(tp3Price - price) / price) * 100).toFixed(1);
-
-  // Exact Risk-to-Reward Ratio
-  const rawRR = Math.abs(tp2Price - price) / Math.abs(price - stopLossPrice);
-  const rrRatioFormatted = `1 : ${rawRR.toFixed(2)}`;
-
-  // Position Sizing Calculations
-  const dollarRisk = (capital * riskPercent) / 100;
-  const slDistance = Math.abs(entryPrice - stopLossPrice);
-  const positionUnits = slDistance > 0 ? dollarRisk / slDistance : 0;
-  const totalPositionValue = positionUnits * entryPrice;
+  // Calculations for position sizing & risk
+  const dollarRisk = activeCoin ? (capital * riskPercent) / 100 : 0;
+  const slDistance = activeCoin ? Math.abs(activeCoin.entryPrice - activeCoin.stopLossPrice) : 1;
+  const positionUnits = activeCoin && slDistance > 0 ? dollarRisk / slDistance : 0;
+  const totalPositionValue = activeCoin ? positionUnits * activeCoin.entryPrice : 0;
   const requiredMargin = totalPositionValue / leverage;
 
-  const profitTP1 = positionUnits * Math.abs(tp1Price - entryPrice);
-  const profitTP2 = positionUnits * Math.abs(tp2Price - entryPrice);
-  const profitTP3 = positionUnits * Math.abs(tp3Price - entryPrice);
+  // Estimated Liquidation Price Calculation
+  const mmRate = 0.005;
+  const isLong = directionMode === "LONG";
+  const entryP = activeCoin ? activeCoin.entryPrice : 1;
+  const estimatedLiquidationPrice = activeCoin
+    ? isLong
+      ? entryP * (1 - (1 / leverage) + mmRate)
+      : entryP * (1 + (1 / leverage) - mmRate)
+    : 0;
 
-  const sessionWindow = isLong
-    ? "New York Session Open (13:30 - 16:30 UTC)"
-    : "London / NY Handover (12:00 - 15:30 UTC)";
+  const profitTP1 = activeCoin ? positionUnits * Math.abs(activeCoin.tp1Price - activeCoin.entryPrice) : 0;
+  const profitTP2 = activeCoin ? positionUnits * Math.abs(activeCoin.tp2Price - activeCoin.entryPrice) : 0;
+  const profitTP3 = activeCoin ? positionUnits * Math.abs(activeCoin.tp3Price - activeCoin.entryPrice) : 0;
 
   // Filtered Coins
   const filteredCoins = liveSignals.filter((c) => {
@@ -410,40 +299,32 @@ export default function HomeAISignalsBots() {
   // Handle Copy parameters
   const handleCopySetup = () => {
     if (!activeCoin) return;
-    const text = `🎯 [${activeBot.name}] ${activeCoin.base}/USDT ${directionMode} Setup
-• Entry Zone: $${fmt(entryMin)} - $${fmt(entryMax)} (Current: $${fmt(entryPrice)})
-• Stop Loss (SL): $${fmt(stopLossPrice)} (${isLong ? "-" : "+"}${slDeltaPercent}%)
-• TP1: $${fmt(tp1Price)} (+${tp1DeltaPercent}%) [50% Scale & SL to Breakeven]
-• TP2: $${fmt(tp2Price)} (+${tp2DeltaPercent}%) [Target]
-• TP3: $${fmt(tp3Price)} (+${tp3DeltaPercent}%) [Runner]
-• Risk-Reward: ${rrRatioFormatted}
-• Recommended Leverage: ${activeBot.recommendedLeverage}`;
-
+    const text = formatSignalForClipboard(activeCoin, leverage);
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
   return (
-    <section id="ai-signals-hub" className="py-16 sm:py-24 bg-gradient-to-b from-white via-amber-50/20 to-slate-50 border-t border-b border-slate-200/80">
+    <section id="ai-signals-hub" className="py-16 sm:py-24 bg-gradient-to-b from-white via-amber-50/20 to-slate-50 dark:from-slate-950 dark:via-slate-900/40 dark:to-slate-950 border-t border-b border-slate-200/80 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
 
         {/* SECTION HEADER */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-4 border-b border-slate-200">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-4 border-b border-slate-200 dark:border-slate-800">
           <div className="space-y-3 max-w-3xl">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80 shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                 <span>Algorithmic Trading & Signal Copilot</span>
               </span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
               AI Trading Signals &{" "}
               <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 bg-clip-text text-transparent">
                 Reliable Bots Hub
               </span>
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               Instantly discover verified algorithmic bots, scan real-time market signals, analyze live TradingView candlestick charts, and simulate <strong>Long / Short</strong> trades with exact risk-to-reward ratios before execution.
             </p>
           </div>
@@ -451,9 +332,9 @@ export default function HomeAISignalsBots() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={fetchBinancePrices}
-              className="px-4 py-2.5 rounded-2xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition flex items-center gap-2 shadow-sm"
+              className="px-4 py-2.5 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white text-xs font-bold hover:bg-slate-800 dark:hover:bg-slate-700 border border-slate-700 transition flex items-center gap-2 shadow-sm"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+              <RefreshCw className={`w-3.5 h-3.5 text-amber-400 ${loading ? "animate-spin" : ""}`} />
               <span>Force Price Sync</span>
             </button>
             <Link
@@ -474,15 +355,15 @@ export default function HomeAISignalsBots() {
                 <Bot className="w-4 h-4" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-slate-900">
+                <h3 className="text-lg font-black text-slate-900 dark:text-white">
                   Most Reliable AI Trading Bots
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Vetted institutional algorithmic strategies with verified backtests and high win rates.
                 </p>
               </div>
             </div>
-            <span className="text-[11px] font-mono font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full self-start sm:self-auto">
+            <span className="text-[11px] font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/80 border border-amber-200 dark:border-amber-800 px-3 py-1 rounded-full self-start sm:self-auto">
               5 Strategies Active
             </span>
           </div>
@@ -500,43 +381,43 @@ export default function HomeAISignalsBots() {
                   }}
                   className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                     isSelected
-                      ? "bg-white border-amber-400 shadow-lg shadow-amber-400/15 scale-[1.02] ring-2 ring-amber-400/20"
-                      : "bg-white/90 border-slate-200/90 hover:border-slate-300 hover:bg-white"
+                      ? "bg-white dark:bg-slate-900 border-amber-400 dark:border-amber-400 shadow-lg shadow-amber-400/15 scale-[1.02] ring-2 ring-amber-400/20"
+                      : "bg-white/90 dark:bg-slate-900/90 border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-900"
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">
+                      <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                         {bot.badge}
                       </span>
-                      <span className="text-xs font-black text-emerald-600 flex items-center gap-0.5">
+                      <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
                         <Award className="w-3 h-3 text-emerald-500" />
                         {bot.reliability}
                       </span>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-black text-slate-900 leading-snug">
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white leading-snug">
                         {bot.name}
                       </h4>
-                      <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
                         {bot.strategyDesc}
                       </p>
                     </div>
                   </div>
 
-                  <div className="pt-3 mt-3 border-t border-slate-100 space-y-1.5 text-[11px]">
-                    <div className="flex justify-between items-center text-slate-600">
+                  <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-[11px]">
+                    <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                       <span>Win Rate:</span>
-                      <strong className="text-emerald-700 font-bold">{bot.winRate}</strong>
+                      <strong className="text-emerald-700 dark:text-emerald-400 font-bold">{bot.winRate}</strong>
                     </div>
-                    <div className="flex justify-between items-center text-slate-600">
+                    <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                       <span>Average R:R:</span>
-                      <strong className="text-amber-700 font-bold">{bot.avgRR}</strong>
+                      <strong className="text-amber-700 dark:text-amber-400 font-bold">{bot.avgRR}</strong>
                     </div>
-                    <div className="flex justify-between items-center text-slate-600">
+                    <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                       <span>Timeframe:</span>
-                      <span className="font-mono text-[10px] text-slate-800 font-bold">{bot.bestFor}</span>
+                      <span className="font-mono text-[10px] text-slate-800 dark:text-slate-200 font-bold">{bot.bestFor}</span>
                     </div>
 
                     <div className="pt-1">
@@ -544,7 +425,7 @@ export default function HomeAISignalsBots() {
                         className={`w-full py-1 text-center rounded-lg text-[10px] font-extrabold uppercase transition ${
                           isSelected
                             ? "bg-amber-400 text-slate-950 shadow-sm"
-                            : "bg-slate-100 text-slate-600 group-hover:bg-slate-200"
+                            : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 group-hover:bg-slate-200 dark:group-hover:bg-slate-700"
                         }`}
                       >
                         {isSelected ? "Active Strategy ✓" : "Select Strategy"}
@@ -603,7 +484,7 @@ export default function HomeAISignalsBots() {
                     }}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition ${
                       activeCoin?.base === sym
-                        ? "bg-slate-900 text-white shadow-sm"
+                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                     }`}
                   >
@@ -613,12 +494,34 @@ export default function HomeAISignalsBots() {
               </div>
             </div>
 
+            {/* Timeframe selector pill bar */}
+            <div className="flex items-center justify-between bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm text-xs">
+              <span className="font-bold text-slate-600 flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-amber-500" /> Timeframe:
+              </span>
+              <div className="flex items-center gap-1">
+                {(["5M", "15M", "1H", "4H"] as SignalTimeframe[]).map((tf) => (
+                  <button
+                    key={tf}
+                    onClick={() => setSelectedTimeframe(tf)}
+                    className={`px-2.5 py-1 rounded-lg font-mono font-bold text-xs transition ${
+                      selectedTimeframe === tf
+                        ? "bg-slate-900 text-white shadow-sm"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                  >
+                    {tf}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Live Signals Stream List */}
             <div className="space-y-2.5 max-h-[580px] overflow-y-auto pr-1">
               {filteredCoins.map((coin) => {
                 const isSelected = activeCoin?.symbol === coin.symbol;
-                const isBull = coin.naturalSignal.includes("BUY");
-                const isBear = coin.naturalSignal.includes("SHORT");
+                const isBull = coin.signal.includes("BUY");
+                const isBear = coin.signal.includes("SHORT");
 
                 return (
                   <div
@@ -638,12 +541,12 @@ export default function HomeAISignalsBots() {
                         <div>
                           <div className="text-sm font-black text-slate-900 flex items-center gap-1.5">
                             <span>{coin.base}/USDT</span>
-                            <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600">
+                            <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-200">
                               {coin.timeframe}
                             </span>
                           </div>
                           <div className="text-[11px] text-slate-500 font-medium">
-                            24h Vol: {coin.volume24h}
+                            Vol: {coin.marketCap.volume24hFormatted} • OI: {coin.coinglass.openInterestFormatted}
                           </div>
                         </div>
                       </div>
@@ -659,10 +562,10 @@ export default function HomeAISignalsBots() {
                               : "bg-slate-100 text-slate-700 border border-slate-200"
                           }`}
                         >
-                          {coin.naturalSignal}
+                          {coin.signal}
                         </span>
                         <div className="text-[10px] font-mono text-slate-400 mt-0.5">
-                          AI Conf: <strong className="text-slate-900">{coin.confidence}%</strong>
+                          Confluence: <strong className="text-slate-900">{coin.confidence}%</strong>
                         </div>
                       </div>
                     </div>
@@ -670,9 +573,9 @@ export default function HomeAISignalsBots() {
                     {/* Price & Level preview */}
                     <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-xs">
                       <div>
-                        <span className="text-[10px] text-slate-400 uppercase font-mono">Live Price</span>
+                        <span className="text-[10px] text-slate-400 uppercase font-mono">Present Spot</span>
                         <div className="font-extrabold text-slate-900 flex items-center gap-1">
-                          ${fmt(coin.price)}
+                          ${formatPrice(coin.price)}
                         </div>
                       </div>
                       <div>
@@ -702,14 +605,14 @@ export default function HomeAISignalsBots() {
                       <Sliders className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-base font-bold text-slate-900">Trade Entry & Risk Sizer</h4>
+                      <h4 className="text-base font-bold text-slate-900">Futures Risk & Position Sizer</h4>
                       <p className="text-[11px] text-slate-500">
-                        Live risk calculations for {activeCoin.base}/USDT ({directionMode})
+                        Live calculations for {activeCoin.base}/USDT ({directionMode})
                       </p>
                     </div>
                   </div>
                   <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    R:R {rrRatioFormatted}
+                    R:R {activeCoin.rrRatioFormatted}
                   </span>
                 </div>
 
@@ -745,7 +648,7 @@ export default function HomeAISignalsBots() {
                       <option value={1}>1x (Spot)</option>
                       <option value={2}>2x</option>
                       <option value={3}>3x (Safe)</option>
-                      <option value={5}>5x</option>
+                      <option value={5}>5x (Scalp)</option>
                       <option value={10}>10x (Max)</option>
                     </select>
                   </div>
@@ -754,7 +657,7 @@ export default function HomeAISignalsBots() {
                 {/* Calculation Outputs */}
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-500">Dollar Risk at Stop Loss:</span>
+                    <span className="text-slate-500">Max Dollar Risk at Stop Loss:</span>
                     <span className="font-black text-rose-600">-${dollarRisk.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -766,6 +669,15 @@ export default function HomeAISignalsBots() {
                   <div className="flex justify-between items-center">
                     <span className="text-slate-500">Required Margin ({leverage}x):</span>
                     <span className="font-bold text-amber-700">${Math.round(requiredMargin).toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-1 border-t border-slate-200/80">
+                    <span className="text-slate-500 flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3 text-amber-500" />
+                      <span>Est. Liquidation Price:</span>
+                    </span>
+                    <span className="font-mono font-bold text-rose-700">
+                      ${formatPrice(estimatedLiquidationPrice)} ({isLong ? "-" : "+"}{((Math.abs(estimatedLiquidationPrice - activeCoin.entryPrice) / activeCoin.entryPrice) * 100).toFixed(1)}%)
+                    </span>
                   </div>
                   <div className="pt-2 border-t border-slate-200 flex justify-between items-center font-bold">
                     <span className="text-emerald-700">Projected Profit at Target (TP2):</span>
@@ -781,7 +693,7 @@ export default function HomeAISignalsBots() {
                   {copied ? (
                     <>
                       <Check className="w-4 h-4 text-emerald-400" />
-                      <span className="text-emerald-300">Trade Setup Copied to Clipboard!</span>
+                      <span className="text-emerald-300">Trade Setup Copied (Telegram/Discord Format)!</span>
                     </>
                   ) : (
                     <>
@@ -814,7 +726,7 @@ export default function HomeAISignalsBots() {
                       </span>
                     </div>
                     <p className="text-xs text-slate-500 font-medium flex items-center gap-2">
-                      <span>Live Binance Spot: <strong className="text-slate-900 text-sm">${fmt(activeCoin.price)}</strong></span>
+                      <span>Present Spot: <strong className="text-slate-900 text-sm">${formatPrice(activeCoin.price)}</strong></span>
                       <span>• 24h Change: <strong className={activeCoin.change24h >= 0 ? "text-emerald-600" : "text-rose-600"}>
                         {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
                       </strong></span>
@@ -858,9 +770,9 @@ export default function HomeAISignalsBots() {
                       <span>Exact Entry Zone</span>
                     </div>
                     <div className="text-sm font-black text-slate-900 mt-1">
-                      ${fmt(entryMin)} - ${fmt(entryMax)}
+                      {activeCoin.entryZoneFormatted}
                     </div>
-                    <div className="text-[10px] text-amber-700 font-medium mt-0.5">Market Order / Limit</div>
+                    <div className="text-[10px] text-amber-700 font-medium mt-0.5">Matching current spot</div>
                   </div>
 
                   {/* Stop Loss (SL) */}
@@ -870,10 +782,10 @@ export default function HomeAISignalsBots() {
                       <span>Stop Loss (SL)</span>
                     </div>
                     <div className="text-sm font-black text-rose-700 mt-1">
-                      ${fmt(stopLossPrice)}
+                      {activeCoin.stopLossFormatted}
                     </div>
                     <div className="text-[10px] text-rose-600 font-bold mt-0.5">
-                      {isLong ? "-" : "+"}{slDeltaPercent}% Invalidation
+                      Structure Invalidation
                     </div>
                   </div>
 
@@ -884,10 +796,10 @@ export default function HomeAISignalsBots() {
                       <span>Target 1 (TP1)</span>
                     </div>
                     <div className="text-sm font-black text-emerald-700 mt-1">
-                      ${fmt(tp1Price)}
+                      {activeCoin.tp1Formatted}
                     </div>
                     <div className="text-[10px] text-emerald-600 font-bold mt-0.5">
-                      +{tp1DeltaPercent}% (Lock 50% & SL to BE)
+                      Secure 50% & SL to BE
                     </div>
                   </div>
 
@@ -898,10 +810,10 @@ export default function HomeAISignalsBots() {
                       <span>Target 2 (TP2)</span>
                     </div>
                     <div className="text-sm font-black text-emerald-700 mt-1">
-                      ${fmt(tp2Price)}
+                      {activeCoin.tp2Formatted}
                     </div>
                     <div className="text-[10px] text-emerald-600 font-bold mt-0.5">
-                      +{tp2DeltaPercent}% (R:R {rrRatioFormatted})
+                      R:R {activeCoin.rrRatioFormatted}
                     </div>
                   </div>
 
@@ -916,39 +828,39 @@ export default function HomeAISignalsBots() {
                         Optimal Execution Session & Runner Target:
                       </span>
                       <div className="text-xs sm:text-sm font-black text-slate-100">
-                        {sessionWindow} • <span className="text-emerald-400">TP3 Runner: ${fmt(tp3Price)} (+{tp3DeltaPercent}%)</span>
+                        {activeCoin.optimalSession} • <span className="text-emerald-400">TP3 Runner: {activeCoin.tp3Formatted}</span>
                       </div>
                     </div>
                   </div>
                   <div className="text-xs font-mono text-slate-300 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center gap-1.5">
                     <span>Risk/Reward:</span>
-                    <span className="text-amber-400 font-black text-sm">{rrRatioFormatted}</span>
+                    <span className="text-amber-400 font-black text-sm">{activeCoin.rrRatioFormatted}</span>
                   </div>
                 </div>
 
-                {/* TECHNICAL INDICATOR SNAPSHOT */}
+                {/* TECHNICAL & COINGLASS INDICATOR SNAPSHOT */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-[10px] text-slate-400 font-mono uppercase">RSI (14)</div>
-                    <div className="font-black text-slate-900">{activeCoin.rsi}</div>
+                    <div className="text-[10px] text-slate-400 font-mono uppercase">CoinGlass Funding</div>
+                    <div className="font-black text-slate-900 font-mono">{activeCoin.coinglass.fundingRateFormatted}</div>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
                     <div className="text-[10px] text-slate-400 font-mono uppercase">Trend Structure</div>
-                    <div className="font-bold text-slate-900 truncate">{activeCoin.emaTrend}</div>
+                    <div className="font-bold text-slate-900 truncate">{activeCoin.technicals.emaTrend}</div>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-[10px] text-slate-400 font-mono uppercase">Volume Delta</div>
-                    <div className="font-bold text-slate-900 truncate">{activeCoin.volumeDelta}</div>
+                    <div className="text-[10px] text-slate-400 font-mono uppercase">Taker CVD Delta</div>
+                    <div className="font-bold text-slate-900 truncate">{activeCoin.coinglass.cvdDeltaFormatted}</div>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-[10px] text-slate-400 font-mono uppercase">Funding Rate</div>
-                    <div className="font-bold text-slate-900">{activeCoin.fundingRate}</div>
+                    <div className="text-[10px] text-slate-400 font-mono uppercase">Open Interest (OI)</div>
+                    <div className="font-bold text-slate-900 font-mono">{activeCoin.coinglass.openInterestFormatted}</div>
                   </div>
                 </div>
 
               </div>
 
-              {/* INSTITUTIONAL ORDER FLOW & LIQUIDITY MAP */}
+              {/* INSTITUTIONAL ORDER FLOW & LIQUIDATION MAP */}
               <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
                   <div className="flex items-center gap-2">
@@ -957,7 +869,7 @@ export default function HomeAISignalsBots() {
                     </div>
                     <div>
                       <h4 className="text-base font-black text-slate-900">
-                        Order Flow & Institutional Liquidity Map
+                        CoinGlass Liquidation Magnet Map & Order Flow
                       </h4>
                       <p className="text-[11px] text-slate-500">
                         Resting limit orders, volume delta profile & 24h channel position
@@ -973,13 +885,13 @@ export default function HomeAISignalsBots() {
                 <div className="space-y-1.5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
                   <div className="flex justify-between items-center text-xs font-mono">
                     <span className="text-slate-500 flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-rose-500" /> 24h Low: <strong>${fmt(activeCoin.low24h)}</strong>
+                      <span className="w-2 h-2 rounded-full bg-rose-500" /> 24h Low: <strong>${formatPrice(activeCoin.low24h)}</strong>
                     </span>
                     <span className="font-bold text-amber-600">
-                      Channel Range: ${fmt(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(2)}%)
+                      Channel Range: ${formatPrice(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(2)}%)
                     </span>
                     <span className="text-slate-500 flex items-center gap-1">
-                      24h High: <strong>${fmt(activeCoin.high24h)}</strong> <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      24h High: <strong>${formatPrice(activeCoin.high24h)}</strong> <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     </span>
                   </div>
                   <div className="relative w-full h-3 bg-slate-200 rounded-full overflow-hidden">
@@ -998,44 +910,33 @@ export default function HomeAISignalsBots() {
                   </div>
                   <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono pt-0.5">
                     <span>Oversold / Floor Support</span>
-                    <span className="text-slate-800 font-bold">Current Spot: ${fmt(activeCoin.price)}</span>
+                    <span className="text-slate-800 font-bold">Present Price: ${formatPrice(activeCoin.price)}</span>
                     <span>Overbought / Peak Resistance</span>
                   </div>
                 </div>
 
                 {/* Liquidity Pools & Orderbook Blocks */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-1">
                     <div className="text-[10px] font-bold text-rose-700 uppercase font-mono flex items-center justify-between">
-                      <span>Overhead Ask Wall</span>
-                      <span>+1.5%</span>
+                      <span>Upper Short Liquidation Pool</span>
+                      <span>Target Magnet</span>
                     </div>
                     <div className="text-sm font-black text-rose-800 font-mono">
-                      ${fmt(activeCoin.high24h * 1.015)}
+                      ${formatPrice(activeCoin.coinglass.liquidationUpperMagnet)}
                     </div>
-                    <div className="text-[10px] text-rose-600">Major Short Liquidation Pool</div>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-1">
-                    <div className="text-[10px] font-bold text-amber-800 uppercase font-mono flex items-center justify-between">
-                      <span>Volume Equilibrium</span>
-                      <span>POC</span>
-                    </div>
-                    <div className="text-sm font-black text-slate-900 font-mono">
-                      ${fmt((activeCoin.high24h + activeCoin.low24h) / 2)}
-                    </div>
-                    <div className="text-[10px] text-amber-700">Point of Control / Fair Value</div>
+                    <div className="text-[10px] text-rose-600">{activeCoin.coinglass.liquidationUpperPoolUsd}</div>
                   </div>
 
                   <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-1">
                     <div className="text-[10px] font-bold text-emerald-700 uppercase font-mono flex items-center justify-between">
-                      <span>Institutional Bid Floor</span>
-                      <span>-1.5%</span>
+                      <span>Lower Long Liquidation Shelf</span>
+                      <span>Demand Floor</span>
                     </div>
                     <div className="text-sm font-black text-emerald-800 font-mono">
-                      ${fmt(activeCoin.low24h * 0.985)}
+                      ${formatPrice(activeCoin.coinglass.liquidationLowerMagnet)}
                     </div>
-                    <div className="text-[10px] text-emerald-600">Resting Long Stop Floor</div>
+                    <div className="text-[10px] text-emerald-600">{activeCoin.coinglass.liquidationLowerPoolUsd}</div>
                   </div>
                 </div>
 
@@ -1043,91 +944,35 @@ export default function HomeAISignalsBots() {
                 <div className="p-4 rounded-2xl bg-slate-900 text-white space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-mono text-emerald-400 font-bold flex items-center gap-1.5">
-                      <TrendingUp className="w-3.5 h-3.5" /> Buyer Inflow: {activeCoin.change24h >= 0 ? Math.min(88, Math.round(52 + activeCoin.change24h * 3.5)) : Math.max(22, Math.round(48 + activeCoin.change24h * 3.5))}%
+                      <TrendingUp className="w-3.5 h-3.5" /> Buyer Inflow: {activeCoin.coinglass.longAccountPercent}%
                     </span>
                     <span className="font-mono text-[10px] text-slate-400 uppercase">
                       CVD Volume Delta
                     </span>
                     <span className="font-mono text-rose-400 font-bold flex items-center gap-1.5">
-                      Seller Delta: {activeCoin.change24h >= 0 ? Math.max(12, Math.round(48 - activeCoin.change24h * 3.5)) : Math.min(78, Math.round(52 - activeCoin.change24h * 3.5))}% <TrendingDown className="w-3.5 h-3.5" />
+                      Seller Delta: {activeCoin.coinglass.shortAccountPercent}% <TrendingDown className="w-3.5 h-3.5" />
                     </span>
                   </div>
                   <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden flex">
                     <div
                       className="bg-emerald-500 transition-all duration-500"
                       style={{
-                        width: `${activeCoin.change24h >= 0 ? Math.min(88, Math.round(52 + activeCoin.change24h * 3.5)) : Math.max(22, Math.round(48 + activeCoin.change24h * 3.5))}%`
+                        width: `${activeCoin.coinglass.longAccountPercent}%`
                       }}
                     />
                     <div
                       className="bg-rose-500 transition-all duration-500"
                       style={{
-                        width: `${activeCoin.change24h >= 0 ? Math.max(12, Math.round(48 - activeCoin.change24h * 3.5)) : Math.min(78, Math.round(52 - activeCoin.change24h * 3.5))}%`
+                        width: `${activeCoin.coinglass.shortAccountPercent}%`
                       }}
                     />
                   </div>
                   <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono">
-                    <span>Taker Buy Aggression</span>
-                    <span>24h Quote Vol: <strong className="text-amber-400">{activeCoin.volume24h}</strong></span>
-                    <span>Resting Limit Absorption</span>
+                    <span>Taker Aggression: <strong className="text-amber-400">{activeCoin.coinglass.cvdDeltaFormatted}</strong></span>
+                    <span>Quote Vol: <strong className="text-slate-200">{activeCoin.marketCap.volume24hFormatted}</strong></span>
                   </div>
                 </div>
 
-              </div>
-
-              {/* TOP MARKET MOMENTUM PULSE & QUICK MULTI-COIN SWITCHER */}
-              <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                      <Flame className="w-4 h-4 text-amber-600" />
-                    </div>
-                    <div>
-                      <h4 className="text-base font-black text-slate-900">
-                        Top Market Momentum Leaders
-                      </h4>
-                      <p className="text-[11px] text-slate-500">
-                        Compare live market leaders and switch analysis with 1-click
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-mono text-slate-400">Instant Switch</span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  {liveSignals.slice(0, 8).map((coin) => {
-                    const isSelected = activeCoin.symbol === coin.symbol;
-                    const isBull = coin.naturalSignal.includes("BUY");
-                    return (
-                      <div
-                        key={coin.symbol}
-                        onClick={() => setSelectedCoin(coin)}
-                        className={`p-3 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-                          isSelected
-                            ? "bg-amber-50/80 border-amber-400 ring-2 ring-amber-400/20 shadow-sm scale-[1.02]"
-                            : "bg-slate-50/80 border-slate-200/80 hover:bg-white hover:border-slate-300"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-black text-slate-900">{coin.base}</span>
-                          <span
-                            className={`text-[9px] font-mono font-black px-1.5 py-0.2 rounded ${
-                              isBull ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"
-                            }`}
-                          >
-                            {coin.change24h >= 0 ? "+" : ""}{coin.change24h.toFixed(1)}%
-                          </span>
-                        </div>
-                        <div className="text-xs font-black text-slate-900 font-mono">
-                          ${fmt(coin.price)}
-                        </div>
-                        <div className="text-[9px] font-mono text-slate-500 truncate mt-1">
-                          {coin.naturalSignal} • {coin.confidence}%
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
 
               {/* 6-FACTOR ALGORITHMIC CONFLUENCE CHECKLIST */}
@@ -1147,58 +992,20 @@ export default function HomeAISignalsBots() {
                     </div>
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono">
-                    Grade A+ (94% Match)
+                    Grade A+ ({activeCoin.confidence}% Match)
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-slate-900">200 EMA Structural Slope</div>
-                      <div className="text-[10px] text-slate-500">{activeCoin.emaTrend}</div>
+                  {activeCoin.confluenceAudit.map((item, idx) => (
+                    <div key={idx} className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                      <div>
+                        <div className="font-bold text-slate-900">{item.title}</div>
+                        <div className="text-[10px] text-slate-500">{item.metric}</div>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-slate-900">14-Period RSI Momentum</div>
-                      <div className="text-[10px] text-slate-500">Index at {activeCoin.rsi} (Healthy Expansion Zone)</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-slate-900">MACD Histogram & Signal</div>
-                      <div className="text-[10px] text-slate-500">{activeCoin.macd}</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-slate-900">Funding Rate Skew</div>
-                      <div className="text-[10px] text-slate-500">{activeCoin.fundingRate} (Low short squeeze risk)</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-slate-900">Risk-to-Reward Efficiency</div>
-                      <div className="text-[10px] text-slate-500">Expected Ratio {rrRatioFormatted} (High Asymmetry)</div>
-                    </div>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-slate-900">Target Liquidity Pool</div>
-                      <div className="text-[10px] text-slate-500">{activeCoin.liquidityPool}</div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -1207,7 +1014,7 @@ export default function HomeAISignalsBots() {
 
         </div>
 
-        {/* 3. HIGHLIGHTED LIVE CHART TERMINAL GATEWAY (LIGHTWEIGHT, FAST & ADSENSE FRIENDLY) */}
+        {/* 3. HIGHLIGHTED LIVE CHART TERMINAL GATEWAY */}
         {activeCoin && (
           <div className="w-full pt-4">
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/90 text-white p-6 sm:p-10 border-2 border-amber-400/40 shadow-xl shadow-amber-500/5">
@@ -1278,10 +1085,10 @@ export default function HomeAISignalsBots() {
                   <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 p-4 rounded-2xl space-y-1.5 hover:border-amber-400/50 transition">
                     <div className="flex items-center gap-2 font-bold text-amber-400">
                       <Clock className="w-4 h-4" />
-                      <span>Multi-Timeframe Engine</span>
+                      <span>Small Timeframe Scalping</span>
                     </div>
                     <p className="text-[11px] text-slate-400 leading-relaxed">
-                      Seamless switching between 15M Scalp, 1H Intraday, 4H Swing, and 1D Macro charts.
+                      Seamless switching between 5M Scalp, 15M Intraday, 1H Breakout, and 4H Swing charts.
                     </p>
                   </div>
 
@@ -1299,11 +1106,11 @@ export default function HomeAISignalsBots() {
                 {/* Primary Action Row */}
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
                   <div className="flex items-center gap-3 text-xs text-slate-400 font-mono">
-                    <span>Spot: <strong className="text-white">${fmt(activeCoin.price)}</strong></span>
+                    <span>Spot: <strong className="text-white">${formatPrice(activeCoin.price)}</strong></span>
                     <span>•</span>
-                    <span>24h High: <strong className="text-emerald-400">${fmt(activeCoin.high24h)}</strong></span>
+                    <span>24h High: <strong className="text-emerald-400">${formatPrice(activeCoin.high24h)}</strong></span>
                     <span>•</span>
-                    <span>24h Low: <strong className="text-rose-400">${fmt(activeCoin.low24h)}</strong></span>
+                    <span>24h Low: <strong className="text-rose-400">${formatPrice(activeCoin.low24h)}</strong></span>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
@@ -1317,10 +1124,10 @@ export default function HomeAISignalsBots() {
                     </Link>
 
                     <Link
-                      href="/tools?tab=terminal"
+                      href="/tools?tab=bot"
                       className="w-full sm:w-auto px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5"
                     >
-                      <span>Explore All 50+ Pairs</span>
+                      <span>Explore All 30+ Pairs</span>
                       <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                     </Link>
                   </div>

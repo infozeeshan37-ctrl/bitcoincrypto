@@ -13,9 +13,12 @@ import {
   Shield,
   Activity,
   Award,
-  Zap
+  Zap,
+  Calculator
 } from "lucide-react";
 import Link from "next/link";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
+import DCACalculator from "@/components/tools/DCACalculator";
 
 export default function ConceptsPage() {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -97,25 +100,45 @@ export default function ConceptsPage() {
     : masterclassTracks.filter((t) => t.category === activeFilter);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 py-12 sm:py-20">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-10 sm:py-16 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+
+        <Breadcrumbs items={[{ label: "Trading Concepts & Masterclasses", href: "/concepts" }]} />
 
         {/* Page Hero */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 border border-amber-200 text-amber-900 shadow-sm">
-            <Compass className="w-3.5 h-3.5 text-amber-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/80 border border-amber-200 dark:border-amber-700/80 text-amber-900 dark:text-amber-300 shadow-sm">
+            <Compass className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
             <span>Structured Educational Academy</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Trading Concepts & Masterclasses
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
             Free, institutional-grade masterclasses and technical frameworks designed to teach you how market structure, order flow, and derivatives truly operate.
           </p>
         </div>
 
+        {/* INTERACTIVE DCA SIMULATOR & MATHEMATICS MODULE */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black">
+              <Calculator className="w-4 h-4" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-slate-900 dark:text-white">
+                Interactive DCA & Compounding Simulator
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Live mathematical modeling tool demonstrating harmonic cost-averaging efficiency.
+              </p>
+            </div>
+          </div>
+          <DCACalculator />
+        </div>
+
         {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-6">
           {[
             { id: "all", label: "All Curriculum Tracks" },
             { id: "macro", label: "Macro & Supply Dynamics" },
@@ -128,8 +151,8 @@ export default function ConceptsPage() {
               onClick={() => setActiveFilter(cat.id)}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
                 activeFilter === cat.id
-                  ? "bg-amber-400 text-slate-950 shadow-sm"
-                  : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                  ? "bg-amber-400 text-slate-950 shadow-sm font-black"
+                  : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
               }`}
             >
               {cat.label}
@@ -142,30 +165,30 @@ export default function ConceptsPage() {
           {filteredTracks.map((track) => (
             <div
               key={track.trackNumber}
-              className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-6 group"
+              className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-6 group"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-amber-700 bg-amber-100 font-bold px-2.5 py-1 rounded-lg">
+                  <span className="text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 font-bold px-2.5 py-1 rounded-lg">
                     TRACK {track.trackNumber}
                   </span>
-                  <span className="text-slate-500 font-semibold">{track.level}</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-semibold">{track.level}</span>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-amber-600 transition">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">
                   {track.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   {track.description}
                 </p>
 
                 {/* Syllabus List */}
-                <div className="space-y-2.5 pt-4 border-t border-slate-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
+                <div className="space-y-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 font-mono">
                     Curriculum Modules Included:
                   </span>
                   {track.syllabus.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-700">
+                    <div key={idx} className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
                       <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                       <span>{item}</span>
                     </div>
@@ -173,15 +196,15 @@ export default function ConceptsPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-3 text-slate-500 font-mono">
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 font-mono">
                   <span>{track.lessons}</span>
                   <span>•</span>
                   <span>{track.readTime}</span>
                 </div>
                 <Link
                   href="/blog"
-                  className="font-bold text-amber-600 hover:text-amber-700 flex items-center gap-1.5"
+                  className="font-bold text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 flex items-center gap-1.5"
                 >
                   Start Track Free <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
@@ -191,24 +214,24 @@ export default function ConceptsPage() {
         </div>
 
         {/* Interactive Trading Glossary */}
-        <div className="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm space-y-8">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 mb-2">
-              <BookOpen className="w-3.5 h-3.5" /> Reference Index
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 mb-2">
+              <BookOpen className="w-3.5 h-3.5 text-amber-500" /> Reference Index
             </div>
-            <h2 className="text-2xl font-extrabold text-slate-900">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
               Cryptocurrency & Derivatives Glossary
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               Essential definitions and mathematical terminology used across institutional desks.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {glossaryTerms.map((g, idx) => (
-              <div key={idx} className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <h4 className="text-sm font-bold text-slate-900">{g.term}</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">{g.def}</p>
+              <div key={idx} className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 space-y-1.5">
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white">{g.term}</h4>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{g.def}</p>
               </div>
             ))}
           </div>

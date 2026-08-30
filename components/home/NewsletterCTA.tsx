@@ -7,7 +7,7 @@ export default function NewsletterCTA() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white dark:bg-slate-950 transition-colors">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="bg-gradient-to-tr from-amber-500 to-amber-400 rounded-3xl p-8 sm:p-12 text-center text-slate-950 space-y-6 shadow-xl shadow-amber-500/10">
@@ -46,7 +46,7 @@ export default function NewsletterCTA() {
               />
               <button
                 type="submit"
-                className="px-6 py-3 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition shadow"
+                className="px-6 py-3 rounded-xl text-xs font-bold text-white bg-slate-950 hover:bg-slate-900 transition shadow"
               >
                 Subscribe Free
               </button>

@@ -209,23 +209,23 @@ export default function CryptoNewsCPIDashboard() {
       </div>
 
       {/* 2. DEDICATED US CPI INFLATION TRACKER TERMINAL */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-black text-xs">
+              <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 flex items-center justify-center font-black text-xs">
                 CPI
               </div>
-              <h2 className="text-lg font-black text-slate-900">
+              <h2 className="text-lg font-black text-slate-900 dark:text-white">
                 US Consumer Price Index (CPI) Dashboard
               </h2>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Official Bureau of Labor Statistics inflation prints and historical correlation with Bitcoin price moves.
             </p>
           </div>
 
-          <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 self-start sm:self-auto">
+          <span className="text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 self-start sm:self-auto">
             Disinflation Regime Active
           </span>
         </div>
@@ -234,81 +234,81 @@ export default function CryptoNewsCPIDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           
           {/* Latest Print Breakdown */}
-          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black text-slate-900 uppercase">Latest Print Breakdown</span>
-              <span className="text-[10px] font-mono font-bold text-slate-500">{cpi?.latest.period}</span>
+              <span className="text-xs font-black text-slate-900 dark:text-white uppercase">Latest Print Breakdown</span>
+              <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">{cpi?.latest.period}</span>
             </div>
 
             <div className="space-y-2 text-xs">
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">Headline CPI YoY:</span>
-                <strong className="text-emerald-700 font-mono text-sm">{cpi?.latest.actualYoY}% (Beat)</strong>
+                <span className="text-slate-600 dark:text-slate-400">Headline CPI YoY:</span>
+                <strong className="text-emerald-700 dark:text-emerald-400 font-mono text-sm">{cpi?.latest.actualYoY}% (Beat)</strong>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">Consensus Forecast:</span>
-                <span className="font-mono text-slate-700">{cpi?.latest.forecastYoY}%</span>
+                <span className="text-slate-600 dark:text-slate-400">Consensus Forecast:</span>
+                <span className="font-mono text-slate-700 dark:text-slate-300">{cpi?.latest.forecastYoY}%</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-600">Previous Period:</span>
-                <span className="font-mono text-slate-700">{cpi?.latest.previousYoY}%</span>
+                <span className="text-slate-600 dark:text-slate-400">Previous Period:</span>
+                <span className="font-mono text-slate-700 dark:text-slate-300">{cpi?.latest.previousYoY}%</span>
               </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-200">
-                <span className="text-slate-600">Core CPI (Ex-Food/Energy):</span>
-                <strong className="text-slate-900 font-mono">{cpi?.latest.coreActualYoY}% (Exp: {cpi?.latest.coreForecastYoY}%)</strong>
+              <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-slate-700">
+                <span className="text-slate-600 dark:text-slate-400">Core CPI (Ex-Food/Energy):</span>
+                <strong className="text-slate-900 dark:text-white font-mono">{cpi?.latest.coreActualYoY}% (Exp: {cpi?.latest.coreForecastYoY}%)</strong>
               </div>
             </div>
 
-            <p className="text-[11px] text-slate-500 pt-1 leading-relaxed">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 pt-1 leading-relaxed">
               {cpi?.latest.inflationStatusText}
             </p>
           </div>
 
           {/* Upcoming CPI Release Countdown */}
-          <div className="p-5 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-3 flex flex-col justify-between">
+          <div className="p-5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 space-y-3 flex flex-col justify-between">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-blue-950 uppercase flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-blue-600" /> Upcoming Release
+                <span className="text-xs font-black text-blue-950 dark:text-blue-300 uppercase flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Upcoming Release
                 </span>
-                <span className="text-[10px] font-mono font-bold bg-blue-200 text-blue-900 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-mono font-bold bg-blue-200 dark:bg-blue-900/60 text-blue-900 dark:text-blue-300 px-2 py-0.5 rounded">
                   High Volatility Alert
                 </span>
               </div>
 
-              <div className="text-base font-black text-slate-900">
+              <div className="text-base font-black text-slate-900 dark:text-white">
                 {cpi?.upcoming.event}
               </div>
 
-              <div className="text-xs text-slate-600 space-y-1">
-                <div>Release Date: <strong className="text-slate-900">{cpi?.upcoming.releaseDate}</strong></div>
-                <div>Consensus Forecast: <strong className="text-blue-700 font-mono">{cpi?.upcoming.consensusForecastYoY}</strong></div>
-                <div>Previous Print: <span className="font-mono text-slate-600">{cpi?.upcoming.previousYoY}</span></div>
+              <div className="text-xs text-slate-600 dark:text-slate-300 space-y-1">
+                <div>Release Date: <strong className="text-slate-900 dark:text-white">{cpi?.upcoming.releaseDate}</strong></div>
+                <div>Consensus Forecast: <strong className="text-blue-700 dark:text-blue-400 font-mono">{cpi?.upcoming.consensusForecastYoY}</strong></div>
+                <div>Previous Print: <span className="font-mono text-slate-600 dark:text-slate-400">{cpi?.upcoming.previousYoY}</span></div>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-white border border-blue-200 text-[11px] text-blue-950 font-medium">
+            <div className="p-3 rounded-xl bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-700 text-[11px] text-blue-950 dark:text-blue-200 font-medium">
               💡 {cpi?.upcoming.impactOutlook}
             </div>
           </div>
 
           {/* Macro Impact on Bitcoin & Crypto */}
-          <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-3 flex flex-col justify-between">
+          <div className="p-5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-3 flex flex-col justify-between">
             <div className="space-y-2">
-              <span className="text-xs font-black text-amber-950 uppercase flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-amber-600" /> Why CPI Moves Bitcoin
+              <span className="text-xs font-black text-amber-950 dark:text-amber-300 uppercase flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Why CPI Moves Bitcoin
               </span>
-              <h4 className="text-xs font-bold text-slate-900 leading-snug">
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-snug">
                 Liquidity Cycles & Real Interest Rates
               </h4>
-              <p className="text-[11px] text-slate-600 leading-relaxed">
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
                 When CPI comes in lower than expectations, it gives the Federal Reserve room to cut interest rates. Lower rates expand global M2 money supply, creating tailwinds for digital assets like Bitcoin and Ethereum.
               </p>
             </div>
 
             <Link
               href="/concepts"
-              className="w-full py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-bold text-center transition flex items-center justify-center gap-1"
+              className="w-full py-2 bg-amber-400 text-slate-950 rounded-xl text-xs font-bold text-center hover:bg-amber-300 transition flex items-center justify-center gap-1 shadow-sm"
             >
               <span>Learn Macro Crypto Models</span>
               <ArrowRight className="w-3 h-3" />
@@ -319,13 +319,13 @@ export default function CryptoNewsCPIDashboard() {
 
         {/* Historical CPI Releases Table */}
         <div className="space-y-3 pt-2">
-          <h3 className="text-xs font-black text-slate-900 uppercase tracking-wider">
+          <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
             Historical CPI Releases & Bitcoin Price Reaction
           </h3>
 
-          <div className="overflow-x-auto rounded-2xl border border-slate-200">
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px]">
+              <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px]">
                 <tr>
                   <th className="py-3 px-4">Period</th>
                   <th className="py-3 px-4">Release Date</th>
@@ -337,33 +337,33 @@ export default function CryptoNewsCPIDashboard() {
                   <th className="py-3 px-4 text-center">Market Sentiment</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-300">
                 {cpi?.historicalReleases.map((rel) => {
                   const isBull = rel.marketReaction === "BULLISH";
                   const isBear = rel.marketReaction === "BEARISH";
                   return (
-                    <tr key={rel.id} className="hover:bg-slate-50 transition">
-                      <td className="py-3.5 px-4 font-bold text-slate-900">{rel.period}</td>
-                      <td className="py-3.5 px-4 text-slate-500">{rel.releaseDate}</td>
-                      <td className="py-3.5 px-4 text-center font-mono font-extrabold text-slate-900">
+                    <tr key={rel.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                      <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{rel.period}</td>
+                      <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400">{rel.releaseDate}</td>
+                      <td className="py-3.5 px-4 text-center font-mono font-extrabold text-slate-900 dark:text-white">
                         {rel.actualYoY}%
                       </td>
-                      <td className="py-3.5 px-4 text-center font-mono text-slate-500">{rel.forecastYoY}%</td>
-                      <td className="py-3.5 px-4 text-center font-mono text-slate-500">{rel.previousYoY}%</td>
-                      <td className={`py-3.5 px-4 text-right font-mono font-bold ${rel.btcImpact1h.startsWith("+") ? "text-emerald-600" : "text-rose-600"}`}>
+                      <td className="py-3.5 px-4 text-center font-mono text-slate-500 dark:text-slate-400">{rel.forecastYoY}%</td>
+                      <td className="py-3.5 px-4 text-center font-mono text-slate-500 dark:text-slate-400">{rel.previousYoY}%</td>
+                      <td className={`py-3.5 px-4 text-right font-mono font-bold ${rel.btcImpact1h.startsWith("+") ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                         {rel.btcImpact1h}
                       </td>
-                      <td className={`py-3.5 px-4 text-right font-mono font-bold ${rel.btcImpact24h.startsWith("+") ? "text-emerald-600" : "text-rose-600"}`}>
+                      <td className={`py-3.5 px-4 text-right font-mono font-bold ${rel.btcImpact24h.startsWith("+") ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                         {rel.btcImpact24h}
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <span
                           className={`px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-bold ${
                             isBull
-                              ? "bg-emerald-100 text-emerald-800"
+                              ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
                               : isBear
-                              ? "bg-rose-100 text-rose-800"
-                              : "bg-slate-100 text-slate-700"
+                              ? "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
+                              : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
                           }`}
                         >
                           {rel.marketReaction}
@@ -379,16 +379,16 @@ export default function CryptoNewsCPIDashboard() {
       </div>
 
       {/* 3. REAL-TIME CRYPTO NEWS STREAM */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
         
         {/* Header & Controls */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
+            <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
               <Newspaper className="w-5 h-5 text-blue-500" />
               <span>Real-Time Breaking Crypto & Macro News Wire</span>
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Curated and verified news from institutional and decentralized intelligence sources.
             </p>
           </div>
@@ -401,7 +401,7 @@ export default function CryptoNewsCPIDashboard() {
               placeholder="Search news & reports..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-slate-400"
+              className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-slate-400"
             />
           </div>
         </div>
@@ -414,8 +414,8 @@ export default function CryptoNewsCPIDashboard() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
                 selectedCategory === cat
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  ? "bg-blue-600 text-white shadow-sm font-black"
+                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
               }`}
             >
               {cat}
@@ -432,15 +432,15 @@ export default function CryptoNewsCPIDashboard() {
             return (
               <div
                 key={item.id}
-                className="p-5 rounded-2xl border border-slate-200/90 bg-white hover:border-blue-400 hover:shadow-md transition space-y-3 flex flex-col justify-between"
+                className="p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 dark:hover:border-blue-500/60 hover:shadow-md transition space-y-3 flex flex-col justify-between"
               >
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 border border-blue-100">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
                         {item.category}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-mono">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono">
                         {item.timeAgo}
                       </span>
                     </div>
@@ -448,32 +448,32 @@ export default function CryptoNewsCPIDashboard() {
                     <span
                       className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
                         isBull
-                          ? "bg-emerald-100 text-emerald-800"
+                          ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
                           : isBear
-                          ? "bg-rose-100 text-rose-800"
-                          : "bg-slate-100 text-slate-700"
+                          ? "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
                       }`}
                     >
                       {item.sentiment}
                     </span>
                   </div>
 
-                  <h3 className="text-sm font-extrabold text-slate-900 leading-snug hover:text-blue-600 transition">
+                  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white leading-snug hover:text-blue-600 dark:hover:text-blue-400 transition">
                     {item.title}
                   </h3>
 
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
                     {item.summary}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                  <span className="font-semibold text-slate-700">{item.source}</span>
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">{item.source}</span>
                   <a
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-bold flex items-center gap-1"
                   >
                     <span>Read Source</span>
                     <ExternalLink className="w-3 h-3" />

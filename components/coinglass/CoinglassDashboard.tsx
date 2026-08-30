@@ -246,13 +246,13 @@ export default function CoinglassDashboard() {
       </div>
 
       {/* 2. NAVIGATION TABS */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-3 overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 overflow-x-auto no-scrollbar">
         <button
           onClick={() => setSelectedTab("oi")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "oi"
-              ? "bg-slate-900 text-white shadow-sm"
-              : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+              ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-black"
+              : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
           }`}
         >
           <Layers className="w-3.5 h-3.5 text-amber-500" />
@@ -263,8 +263,8 @@ export default function CoinglassDashboard() {
           onClick={() => setSelectedTab("liquidations")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "liquidations"
-              ? "bg-slate-900 text-white shadow-sm"
-              : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+              ? "bg-slate-900 dark:bg-rose-500 text-white shadow-sm font-black"
+              : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
           }`}
         >
           <Skull className="w-3.5 h-3.5 text-rose-500" />
@@ -275,8 +275,8 @@ export default function CoinglassDashboard() {
           onClick={() => setSelectedTab("funding")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "funding"
-              ? "bg-slate-900 text-white shadow-sm"
-              : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+              ? "bg-slate-900 dark:bg-blue-500 text-white shadow-sm font-black"
+              : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
           }`}
         >
           <Percent className="w-3.5 h-3.5 text-blue-500" />
@@ -287,8 +287,8 @@ export default function CoinglassDashboard() {
           onClick={() => setSelectedTab("longshort")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "longshort"
-              ? "bg-slate-900 text-white shadow-sm"
-              : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+              ? "bg-slate-900 dark:bg-emerald-500 text-white shadow-sm font-black"
+              : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
           }`}
         >
           <Gauge className="w-3.5 h-3.5 text-emerald-500" />
@@ -298,25 +298,25 @@ export default function CoinglassDashboard() {
 
       {/* 3. TAB 1: OPEN INTEREST TABLE */}
       {selectedTab === "oi" && (
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
-          <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden space-y-4">
+          <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+              <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                 <Layers className="w-4 h-4 text-amber-500" />
                 <span>Futures Open Interest by Cryptocurrency</span>
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Total outstanding unsettled derivative contracts across major exchanges.
               </p>
             </div>
-            <div className="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-xl border border-amber-200">
+            <div className="text-xs font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/80 px-3 py-1 rounded-xl border border-amber-200 dark:border-amber-800">
               Aggregated OI: {totalOiFormatted}
             </div>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px] tracking-wider">
+              <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Cryptocurrency</th>
                   <th className="py-3 px-4 text-right">Perp Price</th>
@@ -327,51 +327,51 @@ export default function CoinglassDashboard() {
                   <th className="py-3 px-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-300">
                 {openInterestList.map((item) => {
                   const isBull = item.change24h >= 0;
                   return (
-                    <tr key={item.symbol} className="hover:bg-amber-50/40 transition">
+                    <tr key={item.symbol} className="hover:bg-amber-50/40 dark:hover:bg-slate-800/50 transition">
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center font-black text-xs text-slate-900">
+                          <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-black text-xs text-slate-900 dark:text-white">
                             {item.base}
                           </div>
                           <div>
-                            <div className="font-extrabold text-slate-900 text-sm">
+                            <div className="font-extrabold text-slate-900 dark:text-white text-sm">
                               {item.name}
                             </div>
-                            <span className="font-mono text-[10px] text-slate-400">{item.symbol}</span>
+                            <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">{item.symbol}</span>
                           </div>
                         </div>
                       </td>
 
-                      <td className="py-4 px-4 text-right font-mono font-extrabold text-slate-900">
+                      <td className="py-4 px-4 text-right font-mono font-extrabold text-slate-900 dark:text-white">
                         {fmtPrice(item.price)}
                       </td>
 
-                      <td className="py-4 px-4 text-right font-mono font-black text-amber-700 text-sm">
+                      <td className="py-4 px-4 text-right font-mono font-black text-amber-600 dark:text-amber-400 text-sm">
                         {fmtCurrency(item.openInterestUsd)}
                       </td>
 
-                      <td className="py-4 px-4 text-right font-mono text-slate-600">
+                      <td className="py-4 px-4 text-right font-mono text-slate-600 dark:text-slate-300">
                         {item.openInterestTokens.toLocaleString()} {item.base}
                       </td>
 
                       <td className="py-4 px-4 text-right font-mono font-bold">
-                        <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-lg text-xs ${isBull ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
+                        <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-lg text-xs ${isBull ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300" : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"}`}>
                           {isBull ? "+" : ""}{item.change24h.toFixed(2)}%
                         </span>
                       </td>
 
-                      <td className="py-4 px-4 text-right font-mono text-slate-700">
+                      <td className="py-4 px-4 text-right font-mono text-slate-700 dark:text-slate-300">
                         {fmtCurrency(item.volume24hUsd)}
                       </td>
 
                       <td className="py-4 px-4 text-right">
                         <Link
                           href="/tools"
-                          className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-amber-400 hover:text-slate-950 text-slate-700 text-xs font-bold transition inline-flex items-center gap-1"
+                          className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-400 hover:text-slate-950 dark:hover:bg-amber-400 dark:hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold transition inline-flex items-center gap-1"
                         >
                           <span>Analyze</span>
                           <ArrowRight className="w-3 h-3" />
@@ -390,40 +390,40 @@ export default function CoinglassDashboard() {
       {selectedTab === "liquidations" && (
         <div className="space-y-6">
           {/* Liquidation Breakdown Card */}
-          <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+          <div className="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                   <Skull className="w-4 h-4 text-rose-500" />
                   <span>24h Total Liquidation Distribution</span>
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Total leveraged positions forcefully closed by exchange margin engines.
                 </p>
               </div>
               <div className="text-right">
-                <span className="text-lg font-black text-rose-600 font-mono">
+                <span className="text-lg font-black text-rose-600 dark:text-rose-400 font-mono">
                   {liquidations ? fmtCurrency(liquidations.total24hUsd) : "$248.60M"}
                 </span>
-                <div className="text-[10px] text-slate-400">Total Liquidated in 24 Hours</div>
+                <div className="text-[10px] text-slate-400 dark:text-slate-500">Total Liquidated in 24 Hours</div>
               </div>
             </div>
 
             {/* Visual Balance Bar */}
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-black">
-                <span className="text-emerald-700 flex items-center gap-1">
+                <span className="text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
                   <span>Longs Wrecked: {liquidations ? fmtCurrency(liquidations.longsTotalUsd) : "$84.2M"}</span>
                   <span className="text-[10px] font-mono">({liquidations?.longsPercent || 34}%)</span>
                 </span>
-                <span className="text-rose-700 flex items-center gap-1">
+                <span className="text-rose-700 dark:text-rose-400 flex items-center gap-1">
                   <span className="text-[10px] font-mono">({liquidations?.shortsPercent || 66}%)</span>
                   <span>Shorts Wrecked: {liquidations ? fmtCurrency(liquidations.shortsTotalUsd) : "$164.4M"}</span>
                 </span>
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full h-4 rounded-full bg-slate-100 overflow-hidden flex shadow-inner">
+              <div className="w-full h-4 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden flex shadow-inner">
                 <div
                   style={{ width: `${liquidations?.longsPercent || 34}%` }}
                   className="bg-emerald-500 transition-all duration-500"
@@ -437,49 +437,49 @@ export default function CoinglassDashboard() {
 
             {/* Liquidation Clusters (Heatmap levels) */}
             {heatmapLevels && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-slate-900 text-xs">Bitcoin Liquidation Cluster</span>
-                    <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
+                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">Bitcoin Liquidation Cluster</span>
+                    <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2 py-0.5 rounded">
                       Live Heatmap
                     </span>
                   </div>
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between">
-                      <span className="text-slate-500">Overhead Short Cascade Pool:</span>
-                      <strong className="text-rose-600 font-mono">${heatmapLevels.btc.majorShortLiquidationPool.toLocaleString()}</strong>
+                      <span className="text-slate-500 dark:text-slate-400">Overhead Short Cascade Pool:</span>
+                      <strong className="text-rose-600 dark:text-rose-400 font-mono">${heatmapLevels.btc.majorShortLiquidationPool.toLocaleString()}</strong>
                     </div>
-                    <div className="flex justify-between text-[11px] text-slate-400">
+                    <div className="flex justify-between text-[11px] text-slate-400 dark:text-slate-500">
                       <span>Resting Liquidity Volume:</span>
-                      <span className="font-bold text-slate-700">{heatmapLevels.btc.shortPoolVolumeUsd}</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-200">{heatmapLevels.btc.shortPoolVolumeUsd}</span>
                     </div>
                     <div className="flex justify-between pt-1">
-                      <span className="text-slate-500">Resting Long Stop Shelf:</span>
-                      <strong className="text-emerald-600 font-mono">${heatmapLevels.btc.majorLongLiquidationPool.toLocaleString()}</strong>
+                      <span className="text-slate-500 dark:text-slate-400">Resting Long Stop Shelf:</span>
+                      <strong className="text-emerald-600 dark:text-emerald-400 font-mono">${heatmapLevels.btc.majorLongLiquidationPool.toLocaleString()}</strong>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-slate-900 text-xs">Ethereum Liquidation Cluster</span>
-                    <span className="text-[10px] font-mono font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">Ethereum Liquidation Cluster</span>
+                    <span className="text-[10px] font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950/80 px-2 py-0.5 rounded">
                       Live Heatmap
                     </span>
                   </div>
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between">
-                      <span className="text-slate-500">Overhead Short Cascade Pool:</span>
-                      <strong className="text-rose-600 font-mono">${heatmapLevels.eth.majorShortLiquidationPool.toLocaleString()}</strong>
+                      <span className="text-slate-500 dark:text-slate-400">Overhead Short Cascade Pool:</span>
+                      <strong className="text-rose-600 dark:text-rose-400 font-mono">${heatmapLevels.eth.majorShortLiquidationPool.toLocaleString()}</strong>
                     </div>
-                    <div className="flex justify-between text-[11px] text-slate-400">
+                    <div className="flex justify-between text-[11px] text-slate-400 dark:text-slate-500">
                       <span>Resting Liquidity Volume:</span>
-                      <span className="font-bold text-slate-700">{heatmapLevels.eth.shortPoolVolumeUsd}</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-200">{heatmapLevels.eth.shortPoolVolumeUsd}</span>
                     </div>
                     <div className="flex justify-between pt-1">
-                      <span className="text-slate-500">Resting Long Stop Shelf:</span>
-                      <strong className="text-emerald-600 font-mono">${heatmapLevels.eth.majorLongLiquidationPool.toLocaleString()}</strong>
+                      <span className="text-slate-500 dark:text-slate-400">Resting Long Stop Shelf:</span>
+                      <strong className="text-emerald-600 dark:text-emerald-400 font-mono">${heatmapLevels.eth.majorLongLiquidationPool.toLocaleString()}</strong>
                     </div>
                   </div>
                 </div>
@@ -488,8 +488,8 @@ export default function CoinglassDashboard() {
           </div>
 
           {/* Recent Live Liquidations Stream */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-            <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
               <Activity className="w-4 h-4 text-rose-500" />
               <span>Real-Time Forced Liquidation Stream</span>
             </h3>
@@ -500,29 +500,29 @@ export default function CoinglassDashboard() {
                 return (
                   <div
                     key={evt.id}
-                    className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs"
+                    className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-xs"
                   >
                     <div className="flex items-center gap-3">
                       <span
                         className={`px-2 py-0.5 rounded-lg font-mono font-black text-[10px] ${
                           isLong
-                            ? "bg-emerald-100 text-emerald-800"
-                            : "bg-rose-100 text-rose-800"
+                            ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
+                            : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
                         }`}
                       >
                         {evt.side} LIQ
                       </span>
                       <div>
-                        <span className="font-extrabold text-slate-900">{evt.symbol}</span>
-                        <span className="text-[10px] text-slate-400 ml-2">on {evt.exchange}</span>
+                        <span className="font-extrabold text-slate-900 dark:text-white">{evt.symbol}</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 ml-2">on {evt.exchange}</span>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4">
-                      <span className="font-mono font-black text-rose-600">
+                      <span className="font-mono font-black text-rose-600 dark:text-rose-400">
                         {fmtCurrency(evt.amountUsd)}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400">{evt.timeAgo}</span>
+                      <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500">{evt.timeAgo}</span>
                     </div>
                   </div>
                 );
@@ -534,26 +534,26 @@ export default function CoinglassDashboard() {
 
       {/* 5. TAB 3: FUNDING RATES MATRIX */}
       {selectedTab === "funding" && (
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
-          <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden space-y-4">
+          <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+              <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                 <Percent className="w-4 h-4 text-blue-500" />
                 <span>Multi-Exchange Perpetual Funding Rates</span>
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Periodic payments exchanged between long and short traders to anchor perp contracts to spot index prices.
               </p>
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+            <div className="flex items-center gap-1.5 text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
               <Clock className="w-3.5 h-3.5 text-amber-500" />
-              <span>Next Settlement in: <strong className="text-slate-900">03:42:15</strong></span>
+              <span>Next Settlement in: <strong className="text-slate-900 dark:text-white">03:42:15</strong></span>
             </div>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px] tracking-wider">
+              <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Symbol</th>
                   <th className="py-3 px-4 text-center">Binance</th>
@@ -563,30 +563,30 @@ export default function CoinglassDashboard() {
                   <th className="py-3 px-4 text-right">Predicted Next Rate</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-300">
                 {fundingRates.map((f) => (
-                  <tr key={f.symbol} className="hover:bg-blue-50/40 transition">
-                    <td className="py-4 px-4 font-extrabold text-slate-900 text-sm">
+                  <tr key={f.symbol} className="hover:bg-blue-50/40 dark:hover:bg-slate-800/50 transition">
+                    <td className="py-4 px-4 font-extrabold text-slate-900 dark:text-white text-sm">
                       {f.base}/USDT
                     </td>
 
-                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600">
+                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600 dark:text-emerald-400">
                       {f.exchanges.binance}
                     </td>
 
-                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600">
+                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600 dark:text-emerald-400">
                       {f.exchanges.bybit}
                     </td>
 
-                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600">
+                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600 dark:text-emerald-400">
                       {f.exchanges.okx}
                     </td>
 
-                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600">
+                    <td className="py-4 px-4 text-center font-mono font-bold text-emerald-600 dark:text-emerald-400">
                       {f.exchanges.dydx}
                     </td>
 
-                    <td className="py-4 px-4 text-right font-mono font-black text-amber-700">
+                    <td className="py-4 px-4 text-right font-mono font-black text-amber-600 dark:text-amber-400">
                       {f.predictedRate}
                     </td>
                   </tr>
@@ -603,19 +603,19 @@ export default function CoinglassDashboard() {
           {longShortRatios.map((item) => (
             <div
               key={item.symbol}
-              className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4"
+              className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center font-black text-xs text-slate-900">
+                  <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-black text-xs text-slate-900 dark:text-white">
                     {item.base}
                   </div>
                   <div>
-                    <h4 className="font-black text-slate-900 text-sm">{item.base}/USDT Position Ratio</h4>
-                    <span className="text-[10px] text-slate-400">Binance Futures Global Accounts</span>
+                    <h4 className="font-black text-slate-900 dark:text-white text-sm">{item.base}/USDT Position Ratio</h4>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500">Binance Futures Global Accounts</span>
                   </div>
                 </div>
-                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800">
+                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                   Ratio: {item.ratio}
                 </span>
               </div>
@@ -623,26 +623,26 @@ export default function CoinglassDashboard() {
               {/* Progress bar */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-xs font-bold">
-                  <span className="text-emerald-600">Longs {item.longRatio}%</span>
-                  <span className="text-rose-600">Shorts {item.shortRatio}%</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">Longs {item.longRatio}%</span>
+                  <span className="text-rose-600 dark:text-rose-400">Shorts {item.shortRatio}%</span>
                 </div>
-                <div className="w-full h-3 rounded-full bg-slate-100 overflow-hidden flex">
+                <div className="w-full h-3 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden flex">
                   <div style={{ width: `${item.longRatio}%` }} className="bg-emerald-500" />
                   <div style={{ width: `${item.shortRatio}%` }} className="bg-rose-500" />
                 </div>
               </div>
 
               {/* Top Traders Ratio & Taker Volume */}
-              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs">
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400">Top Trader Accounts</span>
-                  <div className="font-extrabold text-slate-900 font-mono">
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500">Top Trader Accounts</span>
+                  <div className="font-extrabold text-slate-900 dark:text-white font-mono">
                     {item.topTradersLong}% Long / {item.topTradersShort}% Short
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-slate-400">Taker Buy Volume</span>
-                  <div className="font-extrabold text-emerald-600 font-mono">
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500">Taker Buy Volume</span>
+                  <div className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
                     {item.takerBuyVolPercent}% Net Buyers
                   </div>
                 </div>

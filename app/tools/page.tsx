@@ -24,6 +24,7 @@ import {
 import AITradingBotTerminal from "@/components/tools/AITradingBotTerminal";
 import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChart";
 import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 function ToolsContent() {
   const searchParams = useSearchParams();
@@ -134,41 +135,43 @@ function ToolsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 py-12 sm:py-20">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-10 sm:py-16 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+        <Breadcrumbs items={[{ label: "AI Trading Tools & Terminal", href: "/tools" }]} />
 
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 border border-amber-200 text-amber-900 shadow-sm">
-            <Bot className="w-3.5 h-3.5 text-amber-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/80 border border-amber-200 dark:border-amber-700/80 text-amber-900 dark:text-amber-300 shadow-sm">
+            <Bot className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
             <span>AI Trading Bot & Professional Analytics</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Cryptocurrency Trading Suite & Signals Engine
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
             Real-time algorithmic trading bot, multi-coin market scanner, live TradingView charts, and exact risk execution calculators.
           </p>
         </div>
 
         {/* Navigation Tabs Bar */}
-        <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm max-w-3xl mx-auto">
+        <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm max-w-3xl mx-auto">
           <button
             onClick={() => setActiveTab("bot")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeTab === "bot"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
-            <Bot className="w-4 h-4 text-amber-700" /> AI Trading Bot & Signals
+            <Bot className="w-4 h-4 text-amber-700 dark:text-amber-950" /> AI Trading Bot & Signals
           </button>
           <button
             onClick={() => setActiveTab("terminal")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeTab === "terminal"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <BarChart2 className="w-4 h-4" /> Live Chart Terminal
@@ -178,7 +181,7 @@ function ToolsContent() {
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeTab === "dca"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <Calculator className="w-4 h-4" /> DCA Simulator
@@ -188,7 +191,7 @@ function ToolsContent() {
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeTab === "sizer"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <Sliders className="w-4 h-4" /> Position Sizer
@@ -198,7 +201,7 @@ function ToolsContent() {
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
               activeTab === "converter"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <RefreshCw className="w-4 h-4" /> Spot Converter
@@ -211,9 +214,9 @@ function ToolsContent() {
         {/* TAB 2: STANDALONE TRADINGVIEW TERMINAL */}
         {activeTab === "terminal" && (
           <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Popular Pairs:</span>
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Popular Pairs:</span>
                 {[
                   { label: "BTC/USDT", symbol: "BINANCE:BTCUSDT" },
                   { label: "ETH/USDT", symbol: "BINANCE:ETHUSDT" },
@@ -229,8 +232,8 @@ function ToolsContent() {
                     onClick={() => setChartSymbol(pair.symbol)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                       chartSymbol === pair.symbol
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 font-black"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                     }`}
                   >
                     {pair.label}
@@ -245,7 +248,7 @@ function ToolsContent() {
                   placeholder="Load any pair (e.g. NEAR, WIF)..."
                   value={customChartInput}
                   onChange={(e) => setCustomChartInput(e.target.value)}
-                  className="px-3 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 w-44"
+                  className="px-3 py-1.5 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 w-44 placeholder:text-slate-400"
                 />
                 <button
                   type="submit"
@@ -257,16 +260,16 @@ function ToolsContent() {
             </div>
 
             {/* View Mode Switcher */}
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 sm:px-4 sm:py-3 rounded-2xl border border-slate-200 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3 sm:px-4 sm:py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Terminal Mode:</span>
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Terminal Mode:</span>
+                <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
                   <button
                     onClick={() => setChartTerminalMode("chart")}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
                       chartTerminalMode === "chart"
-                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
+                        ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-extrabold"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
                     <BarChart2 className="w-3.5 h-3.5" />
@@ -276,8 +279,8 @@ function ToolsContent() {
                     onClick={() => setChartTerminalMode("analysis")}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
                       chartTerminalMode === "analysis"
-                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
+                        ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-extrabold"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
                     <Gauge className="w-3.5 h-3.5" />
@@ -288,7 +291,7 @@ function ToolsContent() {
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
                       chartTerminalMode === "split"
                         ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
                     <Layers className="w-3.5 h-3.5" />
@@ -298,11 +301,11 @@ function ToolsContent() {
               </div>
 
               <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="text-slate-500">Live Price:</span>
-                <strong className="text-slate-900">
+                <span className="text-slate-500 dark:text-slate-400">Live Price:</span>
+                <strong className="text-slate-900 dark:text-white">
                   ${terminalTicker.price >= 1000 ? terminalTicker.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : terminalTicker.price}
                 </strong>
-                <span className={`px-2 py-0.5 rounded-md font-bold text-[11px] ${terminalTicker.change24h >= 0 ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
+                <span className={`px-2 py-0.5 rounded-md font-bold text-[11px] ${terminalTicker.change24h >= 0 ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300" : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"}`}>
                   {terminalTicker.change24h >= 0 ? "+" : ""}{terminalTicker.change24h.toFixed(2)}%
                 </span>
               </div>
@@ -337,18 +340,18 @@ function ToolsContent() {
         {/* TAB 3: DCA SIMULATOR */}
         {activeTab === "dca" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-6 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+            <div className="lg:col-span-6 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">Dollar-Cost Averaging Simulator</h3>
-                <p className="text-xs text-slate-500 mt-1">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Dollar-Cost Averaging Simulator</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Model periodic accumulation math and compound growth across cryptocurrency market cycles.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-slate-700">
+                <div className="flex justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
                   <span>Monthly Contribution</span>
-                  <span className="text-amber-600 font-bold">${monthlyInvest.toLocaleString()} / mo</span>
+                  <span className="text-amber-600 dark:text-amber-400 font-bold">${monthlyInvest.toLocaleString()} / mo</span>
                 </div>
                 <input
                   type="range"
@@ -357,14 +360,14 @@ function ToolsContent() {
                   step="25"
                   value={monthlyInvest}
                   onChange={(e) => setMonthlyInvest(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
                 />
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-slate-700">
+                <div className="flex justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
                   <span>Time Horizon (Years)</span>
-                  <span className="text-amber-600 font-bold">{dcaYears} Years ({totalMonths} Months)</span>
+                  <span className="text-amber-600 dark:text-amber-400 font-bold">{dcaYears} Years ({totalMonths} Months)</span>
                 </div>
                 <div className="grid grid-cols-4 gap-2">
                   {[1, 2, 3, 4].map((yr) => (
@@ -373,8 +376,8 @@ function ToolsContent() {
                       onClick={() => setDcaYears(yr)}
                       className={`py-2 rounded-xl text-xs font-bold transition ${
                         dcaYears === yr
-                          ? "bg-slate-900 text-white shadow-sm"
-                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-black"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                       }`}
                     >
                       {yr} {yr === 1 ? "Year" : "Years"}
@@ -384,9 +387,9 @@ function ToolsContent() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-xs font-semibold text-slate-700">
+                <div className="flex justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
                   <span>Expected Annualized Rate of Return</span>
-                  <span className="text-amber-600 font-bold">{projectedGrowth}% APR</span>
+                  <span className="text-amber-600 dark:text-amber-400 font-bold">{projectedGrowth}% APR</span>
                 </div>
                 <input
                   type="range"
@@ -395,12 +398,12 @@ function ToolsContent() {
                   step="5"
                   value={projectedGrowth}
                   onChange={(e) => setProjectedGrowth(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
                 />
               </div>
 
-              <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 flex items-start gap-3">
-                <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div className="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-300 flex items-start gap-3">
+                <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                 <p>
                   <strong>The Harmonic Mean Advantage:</strong> Fixed-calendar accumulation automatically buys more Bitcoin during deep drawdowns and less during high-volatility tops.
                 </p>
@@ -440,37 +443,37 @@ function ToolsContent() {
         {/* TAB 4: POSITION SIZER */}
         {activeTab === "sizer" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-6 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+            <div className="lg:col-span-6 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
               <div>
-                <h3 className="text-xl font-bold text-slate-900">Risk & Position Sizing Calculator</h3>
-                <p className="text-xs text-slate-500 mt-1">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Risk & Position Sizing Calculator</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Calculate exact trade lot sizes and prevent account ruin before submitting orders.
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700">Account Balance ($) </label>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Account Balance ($) </label>
                   <div className="relative">
                     <span className="absolute left-3 top-2.5 text-xs text-slate-400 font-bold">$</span>
                     <input
                       type="number"
                       value={accountSize}
                       onChange={(e) => setAccountSize(Number(e.target.value))}
-                      className="w-full pl-7 pr-3 py-2 text-sm font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
+                      className="w-full pl-7 pr-3 py-2 text-sm font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700">Account Risk (%)</label>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Account Risk (%)</label>
                   <div className="relative">
                     <input
                       type="number"
                       step="0.1"
                       value={riskPercent}
                       onChange={(e) => setRiskPercent(Number(e.target.value))}
-                      className="w-full pl-3 pr-7 py-2 text-sm font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
+                      className="w-full pl-3 pr-7 py-2 text-sm font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
                     />
                     <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-bold">%</span>
                   </div>
@@ -478,69 +481,69 @@ function ToolsContent() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Entry Price ($)</label>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Entry Price ($)</label>
                 <input
                   type="number"
                   value={entryPrice}
                   onChange={(e) => setEntryPrice(Number(e.target.value))}
-                  className="w-full px-3 py-2 text-sm font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  className="w-full px-3 py-2 text-sm font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-rose-600">Stop Loss Invalidation ($)</label>
+                  <label className="text-xs font-bold text-rose-600 dark:text-rose-400">Stop Loss Invalidation ($)</label>
                   <input
                     type="number"
                     value={stopLoss}
                     onChange={(e) => setStopLoss(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm font-bold text-slate-900 bg-rose-50/50 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400"
+                    className="w-full px-3 py-2 text-sm font-bold text-slate-900 dark:text-white bg-rose-50/50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-emerald-600">Take Profit Target ($)</label>
+                  <label className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Take Profit Target ($)</label>
                   <input
                     type="number"
                     value={takeProfit}
                     onChange={(e) => setTakeProfit(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm font-bold text-slate-900 bg-emerald-50/50 border border-emerald-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="w-full px-3 py-2 text-sm font-bold text-slate-900 dark:text-white bg-emerald-50/50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   />
                 </div>
               </div>
             </div>
 
             <div className="lg:col-span-6 space-y-6">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-lg space-y-6">
+              <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">
                     Calculated Position Matrix
                   </span>
-                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                     R:R Ratio 1 : {riskRewardRatio}
                   </span>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-amber-50/50 border border-amber-200 text-center space-y-1">
-                  <div className="text-xs font-semibold text-slate-600">Recommended Position Size</div>
-                  <div className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                <div className="p-6 rounded-2xl bg-amber-50/50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-center space-y-1">
+                  <div className="text-xs font-semibold text-slate-600 dark:text-slate-300">Recommended Position Size</div>
+                  <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">
                     {positionUnits.toFixed(4)} BTC
                   </div>
-                  <div className="text-xs text-amber-700 font-bold">
+                  <div className="text-xs text-amber-700 dark:text-amber-300 font-bold">
                     ≈ ${Math.round(positionValue).toLocaleString()} Total Position Value
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200">
-                    <div className="text-[11px] font-bold text-rose-600 uppercase">Max Risk at SL</div>
-                    <div className="text-2xl font-extrabold text-rose-700 mt-1">
+                  <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800">
+                    <div className="text-[11px] font-bold text-rose-600 dark:text-rose-400 uppercase">Max Risk at SL</div>
+                    <div className="text-2xl font-extrabold text-rose-700 dark:text-rose-300 mt-1">
                       -${riskDollar.toFixed(2)}
                     </div>
                   </div>
-                  <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
-                    <div className="text-[11px] font-bold text-emerald-600 uppercase">Potential Profit</div>
-                    <div className="text-2xl font-extrabold text-emerald-700 mt-1">
+                  <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
+                    <div className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Potential Profit</div>
+                    <div className="text-2xl font-extrabold text-emerald-700 dark:text-emerald-300 mt-1">
                       +${totalPotentialProfit.toFixed(2)}
                     </div>
                   </div>
@@ -552,29 +555,29 @@ function ToolsContent() {
 
         {/* TAB 5: SPOT CONVERTER */}
         {activeTab === "converter" && (
-          <div className="max-w-3xl mx-auto bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-lg space-y-8">
+          <div className="max-w-3xl mx-auto bg-white dark:bg-slate-900 p-8 sm:p-10 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg space-y-8">
             <div className="text-center space-y-2">
-              <h3 className="text-2xl font-bold text-slate-900">Real-Time Cryptocurrency Spot Converter</h3>
-              <p className="text-xs sm:text-sm text-slate-500">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Real-Time Cryptocurrency Spot Converter</h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                 Instant multi-currency exchange calculations powered by live institutional liquidity pricing.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
               <div className="sm:col-span-5 space-y-2">
-                <label className="text-xs font-bold text-slate-600">You Send / Input</label>
-                <div className="flex rounded-2xl border border-slate-200 overflow-hidden bg-slate-50">
+                <label className="text-xs font-bold text-slate-600 dark:text-slate-300">You Send / Input</label>
+                <div className="flex rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-50 dark:bg-slate-800">
                   <input
                     type="number"
                     min="0"
                     value={convertAmount}
                     onChange={(e) => setConvertAmount(Math.max(0, Number(e.target.value)))}
-                    className="w-full px-4 py-3 bg-transparent text-lg font-bold text-slate-900 focus:outline-none"
+                    className="w-full px-4 py-3 bg-transparent text-lg font-bold text-slate-900 dark:text-white focus:outline-none"
                   />
                   <select
                     value={fromAsset}
                     onChange={(e) => setFromAsset(e.target.value as any)}
-                    className="bg-white px-3 py-3 font-bold text-sm text-slate-800 border-l border-slate-200 focus:outline-none"
+                    className="bg-white dark:bg-slate-800 px-3 py-3 font-bold text-sm text-slate-800 dark:text-slate-200 border-l border-slate-200 dark:border-slate-700 focus:outline-none"
                   >
                     <option value="BTC">BTC</option>
                     <option value="ETH">ETH</option>
@@ -585,21 +588,21 @@ function ToolsContent() {
               </div>
 
               <div className="sm:col-span-2 flex justify-center pt-4 sm:pt-6">
-                <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
                   ⇄
                 </div>
               </div>
 
               <div className="sm:col-span-5 space-y-2">
-                <label className="text-xs font-bold text-slate-600">You Receive / Value</label>
-                <div className="flex rounded-2xl border border-slate-200 overflow-hidden bg-slate-50">
-                  <div className="w-full px-4 py-3 text-lg font-bold text-amber-600 truncate">
+                <label className="text-xs font-bold text-slate-600 dark:text-slate-300">You Receive / Value</label>
+                <div className="flex rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-50 dark:bg-slate-800">
+                  <div className="w-full px-4 py-3 text-lg font-bold text-amber-600 dark:text-amber-400 truncate">
                     {convertedResult.toLocaleString(undefined, { maximumFractionDigits: 4 })}
                   </div>
                   <select
                     value={toAsset}
                     onChange={(e) => setToAsset(e.target.value as any)}
-                    className="bg-white px-3 py-3 font-bold text-sm text-slate-800 border-l border-slate-200 focus:outline-none"
+                    className="bg-white dark:bg-slate-800 px-3 py-3 font-bold text-sm text-slate-800 dark:text-slate-200 border-l border-slate-200 dark:border-slate-700 focus:outline-none"
                   >
                     <option value="USD">USD ($)</option>
                     <option value="EUR">EUR (€)</option>
@@ -620,7 +623,7 @@ function ToolsContent() {
 
 export default function ToolsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-8 text-sm font-bold text-slate-500">Loading Trading Suite...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-8 text-sm font-bold text-slate-500">Loading Trading Suite...</div>}>
       <ToolsContent />
     </Suspense>
   );

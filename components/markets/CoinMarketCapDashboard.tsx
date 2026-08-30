@@ -286,13 +286,13 @@ export default function CoinMarketCapDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
         {/* Top Gainers */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
+            <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-emerald-500" />
               <span>Top 24h Gainers</span>
             </h3>
-            <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded">
               High Momentum
             </span>
           </div>
@@ -301,19 +301,19 @@ export default function CoinMarketCapDashboard() {
             {topGainers.map((coin) => (
               <div
                 key={coin.symbol}
-                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 transition"
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 font-black text-[11px] flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 font-black text-[11px] flex items-center justify-center">
                     {coin.symbol}
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-slate-900">{coin.name}</div>
-                    <div className="text-[10px] font-mono text-slate-500">{fmtPrice(coin.price)}</div>
+                    <div className="text-xs font-extrabold text-slate-900 dark:text-white">{coin.name}</div>
+                    <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{fmtPrice(coin.price)}</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs font-black text-emerald-600 font-mono">
+                  <div className="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono">
                     +{coin.change24h.toFixed(2)}%
                   </div>
                   <div className="text-[10px] text-slate-400 font-mono">{fmtCurrency(coin.volume24h)}</div>
@@ -324,13 +324,13 @@ export default function CoinMarketCapDashboard() {
         </div>
 
         {/* Top Losers / Dips */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
+            <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
               <TrendingDown className="w-4 h-4 text-rose-500" />
               <span>Top 24h Pullbacks</span>
             </h3>
-            <span className="text-[10px] font-mono font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-mono font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/80 px-2 py-0.5 rounded">
               Dip Watch
             </span>
           </div>
@@ -339,19 +339,19 @@ export default function CoinMarketCapDashboard() {
             {topLosers.map((coin) => (
               <div
                 key={coin.symbol}
-                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 transition"
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-rose-100 text-rose-800 font-black text-[11px] flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-900/40 text-rose-800 dark:text-rose-300 font-black text-[11px] flex items-center justify-center">
                     {coin.symbol}
                   </div>
                   <div>
-                    <div className="text-xs font-extrabold text-slate-900">{coin.name}</div>
-                    <div className="text-[10px] font-mono text-slate-500">{fmtPrice(coin.price)}</div>
+                    <div className="text-xs font-extrabold text-slate-900 dark:text-white">{coin.name}</div>
+                    <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{fmtPrice(coin.price)}</div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs font-black text-rose-600 font-mono">
+                  <div className="text-xs font-black text-rose-600 dark:text-rose-400 font-mono">
                     {coin.change24h >= 0 ? "+" : ""}{coin.change24h.toFixed(2)}%
                   </div>
                   <div className="text-[10px] text-slate-400 font-mono">{fmtCurrency(coin.volume24h)}</div>
@@ -387,7 +387,7 @@ export default function CoinMarketCapDashboard() {
       </div>
 
       {/* 3. CONTROLS: CATEGORIES & SEARCH BAR */}
-      <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           
           {/* Category Pills */}
@@ -398,8 +398,8 @@ export default function CoinMarketCapDashboard() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
                   selectedCategory === cat
-                    ? "bg-slate-900 text-white shadow-sm"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-black"
+                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                 }`}
               >
                 {cat}
@@ -415,7 +415,7 @@ export default function CoinMarketCapDashboard() {
               placeholder="Search crypto (e.g. BTC, Solana)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-slate-400"
+              className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-slate-400"
             />
           </div>
 
@@ -423,41 +423,41 @@ export default function CoinMarketCapDashboard() {
       </div>
 
       {/* 4. MAIN COINMARKETCAP LIVE TABLE */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px] tracking-wider select-none">
+            <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-bold uppercase text-[10px] tracking-wider select-none">
               <tr>
                 <th
                   onClick={() => handleSort("rank")}
-                  className="py-3.5 px-4 cursor-pointer hover:text-slate-900"
+                  className="py-3.5 px-4 cursor-pointer hover:text-slate-900 dark:hover:text-white"
                 >
                   # {sortBy === "rank" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
                 <th className="py-3.5 px-4">Name</th>
                 <th
                   onClick={() => handleSort("price")}
-                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900"
+                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900 dark:hover:text-white"
                 >
                   Price {sortBy === "price" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
                 <th className="py-3.5 px-4 text-right">1h %</th>
                 <th
                   onClick={() => handleSort("change24h")}
-                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900"
+                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900 dark:hover:text-white"
                 >
                   24h % {sortBy === "change24h" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
                 <th className="py-3.5 px-4 text-right">7d %</th>
                 <th
                   onClick={() => handleSort("volume24h")}
-                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900 hidden sm:table-cell"
+                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900 dark:hover:text-white hidden sm:table-cell"
                 >
                   24h Volume {sortBy === "volume24h" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
                 <th
                   onClick={() => handleSort("marketCap")}
-                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900 hidden md:table-cell"
+                  className="py-3.5 px-4 text-right cursor-pointer hover:text-slate-900 dark:hover:text-white hidden md:table-cell"
                 >
                   Market Cap {sortBy === "marketCap" ? (sortOrder === "asc" ? "▲" : "▼") : ""}
                 </th>
@@ -466,7 +466,7 @@ export default function CoinMarketCapDashboard() {
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium text-slate-700 dark:text-slate-300">
               {filteredCoins.map((coin) => {
                 const isBull24h = coin.change24h >= 0;
                 const isBull1h = coin.change1h >= 0;
@@ -475,29 +475,29 @@ export default function CoinMarketCapDashboard() {
                 return (
                   <tr
                     key={coin.id}
-                    className="hover:bg-amber-50/40 transition group"
+                    className="hover:bg-amber-50/40 dark:hover:bg-slate-800/50 transition group"
                   >
                     {/* Rank */}
-                    <td className="py-4 px-4 font-mono font-bold text-slate-400 text-xs">
+                    <td className="py-4 px-4 font-mono font-bold text-slate-400 dark:text-slate-500 text-xs">
                       {coin.rank}
                     </td>
 
                     {/* Name & Icon */}
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center font-black text-xs text-slate-900 group-hover:scale-105 transition">
+                        <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-black text-xs text-slate-900 dark:text-white group-hover:scale-105 transition">
                           {coin.symbol}
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-extrabold text-slate-900 text-sm group-hover:text-amber-600 transition">
+                            <span className="font-extrabold text-slate-900 dark:text-white text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">
                               {coin.name}
                             </span>
-                            <span className="font-mono font-bold text-[11px] text-slate-400 uppercase">
+                            <span className="font-mono font-bold text-[11px] text-slate-400 dark:text-slate-500 uppercase">
                               {coin.symbol}
                             </span>
                           </div>
-                          <span className="text-[10px] text-slate-400 font-medium">
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">
                             {coin.category}
                           </span>
                         </div>
@@ -505,12 +505,12 @@ export default function CoinMarketCapDashboard() {
                     </td>
 
                     {/* Price */}
-                    <td className="py-4 px-4 text-right font-mono font-extrabold text-slate-900 text-sm">
+                    <td className="py-4 px-4 text-right font-mono font-extrabold text-slate-900 dark:text-white text-sm">
                       {fmtPrice(coin.price)}
                     </td>
 
                     {/* 1h % */}
-                    <td className={`py-4 px-4 text-right font-mono font-bold ${isBull1h ? "text-emerald-600" : "text-rose-600"}`}>
+                    <td className={`py-4 px-4 text-right font-mono font-bold ${isBull1h ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                       {isBull1h ? "+" : ""}{coin.change1h.toFixed(2)}%
                     </td>
 
@@ -519,8 +519,8 @@ export default function CoinMarketCapDashboard() {
                       <span
                         className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded-lg font-mono font-black text-xs ${
                           isBull24h
-                            ? "bg-emerald-100 text-emerald-800"
-                            : "bg-rose-100 text-rose-800"
+                            ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
+                            : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
                         }`}
                       >
                         {isBull24h ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
@@ -529,17 +529,17 @@ export default function CoinMarketCapDashboard() {
                     </td>
 
                     {/* 7d % */}
-                    <td className={`py-4 px-4 text-right font-mono font-bold ${isBull7d ? "text-emerald-600" : "text-rose-600"}`}>
+                    <td className={`py-4 px-4 text-right font-mono font-bold ${isBull7d ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                       {isBull7d ? "+" : ""}{coin.change7d.toFixed(2)}%
                     </td>
 
                     {/* 24h Volume */}
-                    <td className="py-4 px-4 text-right font-mono text-slate-700 hidden sm:table-cell">
+                    <td className="py-4 px-4 text-right font-mono text-slate-700 dark:text-slate-300 hidden sm:table-cell">
                       {fmtCurrency(coin.volume24h)}
                     </td>
 
                     {/* Market Cap */}
-                    <td className="py-4 px-4 text-right font-mono font-bold text-slate-900 hidden md:table-cell">
+                    <td className="py-4 px-4 text-right font-mono font-bold text-slate-900 dark:text-white hidden md:table-cell">
                       {fmtCurrency(coin.marketCap)}
                     </td>
 
@@ -554,7 +554,7 @@ export default function CoinMarketCapDashboard() {
                     <td className="py-4 px-4 text-right">
                       <Link
                         href={`/tools`}
-                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-amber-400 hover:text-slate-950 text-slate-700 text-xs font-bold transition inline-flex items-center gap-1"
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-400 hover:text-slate-950 dark:hover:bg-amber-400 dark:hover:text-slate-950 text-slate-700 dark:text-slate-300 text-xs font-bold transition inline-flex items-center gap-1"
                       >
                         <span>Trade / Bot</span>
                         <ArrowUpRight className="w-3 h-3" />
@@ -568,12 +568,12 @@ export default function CoinMarketCapDashboard() {
         </div>
 
         {/* Footer info in table */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 font-medium">
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400 font-medium">
           <div>
             Showing <strong>{filteredCoins.length}</strong> top cryptocurrencies
           </div>
           <div className="font-mono text-[11px]">
-            Last Updated: <strong className="text-slate-800">{lastSyncTime || "Just now"}</strong>
+            Last Updated: <strong className="text-slate-800 dark:text-slate-200">{lastSyncTime || "Just now"}</strong>
           </div>
         </div>
       </div>

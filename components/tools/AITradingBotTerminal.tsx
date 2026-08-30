@@ -372,7 +372,10 @@ export default function AITradingBotTerminal() {
                   type="text"
                   placeholder="Type any symbol (e.g. SUI, PEPE, WIF, NEAR)..."
                   value={customPairInput}
-                  onChange={(e) => setSearch(e.target.value) || setCustomPairInput(e.target.value)}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setCustomPairInput(e.target.value);
+                  }}
                   className="w-full px-3.5 py-2 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 placeholder:text-slate-400"
                 />
                 <button
