@@ -154,7 +154,6 @@ export default function HomeAISignalsBots() {
   const [liveSignals, setLiveSignals] = useState<LiveCoinSignal[]>([]);
   const [selectedCoin, setSelectedCoin] = useState<LiveCoinSignal | null>(null);
   const [activeBot, setActiveBot] = useState<ReliableBotPreset>(RELIABLE_BOTS[0]);
-  const [directionMode, setDirectionMode] = useState<"LONG" | "SHORT">("LONG");
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [copied, setCopied] = useState(false);
@@ -292,7 +291,8 @@ export default function HomeAISignalsBots() {
     return n.toFixed(6);
   };
 
-  const isLong = directionMode === "LONG";
+  const isLong = activeCoin ? activeCoin.naturalSignal.includes("BUY") : true;
+  const signalDirectionText = isLong ? "LONG" : "SHORT";
   const price = activeCoin?.price || 78000;
 
   const entryMin = isLong ? price * 0.997 : price * 0.998;
@@ -316,7 +316,7 @@ export default function HomeAISignalsBots() {
 
   const handleCopySetup = () => {
     if (!activeCoin) return;
-    const text = `🎯 [${activeBot.name}] ${activeCoin.base}/USDT ${directionMode} Setup
+    const text = `🎯 [${activeBot.name}] ${activeCoin.base}/USDT ${signalDirectionText} Setup (Single AI Verified Signal)
 • Entry Zone: $${fmt(entryMin)} - $${fmt(entryMax)} (Spot: $${fmt(entryPrice)})
 • Stop Loss (SL): $${fmt(stopLossPrice)} (${isLong ? "-" : "+"}${slDeltaPercent}%)
 • Target 1 (TP1): $${fmt(tp1Price)} (+${tp1DeltaPercent}%)
@@ -391,7 +391,6 @@ export default function HomeAISignalsBots() {
                   key={bot.id}
                   onClick={() => {
                     setActiveBot(bot);
-                    setDirectionMode(bot.defaultDirection);
                   }}
                   className={`text-left p-3 rounded-2xl border transition-all flex flex-col justify-between ${
                     isSelected
@@ -490,29 +489,18 @@ export default function HomeAISignalsBots() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 self-start sm:self-auto shadow-xs">
-                    <button
-                      onClick={() => setDirectionMode("LONG")}
-                      className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-black transition ${
-                        directionMode === "LONG"
-                          ? "bg-emerald-500 text-white shadow-xs"
-                          : "text-slate-600 hover:text-slate-900"
+                  {/* Single AI Verified Verdict Badge */}
+                  <div className="flex items-center gap-1.5 self-start sm:self-auto">
+                    <span
+                      className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black shadow-xs ${
+                        isLong
+                          ? "bg-emerald-500 text-white"
+                          : "bg-rose-500 text-white"
                       }`}
                     >
-                      <TrendingUp className="w-3.5 h-3.5" />
-                      <span>LONG</span>
-                    </button>
-                    <button
-                      onClick={() => setDirectionMode("SHORT")}
-                      className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-black transition ${
-                        directionMode === "SHORT"
-                          ? "bg-rose-500 text-white shadow-xs"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      <TrendingDown className="w-3.5 h-3.5" />
-                      <span>SHORT</span>
-                    </button>
+                      {isLong ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                      <span>{isLong ? "🟢 SINGLE POSITION: LONG" : "🔴 SINGLE POSITION: SHORT"}</span>
+                    </span>
                   </div>
                 </div>
 

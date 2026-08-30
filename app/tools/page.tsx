@@ -562,9 +562,6 @@ function ToolsContent() {
                 </div>
               </div>
             </div>
-
-            {/* In-depth Position Sizing & Risk Management Guide */}
-            <PositionSizerDetails />
           </div>
         )}
 
@@ -630,9 +627,6 @@ function ToolsContent() {
                 </div>
               </div>
             </div>
-
-            {/* In-depth Spot Conversion & Liquidity Mechanics Guide */}
-            <SpotConverterDetails />
           </div>
         )}
 
