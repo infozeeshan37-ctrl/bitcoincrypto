@@ -9,7 +9,6 @@ import {
   Info,
   Menu,
   X,
-  ArrowUpRight,
   Bot,
   Flame,
   Newspaper,
@@ -347,18 +346,9 @@ export default function Navbar() {
 
         </div>
 
-        {/* Right: Desktop Theme Switcher & Action Button */}
+        {/* Right: Desktop Theme Switcher */}
         <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
           <ThemeToggle />
-
-          <Link
-            href="/tools"
-            className="relative group px-4 py-2.5 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 shadow-sm hover:shadow-md hover:shadow-amber-500/20 transition-all duration-200 flex items-center gap-2"
-          >
-            <Bot className="w-4 h-4 text-slate-950" />
-            <span>Launch AI Terminal</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </Link>
         </div>
 
         {/* Mobile menu trigger */}

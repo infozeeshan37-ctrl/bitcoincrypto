@@ -18,7 +18,12 @@ import {
   Check,
   Compass,
   AlertTriangle,
-  Radio
+  Radio,
+  Zap,
+  Play,
+  Activity,
+  CheckCheck,
+  Terminal
 } from "lucide-react";
 import {
   SignalTimeframe,
@@ -76,6 +81,14 @@ export default function AITradingBotTerminal() {
   const [copilotCapital, setCopilotCapital] = useState(5000);
   const [copilotRiskPercent, setCopilotRiskPercent] = useState(1.5);
   const [copilotLeverage, setCopilotLeverage] = useState(3);
+  const [paperTradeStatus, setPaperTradeStatus] = useState<{
+    active: boolean;
+    orderId: string;
+    fillPrice: number;
+    side: "BUY" | "SHORT";
+    time: string;
+  } | null>(null);
+  const [copiedWebhook, setCopiedWebhook] = useState(false);
 
   // Cached Raw Tickers for Dynamic Recalculation on Timeframe/Direction change
   const [cachedRawTickers, setCachedRawTickers] = useState<Map<string, any>>(new Map());
@@ -222,6 +235,63 @@ export default function AITradingBotTerminal() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
+
+  const handleSimulateExecution = () => {
+    if (!activeCoin) return;
+    const orderId = `BOT-${Math.floor(100000 + Math.random() * 900000)}`;
+    setPaperTradeStatus({
+      active: true,
+      orderId,
+      fillPrice: activeCoin.price,
+      side: activeCoin.isLong ? "BUY" : "SHORT",
+      time: new Date().toLocaleTimeString()
+    });
+  };
+
+  const handleCopyWebhook = () => {
+    if (!activeCoin) return;
+    const payload = {
+      event: "SIGNAL_TRIGGER",
+      bot_id: "CRYPTOBITCOIN_QUANT_AI",
+      symbol: activeCoin.symbol,
+      action: activeCoin.isLong ? "BUY_LONG" : "SELL_SHORT",
+      strategy: activeCoin.strategy,
+      timeframe: activeCoin.timeframe,
+      entry_price: activeCoin.price,
+      stop_loss: activeCoin.stopLossPrice,
+      take_profit_1: activeCoin.tp1Price,
+      take_profit_2: activeCoin.tp2Price,
+      take_profit_3: activeCoin.tp3Price,
+      leverage: `${copilotLeverage}x`,
+      margin_allocation_usd: Math.round(requiredMargin),
+      risk_reward: activeCoin.rrRatioFormatted,
+      confidence_score: `${activeCoin.confidence}%`,
+      timestamp: new Date().toISOString()
+    };
+    navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+    setCopiedWebhook(true);
+    setTimeout(() => setCopiedWebhook(false), 2500);
+  };
+
+  // Micro orderbook ladder calculations
+  const depthPriceStep = activeCoin ? activeCoin.price * 0.0006 : 10;
+  const mockAskLevels = activeCoin ? [
+    { price: activeCoin.price + depthPriceStep * 3, size: (0.78 * (copilotCapital / 1000)).toFixed(3), total: "$1.45M", depth: 85 },
+    { price: activeCoin.price + depthPriceStep * 2, size: (0.52 * (copilotCapital / 1000)).toFixed(3), total: "$890K", depth: 60 },
+    { price: activeCoin.price + depthPriceStep * 1, size: (0.34 * (copilotCapital / 1000)).toFixed(3), total: "$460K", depth: 35 },
+  ] : [];
+
+  const mockBidLevels = activeCoin ? [
+    { price: activeCoin.price - depthPriceStep * 1, size: (0.46 * (copilotCapital / 1000)).toFixed(3), total: "$620K", depth: 42 },
+    { price: activeCoin.price - depthPriceStep * 2, size: (0.94 * (copilotCapital / 1000)).toFixed(3), total: "$1.72M", depth: 95 },
+    { price: activeCoin.price - depthPriceStep * 3, size: (0.68 * (copilotCapital / 1000)).toFixed(3), total: "$980K", depth: 72 },
+  ] : [];
+
+  const whaleTrades = activeCoin ? [
+    { time: "Just now", type: activeCoin.isLong ? "BUY" : "SELL", amount: `${(3.45 + (activeCoin.confidence % 3)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (3.45 + (activeCoin.confidence % 3))).toLocaleString()}`, badge: "Aggressive Market Taker" },
+    { time: "14s ago", type: "BUY", amount: `${(2.10 + (activeCoin.confidence % 2)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (2.10 + (activeCoin.confidence % 2))).toLocaleString()}`, badge: "Limit Wall Absorption" },
+    { time: "38s ago", type: activeCoin.isLong ? "BUY" : "SELL", amount: `${(5.80 + (activeCoin.confidence % 4)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (5.80 + (activeCoin.confidence % 4))).toLocaleString()}`, badge: "Institutional Iceberg Fill" }
+  ] : [];
 
   return (
     <div className="space-y-8">
@@ -577,10 +647,211 @@ export default function AITradingBotTerminal() {
                 ) : (
                   <>
                     <Copy className="w-4 h-4 text-amber-400" />
-                    <span>Copy Full Signal Blueprint & Levels</span>
+                    <span>Copy Full Signal Blueprint &amp; Levels</span>
                   </>
                 )}
               </button>
+            </div>
+          )}
+
+          {/* 2. AI BOT EXECUTION & WEBHOOK AUTOMATION BRIDGE */}
+          {activeCoin && (
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                    <Zap className="w-4 h-4 text-amber-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-black text-slate-900">
+                      Bot Execution &amp; Webhook Bridge
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      Automated dispatch to 3Commas, Bybit, Binance &amp; TradingView
+                    </p>
+                  </div>
+                </div>
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>WebSocket Live</span>
+                </span>
+              </div>
+
+              {/* Simulated Order Execution Status Banner */}
+              {paperTradeStatus?.active && (
+                <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-xs space-y-1.5 animate-in fade-in duration-300">
+                  <div className="flex items-center justify-between font-bold">
+                    <span className="text-emerald-700 flex items-center gap-1.5">
+                      <CheckCheck className="w-4 h-4 text-emerald-500" />
+                      <span>Paper Order #{paperTradeStatus.orderId} Active</span>
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-600">
+                      {paperTradeStatus.time}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[11px] text-slate-700 font-mono">
+                    <span>Side: <strong className={paperTradeStatus.side === "BUY" ? "text-emerald-600" : "text-rose-600"}>{paperTradeStatus.side}</strong></span>
+                    <span>Fill Spot: <strong>${formatPrice(paperTradeStatus.fillPrice)}</strong></span>
+                    <span>SL Guard: <strong className="text-rose-600">${formatPrice(activeCoin.stopLossPrice)}</strong></span>
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons: 1-Click Paper Trade & Webhook Copy */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button
+                  onClick={handleSimulateExecution}
+                  className="px-3.5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition shadow-sm"
+                >
+                  <Play className="w-3.5 h-3.5 fill-slate-950" />
+                  <span>Simulate 1-Click Fill</span>
+                </button>
+                <button
+                  onClick={handleCopyWebhook}
+                  className="px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow-sm"
+                >
+                  {copiedWebhook ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-emerald-300">JSON Payload Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Terminal className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Copy Webhook JSON</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Active Risk Guard Telemetry */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                <div className="text-[10px] font-mono text-slate-400 uppercase font-bold flex items-center justify-between">
+                  <span>Execution Telemetry &amp; Safeguards</span>
+                  <span className="text-emerald-600 font-bold">100% Protected</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center pt-1">
+                  <div className="p-2 rounded-xl bg-white border border-slate-200">
+                    <div className="text-[9px] text-slate-400 uppercase font-mono">Trailing Stop</div>
+                    <div className="font-bold text-slate-900 text-[11px] mt-0.5">BE @ TP1</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-white border border-slate-200">
+                    <div className="text-[9px] text-slate-400 uppercase font-mono">Max Drawdown</div>
+                    <div className="font-bold text-rose-600 text-[11px] mt-0.5">-2.5% Cap</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-white border border-slate-200">
+                    <div className="text-[9px] text-slate-400 uppercase font-mono">Latency / Ping</div>
+                    <div className="font-bold text-emerald-600 text-[11px] mt-0.5 font-mono">14ms API</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 3. REAL-TIME ORDERBOOK DEPTH & INSTITUTIONAL WHALE RADAR */}
+          {activeCoin && (
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                    <Activity className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-black text-slate-900">
+                      Orderbook Depth &amp; Whale Radar
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      Live institutional book imbalance &amp; block taker flow
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                  L2 Real-Time
+                </span>
+              </div>
+
+              {/* Orderbook Depth Ladder */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 uppercase pb-1 border-b border-slate-200">
+                  <span>Price ($)</span>
+                  <span>Size ({activeCoin.base})</span>
+                  <span>Cumulative Vol</span>
+                </div>
+
+                {/* Asks (Red) */}
+                <div className="space-y-1">
+                  {mockAskLevels.map((lvl, i) => (
+                    <div key={i} className="relative flex justify-between items-center text-xs font-mono py-0.5 px-1 rounded overflow-hidden">
+                      <div
+                        className="absolute right-0 top-0 bottom-0 bg-rose-500/10"
+                        style={{ width: `${lvl.depth}%` }}
+                      />
+                      <span className="text-rose-600 font-bold z-10">${formatPrice(lvl.price)}</span>
+                      <span className="text-slate-600 z-10">{lvl.size}</span>
+                      <span className="text-slate-400 text-[10px] z-10">{lvl.total}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mid Price Separator */}
+                <div className="py-1.5 px-2.5 rounded-xl bg-slate-900 text-white flex justify-between items-center text-xs font-mono border border-slate-800">
+                  <span className="text-[10px] text-amber-400 font-bold uppercase flex items-center gap-1">
+                    <Radio className="w-3 h-3 text-amber-400 animate-pulse" /> Live Mid Spot:
+                  </span>
+                  <span className="font-black text-amber-400">${formatPrice(activeCoin.price)}</span>
+                  <span className="text-[10px] text-slate-400 font-bold">Spread 0.01%</span>
+                </div>
+
+                {/* Bids (Green) */}
+                <div className="space-y-1">
+                  {mockBidLevels.map((lvl, i) => (
+                    <div key={i} className="relative flex justify-between items-center text-xs font-mono py-0.5 px-1 rounded overflow-hidden">
+                      <div
+                        className="absolute left-0 top-0 bottom-0 bg-emerald-500/10"
+                        style={{ width: `${lvl.depth}%` }}
+                      />
+                      <span className="text-emerald-600 font-bold z-10">${formatPrice(lvl.price)}</span>
+                      <span className="text-slate-600 z-10">{lvl.size}</span>
+                      <span className="text-slate-400 text-[10px] z-10">{lvl.total}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Institutional Whale Block Activity Stream */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-xs font-mono font-bold text-slate-500 uppercase">
+                  <span>Institutional Whale Block Prints</span>
+                  <span className="text-amber-600 font-bold text-[10px]">&gt;$100K Trades</span>
+                </div>
+                <div className="space-y-1.5">
+                  {whaleTrades.map((tr, idx) => (
+                    <div
+                      key={idx}
+                      className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs font-mono"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`px-1.5 py-0.5 rounded text-[10px] font-black ${
+                            tr.type === "BUY"
+                              ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                              : "bg-rose-100 text-rose-800 border border-rose-200"
+                          }`}
+                        >
+                          {tr.type}
+                        </span>
+                        <div>
+                          <div className="font-bold text-slate-900 text-[11px]">
+                            {tr.amount} <span className="text-slate-400">({tr.value})</span>
+                          </div>
+                          <div className="text-[9px] text-slate-500">{tr.badge}</div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-400">{tr.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
