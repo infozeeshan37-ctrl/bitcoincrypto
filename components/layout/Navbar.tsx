@@ -256,106 +256,31 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Dropdown 3: Research & Education */}
-          <div
-            className="relative"
-            onMouseEnter={() => handleMouseEnter("research")}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              onClick={() => toggleDropdown("research")}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-semibold ${
-                activeDropdown === "research" ? "bg-slate-100 dark:bg-slate-800 text-slate-950 dark:text-white" : ""
-              }`}
-              aria-expanded={activeDropdown === "research"}
-            >
-              <BookOpen className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-              <span>Research & Learn</span>
-              <ChevronDown
-                className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
-                  activeDropdown === "research" ? "rotate-180 text-amber-600" : ""
-                }`}
-              />
-            </button>
-
-            {/* Dropdown Flyout */}
-            {activeDropdown === "research" && (
-              <div className="absolute top-full left-0 mt-2 w-80 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-900/10 dark:shadow-slate-950/50 p-3 space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800">
-                  Knowledge & Architecture
-                </div>
-                
-                <Link
-                  href="/concepts"
-                  onClick={() => setActiveDropdown(null)}
-                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
-                    <Compass className="w-4 h-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                      Trading Concepts & DCA
-                    </span>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
-                      Order books, funding mechanisms, DCA models.
-                    </p>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/blog"
-                  onClick={() => setActiveDropdown(null)}
-                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
-                    <LineChart className="w-4 h-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                      Research Desk & Insights
-                    </span>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
-                      Crypto market deep dives and analytical articles.
-                    </p>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/about"
-                  onClick={() => setActiveDropdown(null)}
-                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
-                    <Info className="w-4 h-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                      About Architecture
-                    </span>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
-                      Methodology, data sources, and platform mission.
-                    </p>
-                  </div>
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Direct Link: Concepts (visible on ultra-wide / xl) */}
+          {/* Direct Link: Concepts */}
           <Link
             href="/concepts"
-            className="hidden xl:flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-medium"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-semibold"
           >
+            <Compass className="w-4 h-4 text-slate-500 dark:text-slate-400" />
             <span>Concepts</span>
           </Link>
 
-          {/* Direct Link: Blog (visible on ultra-wide / xl) */}
+          {/* Direct Link: Blog */}
           <Link
             href="/blog"
-            className="hidden xl:flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-medium"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-semibold"
           >
+            <BookOpen className="w-4 h-4 text-slate-500 dark:text-slate-400" />
             <span>Blog</span>
+          </Link>
+
+          {/* Direct Link: About */}
+          <Link
+            href="/about"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-semibold"
+          >
+            <Info className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+            <span>About</span>
           </Link>
 
           {/* Command Palette Trigger */}
