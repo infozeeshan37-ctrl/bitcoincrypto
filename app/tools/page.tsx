@@ -27,8 +27,6 @@ import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
-import PositionSizerDetails from "@/components/tools/details/PositionSizerDetails";
-import SpotConverterDetails from "@/components/tools/details/SpotConverterDetails";
 
 function ToolsContent() {
   const searchParams = useSearchParams();

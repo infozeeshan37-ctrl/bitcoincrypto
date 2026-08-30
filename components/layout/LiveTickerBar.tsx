@@ -86,55 +86,55 @@ export default function LiveTickerBar() {
   };
 
   return (
-    <div className="bg-slate-950 text-slate-300 text-[11px] border-b border-slate-800/80 select-none overflow-x-auto no-scrollbar">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-9 flex items-center justify-between gap-6 whitespace-nowrap">
+    <div className="bg-slate-950 text-slate-300 text-[11px] border-b border-slate-800/80 select-none overflow-x-auto no-scrollbar w-full">
+      <div className="w-full px-3 sm:px-5 lg:px-6 h-9 flex items-center justify-between gap-3 sm:gap-4 whitespace-nowrap">
         
         {/* Left: Global Metrics Quick Bar */}
-        <div className="flex items-center gap-4 text-slate-400 font-medium">
-          <div className="flex items-center gap-1.5 text-slate-300 font-bold">
+        <div className="flex items-center gap-2.5 sm:gap-3 text-slate-400 font-medium text-[11px] shrink-0">
+          <div className="flex items-center gap-1.5 text-slate-200 font-extrabold shrink-0">
             <Sparkles className="w-3 h-3 text-amber-400" />
-            <span className="text-[10px] tracking-wider uppercase font-extrabold text-slate-200">Markets</span>
+            <span className="text-[10px] tracking-wider uppercase font-black">Markets</span>
           </div>
 
           <span className="text-slate-700 hidden sm:inline">|</span>
 
-          <Link href="/markets" className="hover:text-amber-400 transition hidden md:flex items-center gap-1">
-            <span>Market Cap:</span>
+          <Link href="/markets" className="hover:text-amber-400 transition hidden md:flex items-center gap-1 shrink-0">
+            <span className="text-slate-400">MCap:</span>
             <strong className="text-white font-mono">{globalStats.mcap}</strong>
           </Link>
 
-          <Link href="/markets" className="hover:text-amber-400 transition hidden lg:flex items-center gap-1">
-            <span>24h Vol:</span>
+          <Link href="/markets" className="hover:text-amber-400 transition hidden xl:flex items-center gap-1 shrink-0">
+            <span className="text-slate-400">24h Vol:</span>
             <strong className="text-white font-mono">{globalStats.vol24h}</strong>
           </Link>
 
-          <Link href="/markets" className="hover:text-amber-400 transition hidden sm:flex items-center gap-1">
-            <span>BTC Dom:</span>
+          <Link href="/markets" className="hover:text-amber-400 transition hidden lg:flex items-center gap-1 shrink-0">
+            <span className="text-slate-400">BTC Dom:</span>
             <strong className="text-amber-400 font-mono font-bold">{globalStats.btcDom}</strong>
           </Link>
 
-          <Link href="/coinglass" className="hover:text-emerald-400 transition hidden xl:flex items-center gap-1">
+          <Link href="/coinglass" className="hover:text-emerald-400 transition hidden 2xl:flex items-center gap-1 shrink-0">
             <Flame className="w-3 h-3 text-amber-500" />
-            <span>Fear & Greed:</span>
+            <span className="text-slate-400">F&amp;G:</span>
             <strong className="text-emerald-400 font-mono">{globalStats.fng}</strong>
           </Link>
 
-          <Link href="/news" className="hover:text-amber-300 transition flex items-center gap-1 text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60">
+          <Link href="/news" className="hover:text-amber-300 transition flex items-center gap-1 text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60 shrink-0 text-[10.5px]">
             <Calendar className="w-3 h-3 text-amber-400" />
-            <span>Next CPI Release:</span>
+            <span>CPI:</span>
             <strong className="font-mono text-white">Sep 11 (2.6% Est)</strong>
           </Link>
         </div>
 
         {/* Right: Live Crypto Tickers Stream */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           {tickers.map((t) => {
             const isBull = t.change24h >= 0;
             return (
               <Link
                 key={t.symbol}
                 href="/markets"
-                className="flex items-center gap-1.5 hover:text-white transition group py-0.5"
+                className="flex items-center gap-1.5 hover:text-white transition group py-0.5 shrink-0"
               >
                 <span className="font-bold text-white group-hover:text-amber-400 transition">{t.base}</span>
                 <span className="font-mono text-slate-200">${fmt(t.price)}</span>
