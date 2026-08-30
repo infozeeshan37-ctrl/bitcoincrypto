@@ -839,6 +839,135 @@ export default function HomeTradingSuiteHero() {
                     </div>
                   </div>
 
+                  {/* INSTITUTIONAL ORDER FLOW & LIQUIDATION MAGNET MAP */}
+                  <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
+                          <Layers className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                        </div>
+                        <div>
+                          <h4 className="text-base font-black text-slate-900 dark:text-white">
+                            Liquidation Magnet Pools &amp; Order Flow Range
+                          </h4>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                            Resting stop clusters, taker order delta &amp; 24h range positioning
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                        Live Derivatives Matrix
+                      </span>
+                    </div>
+
+                    {/* 24h Channel Range Progress Bar */}
+                    <div className="space-y-1.5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                      <div className="flex justify-between items-center text-xs font-mono">
+                        <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-rose-500" /> 24h Low: <strong className="text-slate-900 dark:text-white">${formatPrice(activeCoin.low24h)}</strong>
+                        </span>
+                        <span className="font-bold text-amber-600 dark:text-amber-400">
+                          Range: ${formatPrice(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(2)}%)
+                        </span>
+                        <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                          24h High: <strong className="text-slate-900 dark:text-white">${formatPrice(activeCoin.high24h)}</strong> <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                        </span>
+                      </div>
+                      <div className="relative w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div
+                          className="absolute top-0 bottom-0 bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 rounded-full transition-all duration-500"
+                          style={{ width: "100%" }}
+                        />
+                        <div
+                          className="absolute top-0 bottom-0 w-3 bg-slate-950 dark:bg-white border-2 border-white dark:border-slate-950 rounded-full shadow -ml-1.5 transition-all duration-300"
+                          style={{
+                            left: `${Math.max(
+                              5,
+                              Math.min(
+                                95,
+                                ((activeCoin.price - activeCoin.low24h) /
+                                  Math.max(1, activeCoin.high24h - activeCoin.low24h)) *
+                                  100
+                              )
+                            )}%`
+                          }}
+                        />
+                      </div>
+                      <div className="flex justify-between items-center text-[10px] text-slate-400 dark:text-slate-500 font-mono pt-0.5">
+                        <span>Support Floor</span>
+                        <span className="text-slate-800 dark:text-slate-200 font-bold">Present Spot: ${formatPrice(activeCoin.price)}</span>
+                        <span>Resistance Ceiling</span>
+                      </div>
+                    </div>
+
+                    {/* Liquidation Magnet Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="p-3.5 rounded-2xl bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-800/80 space-y-1">
+                        <div className="text-[10px] font-bold text-rose-700 dark:text-rose-300 uppercase font-mono flex items-center justify-between">
+                          <span>Upper Short Liquidation Pool</span>
+                          <span>Target Magnet</span>
+                        </div>
+                        <div className="text-base font-black text-rose-800 dark:text-rose-200 font-mono">
+                          ${formatPrice(activeCoin.coinglass.liquidationUpperMagnet)}
+                        </div>
+                        <div className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">
+                          {activeCoin.coinglass.liquidationUpperPoolUsd}
+                        </div>
+                      </div>
+
+                      <div className="p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 space-y-1">
+                        <div className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase font-mono flex items-center justify-between">
+                          <span>Lower Long Liquidation Shelf</span>
+                          <span>Support Floor</span>
+                        </div>
+                        <div className="text-base font-black text-emerald-800 dark:text-emerald-200 font-mono">
+                          ${formatPrice(activeCoin.coinglass.liquidationLowerMagnet)}
+                        </div>
+                        <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                          {activeCoin.coinglass.liquidationLowerPoolUsd}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Algorithmic Strategy Thesis & Quantitative Rationale */}
+                    <div className="space-y-3 pt-1">
+                      <div className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase flex items-center justify-between">
+                        <span>Algorithmic Rationale &amp; Order Thesis</span>
+                        <span className="text-amber-600 dark:text-amber-400 font-bold">{activeCoin.strategy}</span>
+                      </div>
+                      <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                        {activeCoin.rationale}
+                      </p>
+
+                      {/* Micro Indicators Grid */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs">
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                          <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono uppercase">RSI (14)</div>
+                          <div className="font-bold text-slate-900 dark:text-white font-mono">{activeCoin.technicals.rsi}</div>
+                          <div className="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">
+                            {activeCoin.technicals.rsi > 50 ? "Bullish Momentum" : "Neutral / Oversold"}
+                          </div>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                          <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono uppercase">Open Interest (OI)</div>
+                          <div className="font-bold text-slate-900 dark:text-white font-mono">{activeCoin.coinglass.openInterestFormatted}</div>
+                          <div className="text-[9px] text-slate-500 dark:text-slate-400">{activeCoin.coinglass.openInterestTrend}</div>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                          <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono uppercase">L/S Accounts</div>
+                          <div className="font-bold text-slate-900 dark:text-white font-mono">{activeCoin.coinglass.longShortRatio} ({activeCoin.coinglass.longAccountPercent}% L)</div>
+                          <div className="text-[9px] text-slate-500 dark:text-slate-400">Retail Sentiment</div>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                          <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono uppercase">Orderbook Flow</div>
+                          <div className="font-bold text-slate-900 dark:text-white font-mono">{activeCoin.technicals.rsi > 50 ? "Bid Wall" : "Ask Wall"}</div>
+                          <div className="text-[9px] text-amber-600 dark:text-amber-400 truncate">{activeCoin.technicals.orderbookImbalance}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
                 </div>
               )}
 
