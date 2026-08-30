@@ -1,35 +1,55 @@
 import Link from "next/link";
-import { Terminal, Calculator, Flame, Newspaper, ArrowRight } from "lucide-react";
+import { Terminal, Calculator, Flame, Newspaper, ArrowRight, Bot, Coins } from "lucide-react";
 
 export default function PlatformOverview() {
   const sections = [
     {
       icon: Terminal,
       badge: "Real-Time Terminal",
-      title: "TradingView Institutional Charts",
-      desc: "Full multi-timeframe candlestick terminal equipped with 100+ technical indicators (RSI, MACD, Bollinger Bands) and drawing suites.",
-      link: "/tools"
+      title: "TradingView Institutional Charts & TA",
+      desc: "Full multi-timeframe candlestick terminal equipped with 100+ technical indicators (RSI, MACD, Bollinger Bands, 200 EMA) and complete drawing suites.",
+      link: "/tools?tab=terminal",
+      ctaText: "Launch Chart Terminal"
     },
     {
-      icon: Calculator,
-      badge: "Financial Models",
-      title: "Algorithmic DCA & Risk Calculators",
-      desc: "Simulate recurring accumulation strategies across multi-year cycles and calculate exact position risk-to-reward ratios.",
-      link: "/tools"
+      icon: Coins,
+      badge: "Market Intelligence",
+      title: "CoinMarketCap Spot Rankings & Stats",
+      desc: "Live prices, 24h trading volume, top gainers, losers, and dominance indicators across top 50+ cryptocurrencies.",
+      link: "/markets",
+      ctaText: "Explore Spot Markets"
     },
     {
       icon: Flame,
       badge: "Derivatives Radar",
-      title: "Liquidation & Funding Rate Heatmaps",
-      desc: "Deep visual insight into perpetual futures positioning, long/short skew, and open interest divergences across exchanges.",
-      link: "/concepts"
+      title: "Coinglass Liquidation & Derivatives Hub",
+      desc: "Deep visual insight into perpetual futures positioning, long/short ratio skew, and open interest divergences across major exchanges.",
+      link: "/coinglass",
+      ctaText: "View Coinglass Analytics"
+    },
+    {
+      icon: Calculator,
+      badge: "Financial Models",
+      title: "Algorithmic DCA & Risk Sizing Calculators",
+      desc: "Simulate recurring accumulation strategies across multi-year cycles and calculate exact position risk-to-reward ratios before placing orders.",
+      link: "/tools?tab=dca",
+      ctaText: "Open Financial Calculators"
     },
     {
       icon: Newspaper,
-      badge: "Market Research",
-      title: "Macroeconomic & On-Chain Blog",
-      desc: "In-depth breakdowns of Bitcoin halving supply schedules, Lightning Network velocity, and institutional ETF flow trends.",
-      link: "/blog"
+      badge: "Macro Economics",
+      title: "US CPI Tracker & Macroeconomic News",
+      desc: "Instant updates on US headline/core inflation reports, FOMC rate hike probabilities, and major global economic market catalysts.",
+      link: "/news",
+      ctaText: "Check CPI & Macro News"
+    },
+    {
+      icon: Bot,
+      badge: "Educational Architecture",
+      title: "Research Desk & Trading Concepts",
+      desc: "In-depth breakdowns of Bitcoin halving supply schedules, Lightning Network velocity, institutional ETF flows, and order flow dynamics.",
+      link: "/blog",
+      ctaText: "Read Research Articles"
     }
   ];
 
@@ -45,29 +65,30 @@ export default function PlatformOverview() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sections.map((sec, idx) => (
-            <div key={idx} className="bg-slate-50/70 rounded-2xl p-8 border border-slate-200 hover:border-amber-300 transition group flex flex-col justify-between">
+            <div key={idx} className="bg-slate-50/70 rounded-3xl p-7 border border-slate-200 hover:border-amber-300 hover:bg-white transition group flex flex-col justify-between shadow-xs hover:shadow-md">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-white text-amber-600 shadow-sm border border-slate-200 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-white text-amber-600 shadow-sm border border-slate-200 flex items-center justify-center group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
                     <sec.icon className="w-6 h-6" />
                   </div>
-                  <span className="text-[11px] font-semibold font-mono text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full">
+                  <span className="text-[11px] font-semibold font-mono text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-200/60">
                     {sec.badge}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-amber-700 transition">
+                <h3 className="text-lg font-bold text-slate-900 group-hover:text-amber-700 transition">
                   {sec.title}
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   {sec.desc}
                 </p>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-slate-200/80">
-                <Link href={sec.link} className="text-xs font-bold text-amber-600 hover:text-amber-700 inline-flex items-center gap-1.5 transition">
-                  Learn more about this module <ArrowRight className="w-3.5 h-3.5" />
+              <div className="pt-5 mt-5 border-t border-slate-200/80">
+                <Link href={sec.link} className="text-xs font-bold text-slate-900 group-hover:text-amber-600 inline-flex items-center gap-1.5 transition">
+                  <span>{sec.ctaText}</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>

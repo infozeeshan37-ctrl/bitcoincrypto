@@ -28,11 +28,12 @@ import {
   Scale,
   Crosshair,
   Percent,
-  Compass
+  Compass,
+  LineChart,
+  ExternalLink,
+  Maximize2
 } from "lucide-react";
 import Link from "next/link";
-import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChart";
-import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 
 export interface CoinConfig {
   symbol: string;
@@ -182,7 +183,6 @@ export default function HomeAISignalsBots() {
   const [lastSyncTime, setLastSyncTime] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [customPair, setCustomPair] = useState("");
-  const [chartViewMode, setChartViewMode] = useState<"chart" | "analysis" | "both">("chart");
   const [copied, setCopied] = useState(false);
 
   // Position Sizing / Entry Calculator State
@@ -1207,99 +1207,127 @@ export default function HomeAISignalsBots() {
 
         </div>
 
-        {/* 3. DEDICATED FULL-WIDTH RESPONSIVE TRADINGVIEW CHART & TA TERMINAL (PLACED BELOW) */}
+        {/* 3. HIGHLIGHTED LIVE CHART TERMINAL GATEWAY (LIGHTWEIGHT, FAST & ADSENSE FRIENDLY) */}
         {activeCoin && (
-          <div className="w-full space-y-6 pt-4">
-            
-            {/* View Selector Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 sm:px-6 sm:py-4 rounded-3xl border border-slate-200 shadow-sm">
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="p-1.5 rounded-xl bg-amber-100 text-amber-800">
-                    <BarChart2 className="w-4 h-4 text-amber-600" />
-                  </span>
-                  <h3 className="text-base sm:text-lg font-black text-slate-900">
-                    Interactive Live Terminal & Technical Analysis Engine
-                  </h3>
-                </div>
-                
-                {/* View Mode Switcher */}
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
-                  <button
-                    onClick={() => setChartViewMode("chart")}
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-                      chartViewMode === "chart"
-                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <BarChart2 className="w-3.5 h-3.5" />
-                    <span>Full Live Chart & Drawing Suite</span>
-                  </button>
-                  <button
-                    onClick={() => setChartViewMode("analysis")}
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-                      chartViewMode === "analysis"
-                        ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <Gauge className="w-3.5 h-3.5" />
-                    <span>Institutional TA Gauge & Pivots</span>
-                  </button>
-                  <button
-                    onClick={() => setChartViewMode("both")}
-                    className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
-                      chartViewMode === "both"
-                        ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <Layers className="w-3.5 h-3.5" />
-                    <span>Split Dual View</span>
-                  </button>
-                </div>
-              </div>
+          <div className="w-full pt-4">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/90 text-white p-6 sm:p-10 border-2 border-amber-400/40 shadow-xl shadow-amber-500/5">
+              
+              {/* Background ambient glow */}
+              <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-              <div className="flex items-center gap-3 text-xs font-mono ml-auto sm:ml-0">
-                <span className="text-slate-400">Selected Market:</span>
-                <span className="font-black text-slate-900 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200">
-                  {activeCoin.tvSymbol}
-                </span>
-                <span className={`px-2 py-0.5 rounded-lg font-bold ${activeCoin.change24h >= 0 ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
-                  {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
-                </span>
+              <div className="relative z-10 space-y-6">
+                
+                {/* Header & Badges */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                  <div className="space-y-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 shadow-sm uppercase tracking-wider">
+                      <BarChart2 className="w-3.5 h-3.5" />
+                      <span>TradingView Terminal Suite</span>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
+                      Live Multi-Timeframe Candlestick Chart &{" "}
+                      <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-200 bg-clip-text text-transparent">
+                        Technical Analysis Studio
+                      </span>
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                      Instant access to high-performance TradingView candlestick charting, 100+ technical indicators (RSI, MACD, 200 EMA), full drawing suites, and institutional pivot gauges for <strong>{activeCoin.base}/USDT</strong>.
+                    </p>
+                  </div>
+
+                  {/* Active Market Pill */}
+                  <div className="bg-slate-800/90 border border-slate-700 p-3.5 rounded-2xl flex items-center gap-3 self-start lg:self-auto">
+                    <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-400 border border-amber-400/30 flex items-center justify-center font-black text-sm">
+                      {activeCoin.base}
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-slate-400">Selected Live Market</div>
+                      <div className="text-sm font-black text-white font-mono flex items-center gap-2">
+                        <span>{activeCoin.tvSymbol}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-md font-bold ${activeCoin.change24h >= 0 ? "bg-emerald-500/20 text-emerald-400" : "bg-rose-500/20 text-rose-400"}`}>
+                          {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4 Feature Capability Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
+                  <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 p-4 rounded-2xl space-y-1.5 hover:border-amber-400/50 transition">
+                    <div className="flex items-center gap-2 font-bold text-amber-400">
+                      <LineChart className="w-4 h-4" />
+                      <span>100+ Technical Indicators</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      RSI (14), MACD Histogram, Bollinger Bands, 200/50 EMA, Volume Profile & CVD.
+                    </p>
+                  </div>
+
+                  <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 p-4 rounded-2xl space-y-1.5 hover:border-amber-400/50 transition">
+                    <div className="flex items-center gap-2 font-bold text-amber-400">
+                      <Crosshair className="w-4 h-4" />
+                      <span>Full Drawing & Trend Suite</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      Fibonacci retracements, trend channels, pitchforks, support/resistance rays.
+                    </p>
+                  </div>
+
+                  <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 p-4 rounded-2xl space-y-1.5 hover:border-amber-400/50 transition">
+                    <div className="flex items-center gap-2 font-bold text-amber-400">
+                      <Clock className="w-4 h-4" />
+                      <span>Multi-Timeframe Engine</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      Seamless switching between 15M Scalp, 1H Intraday, 4H Swing, and 1D Macro charts.
+                    </p>
+                  </div>
+
+                  <div className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 p-4 rounded-2xl space-y-1.5 hover:border-amber-400/50 transition">
+                    <div className="flex items-center gap-2 font-bold text-amber-400">
+                      <Gauge className="w-4 h-4" />
+                      <span>Institutional TA Gauge</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      Real-time technical speedometer, oscillator breakdown, and classic pivot points.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Primary Action Row */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                  <div className="flex items-center gap-3 text-xs text-slate-400 font-mono">
+                    <span>Spot: <strong className="text-white">${fmt(activeCoin.price)}</strong></span>
+                    <span>•</span>
+                    <span>24h High: <strong className="text-emerald-400">${fmt(activeCoin.high24h)}</strong></span>
+                    <span>•</span>
+                    <span>24h Low: <strong className="text-rose-400">${fmt(activeCoin.low24h)}</strong></span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                    <Link
+                      href={`/tools?tab=terminal&symbol=${activeCoin.tvSymbol}`}
+                      className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-slate-950 text-xs sm:text-sm font-black hover:from-amber-300 hover:to-yellow-300 transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 hover:scale-[1.02]"
+                    >
+                      <BarChart2 className="w-4 h-4 text-slate-950" />
+                      <span>Launch Full Interactive Chart Terminal ({activeCoin.base}/USDT)</span>
+                      <ArrowRight className="w-4 h-4 text-slate-950" />
+                    </Link>
+
+                    <Link
+                      href="/tools?tab=terminal"
+                      className="w-full sm:w-auto px-4 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5"
+                    >
+                      <span>Explore All 50+ Pairs</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                    </Link>
+                  </div>
+                </div>
+
               </div>
             </div>
-
-            {/* FULL-WIDTH RESPONSIVE ADVANCED TRADINGVIEW CHART */}
-            {(chartViewMode === "chart" || chartViewMode === "both") && (
-              <div className="w-full">
-                <TradingViewAdvancedChart
-                  symbol={activeCoin.tvSymbol}
-                  defaultInterval={activeCoin.timeframe}
-                  height={660}
-                  showIndicatorBar={true}
-                  showTimeframeBar={true}
-                  showStyleBar={true}
-                />
-              </div>
-            )}
-
-            {/* FULL-WIDTH TECHNICAL ANALYSIS PANEL */}
-            {(chartViewMode === "analysis" || chartViewMode === "both") && (
-              <div className="w-full">
-                <TechnicalAnalysisPanel
-                  symbol={activeCoin.tvSymbol}
-                  price={activeCoin.price}
-                  high24h={activeCoin.high24h}
-                  low24h={activeCoin.low24h}
-                  change24h={activeCoin.change24h}
-                  defaultInterval={activeCoin.timeframe === "15M" ? "15m" : activeCoin.timeframe === "1H" ? "1h" : activeCoin.timeframe === "4H" ? "4h" : "1D"}
-                />
-              </div>
-            )}
-
           </div>
         )}
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Cpu,
   BarChart2,
@@ -24,9 +25,23 @@ import AITradingBotTerminal from "@/components/tools/AITradingBotTerminal";
 import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChart";
 import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 
-export default function ToolsPage() {
-  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter">("bot");
-  const [chartSymbol, setChartSymbol] = useState("BINANCE:BTCUSDT");
+function ToolsContent() {
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const symbolParam = searchParams.get("symbol");
+
+  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter">(
+    tabParam === "terminal" || tabParam === "dca" || tabParam === "sizer" || tabParam === "converter"
+      ? tabParam
+      : "bot"
+  );
+  const [chartSymbol, setChartSymbol] = useState(
+    symbolParam
+      ? symbolParam.startsWith("BINANCE:")
+        ? symbolParam
+        : `BINANCE:${symbolParam}`
+      : "BINANCE:BTCUSDT"
+  );
   const [customChartInput, setCustomChartInput] = useState("");
   const [chartTerminalMode, setChartTerminalMode] = useState<"chart" | "analysis" | "split">("chart");
   const [terminalTicker, setTerminalTicker] = useState<{ price: number; high24h: number; low24h: number; change24h: number }>({
@@ -35,6 +50,16 @@ export default function ToolsPage() {
     low24h: 76500,
     change24h: 2.4
   });
+
+  // Sync tab/symbol when search params change
+  useEffect(() => {
+    if (tabParam && ["bot", "terminal", "dca", "sizer", "converter"].includes(tabParam)) {
+      setActiveTab(tabParam as any);
+    }
+    if (symbolParam) {
+      setChartSymbol(symbolParam.startsWith("BINANCE:") ? symbolParam : `BINANCE:${symbolParam}`);
+    }
+  }, [tabParam, symbolParam]);
 
   // Fetch real-time ticker data for the selected chart symbol
   useEffect(() => {
@@ -590,5 +615,13 @@ export default function ToolsPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function ToolsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-8 text-sm font-bold text-slate-500">Loading Trading Suite...</div>}>
+      <ToolsContent />
+    </Suspense>
   );
 }

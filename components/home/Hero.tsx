@@ -30,16 +30,36 @@ export default function Hero() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
             <Link
-              href="/concepts"
+              href="#ai-signals-hub"
               className="px-6 py-3.5 rounded-xl text-sm font-bold text-slate-900 bg-amber-400 hover:bg-amber-300 shadow-sm hover:shadow transition flex items-center gap-2"
             >
-              Explore Trading Concepts <ArrowRight className="w-4 h-4" />
+              <span>Explore AI Trading Bots</span> <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/blog"
+              href="/tools?tab=terminal"
               className="px-6 py-3.5 rounded-xl text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-sm transition"
             >
-              Read Research Desk
+              Live Chart Studio
+            </Link>
+          </div>
+
+          {/* Quick Ecosystem Hub Links */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-4 border-t border-slate-100 text-xs">
+            <span className="text-slate-400 font-semibold">Quick Jump:</span>
+            <Link href="/markets" className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-amber-900 font-medium transition">
+              Spot Rankings
+            </Link>
+            <Link href="/coinglass" className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-900 font-medium transition">
+              Coinglass Derivatives
+            </Link>
+            <Link href="/news" className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-blue-100 text-slate-700 hover:text-blue-900 font-medium transition">
+              CPI Inflation Tracker
+            </Link>
+            <Link href="/concepts" className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">
+              Trading Concepts
+            </Link>
+            <Link href="/blog" className="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">
+              Research Desk
             </Link>
           </div>
 
