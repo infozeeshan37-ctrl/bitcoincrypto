@@ -67,7 +67,43 @@ const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
   { symbol: "TIAUSDT", name: "Celestia", base: "TIA", defaultTimeframe: "15M" },
   { symbol: "RENDERUSDT", name: "Render", base: "RENDER", defaultTimeframe: "1H" },
   { symbol: "FETUSDT", name: "Artificial Superintelligence", base: "FET", defaultTimeframe: "1H" },
-  { symbol: "WIFUSDT", name: "dogwifhat", base: "WIF", defaultTimeframe: "5M" }
+  { symbol: "WIFUSDT", name: "dogwifhat", base: "WIF", defaultTimeframe: "5M" },
+  { symbol: "KASUSDT", name: "Kaspa", base: "KAS", defaultTimeframe: "15M" },
+  { symbol: "ICPUSDT", name: "Internet Computer", base: "ICP", defaultTimeframe: "1H" },
+  { symbol: "TRXUSDT", name: "TRON", base: "TRX", defaultTimeframe: "4H" },
+  { symbol: "TAOUSDT", name: "Bittensor", base: "TAO", defaultTimeframe: "15M" },
+  { symbol: "INJUSDT", name: "Injective", base: "INJ", defaultTimeframe: "1H" },
+  { symbol: "FILUSDT", name: "Filecoin", base: "FIL", defaultTimeframe: "1H" },
+  { symbol: "ARBUSDT", name: "Arbitrum", base: "ARB", defaultTimeframe: "15M" },
+  { symbol: "OPUSDT", name: "Optimism", base: "OP", defaultTimeframe: "15M" },
+  { symbol: "ATOMUSDT", name: "Cosmos", base: "ATOM", defaultTimeframe: "4H" },
+  { symbol: "XLMUSDT", name: "Stellar", base: "XLM", defaultTimeframe: "1H" },
+  { symbol: "HBARUSDT", name: "Hedera", base: "HBAR", defaultTimeframe: "1H" },
+  { symbol: "ETCUSDT", name: "Ethereum Classic", base: "ETC", defaultTimeframe: "4H" },
+  { symbol: "BCHUSDT", name: "Bitcoin Cash", base: "BCH", defaultTimeframe: "1D" },
+  { symbol: "AAVEUSDT", name: "Aave", base: "AAVE", defaultTimeframe: "1H" },
+  { symbol: "MKRUSDT", name: "Maker", base: "MKR", defaultTimeframe: "4H" },
+  { symbol: "UNIUSDT", name: "Uniswap", base: "UNI", defaultTimeframe: "1H" },
+  { symbol: "SEIUSDT", name: "Sei", base: "SEI", defaultTimeframe: "5M" },
+  { symbol: "BONKUSDT", name: "Bonk", base: "BONK", defaultTimeframe: "5M" },
+  { symbol: "FLOKIUSDT", name: "Floki", base: "FLOKI", defaultTimeframe: "15M" },
+  { symbol: "PENDLEUSDT", name: "Pendle", base: "PENDLE", defaultTimeframe: "1H" },
+  { symbol: "ONDOUSDT", name: "Ondo", base: "ONDO", defaultTimeframe: "15M" },
+  { symbol: "JUPUSDT", name: "Jupiter", base: "JUP", defaultTimeframe: "15M" },
+  { symbol: "STXUSDT", name: "Stacks", base: "STX", defaultTimeframe: "1H" },
+  { symbol: "TONUSDT", name: "Toncoin", base: "TON", defaultTimeframe: "1H" },
+  { symbol: "ENAUSDT", name: "Ethena", base: "ENA", defaultTimeframe: "15M" },
+  { symbol: "WUSDT", name: "Wormhole", base: "W", defaultTimeframe: "15M" },
+  { symbol: "POPCATUSDT", name: "Popcat", base: "POPCAT", defaultTimeframe: "5M" },
+  { symbol: "RUNEUSDT", name: "THORChain", base: "RUNE", defaultTimeframe: "1H" },
+  { symbol: "DYDXUSDT", name: "dYdX", base: "DYDX", defaultTimeframe: "1H" },
+  { symbol: "GALAUSDT", name: "Gala", base: "GALA", defaultTimeframe: "15M" },
+  { symbol: "FTMUSDT", name: "Fantom", base: "FTM", defaultTimeframe: "1H" },
+  { symbol: "CRVUSDT", name: "Curve", base: "CRV", defaultTimeframe: "1H" },
+  { symbol: "LDOUSDT", name: "Lido DAO", base: "LDO", defaultTimeframe: "1H" },
+  { symbol: "PYTHUSDT", name: "Pyth Network", base: "PYTH", defaultTimeframe: "15M" },
+  { symbol: "JTOUSDT", name: "Jito", base: "JTO", defaultTimeframe: "15M" },
+  { symbol: "STRKUSDT", name: "Starknet", base: "STRK", defaultTimeframe: "15M" }
 ];
 
 export default function HomeTradingSuiteHero() {
@@ -76,6 +112,7 @@ export default function HomeTradingSuiteHero() {
   // 1. Bot & Signals State (Single Authoritative Direction per Asset)
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
   const [selectedCoin, setSelectedCoin] = useState<ComprehensiveSignal | null>(null);
+  const [customPairs, setCustomPairs] = useState<CoinConfig[]>([]);
   const [loadingSignals, setLoadingSignals] = useState(true);
   const [selectedTimeframe, setSelectedTimeframe] = useState<SignalTimeframe>("15M");
   const [signalFilter, setSignalFilter] = useState<"ALL" | "BUY" | "SHORT" | "HIGH_CONF">("ALL");
@@ -161,7 +198,7 @@ export default function HomeTradingSuiteHero() {
     GBP: 1.28
   };
 
-  // Fetch Binance Live Tickers & compute Tri-Pillar Confluence Signals
+  // Fetch Binance Live Tickers & compute Tri-Pillar Confluence Signals (persists all custom pairs!)
   const fetchBinanceData = useCallback(async () => {
     try {
       const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
@@ -171,7 +208,8 @@ export default function HomeTradingSuiteHero() {
       allTickers.forEach((t: any) => tickerMap.set(t.symbol, t));
       setCachedRawTickers(tickerMap);
 
-      const updated = BINANCE_SUPPORTED_PAIRS.map((cfg) => {
+      const allPairsToProcess = [...BINANCE_SUPPORTED_PAIRS, ...customPairs];
+      const updated = allPairsToProcess.map((cfg) => {
         const raw = tickerMap.get(cfg.symbol);
         if (!raw) return null;
         return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData);
@@ -190,7 +228,7 @@ export default function HomeTradingSuiteHero() {
       console.warn("Binance live fetch fallback:", err);
       setLoadingSignals(false);
     }
-  }, [selectedTimeframe, newsMacroData]);
+  }, [selectedTimeframe, newsMacroData, customPairs]);
 
   useEffect(() => {
     fetchBinanceData();
@@ -198,10 +236,11 @@ export default function HomeTradingSuiteHero() {
     return () => clearInterval(interval);
   }, [fetchBinanceData]);
 
-  // Recalculate signals on timeframe or news change
+  // Recalculate signals on timeframe or news change (persists all custom pairs!)
   useEffect(() => {
     if (cachedRawTickers.size === 0) return;
-    const updated = BINANCE_SUPPORTED_PAIRS.map((cfg) => {
+    const allPairsToProcess = [...BINANCE_SUPPORTED_PAIRS, ...customPairs];
+    const updated = allPairsToProcess.map((cfg) => {
       const raw = cachedRawTickers.get(cfg.symbol);
       if (!raw) return null;
       return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData);
@@ -215,7 +254,7 @@ export default function HomeTradingSuiteHero() {
         return fresh || updated[0];
       });
     }
-  }, [selectedTimeframe, newsMacroData, cachedRawTickers]);
+  }, [selectedTimeframe, newsMacroData, cachedRawTickers, customPairs]);
 
   // Fetch chart ticker
   useEffect(() => {
@@ -235,14 +274,16 @@ export default function HomeTradingSuiteHero() {
       .catch(() => {});
   }, [chartSymbol]);
 
-  // Handle custom pair in signals scanner
-  const handleLoadCustomPair = (e: React.FormEvent) => {
-    e.preventDefault();
-    const clean = customPairInput.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+  // Handle custom pair in signals scanner - adds to customPairs so it NEVER disappears!
+  const handleLoadCustomPair = (e?: React.FormEvent, directSymbol?: string) => {
+    if (e) e.preventDefault();
+    const target = directSymbol || customPairInput;
+    const clean = target.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (!clean) return;
     const fullSymbol = clean.endsWith("USDT") ? clean : `${clean}USDT`;
     const base = fullSymbol.replace("USDT", "");
 
+    // 1. Check if already active in liveSignals
     const existing = liveSignals.find((s) => s.symbol === fullSymbol);
     if (existing) {
       setSelectedCoin(existing);
@@ -250,17 +291,37 @@ export default function HomeTradingSuiteHero() {
       return;
     }
 
+    // 2. Check if already present in cached raw tickers (Instant load with 0ms network delay!)
+    const cachedRaw = cachedRawTickers.get(fullSymbol);
+    if (cachedRaw) {
+      const customConfig: CoinConfig = { symbol: fullSymbol, name: base, base, defaultTimeframe: selectedTimeframe };
+      setCustomPairs((prev) => {
+        if (prev.some((p) => p.symbol === fullSymbol)) return prev;
+        return [customConfig, ...prev];
+      });
+      const customSignal = generateQuantitativeSignal(cachedRaw, customConfig, selectedTimeframe, newsMacroData);
+      setLiveSignals((prev) => [customSignal, ...prev.filter((p) => p.symbol !== fullSymbol)]);
+      setSelectedCoin(customSignal);
+      setCustomPairInput("");
+      return;
+    }
+
+    // 3. Fallback: Fetch directly from Binance API
     fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${fullSymbol}`)
       .then((r) => r.json())
       .then((raw) => {
         if (raw.symbol) {
           const customConfig: CoinConfig = { symbol: fullSymbol, name: base, base, defaultTimeframe: selectedTimeframe };
+          setCustomPairs((prev) => {
+            if (prev.some((p) => p.symbol === fullSymbol)) return prev;
+            return [customConfig, ...prev];
+          });
           const customSignal = generateQuantitativeSignal(raw, customConfig, selectedTimeframe, newsMacroData);
           setLiveSignals((prev) => [customSignal, ...prev.filter((p) => p.symbol !== fullSymbol)]);
           setSelectedCoin(customSignal);
           setCustomPairInput("");
         } else {
-          alert(`Pair ${fullSymbol} not found on Binance.`);
+          alert(`Pair ${fullSymbol} not found on Binance. Please check the ticker name.`);
         }
       })
       .catch(() => alert(`Could not load ${fullSymbol} from Binance.`));
@@ -501,6 +562,52 @@ export default function HomeTradingSuiteHero() {
               </div>
             </div>
 
+            {/* 1. EXECUTION TIMEFRAME & TRI-PILLAR ENGINE CONTROL BAR */}
+            <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              
+              {/* Execution Timeframe Switcher (5M Scalp / 15M Day / 1H / 4H / 1D) */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wide flex items-center gap-1.5 font-mono">
+                  <Clock className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Execution Timeframe:</span>
+                </span>
+                <div className="flex flex-wrap items-center gap-1 bg-slate-100 dark:bg-slate-800/90 p-1 rounded-2xl border border-slate-200 dark:border-slate-700/80">
+                  {(["5M", "15M", "1H", "4H", "1D"] as SignalTimeframe[]).map((tf) => {
+                    const isSelected = selectedTimeframe === tf;
+                    const profile = TIMEFRAME_PROFILES[tf];
+                    return (
+                      <button
+                        key={tf}
+                        onClick={() => setSelectedTimeframe(tf)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                          isSelected
+                            ? "bg-slate-950 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-extrabold ring-1 ring-amber-400/20"
+                            : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700"
+                        }`}
+                        title={`${profile.name} - ${profile.recommendedFor}`}
+                      >
+                        <span>{tf}</span>
+                        {tf === "5M" && <span className="text-[10px] text-amber-400 dark:text-slate-950 font-mono font-black">⚡ Scalp</span>}
+                        {tf === "15M" && <span className="text-[10px] text-emerald-400 dark:text-emerald-950 font-mono font-black">🎯 Day</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Real-time Horizon & Confluence Status */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800/80 text-amber-900 dark:text-amber-300 shadow-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 animate-pulse" />
+                  <span className="text-xs font-black">Strategy Horizon:</span>
+                  <span className="text-[11px] font-mono font-bold text-slate-800 dark:text-amber-200">
+                    {TIMEFRAME_PROFILES[selectedTimeframe].name} ({TIMEFRAME_PROFILES[selectedTimeframe].typicalHoldDuration}) • {TIMEFRAME_PROFILES[selectedTimeframe].recommendedLeverage}
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
             {/* MAIN 2-COLUMN MARKET SCANNER & EXECUTION MATRIX */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               
@@ -509,18 +616,34 @@ export default function HomeTradingSuiteHero() {
                 
                 {/* Search & Custom Binance Pair Bar */}
                 <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3.5">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <Search className="w-3.5 h-3.5 text-amber-500" />
                       <span>Scan Any Binance Pair</span>
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500">50+ Pairs Available</span>
+
+                    {/* Integrated Timeframe pills directly on scanner */}
+                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl border border-slate-200 dark:border-slate-700 text-[10px] font-bold">
+                      {(["5M", "15M", "1H", "4H", "1D"] as SignalTimeframe[]).map((tf) => (
+                        <button
+                          key={`scanner-tf-${tf}`}
+                          onClick={() => setSelectedTimeframe(tf)}
+                          className={`px-1.5 py-0.5 rounded-lg transition ${
+                            selectedTimeframe === tf
+                              ? "bg-amber-400 text-slate-950 font-black shadow-xs"
+                              : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                          }`}
+                        >
+                          {tf}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <form onSubmit={handleLoadCustomPair} className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="Type any symbol (e.g. SUI, PEPE, WIF, NEAR)..."
+                      placeholder="Type any symbol (e.g. KAS, TAO, INJ, SUI, NEAR)..."
                       value={customPairInput}
                       onChange={(e) => {
                         setCustomPairInput(e.target.value);
@@ -536,14 +659,56 @@ export default function HomeTradingSuiteHero() {
                     </button>
                   </form>
 
+                  {/* If user types something in search that is not in the filtered list, show 1-click Instant Binance Load */}
+                  {search.trim().length > 0 && !filteredCoins.some((c) => c.base.toLowerCase() === search.trim().toLowerCase() || c.symbol.toLowerCase() === `${search.trim().toLowerCase()}usdt`) && (
+                    <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-2 text-xs animate-in fade-in">
+                      <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300 font-bold truncate">
+                        <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <span className="truncate">Found Binance pair: <strong>{search.trim().toUpperCase()}USDT</strong></span>
+                      </div>
+                      <button
+                        onClick={() => handleLoadCustomPair(undefined, search.trim().toUpperCase())}
+                        className="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 text-[11px] font-black hover:bg-amber-300 transition shrink-0"
+                      >
+                        ⚡ Load Pair Now
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Signal Direction Filter Pills */}
+                  <div className="flex flex-wrap gap-1 pt-1 border-t border-slate-100 dark:border-slate-800">
+                    {[
+                      { id: "ALL", label: "All Pairs" },
+                      { id: "BUY", label: "🟢 Long Setups" },
+                      { id: "SHORT", label: "🔴 Short Setups" },
+                      { id: "HIGH_CONF", label: "⚡ 90%+ Confluence" },
+                    ].map((f) => (
+                      <button
+                        key={f.id}
+                        onClick={() => setSignalFilter(f.id as any)}
+                        className={`px-2 py-1 rounded-lg text-[10px] font-bold transition ${
+                          signalFilter === f.id
+                            ? "bg-slate-950 dark:bg-amber-400 text-white dark:text-slate-950 font-black shadow-xs"
+                            : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+
                   {/* Popular quick chips */}
                   <div className="flex flex-wrap gap-1.5 pt-1">
-                    {["BTC", "ETH", "SOL", "BNB", "XRP", "SUI", "DOGE"].map((sym) => (
+                    {["BTC", "ETH", "SOL", "BNB", "XRP", "SUI", "DOGE", "PEPE", "TAO", "INJ", "NEAR", "KAS"].map((sym) => (
                       <button
                         key={sym}
                         onClick={() => {
                           const match = liveSignals.find((s) => s.base === sym);
-                          if (match) setSelectedCoin(match);
+                          if (match) {
+                            setSelectedCoin(match);
+                          } else {
+                            handleLoadCustomPair(undefined, sym);
+                          }
                         }}
                         className={`px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition ${
                           activeCoin?.base === sym
@@ -559,6 +724,25 @@ export default function HomeTradingSuiteHero() {
 
                 {/* Live Signals Stream List */}
                 <div className="space-y-2.5 max-h-[580px] overflow-y-auto pr-1">
+                  {filteredCoins.length === 0 && (
+                    <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
+                      <Search className="w-8 h-8 text-slate-400 mx-auto" />
+                      <div className="text-sm font-bold text-slate-900 dark:text-white">
+                        No pairs matching &quot;{search}&quot;
+                      </div>
+                      <p className="text-xs text-slate-500 max-w-xs mx-auto">
+                        Type any coin symbol above and click &quot;Load Pair&quot; to fetch and calculate live signals directly from Binance.
+                      </p>
+                      {search.trim().length > 0 && (
+                        <button
+                          onClick={() => handleLoadCustomPair(undefined, search.trim().toUpperCase())}
+                          className="px-4 py-2 bg-amber-400 text-slate-950 text-xs font-black rounded-xl hover:bg-amber-300 transition shadow-sm"
+                        >
+                          Load {search.trim().toUpperCase()} from Binance
+                        </button>
+                      )}
+                    </div>
+                  )}
                   {filteredCoins.map((coin) => {
                     const isSelected = activeCoin?.symbol === coin.symbol;
                     const isBull = coin.signal.includes("BUY");
