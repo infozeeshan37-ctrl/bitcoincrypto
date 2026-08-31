@@ -33,6 +33,7 @@ import {
   HelpCircle
 } from "lucide-react";
 import { WhaleOrder, WhaleLiquidityWall, WhaleSentimentSummary } from "@/app/api/whale-orders/route";
+import WhaleOrdersChartTerminal from "./WhaleOrdersChartTerminal";
 
 const SUPPORTED_COINS = [
   { symbol: "BTCUSDT", base: "BTC", name: "Bitcoin", icon: "₿" },
@@ -113,7 +114,12 @@ export default function WhaleOrdersTerminal() {
   return (
     <div className="space-y-10 pb-20">
       
-      {/* 1. HERO BANNER WITH LIVE WHALE HUD */}
+      {/* 1. PROFESSIONAL REAL-TIME WHALE ORDERS & LARGE TRADES GRAPH (STARTING COMPONENT MATCHING REFERENCE PHOTO) */}
+      <section id="whale-chart-terminal">
+        <WhaleOrdersChartTerminal />
+      </section>
+
+      {/* 2. HERO BANNER WITH LIVE WHALE HUD */}
       <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 border border-indigo-900/40 shadow-xl relative overflow-hidden">
         {/* Glow Effects */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
