@@ -113,13 +113,13 @@ export default function LiveAgentView({
     chatAudio.playMessageSent();
     setInputText('');
 
-    // Start realistic human typing simulation
+    // Start realistic human reading & typing simulation
     setIsAgentTyping(true);
     setTypingStatusText(`${agent.name.split(' ')[0]} is reading your message...`);
 
     const typingPause = setTimeout(() => {
       setTypingStatusText(`${agent.name.split(' ')[0]} is typing a response...`);
-    }, 900);
+    }, 1300);
 
     try {
       // Build conversation array including latest user message
@@ -133,33 +133,34 @@ export default function LiveAgentView({
         },
       ];
 
+      const startTime = Date.now();
       // Dispatch request to Groq backend API
       const reply = await sendGroqChatRequest({
         messages: updatedMessages,
         agent,
-        model: settings.selectedModel,
       });
 
       // Calculate realistic human delay based on reply length and typing speed
       const calculatedDelay = calculateRealisticHumanTypingDelay(
         reply,
-        agent.typingSpeedWpm,
-        settings.typingDelayMultiplier
+        agent.typingSpeedWpm
       );
+      const elapsed = Date.now() - startTime;
+      const remainingDelay = Math.max(800, calculatedDelay - elapsed);
 
       setTimeout(() => {
         setIsAgentTyping(false);
         setTypingStatusText('Agent is active');
         onReceiveAgentMessage(reply);
         chatAudio.playMessageReceived();
-      }, calculatedDelay);
+      }, remainingDelay);
     } catch (err) {
       console.error('Error getting agent reply:', err);
       clearTimeout(typingPause);
       setIsAgentTyping(false);
       setTypingStatusText('Agent is active');
       onReceiveAgentMessage(
-        `I apologize for the brief pause. As part of TradingMomo's ${agent.department}, could you please clarify your question so I can provide the exact steps?`
+        `Thanks for your patience! As part of TradingMomo's ${agent.department}, could you please clarify your question so I can provide the exact steps?`
       );
       chatAudio.playMessageReceived();
     }

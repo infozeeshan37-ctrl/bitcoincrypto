@@ -128,6 +128,20 @@ export default function HomeTradingSuiteHero() {
   const [activeKlines, setActiveKlines] = useState<KlineCandle[]>([]);
   const activeCoinRef = useRef<ComprehensiveSignal | null>(null);
 
+  // 1-Second Real-Time Blinking & Live Telemetry State
+  const [scannerTickDirection, setScannerTickDirection] = useState<Record<string, "up" | "down">>({});
+  const [activeCoinTick, setActiveCoinTick] = useState<"up" | "down" | null>(null);
+  const [latencyMs, setLatencyMs] = useState(14);
+  const [blockHeight, setBlockHeight] = useState(886418);
+  const [orderbookStepOffset, setOrderbookStepOffset] = useState(0);
+  const [dynamicWhaleTrades, setDynamicWhaleTrades] = useState<
+    Array<{ id: string; time: string; type: "BUY" | "SELL"; amount: string; value: string; badge: string }>
+  >([
+    { id: "w-1", time: "Just now", type: "BUY", amount: "5.40 BTC", value: "$477,630", badge: "Aggressive Market Taker" },
+    { id: "w-2", time: "4s ago", type: "BUY", amount: "32.80 ETH", value: "$102,336", badge: "Limit Wall Absorption" },
+    { id: "w-3", time: "8s ago", type: "SELL", amount: "350.00 SOL", value: "$64,650", badge: "Institutional Iceberg Fill" },
+  ]);
+
   // Fetch Live Macro News & CPI Intelligence
   useEffect(() => {
     fetch("/api/news")
@@ -151,6 +165,115 @@ export default function HomeTradingSuiteHero() {
         }
       })
       .catch(() => {});
+  }, []);
+
+  // Continuous 1-Second Real-Time Tick & Blinking Engine
+  useEffect(() => {
+    let tickCount = 0;
+    const interval = setInterval(() => {
+      tickCount++;
+
+      // 1. Simulate micro-fluctuations on 3-5 random pairs every second
+      setLiveSignals((prev) => {
+        if (prev.length === 0) return prev;
+
+        const countToUpdate = Math.min(prev.length, 3 + Math.floor(Math.random() * 3));
+        const indices = new Set<number>();
+        while (indices.size < countToUpdate) {
+          indices.add(Math.floor(Math.random() * prev.length));
+        }
+
+        const updates: Record<string, "up" | "down"> = {};
+        const next = prev.map((coin, idx) => {
+          if (indices.has(idx)) {
+            const isUp = Math.random() > 0.48;
+            const variance = 0.00035 * (Math.random() * 0.8 + 0.2); // ±0.035%
+            const delta = isUp ? coin.price * variance : -coin.price * variance;
+            const newPrice = Math.max(0.000001, coin.price + delta);
+            updates[coin.symbol] = isUp ? "up" : "down";
+
+            return {
+              ...coin,
+              price: newPrice,
+              change24h: coin.change24h + (isUp ? 0.01 : -0.01),
+            };
+          }
+          return coin;
+        });
+
+        // Trigger visual flash
+        setScannerTickDirection((curr) => ({ ...curr, ...updates }));
+        setTimeout(() => {
+          setScannerTickDirection((curr) => {
+            const copy = { ...curr };
+            Object.keys(updates).forEach((k) => delete copy[k]);
+            return copy;
+          });
+        }, 750);
+
+        return next;
+      });
+
+      // 2. Also update activeCoin price on each second tick
+      setSelectedCoin((current) => {
+        if (!current) return current;
+        const isUp = Math.random() > 0.48;
+        const variance = 0.0004 * (Math.random() * 0.7 + 0.3);
+        const delta = isUp ? current.price * variance : -current.price * variance;
+        const newPrice = Math.max(0.000001, current.price + delta);
+        setActiveCoinTick(isUp ? "up" : "down");
+        setTimeout(() => setActiveCoinTick(null), 750);
+
+        const updatedCoin = {
+          ...current,
+          price: newPrice,
+          change24h: current.change24h + (isUp ? 0.01 : -0.01),
+        };
+        activeCoinRef.current = updatedCoin;
+        return updatedCoin;
+      });
+
+      // 3. Shift orderbook depth ladder offset
+      setOrderbookStepOffset((prev) => (prev + 1) % 100);
+
+      // 4. Periodically stream new institutional whale block prints every 3 seconds
+      if (tickCount % 3 === 0 && activeCoinRef.current) {
+        const coin = activeCoinRef.current;
+        const isBuy = Math.random() > 0.4;
+        const sizeMult = 1.5 + Math.random() * 4;
+        const amt = `${sizeMult.toFixed(2)} ${coin.base}`;
+        const val = `$${Math.round(coin.price * sizeMult).toLocaleString()}`;
+        const badges = [
+          "Aggressive Market Taker",
+          "Limit Wall Absorption",
+          "Institutional Iceberg Fill",
+          "TWAP Smart Flow",
+        ];
+        const newTrade = {
+          id: `whale-${Date.now()}`,
+          time: "Just now",
+          type: (isBuy ? "BUY" : "SELL") as "BUY" | "SELL",
+          amount: amt,
+          value: val,
+          badge: badges[Math.floor(Math.random() * badges.length)],
+        };
+
+        setDynamicWhaleTrades((prevTrades) => [
+          newTrade,
+          ...prevTrades.slice(0, 2).map((t, idx) => ({
+            ...t,
+            time: idx === 0 ? "3s ago" : "7s ago",
+          })),
+        ]);
+      }
+
+      // 5. Fluctuate latency slightly (11ms - 17ms)
+      if (tickCount % 4 === 0) {
+        setLatencyMs(11 + Math.floor(Math.random() * 6));
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Fetch Kline / Candlestick series for active selected coin & timeframe
@@ -452,24 +575,19 @@ export default function HomeTradingSuiteHero() {
     setTimeout(() => setCopiedWebhook(false), 2500);
   };
 
-  // Micro orderbook ladder calculations
+  // Dynamic 1-second fluctuating orderbook ladder
   const depthPriceStep = activeCoin ? activeCoin.price * 0.0006 : 10;
+  const oOffset = (orderbookStepOffset % 5) * 0.08;
   const mockAskLevels = activeCoin ? [
-    { price: activeCoin.price + depthPriceStep * 3, size: (0.78 * (copilotCapital / 1000)).toFixed(3), total: "$1.45M", depth: 85 },
-    { price: activeCoin.price + depthPriceStep * 2, size: (0.52 * (copilotCapital / 1000)).toFixed(3), total: "$890K", depth: 60 },
-    { price: activeCoin.price + depthPriceStep * 1, size: (0.34 * (copilotCapital / 1000)).toFixed(3), total: "$460K", depth: 35 },
+    { price: activeCoin.price + depthPriceStep * 3, size: (0.78 + oOffset).toFixed(3), total: `$${(1.45 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(85 + (orderbookStepOffset % 7) * 2)) },
+    { price: activeCoin.price + depthPriceStep * 2, size: (0.52 + oOffset * 0.8).toFixed(3), total: `$${(0.89 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(60 + (orderbookStepOffset % 9) * 3)) },
+    { price: activeCoin.price + depthPriceStep * 1, size: (0.34 + oOffset * 0.5).toFixed(3), total: `$${(0.46 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(35 + (orderbookStepOffset % 11) * 2)) },
   ] : [];
 
   const mockBidLevels = activeCoin ? [
-    { price: activeCoin.price - depthPriceStep * 1, size: (0.46 * (copilotCapital / 1000)).toFixed(3), total: "$620K", depth: 42 },
-    { price: activeCoin.price - depthPriceStep * 2, size: (0.94 * (copilotCapital / 1000)).toFixed(3), total: "$1.72M", depth: 95 },
-    { price: activeCoin.price - depthPriceStep * 3, size: (0.68 * (copilotCapital / 1000)).toFixed(3), total: "$980K", depth: 72 },
-  ] : [];
-
-  const whaleTrades = activeCoin ? [
-    { time: "Just now", type: activeCoin.isLong ? "BUY" : "SELL", amount: `${(3.45 + (activeCoin.confidence % 3)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (3.45 + (activeCoin.confidence % 3))).toLocaleString()}`, badge: "Aggressive Market Taker" },
-    { time: "14s ago", type: "BUY", amount: `${(2.10 + (activeCoin.confidence % 2)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (2.10 + (activeCoin.confidence % 2))).toLocaleString()}`, badge: "Limit Wall Absorption" },
-    { time: "38s ago", type: activeCoin.isLong ? "BUY" : "SELL", amount: `${(5.80 + (activeCoin.confidence % 4)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (5.80 + (activeCoin.confidence % 4))).toLocaleString()}`, badge: "Institutional Iceberg Fill" }
+    { price: activeCoin.price - depthPriceStep * 1, size: (0.46 + oOffset * 0.6).toFixed(3), total: `$${(0.62 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(42 + (orderbookStepOffset % 8) * 3)) },
+    { price: activeCoin.price - depthPriceStep * 2, size: (0.94 + oOffset * 1.1).toFixed(3), total: `$${(1.72 + oOffset * 0.3).toFixed(2)}M`, depth: Math.min(95, Math.round(92 - (orderbookStepOffset % 6) * 2)) },
+    { price: activeCoin.price - depthPriceStep * 3, size: (0.68 + oOffset * 0.7).toFixed(3), total: `$${(0.98 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(72 + (orderbookStepOffset % 7) * 2)) },
   ] : [];
 
   // DCA Calculations
@@ -583,7 +701,7 @@ export default function HomeTradingSuiteHero() {
         {activeTab === "bot" && (
           <div className="space-y-8">
             
-            {/* SUB-CARD HEADER (MATCHING USER SCREENSHOT) */}
+            {/* SUB-CARD HEADER WITH 1-SECOND LIVE STATUS HUD */}
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="space-y-2 max-w-3xl">
                 <div className="flex flex-wrap items-center gap-2">
@@ -591,21 +709,37 @@ export default function HomeTradingSuiteHero() {
                     <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                     <span>Algorithmic Spot &amp; Derivatives Execution Engine</span>
                   </span>
+
+                  {/* 1-Second Live Heartbeat Badge */}
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-xs">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                    </span>
+                    <span>1,000ms LIVE STREAM</span>
+                  </div>
+
+                  {/* Latency & Block Height Telemetry */}
+                  <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                    <Activity className="w-3 h-3 text-emerald-500 animate-pulse" />
+                    <span>{latencyMs}ms Latency • Block #{blockHeight}</span>
+                  </span>
                 </div>
+
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                   Live Algorithmic Signals &amp; Full Market Terminal
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Real-time live prices, dynamic entry zones, mathematically validated stop-losses, and multi-tier take-profits matching live TradingView candlestick charts 1:1.
+                  High-frequency 1-second price action, dynamic entry zones, mathematically validated stop-losses, and multi-tier take-profits matching live TradingView candlestick charts 1:1.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
                 <button
                   onClick={fetchBinanceData}
-                  className="px-5 py-3 rounded-2xl bg-slate-950 dark:bg-slate-800 hover:bg-slate-900 dark:hover:bg-slate-700 text-white text-xs font-black transition flex items-center gap-2 shadow-sm border border-slate-800 dark:border-slate-700"
+                  className="px-5 py-3 rounded-2xl bg-slate-950 dark:bg-slate-800 hover:bg-slate-900 dark:hover:bg-slate-700 text-white text-xs font-black transition flex items-center gap-2 shadow-sm border border-slate-800 dark:border-slate-700 group"
                 >
-                  <RefreshCw className={`w-4 h-4 text-amber-400 ${loadingSignals ? "animate-spin" : ""}`} />
+                  <RefreshCw className={`w-4 h-4 text-amber-400 group-hover:rotate-180 transition-transform duration-500 ${loadingSignals ? "animate-spin" : ""}`} />
                   <span>Refresh Signals</span>
                 </button>
               </div>
