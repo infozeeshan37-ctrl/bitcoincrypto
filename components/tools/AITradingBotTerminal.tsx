@@ -907,7 +907,7 @@ export default function AITradingBotTerminal() {
                 </div>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>WebSocket Live</span>
+                  <span>WebSocket Stream</span>
                 </span>
               </div>
 
@@ -919,14 +919,23 @@ export default function AITradingBotTerminal() {
                       <CheckCheck className="w-4 h-4 text-emerald-500" />
                       <span>Paper Order #{paperTradeStatus.orderId} Active</span>
                     </span>
-                    <span className="text-[10px] font-mono text-emerald-600">
-                      {paperTradeStatus.time}
-                    </span>
+                    <span className="font-mono text-slate-500">{paperTradeStatus.time}</span>
                   </div>
-                  <div className="flex justify-between text-[11px] text-slate-700 font-mono">
-                    <span>Side: <strong className={paperTradeStatus.side === "BUY" ? "text-emerald-600" : "text-rose-600"}>{paperTradeStatus.side}</strong></span>
-                    <span>Fill Spot: <strong>${formatPrice(paperTradeStatus.fillPrice)}</strong></span>
-                    <span>SL Guard: <strong className="text-rose-600">${formatPrice(activeCoin.stopLossPrice)}</strong></span>
+                  <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
+                    <div>
+                      <span className="text-slate-500">Filled:</span>
+                      <strong className="text-slate-900 ml-1">${formatPrice(paperTradeStatus.fillPrice)}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">Side:</span>
+                      <strong className={paperTradeStatus.side === "BUY" ? "text-emerald-600 ml-1" : "text-rose-600 ml-1"}>
+                        {paperTradeStatus.side}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">Status:</span>
+                      <strong className="text-emerald-600 ml-1">Simulated</strong>
+                    </div>
                   </div>
                 </div>
               )}
