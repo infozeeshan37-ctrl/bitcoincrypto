@@ -152,7 +152,7 @@ function ToolsContent() {
             Cryptocurrency Trading Suite & Signals Engine
           </h1>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            Real-time algorithmic trading bot, multi-coin market scanner, live TradingView charts, and exact risk execution calculators.
+            Real-time algorithmic trading bot, multi-coin market scanner, TradingView charts, and exact risk execution calculators.
           </p>
         </div>
 
@@ -176,7 +176,7 @@ function ToolsContent() {
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
-            <BarChart2 className="w-4 h-4" /> Live Chart Terminal
+            <BarChart2 className="w-4 h-4" /> Chart Terminal
           </button>
           <button
             onClick={() => setActiveTab("dca")}
@@ -303,7 +303,7 @@ function ToolsContent() {
               </div>
 
               <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="text-slate-500 dark:text-slate-400">Live Price:</span>
+                <span className="text-slate-500 dark:text-slate-400">Current Price:</span>
                 <strong className="text-slate-900 dark:text-white">
                   ${terminalTicker.price >= 1000 ? terminalTicker.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : terminalTicker.price}
                 </strong>
