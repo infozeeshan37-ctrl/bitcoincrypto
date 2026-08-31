@@ -1231,140 +1231,167 @@ export default function AITradingBotTerminal() {
               </div>
             </div>
 
-            {/* 3. BOTTOM 2-COLUMN INSTITUTIONAL INTELLIGENCE */}
+            {/* 3. BOTTOM 2-COLUMN INSTITUTIONAL INTELLIGENCE (LIQUIDATION POOLS & ORDERBOOK DEPTH) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
               
               {/* CARD 1: LIQUIDATION MAGNET POOLS & 24H ORDER FLOW */}
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+              <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                        <Layers className="w-4 h-4 text-amber-600" />
+                      <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
+                        <Layers className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                       </div>
                       <div>
-                        <h4 className="text-base font-black text-slate-900">
+                        <h4 className="text-base font-black text-slate-900 dark:text-white">
                           Liquidation Pools &amp; Range
                         </h4>
-                        <p className="text-[11px] text-slate-500">
-                          Resting stop clusters &amp; 24h range
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                          Resting stop clusters &amp; 24h positioning
                         </p>
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                       Live Matrix
                     </span>
                   </div>
 
                   {/* 24h Channel Range Progress Bar */}
-                  <div className="space-y-1.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="space-y-2 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                     <div className="flex justify-between items-center text-xs font-mono">
-                      <span className="text-slate-500 flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-rose-500" /> Low: <strong>${formatPrice(activeCoin.low24h)}</strong>
+                      <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-bold">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                        <span>Low:</span>
+                        <strong className="text-slate-900 dark:text-white font-extrabold">${formatPrice(activeCoin.low24h)}</strong>
                       </span>
-                      <span className="font-bold text-amber-600 text-[11px]">
-                        ${formatPrice(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(1)}%)
-                      </span>
-                      <span className="text-slate-500 flex items-center gap-1">
-                        High: <strong>${formatPrice(activeCoin.high24h)}</strong> <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-bold">
+                        <span>High:</span>
+                        <strong className="text-slate-900 dark:text-white font-extrabold">${formatPrice(activeCoin.high24h)}</strong>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                       </span>
                     </div>
-                    <div className="relative w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+
+                    <div className="relative w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className="absolute top-0 bottom-0 bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 rounded-full transition-all duration-500"
                         style={{ width: "100%" }}
                       />
                       <div
-                        className="absolute top-0 bottom-0 w-2.5 bg-slate-950 border-2 border-white rounded-full shadow -ml-1 transition-all duration-300"
-                        style={{ left: `${Math.max(5, Math.min(95, ((activeCoin.price - activeCoin.low24h) / Math.max(1, activeCoin.high24h - activeCoin.low24h)) * 100))}%` }}
+                        className="absolute top-0 bottom-0 w-2.5 bg-slate-950 dark:bg-white border-2 border-white dark:border-slate-950 rounded-full shadow -ml-1 transition-all duration-300"
+                        style={{
+                          left: `${Math.max(
+                            5,
+                            Math.min(
+                              95,
+                              ((activeCoin.price - activeCoin.low24h) /
+                                Math.max(1, activeCoin.high24h - activeCoin.low24h)) *
+                                100
+                            )
+                          )}%`
+                        }}
                       />
+                    </div>
+
+                    <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-0.5">
+                      <span>24h Range Channel</span>
+                      <span className="font-bold text-amber-600 dark:text-amber-400">
+                        Spread: ${formatPrice(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(1)}%)
+                      </span>
                     </div>
                   </div>
 
                   {/* Liquidation Magnet Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div className="p-3 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-0.5">
-                      <div className="text-[10px] font-bold text-rose-700 uppercase font-mono flex items-center justify-between">
+                    <div className="p-3 rounded-2xl bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-800/80 space-y-0.5">
+                      <div className="text-[10px] font-bold text-rose-700 dark:text-rose-300 uppercase font-mono flex items-center justify-between">
                         <span>Short Magnet</span>
                         <span>Target</span>
                       </div>
-                      <div className="text-sm font-black text-rose-800 font-mono">
+                      <div className="text-sm font-black text-rose-800 dark:text-rose-200 font-mono">
                         ${formatPrice(activeCoin.coinglass.liquidationUpperMagnet)}
                       </div>
-                      <div className="text-[10px] text-rose-600">{activeCoin.coinglass.liquidationUpperPoolUsd}</div>
+                      <div className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">
+                        {activeCoin.coinglass.liquidationUpperPoolUsd}
+                      </div>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-0.5">
-                      <div className="text-[10px] font-bold text-emerald-700 uppercase font-mono flex items-center justify-between">
+                    <div className="p-3 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 space-y-0.5">
+                      <div className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase font-mono flex items-center justify-between">
                         <span>Long Shelf</span>
                         <span>Floor</span>
                       </div>
-                      <div className="text-sm font-black text-emerald-800 font-mono">
+                      <div className="text-sm font-black text-emerald-800 dark:text-emerald-200 font-mono">
                         ${formatPrice(activeCoin.coinglass.liquidationLowerMagnet)}
                       </div>
-                      <div className="text-[10px] text-emerald-600">{activeCoin.coinglass.liquidationLowerPoolUsd}</div>
+                      <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                        {activeCoin.coinglass.liquidationLowerPoolUsd}
+                      </div>
                     </div>
                   </div>
 
-                  {/* CVD Delta Meter */}
-                  <div className="p-3.5 rounded-2xl bg-slate-900 text-white space-y-1.5">
-                    <div className="flex justify-between items-center text-[11px]">
-                      <span className="font-mono text-emerald-400 font-bold flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3" /> Buyers: {activeCoin.coinglass.longAccountPercent}%
-                      </span>
-                      <span className="font-mono text-rose-400 font-bold flex items-center gap-1">
-                        Sellers: {activeCoin.coinglass.shortAccountPercent}% <TrendingDown className="w-3 h-3" />
-                      </span>
+                  {/* Micro Indicators Grid */}
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">RSI (14)</div>
+                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.technicals.rsi}</div>
+                      <div className="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">
+                        {activeCoin.technicals.rsi > 50 ? "Bullish Momentum" : "Neutral / Oversold"}
+                      </div>
                     </div>
-                    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden flex">
-                      <div
-                        className="bg-emerald-500 transition-all duration-500"
-                        style={{ width: `${activeCoin.coinglass.longAccountPercent}%` }}
-                      />
-                      <div
-                        className="bg-rose-500 transition-all duration-500"
-                        style={{ width: `${activeCoin.coinglass.shortAccountPercent}%` }}
-                      />
+                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">Open Interest (OI)</div>
+                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.coinglass.openInterestFormatted}</div>
+                      <div className="text-[9px] text-slate-500 dark:text-slate-400">{activeCoin.coinglass.openInterestTrend}</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">L/S Ratio</div>
+                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.coinglass.longShortRatio} ({activeCoin.coinglass.longAccountPercent}% L)</div>
+                      <div className="text-[9px] text-slate-500 dark:text-slate-400">Retail Sentiment</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">Orderbook Flow</div>
+                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.technicals.rsi > 50 ? "Bid Wall" : "Ask Wall"}</div>
+                      <div className="text-[9px] text-amber-600 dark:text-amber-400 truncate">{activeCoin.technicals.orderbookImbalance}</div>
                     </div>
                   </div>
                 </div>
 
-                {/* Rationale snippet */}
-                <div className="pt-2 border-t border-slate-100">
-                  <div className="text-[10px] font-mono font-bold text-amber-600 uppercase mb-1">
-                    Thesis: {activeCoin.strategy}
+                {/* Algorithmic Rationale Snippet */}
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <div className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase mb-1">
+                    Order Thesis: {activeCoin.strategy}
                   </div>
-                  <p className="text-[11px] text-slate-600 line-clamp-3 leading-relaxed">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
                     {activeCoin.rationale}
                   </p>
                 </div>
               </div>
 
               {/* CARD 2: REAL-TIME ORDERBOOK DEPTH & INSTITUTIONAL WHALE RADAR */}
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+              <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                        <Activity className="w-4 h-4 text-emerald-600" />
+                      <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
+                        <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       </div>
                       <div>
-                        <h4 className="text-base font-black text-slate-900">
+                        <h4 className="text-base font-black text-slate-900 dark:text-white">
                           Orderbook &amp; Whale Radar
                         </h4>
-                        <p className="text-[11px] text-slate-500">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
                           L2 depth &amp; block taker prints
                         </p>
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                       L2 Depth
                     </span>
                   </div>
 
                   {/* Orderbook Depth Ladder */}
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
-                    <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 uppercase pb-0.5 border-b border-slate-200">
+                  <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                    <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 dark:text-slate-500 uppercase pb-0.5 border-b border-slate-200 dark:border-slate-700">
                       <span>Price ($)</span>
                       <span>Size ({activeCoin.base})</span>
                       <span>Vol</span>
@@ -1375,18 +1402,18 @@ export default function AITradingBotTerminal() {
                       {mockAskLevels.map((lvl, i) => (
                         <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
                           <div
-                            className="absolute right-0 top-0 bottom-0 bg-rose-500/10"
+                            className="absolute right-0 top-0 bottom-0 bg-rose-500/10 dark:bg-rose-500/20"
                             style={{ width: `${lvl.depth}%` }}
                           />
-                          <span className="text-rose-600 font-bold z-10">${formatPrice(lvl.price)}</span>
-                          <span className="text-slate-600 z-10">{lvl.size}</span>
-                          <span className="text-slate-400 text-[9px] z-10">{lvl.total}</span>
+                          <span className="text-rose-600 dark:text-rose-400 font-bold z-10">${formatPrice(lvl.price)}</span>
+                          <span className="text-slate-600 dark:text-slate-300 z-10">{lvl.size}</span>
+                          <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Mid Price Separator */}
-                    <div className="py-1 px-2 rounded-lg bg-slate-900 text-white flex justify-between items-center text-[11px] font-mono border border-slate-800">
+                    <div className="py-1 px-2 rounded-lg bg-slate-900 dark:bg-slate-950 text-white flex justify-between items-center text-[11px] font-mono border border-slate-800 dark:border-slate-700">
                       <span className="text-[9px] text-amber-400 font-bold uppercase flex items-center gap-1">
                         <Radio className="w-2.5 h-2.5 text-amber-400 animate-pulse" /> Mid Spot:
                       </span>
@@ -1399,12 +1426,12 @@ export default function AITradingBotTerminal() {
                       {mockBidLevels.map((lvl, i) => (
                         <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
                           <div
-                            className="absolute left-0 top-0 bottom-0 bg-emerald-500/10"
+                            className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 dark:bg-emerald-500/20"
                             style={{ width: `${lvl.depth}%` }}
                           />
-                          <span className="text-emerald-600 font-bold z-10">${formatPrice(lvl.price)}</span>
-                          <span className="text-slate-600 z-10">{lvl.size}</span>
-                          <span className="text-slate-400 text-[9px] z-10">{lvl.total}</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-bold z-10">${formatPrice(lvl.price)}</span>
+                          <span className="text-slate-600 dark:text-slate-300 z-10">{lvl.size}</span>
+                          <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
                         </div>
                       ))}
                     </div>
@@ -1412,32 +1439,32 @@ export default function AITradingBotTerminal() {
                 </div>
 
                 {/* Institutional Whale Block Activity Stream */}
-                <div className="space-y-1.5 pt-1 border-t border-slate-100">
-                  <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 uppercase">
-                    <span>Whale Block Prints</span>
-                    <span className="text-amber-600 font-bold text-[9px]">&gt;$100K Trades</span>
+                <div className="space-y-1.5 pt-1 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
+                    <span>Live Whale Prints Stream</span>
+                    <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
                   </div>
                   <div className="space-y-1">
-                    {whaleTrades.slice(0, 2).map((tr, idx) => (
+                    {whaleTrades.slice(0, 3).map((tr, idx) => (
                       <div
                         key={idx}
-                        className="p-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-[11px] font-mono"
+                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-mono"
                       >
                         <div className="flex items-center gap-1.5">
                           <span
                             className={`px-1 py-0.2 rounded text-[9px] font-black ${
                               tr.type === "BUY"
-                                ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
-                                : "bg-rose-100 text-rose-800 border border-rose-200"
+                                ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                                : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
                             }`}
                           >
                             {tr.type}
                           </span>
-                          <span className="font-bold text-slate-900">
-                            {tr.amount} <span className="text-slate-400 text-[10px]">({tr.value})</span>
+                          <span className="font-bold text-slate-900 dark:text-white">
+                            {tr.amount} <span className="text-slate-400 dark:text-slate-500 text-[10px]">({tr.value})</span>
                           </span>
                         </div>
-                        <span className="text-[9px] text-slate-400">{tr.time}</span>
+                        <span className="text-[9px] text-slate-400 dark:text-slate-500">{tr.time}</span>
                       </div>
                     ))}
                   </div>
