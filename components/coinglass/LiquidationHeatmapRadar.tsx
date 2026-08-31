@@ -492,7 +492,9 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
   }, [activeCoin, exchangeFilter]);
 
   const maxHourlyLiq = useMemo(() => {
-    return Math.max(...hourlyLiquidationHistory.map((h) => h.totalUsd), 1);
+    const rawMax = Math.max(...hourlyLiquidationHistory.map((h) => h.totalUsd), 1);
+    // Add 28% breathing room so high-volume squeeze bars never clip at the top
+    return rawMax * 1.28;
   }, [hourlyLiquidationHistory]);
 
   const fmtCurrency = (n: number) => {
@@ -1067,58 +1069,93 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
             </span>
           </div>
 
-          {/* Interactive Stacked Bar Chart */}
-          <div className="h-48 w-full bg-slate-900/80 rounded-2xl border border-slate-800 p-3 flex items-end gap-1.5 overflow-x-auto">
-            {hourlyLiquidationHistory.map((item, idx) => {
-              const heightPercent = Math.max(8, (item.totalUsd / maxHourlyLiq) * 100);
-              const shortPercent = (item.shortUsd / Math.max(1, item.totalUsd)) * 100;
-              const longPercent = 100 - shortPercent;
-
-              return (
-                <div
-                  key={idx}
-                  className="flex-1 flex flex-col items-center justify-end h-full group relative cursor-pointer min-w-[12px]"
-                >
-                  {/* Stacked Bars: Short Liquidations on Top (Red), Long Liquidations below (Green) */}
-                  <div
-                    className="w-full flex flex-col justify-end rounded-t overflow-hidden transition-all duration-300 group-hover:scale-y-105"
-                    style={{ height: `${heightPercent}%` }}
-                  >
-                    <div
-                      className="w-full bg-rose-500 group-hover:bg-rose-400 transition"
-                      style={{ height: `${shortPercent}%` }}
-                    />
-                    <div
-                      className="w-full bg-emerald-500 group-hover:bg-emerald-400 transition"
-                      style={{ height: `${longPercent}%` }}
-                    />
-                  </div>
-
-                  {/* Tooltip on Hover */}
-                  <div className="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center bg-slate-950 text-white text-[9px] font-mono p-2 rounded-xl whitespace-nowrap z-20 border border-slate-700 shadow-2xl pointer-events-none">
-                    <span className="font-black text-amber-400">{item.hour}</span>
-                    <span className="text-rose-400 font-bold">Shorts: {fmtCurrency(item.shortUsd)}</span>
-                    <span className="text-emerald-400 font-bold">Longs: {fmtCurrency(item.longUsd)}</span>
-                    <span className="text-slate-300 border-t border-slate-800 pt-0.5 mt-0.5 font-black">
-                      Total: {fmtCurrency(item.totalUsd)}
-                    </span>
-                  </div>
+          {/* Interactive Stacked Bar Chart with Gridlines & Ample Headroom */}
+          <div className="relative h-64 sm:h-72 w-full bg-slate-900/90 rounded-2xl border border-slate-800 p-4 flex flex-col justify-between overflow-hidden">
+            
+            {/* Background Reference Horizontal Gridlines with Dollar Levels */}
+            <div className="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none z-0">
+              {[0.75, 0.5, 0.25].map((level, lIdx) => (
+                <div key={lIdx} className="w-full flex items-center justify-between border-b border-slate-800/60 text-[9px] font-mono text-slate-500">
+                  <span className="bg-slate-900/80 px-1 rounded">{fmtCurrency(maxHourlyLiq * level)}</span>
+                  <span className="bg-slate-900/80 px-1 rounded">{fmtCurrency(maxHourlyLiq * level)}</span>
                 </div>
-              );
-            })}
+              ))}
+              <div className="w-full border-b border-slate-800/80 text-[9px] font-mono text-slate-600 flex justify-between">
+                <span>$0M</span>
+                <span>$0M</span>
+              </div>
+            </div>
+
+            {/* Bars Container */}
+            <div className="relative z-10 flex items-end gap-1.5 sm:gap-2 h-[82%] w-full">
+              {hourlyLiquidationHistory.map((item, idx) => {
+                const heightPercent = Math.max(6, (item.totalUsd / maxHourlyLiq) * 100);
+                const shortPercent = (item.shortUsd / Math.max(1, item.totalUsd)) * 100;
+                const longPercent = 100 - shortPercent;
+                const isPeak = item.totalUsd > maxHourlyLiq * 0.55;
+
+                return (
+                  <div
+                    key={idx}
+                    className="flex-1 flex flex-col items-center justify-end h-full group relative cursor-pointer min-w-[10px]"
+                  >
+                    {/* Peak Indicator Icon on Major Squeeze Spikes */}
+                    {isPeak && (
+                      <div className="mb-1 text-[8px] font-black font-mono text-amber-400 bg-amber-950/80 border border-amber-500/40 rounded px-1 py-0.2 whitespace-nowrap opacity-90 group-hover:scale-110 transition-transform">
+                        {fmtCurrency(item.totalUsd)}
+                      </div>
+                    )}
+
+                    {/* Stacked Bars: Short Liquidations on Top (Red), Long Liquidations below (Green) */}
+                    <div
+                      className="w-full flex flex-col justify-end rounded-t-md overflow-hidden transition-all duration-300 group-hover:scale-y-105 group-hover:brightness-110 shadow-sm"
+                      style={{ height: `${heightPercent}%` }}
+                    >
+                      <div
+                        className="w-full bg-gradient-to-t from-rose-600 to-rose-500 transition"
+                        style={{ height: `${shortPercent}%` }}
+                      />
+                      <div
+                        className="w-full bg-gradient-to-t from-emerald-600 to-emerald-500 transition"
+                        style={{ height: `${longPercent}%` }}
+                      />
+                    </div>
+
+                    {/* Tooltip on Hover */}
+                    <div className="absolute bottom-full mb-3 hidden group-hover:flex flex-col items-center bg-slate-950 text-white text-[10px] font-mono p-2.5 rounded-xl whitespace-nowrap z-30 border border-slate-700 shadow-2xl pointer-events-none">
+                      <span className="font-black text-amber-400 text-xs">{item.hour}</span>
+                      <span className="text-rose-400 font-bold">Shorts Wiped: {fmtCurrency(item.shortUsd)}</span>
+                      <span className="text-emerald-400 font-bold">Longs Flushed: {fmtCurrency(item.longUsd)}</span>
+                      <span className="text-slate-200 border-t border-slate-800 pt-1 mt-1 font-black">
+                        Total Cascade: {fmtCurrency(item.totalUsd)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* X-Axis Timeline Markers */}
+            <div className="relative z-10 flex justify-between items-center text-[9px] font-mono text-slate-500 pt-1 border-t border-slate-800/80">
+              <span>-24h</span>
+              <span>-18h</span>
+              <span>-12h</span>
+              <span>-6h</span>
+              <span className="text-amber-400 font-bold">Live Now</span>
+            </div>
           </div>
 
           <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-1">
-            <span>24h Ago</span>
+            <span>24h Historical Window</span>
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5 text-rose-400 font-bold">
-                <span className="w-2 h-2 rounded-full bg-rose-500" /> Short Wipeout
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-xs shadow-rose-500/50" /> Short Wipeout
               </span>
               <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Long Flush
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-xs shadow-emerald-500/50" /> Long Flush
               </span>
             </div>
-            <span>Now</span>
+            <span className="text-emerald-400 font-bold">Live Stream</span>
           </div>
         </div>
 
