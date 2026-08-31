@@ -465,15 +465,27 @@ export default function CryptoNewsCPIDashboard() {
                   <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
                     {item.summary}
                   </p>
+
+                  {item.keyTakeaways && item.keyTakeaways.length > 0 && (
+                    <div className="text-[11px] text-amber-800 dark:text-amber-300 bg-amber-50/70 dark:bg-amber-950/40 p-2.5 rounded-xl border border-amber-200/80 dark:border-amber-800/60 space-y-1">
+                      <span className="font-bold flex items-center gap-1 text-[10px] uppercase font-mono">
+                        <Sparkles className="w-3 h-3 text-amber-500" /> Key Takeaway
+                      </span>
+                      <p className="line-clamp-2">{item.keyTakeaways[0]}</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">{item.source}</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 truncate max-w-[180px]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                    <span className="truncate">{item.source}</span>
+                  </span>
                   <a
-                    href={item.url}
+                    href={item.sourceUrl || (item as any).url || "https://www.google.com"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-bold flex items-center gap-1"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-bold flex items-center gap-1 shrink-0"
                   >
                     <span>Read Source</span>
                     <ExternalLink className="w-3 h-3" />

@@ -32,7 +32,8 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Newspaper,
-  Flame
+  Flame,
+  X
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -115,6 +116,7 @@ const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
 
 export default function HomeTradingSuiteHero() {
   const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "news">("bot");
+  const [isNewsDrawerOpen, setIsNewsDrawerOpen] = useState(false);
 
   // 1. Bot & Signals State (Single Authoritative Direction per Asset)
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
@@ -2254,12 +2256,94 @@ export default function HomeTradingSuiteHero() {
 
         {/* 6. TAB 6: LATEST NEWS & GLOBAL MACRO RADAR */}
         {activeTab === "news" && (
-          <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in">
+          <div className="w-full space-y-6 animate-in fade-in">
             <HomeLatestNewsRadar />
           </div>
         )}
 
       </div>
+
+      {/* FLOATING QUICK SIDE NEWS TOGGLE BUTTON (ACCESSIBLE WHEN BROWSING OTHER TABS) */}
+      {activeTab !== "news" && (
+        <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2">
+          <button
+            onClick={() => setIsNewsDrawerOpen(true)}
+            className="flex items-center gap-2.5 px-4 py-3 bg-slate-950 dark:bg-slate-900 text-white rounded-2xl border border-amber-500/40 shadow-xl hover:shadow-amber-500/20 hover:scale-105 transition-all duration-200 group ring-2 ring-amber-400/20"
+            title="Open Live News & Macro Radar Side Drawer"
+          >
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+            </span>
+            <Newspaper className="w-4 h-4 text-amber-400 group-hover:rotate-6 transition-transform" />
+            <span className="text-xs font-black tracking-wide">Live News Wire</span>
+            <span className="hidden sm:inline text-[10px] font-mono bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded-md">
+              1s LIVE
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* SLIDE-OVER SIDE DRAWER FOR LIVE NEWS WIRE */}
+      {isNewsDrawerOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden animate-in fade-in duration-200">
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsNewsDrawerOpen(false)}
+            className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity"
+          />
+
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div className="w-screen max-w-4xl bg-white dark:bg-slate-950 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col p-4 sm:p-6 space-y-4 overflow-y-auto custom-scrollbar">
+              
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-black">
+                    <Newspaper className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white">
+                      Live News &amp; Macro Radar Drawer
+                    </h3>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      Real-time market wire &amp; in-depth paragraph analysis
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setIsNewsDrawerOpen(false);
+                      setActiveTab("news");
+                      window.scrollTo({ top: 400, behavior: "smooth" });
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition flex items-center gap-1 shadow-sm"
+                  >
+                    <span>Full Screen Tab</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+
+                  <button
+                    onClick={() => setIsNewsDrawerOpen(false)}
+                    className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition"
+                    title="Close Drawer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Full News Radar Inside Drawer */}
+              <div className="flex-1">
+                <HomeLatestNewsRadar />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 }
