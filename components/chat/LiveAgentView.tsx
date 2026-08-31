@@ -34,7 +34,6 @@ interface LiveAgentViewProps {
   onReceiveAgentMessage: (text: string) => void;
   onTransferAgent: () => void;
   onBackToFaq: () => void;
-  onOpenSettings: () => void;
   onEndChat: () => void;
   onToggleSound: () => void;
 }
@@ -54,7 +53,6 @@ export default function LiveAgentView({
   onReceiveAgentMessage,
   onTransferAgent,
   onBackToFaq,
-  onOpenSettings,
   onEndChat,
   onToggleSound,
 }: LiveAgentViewProps) {
@@ -135,11 +133,10 @@ export default function LiveAgentView({
         },
       ];
 
-      // Dispatch request to Groq or local simulation
+      // Dispatch request to Groq backend API
       const reply = await sendGroqChatRequest({
         messages: updatedMessages,
         agent,
-        apiKey: settings.groqApiKey,
         model: settings.selectedModel,
       });
 
@@ -226,7 +223,7 @@ export default function LiveAgentView({
           </div>
         </div>
 
-        {/* Action Controls (Transfer, Settings, Mute, End) */}
+        {/* Action Controls (Transfer, Mute, End) */}
         <div className="flex items-center gap-1">
           <button
             onClick={onTransferAgent}
@@ -241,13 +238,6 @@ export default function LiveAgentView({
             title={settings.soundEnabled ? 'Mute Sounds' : 'Unmute Sounds'}
           >
             {settings.soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-          </button>
-          <button
-            onClick={onOpenSettings}
-            className="p-2 text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition-colors"
-            title="Groq AI & Speed Settings"
-          >
-            <Settings size={15} />
           </button>
           <button
             onClick={onEndChat}

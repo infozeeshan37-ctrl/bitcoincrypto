@@ -4,14 +4,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import MomoMascot from './MomoMascot';
 import FAQView from './FAQView';
 import LiveAgentView from './LiveAgentView';
-import ChatSettingsModal from './ChatSettingsModal';
 import AgentRatingModal from './AgentRatingModal';
 import { AgentPersona, ChatMessage, ChatSettings, ChatViewMode } from '@/lib/chat/types';
 import { AGENT_PERSONAS, getRandomAgent } from '@/lib/chat/agentsData';
 import { chatAudio } from '@/lib/chat/audioHelper';
 
 const STORAGE_KEYS = {
-  GROQ_KEY: 'tradingmomo_groq_key',
   SETTINGS: 'tradingmomo_chat_settings',
   MESSAGES: 'tradingmomo_chat_messages',
   CURRENT_AGENT: 'tradingmomo_current_agent',
@@ -22,7 +20,7 @@ const DEFAULT_SETTINGS: ChatSettings = {
   selectedModel: 'llama-3.3-70b-versatile',
   typingDelayMultiplier: 1.0,
   soundEnabled: true,
-  isSimulated: true,
+  isSimulated: false,
 };
 
 export default function ChatWidget() {
@@ -39,15 +37,12 @@ export default function ChatWidget() {
     setIsMounted(true);
 
     try {
-      // Load API key & settings
-      const savedKey = localStorage.getItem(STORAGE_KEYS.GROQ_KEY) || '';
+      // Load sound setting
       const savedSettingsRaw = localStorage.getItem(STORAGE_KEYS.SETTINGS);
       if (savedSettingsRaw) {
         const parsed = JSON.parse(savedSettingsRaw);
-        setSettings({ ...DEFAULT_SETTINGS, ...parsed, groqApiKey: savedKey || parsed.groqApiKey || '' });
+        setSettings({ ...DEFAULT_SETTINGS, ...parsed });
         chatAudio.setMuted(!parsed.soundEnabled);
-      } else if (savedKey) {
-        setSettings((prev) => ({ ...prev, groqApiKey: savedKey }));
       }
 
       // Pick or restore agent
@@ -97,13 +92,10 @@ export default function ChatWidget() {
     }
   }, [messages, isMounted]);
 
-  // Persist settings
+  // Persist settings (e.g. sound toggle)
   const handleUpdateSettings = useCallback((newSettings: Partial<ChatSettings>) => {
     setSettings((prev) => {
       const updated = { ...prev, ...newSettings };
-      if (newSettings.groqApiKey !== undefined) {
-        localStorage.setItem(STORAGE_KEYS.GROQ_KEY, newSettings.groqApiKey);
-      }
       if (newSettings.soundEnabled !== undefined) {
         chatAudio.setMuted(!newSettings.soundEnabled);
       }
@@ -172,17 +164,6 @@ export default function ChatWidget() {
     }
   };
 
-  // Clear conversation history
-  const handleClearHistory = () => {
-    const freshAgent = getRandomAgent();
-    setAgent(freshAgent);
-    localStorage.setItem(STORAGE_KEYS.CURRENT_AGENT, freshAgent.id);
-    const greeting = createAgentGreetingMessage(freshAgent);
-    setMessages([greeting]);
-    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify([greeting]));
-    setViewMode('live_chat');
-  };
-
   // Toggle sound
   const handleToggleSound = () => {
     const nextSound = !settings.soundEnabled;
@@ -199,7 +180,6 @@ export default function ChatWidget() {
           {viewMode === 'faq' && (
             <FAQView
               onStartLiveChat={handleStartLiveChat}
-              onOpenSettings={() => setViewMode('settings')}
               onClose={() => setIsOpen(false)}
               soundEnabled={settings.soundEnabled}
               onToggleSound={handleToggleSound}
@@ -215,18 +195,8 @@ export default function ChatWidget() {
               onReceiveAgentMessage={handleReceiveAgentMessage}
               onTransferAgent={handleTransferAgent}
               onBackToFaq={() => setViewMode('faq')}
-              onOpenSettings={() => setViewMode('settings')}
               onEndChat={() => setViewMode('rating')}
               onToggleSound={handleToggleSound}
-            />
-          )}
-
-          {viewMode === 'settings' && (
-            <ChatSettingsModal
-              settings={settings}
-              onUpdateSettings={handleUpdateSettings}
-              onClearChatHistory={handleClearHistory}
-              onClose={() => setViewMode(messages.length > 1 ? 'live_chat' : 'faq')}
             />
           )}
 

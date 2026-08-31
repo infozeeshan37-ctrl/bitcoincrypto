@@ -26,7 +26,6 @@ import Link from 'next/link';
 
 interface FAQViewProps {
   onStartLiveChat: (initialQuestion?: string) => void;
-  onOpenSettings: () => void;
   onClose: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
@@ -43,7 +42,6 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 
 export default function FAQView({
   onStartLiveChat,
-  onOpenSettings,
   onClose,
   soundEnabled,
   onToggleSound,
@@ -107,13 +105,6 @@ export default function FAQView({
               title={soundEnabled ? 'Mute Sounds' : 'Unmute Sounds'}
             >
               {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-            </button>
-            <button
-              onClick={onOpenSettings}
-              className="p-2 text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition-colors"
-              title="Groq API & Chat Settings"
-            >
-              <Settings size={16} />
             </button>
             <button
               onClick={onClose}
