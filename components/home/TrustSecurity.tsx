@@ -34,7 +34,7 @@ export default function TrustSecurity() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-50 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Live Telemetry Active</span>
+                  <span>Telemetry Active</span>
                 </span>
               </div>
 
@@ -42,7 +42,7 @@ export default function TrustSecurity() {
                 Built on Transparent, Real-Time Methodologies
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                In an ecosystem often plagued by opaque signals and unverified claims, BitcoinCrypto.tech provides open, verifiable, and mathematically grounded educational resources powered by live WebSocket streams.
+                In an ecosystem often plagued by opaque signals and unverified claims, BitcoinCrypto.tech provides open, verifiable, and mathematically grounded educational resources powered by real-time WebSocket streams.
               </p>
 
               {/* Live Verifiable Execution Stream Badge */}

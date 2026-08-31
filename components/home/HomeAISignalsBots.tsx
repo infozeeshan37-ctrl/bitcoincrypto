@@ -340,10 +340,10 @@ export default function HomeAISignalsBots() {
           <div className="space-y-2 max-w-3xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 shadow-xs">
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>Algorithmic Copilot & Live Signals</span>
+              <span>Algorithmic Copilot &amp; Trade Signals</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              AI Trading Signals &{" "}
+              AI Trading Signals &amp;{" "}
               <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 bg-clip-text text-transparent">
                 Algorithmic Bots
               </span>
@@ -357,7 +357,7 @@ export default function HomeAISignalsBots() {
             <button
               onClick={fetchBinancePrices}
               className="px-3.5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition flex items-center gap-1.5 shadow-sm"
-              title="Force sync Binance live prices"
+              title="Force sync Binance market prices"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
               <span>Sync Prices</span>
@@ -480,7 +480,7 @@ export default function HomeAISignalsBots() {
                         </span>
                       </div>
                       <div className="text-xs text-slate-500 font-mono flex items-center gap-2 mt-0.5">
-                        <span>Live Spot: <strong className="text-slate-900">${fmt(activeCoin.price)}</strong></span>
+                        <span>Spot: <strong className="text-slate-900">${fmt(activeCoin.price)}</strong></span>
                         <span>•</span>
                         <span className={`font-bold ${activeCoin.change24h >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                           {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%

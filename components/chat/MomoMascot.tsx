@@ -81,7 +81,7 @@ export default function MomoMascot({
                     }}
                     className="px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-md text-[11px] font-medium transition-colors"
                   >
-                    Live Human Agent
+                    Support Agent
                   </button>
                 )}
               </div>

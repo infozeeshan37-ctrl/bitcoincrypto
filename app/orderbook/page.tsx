@@ -4,14 +4,14 @@ import OrderbookTerminal from "@/components/orderbook/OrderbookTerminal";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Live Cryptocurrency L2 Order Book & Market Depth Terminal | BitcoinCrypto.tech",
+  title: "Cryptocurrency L2 Order Book & Market Depth Terminal | BitcoinCrypto.tech",
   description:
     "Real-time cryptocurrency Central Limit Order Book (CLOB) depth with tick aggregation (0.01 to 100), cumulative bid/ask visualizers, whale block trade tape, and execution slippage simulation on BitcoinCrypto.tech.",
   alternates: {
     canonical: "/orderbook",
   },
   openGraph: {
-    title: "Live L2 Order Book & Market Depth Terminal | BitcoinCrypto.tech",
+    title: "L2 Order Book & Market Depth Terminal | BitcoinCrypto.tech",
     description:
       "Analyze institutional liquidity walls, bid/ask depth imbalance ratios, and block taker sweeps in real time.",
     url: "https://www.bitcoincrypto.tech/orderbook",

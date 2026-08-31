@@ -229,7 +229,7 @@ export default function LiveAgentView({
           <button
             onClick={onTransferAgent}
             className="p-2 text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition-colors"
-            title="Switch / Transfer to another Live Specialist"
+            title="Switch / Transfer to another Specialist"
           >
             <RefreshCw size={15} />
           </button>
@@ -242,29 +242,26 @@ export default function LiveAgentView({
           </button>
           <button
             onClick={onEndChat}
-            className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors"
-            title="End Session & Rate Agent"
+            className="p-2 text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 rounded-lg transition-colors"
+            title="End Chat Session"
           >
-            <X size={17} />
+            <X size={16} />
           </button>
         </div>
       </div>
 
-      {/* Main Chat Conversation Body */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-        {/* Connecting Screen State */}
-        {isConnecting ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4 animate-fadeIn">
+      {/* Main Conversation Messages Scroll Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3.5 min-h-0 bg-slate-900/60">
+        {/* Connecting progress state */}
+        {isConnecting && (
+          <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
             <div className="relative">
-              <div className="w-16 h-16 rounded-full bg-slate-800 border-2 border-amber-500/60 flex items-center justify-center shadow-xl">
-                <img
-                  src={agent.avatar}
-                  alt={agent.name}
-                  className="w-14 h-14 rounded-full object-cover"
-                />
+              <div className="w-14 h-14 rounded-full bg-amber-500/10 border-2 border-amber-400/40 flex items-center justify-center animate-pulse">
+                <ShieldCheck size={28} className="text-amber-400" />
               </div>
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center animate-spin">
-                <Sparkles size={11} className="text-slate-950" />
+              <span className="absolute -bottom-1 -right-1 flex h-4 w-4">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500" />
               </span>
             </div>
 
@@ -277,7 +274,7 @@ export default function LiveAgentView({
               <p className="text-xs text-slate-400 mt-1 max-w-xs">
                 {connectionStep >= 2
                   ? `${agent.title} (${agent.department})`
-                  : 'Connecting you with 24/7 priority live assistance.'}
+                  : 'Connecting you with 24/7 priority support assistance.'}
               </p>
             </div>
 
@@ -445,7 +442,7 @@ export default function LiveAgentView({
           <div className="flex items-center gap-1.5">
             <span className="flex items-center gap-1 text-emerald-400 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              TradingMomo Verified 24/7 Live Desk
+              TradingMomo Verified 24/7 Support Desk
             </span>
           </div>
           <span>Shift + Enter for new line</span>

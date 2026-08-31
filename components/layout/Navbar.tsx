@@ -448,7 +448,7 @@ export default function Navbar() {
                 </div>
                 <div>
                   <span className="font-bold text-slate-900 dark:text-white block text-xs">CoinMarketCap Spot Rankings</span>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400">Live prices, volume, dominance</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">Real-time prices, volume, dominance</span>
                 </div>
               </div>
               <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">

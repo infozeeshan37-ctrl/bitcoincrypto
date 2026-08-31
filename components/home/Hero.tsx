@@ -40,7 +40,7 @@ export default function Hero() {
               className="px-6 py-3.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm transition flex items-center gap-2"
             >
               <LineChart className="w-4 h-4 text-amber-500" />
-              <span>Live Chart Studio</span>
+              <span>Chart Studio</span>
             </Link>
           </div>
 

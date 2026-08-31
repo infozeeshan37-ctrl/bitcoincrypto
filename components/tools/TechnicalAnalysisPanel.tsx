@@ -178,7 +178,7 @@ export default function TechnicalAnalysisPanel({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-slate-500">Live Price:</span>
+          <span className="text-xs font-mono text-slate-500">Current Price:</span>
           <span className="text-base font-black text-slate-900 font-mono">${fmt(price)}</span>
           <span className={`text-xs font-bold font-mono px-2 py-0.5 rounded-lg ${change24h >= 0 ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"}`}>
             {change24h >= 0 ? "+" : ""}{change24h.toFixed(2)}%
@@ -198,7 +198,7 @@ export default function TechnicalAnalysisPanel({
                 TradingView Real-Time Technical Meter
               </h4>
             </div>
-            <span className="text-[10px] font-mono text-slate-400">Live Aggregation</span>
+            <span className="text-[10px] font-mono text-slate-400">Real-Time Aggregation</span>
           </div>
 
           <div ref={widgetContainerRef} className="w-full min-h-[440px] rounded-2xl overflow-hidden" />

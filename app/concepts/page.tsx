@@ -130,7 +130,7 @@ export default function ConceptsPage() {
                 Interactive DCA & Compounding Simulator
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Live mathematical modeling tool demonstrating harmonic cost-averaging efficiency.
+                Interactive mathematical modeling tool demonstrating harmonic cost-averaging efficiency.
               </p>
             </div>
           </div>

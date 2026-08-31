@@ -27,13 +27,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Live Markets & Intelligence */}
+          {/* Markets & Intelligence */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Live Analytics</h4>
+            <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Market Analytics</h4>
             <ul className="space-y-2 text-slate-400">
               <li>
                 <Link href="/markets" className="hover:text-amber-400 transition flex items-center gap-1.5">
-                  <Coins className="w-3.5 h-3.5 text-amber-400" /> CoinMarketCap Live
+                  <Coins className="w-3.5 h-3.5 text-amber-400" /> CoinMarketCap Rankings
                 </Link>
               </li>
               <li>

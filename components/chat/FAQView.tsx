@@ -90,10 +90,10 @@ export default function FAQView({
                 <h3 className="font-bold text-base text-white tracking-tight">TradingMomo Support</h3>
                 <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-semibold flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  Live Desk 24/7
+                  Support Desk 24/7
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">Instant Knowledge Base & Live Specialists</p>
+              <p className="text-xs text-slate-400 mt-0.5">Instant Knowledge Base &amp; Specialists</p>
             </div>
           </div>
 
@@ -182,7 +182,7 @@ export default function FAQView({
             onClick={() => onStartLiveChat()}
             className="px-3 py-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-amber-500/20 transition-all shrink-0 active:scale-95"
           >
-            <span>Chat Live</span>
+            <span>Chat Support</span>
             <ArrowRight size={14} />
           </button>
         </div>
@@ -195,14 +195,14 @@ export default function FAQView({
             </div>
             <p className="text-sm font-semibold text-slate-300">No matching questions found</p>
             <p className="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
-              Try searching with different keywords or connect directly with our live trading specialist.
+              Try searching with different keywords or connect directly with our trading specialist.
             </p>
             <button
               onClick={() => onStartLiveChat(searchQuery)}
               className="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/40 rounded-xl text-xs font-semibold inline-flex items-center gap-2 transition-colors"
             >
               <MessageSquare size={14} />
-              Ask Live Desk: &quot;{searchQuery}&quot;
+              Ask Support Desk: &quot;{searchQuery}&quot;
             </button>
           </div>
         ) : (
@@ -311,7 +311,7 @@ export default function FAQView({
           onClick={() => onStartLiveChat()}
           className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 group"
         >
-          <span>Open Live Agent</span>
+          <span>Open Support Agent</span>
           <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>

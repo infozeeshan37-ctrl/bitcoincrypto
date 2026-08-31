@@ -567,7 +567,7 @@ export default function OrderbookTerminal() {
           {/* Quick Metrics Banner */}
           <div className="flex flex-wrap items-center gap-3 bg-slate-50 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700">
             <div>
-              <div className="text-[10px] font-mono uppercase text-slate-400">Live Spot Mid</div>
+              <div className="text-[10px] font-mono uppercase text-slate-400">Spot Mid</div>
               <div className={`text-lg font-black font-mono transition-colors duration-200 ${
                 priceDirection === "UP" ? "text-emerald-500" : priceDirection === "DOWN" ? "text-rose-500" : "text-slate-900 dark:text-white"
               }`}>
@@ -584,39 +584,23 @@ export default function OrderbookTerminal() {
             </div>
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
             <div>
-              <div className="text-[10px] font-mono uppercase text-slate-400">24h Liquidations</div>
-              <div className="text-sm font-black font-mono text-amber-500">
-                {activePair.liquidations24h}
+              <div className="text-[10px] font-mono uppercase text-slate-400">Spread Bps</div>
+              <div className="text-sm font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
+                {spreadBps} bps (${spreadUsd})
+              </div>
+            </div>
+            <div className="h-8 w-px bg-slate-200 dark:bg-slate-700" />
+            <div>
+              <div className="text-[10px] font-mono uppercase text-slate-400">Tick Precision</div>
+              <div className="text-sm font-extrabold font-mono text-amber-600 dark:text-amber-400">
+                ${tickPrecision}
               </div>
             </div>
           </div>
         </div>
-
-        {/* Pair Switcher Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
-          {SUPPORTED_PAIRS.map((pair) => (
-            <button
-              key={pair.symbol}
-              onClick={() => setActiveSymbol(pair.symbol)}
-              className={`px-4 py-2.5 rounded-2xl text-xs font-black transition flex items-center gap-2.5 shrink-0 ${
-                activeSymbol === pair.symbol
-                  ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-md scale-[1.02]"
-                  : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700"
-              }`}
-            >
-              <span>{pair.base}/USDT</span>
-              <span className="font-mono text-[11px] opacity-80">${pair.price.toLocaleString()}</span>
-              <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded ${
-                pair.change24h >= 0 ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300" : "bg-rose-500/20 text-rose-600 dark:text-rose-300"
-              }`}>
-                {pair.change24h >= 0 ? "+" : ""}{pair.change24h}%
-              </span>
-            </button>
-          ))}
-        </div>
       </div>
 
-      {/* 2. PRO ANIMATED LIQUIDATION BAR PROFILE & CASCADE RADAR (FEATURED SECTION) */}
+      {/* 2. LIQUIDATION VOLUME PROFILE & STOP HUNT RADAR BAR GRAPH */}
       <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl space-y-6">
         
         {/* Section Header & Interactive Controls */}
@@ -630,7 +614,7 @@ export default function OrderbookTerminal() {
                 <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
                   <span>{activePair.base}/USDT Liquidation Volume Profile</span>
                   <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
-                    LIVE CLUSTERS
+                    LIQUIDATION CLUSTERS
                   </span>
                 </h2>
                 <p className="text-xs text-slate-400">
@@ -1063,7 +1047,7 @@ export default function OrderbookTerminal() {
                     priceDirection === "UP" ? "bg-emerald-500" : priceDirection === "DOWN" ? "bg-rose-500" : "bg-amber-500"
                   }`} />
                 </span>
-                <span className="text-xs font-mono font-bold text-slate-300">Live Mid Spot:</span>
+                <span className="text-xs font-mono font-bold text-slate-300">Mid Spot:</span>
                 <span className={`text-lg font-black font-mono transition-colors duration-200 ${
                   priceDirection === "UP" ? "text-emerald-400" : priceDirection === "DOWN" ? "text-rose-400" : "text-amber-400"
                 }`}>
@@ -1301,7 +1285,7 @@ export default function OrderbookTerminal() {
               </div>
               <div>
                 <h3 className="text-base font-black text-white">
-                  Live Liquidation Cascade Feed
+                  Liquidation Cascade Feed
                 </h3>
                 <p className="text-[11px] text-slate-400">
                   Cross-exchange real-time liquidation alerts &amp; stop runs
