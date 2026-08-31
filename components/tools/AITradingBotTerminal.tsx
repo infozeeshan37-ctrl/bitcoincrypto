@@ -1011,7 +1011,7 @@ export default function AITradingBotTerminal() {
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 font-medium flex items-center gap-2">
-                    <span>Live Binance Spot: <strong className="text-slate-900 text-sm">${formatPrice(activeCoin.price)}</strong></span>
+                    <span>Binance Spot: <strong className="text-slate-900 text-sm">${formatPrice(activeCoin.price)}</strong></span>
                     <span>•</span>
                     <span className={activeCoin.change24h >= 0 ? "text-emerald-600 font-bold" : "text-rose-600 font-bold"}>
                       {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
