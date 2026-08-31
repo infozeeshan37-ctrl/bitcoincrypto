@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import LiquidationHeatmapRadar from "./LiquidationHeatmapRadar";
 import {
   Flame,
   TrendingUp,
@@ -400,104 +401,11 @@ export default function CoinglassDashboard() {
 
       {/* 4. TAB 2: LIQUIDATIONS & HEATMAP */}
       {selectedTab === "liquidations" && (
-        <div className="space-y-6">
-          {/* Liquidation Breakdown Card */}
-          <div className="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                  <Skull className="w-4 h-4 text-rose-500" />
-                  <span>24h Total Liquidation Distribution</span>
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Total leveraged positions forcefully closed by exchange margin engines.
-                </p>
-              </div>
-              <div className="text-right">
-                <span className="text-lg font-black text-rose-600 dark:text-rose-400 font-mono">
-                  {liquidations ? fmtCurrency(liquidations.total24hUsd) : "$248.60M"}
-                </span>
-                <div className="text-[10px] text-slate-400 dark:text-slate-500">Total Liquidated in 24 Hours</div>
-              </div>
-            </div>
+        <div className="space-y-8">
+          {/* Main Comprehensive Liquidation Heatmap Radar Component */}
+          <LiquidationHeatmapRadar initialSymbol={searchParams.get("symbol") || "BTCUSDT"} />
 
-            {/* Visual Balance Bar */}
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs font-black">
-                <span className="text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
-                  <span>Longs Wrecked: {liquidations ? fmtCurrency(liquidations.longsTotalUsd) : "$84.2M"}</span>
-                  <span className="text-[10px] font-mono">({liquidations?.longsPercent || 34}%)</span>
-                </span>
-                <span className="text-rose-700 dark:text-rose-400 flex items-center gap-1">
-                  <span className="text-[10px] font-mono">({liquidations?.shortsPercent || 66}%)</span>
-                  <span>Shorts Wrecked: {liquidations ? fmtCurrency(liquidations.shortsTotalUsd) : "$164.4M"}</span>
-                </span>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="w-full h-4 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden flex shadow-inner">
-                <div
-                  style={{ width: `${liquidations?.longsPercent || 34}%` }}
-                  className="bg-emerald-500 transition-all duration-500"
-                />
-                <div
-                  style={{ width: `${liquidations?.shortsPercent || 66}%` }}
-                  className="bg-rose-500 transition-all duration-500"
-                />
-              </div>
-            </div>
-
-            {/* Liquidation Clusters (Heatmap levels) */}
-            {heatmapLevels && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">Bitcoin Liquidation Cluster</span>
-                    <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-2 py-0.5 rounded">
-                      Live Heatmap
-                    </span>
-                  </div>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-slate-500 dark:text-slate-400">Overhead Short Cascade Pool:</span>
-                      <strong className="text-rose-600 dark:text-rose-400 font-mono">${heatmapLevels.btc.majorShortLiquidationPool.toLocaleString()}</strong>
-                    </div>
-                    <div className="flex justify-between text-[11px] text-slate-400 dark:text-slate-500">
-                      <span>Resting Liquidity Volume:</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-200">{heatmapLevels.btc.shortPoolVolumeUsd}</span>
-                    </div>
-                    <div className="flex justify-between pt-1">
-                      <span className="text-slate-500 dark:text-slate-400">Resting Long Stop Shelf:</span>
-                      <strong className="text-emerald-600 dark:text-emerald-400 font-mono">${heatmapLevels.btc.majorLongLiquidationPool.toLocaleString()}</strong>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-slate-900 dark:text-white text-xs">Ethereum Liquidation Cluster</span>
-                    <span className="text-[10px] font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950/80 px-2 py-0.5 rounded">
-                      Live Heatmap
-                    </span>
-                  </div>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-slate-500 dark:text-slate-400">Overhead Short Cascade Pool:</span>
-                      <strong className="text-rose-600 dark:text-rose-400 font-mono">${heatmapLevels.eth.majorShortLiquidationPool.toLocaleString()}</strong>
-                    </div>
-                    <div className="flex justify-between text-[11px] text-slate-400 dark:text-slate-500">
-                      <span>Resting Liquidity Volume:</span>
-                      <span className="font-bold text-slate-700 dark:text-slate-200">{heatmapLevels.eth.shortPoolVolumeUsd}</span>
-                    </div>
-                    <div className="flex justify-between pt-1">
-                      <span className="text-slate-500 dark:text-slate-400">Resting Long Stop Shelf:</span>
-                      <strong className="text-emerald-600 dark:text-emerald-400 font-mono">${heatmapLevels.eth.majorLongLiquidationPool.toLocaleString()}</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Real-time Forced Liquidation Stream Feed */}
 
           {/* Recent Live Liquidations Stream */}
           <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
