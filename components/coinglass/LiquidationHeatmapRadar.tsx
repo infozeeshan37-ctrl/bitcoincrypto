@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import CoinGlass2DHeatmapChart from "./CoinGlass2DHeatmapChart";
 import {
   Flame,
   TrendingUp,
@@ -510,6 +511,13 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
           </div>
         </div>
       </div>
+
+      {/* 2. AUTHENTIC COINGLASS 2D LIQUIDATION HEATMAP SPECTROGRAM & CANDLESTICK CANVAS */}
+      <CoinGlass2DHeatmapChart
+        activeCoin={activeCoin}
+        initialTimeframe={timeframe}
+        initialLeverage={leverageFilter}
+      />
 
       {/* 3. 24H HOURLY LIQUIDATION HISTOGRAM & LEVERAGE MATRIX (2-Column Grid) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
