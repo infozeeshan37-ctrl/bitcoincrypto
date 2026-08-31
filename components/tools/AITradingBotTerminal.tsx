@@ -505,14 +505,14 @@ export default function AITradingBotTerminal() {
               wsConnected ? "bg-emerald-100 text-emerald-800 border-emerald-200" : "bg-blue-100 text-blue-800 border-blue-200"
             }`}>
               <Radio className={`w-3 h-3 ${wsConnected ? "text-emerald-600 animate-pulse" : "text-blue-600"}`} />
-              <span>{wsConnected ? "Binance WebSocket Live Stream" : "Binance Live REST Sync"}</span>
+              <span>{wsConnected ? "Binance WebSocket Stream" : "Binance REST Sync"}</span>
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
             AI Trading Signals &amp; Multi-Timeframe Execution Terminal
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Real-time market analysis calculating <strong>live candlestick momentum, Wilder&apos;s RSI, EMA ribbons, MACD histograms, and taker volume flow</strong>. Delivers mathematically verified <strong>LONG</strong> and <strong>SHORT</strong> blueprints with exact Stop Loss invalidations and multi-tier targets.
+            Real-time market analysis calculating <strong>real-time candlestick momentum, Wilder&apos;s RSI, EMA ribbons, MACD histograms, and taker volume flow</strong>. Delivers mathematically verified <strong>LONG</strong> and <strong>SHORT</strong> blueprints with exact Stop Loss invalidations and multi-tier targets.
           </p>
         </div>
 
@@ -523,7 +523,7 @@ export default function AITradingBotTerminal() {
             className="px-4 py-2.5 rounded-2xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition flex items-center gap-2 shadow-sm"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-            <span>Sync Live Markets</span>
+            <span>Sync Market Data</span>
           </button>
         </div>
       </div>
@@ -681,7 +681,7 @@ export default function AITradingBotTerminal() {
                   No pairs matching &quot;{search}&quot;
                 </div>
                 <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                  Type any coin symbol above and click &quot;Load Pair&quot; to fetch and calculate live signals directly from Binance.
+                  Type any coin symbol above and click &quot;Load Pair&quot; to fetch and calculate signals directly from Binance.
                 </p>
                 {search.trim().length > 0 && (
                   <button
@@ -789,7 +789,7 @@ export default function AITradingBotTerminal() {
                   <div>
                     <h3 className="text-base font-bold text-slate-900">Futures Position &amp; Risk Copilot</h3>
                     <p className="text-[11px] text-slate-500">
-                      Live risk calculations for {activeCoin.base}/USDT ({activeCoin.isShort ? "SHORT" : "LONG"})
+                      Risk calculations for {activeCoin.base}/USDT ({activeCoin.isShort ? "SHORT" : "LONG"})
                     </p>
                   </div>
                 </div>

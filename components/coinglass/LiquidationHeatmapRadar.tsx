@@ -553,7 +553,7 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
     const slotWidth = HEATMAP_WIDTH / numTimeSlots;
     const slotIdx = Math.min(numTimeSlots - 1, Math.max(0, Math.floor(svgX / slotWidth)));
     const hoursBack = Math.round(((numTimeSlots - 1 - slotIdx) / numTimeSlots) * (timeframe === "12h" ? 12 : timeframe === "24h" ? 24 : timeframe === "3d" ? 72 : 168));
-    const timeLabel = hoursBack === 0 ? "Now (Live)" : `${hoursBack}h ago`;
+    const timeLabel = hoursBack === 0 ? "Now (Current)" : `${hoursBack}h ago`;
 
     setHoveredPoint({
       price: targetTier.price,
@@ -1098,7 +1098,7 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
                   <div className="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center bg-slate-950 text-white text-[9px] font-mono p-2 rounded-xl whitespace-nowrap z-20 border border-slate-700 shadow-2xl pointer-events-none">
                     <span className="font-black text-amber-400">{item.hour}</span>
                     <span className="text-rose-400 font-bold">Shorts: {fmtCurrency(item.shortUsd)}</span>
-                    <span className="text-emerald-400 font-bold">Longs: {fmtCurrency(item.longsUsd)}</span>
+                    <span className="text-emerald-400 font-bold">Longs: {fmtCurrency(item.longUsd)}</span>
                     <span className="text-slate-300 border-t border-slate-800 pt-0.5 mt-0.5 font-black">
                       Total: {fmtCurrency(item.totalUsd)}
                     </span>
@@ -1118,7 +1118,7 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
                 <span className="w-2 h-2 rounded-full bg-emerald-500" /> Long Flush
               </span>
             </div>
-            <span>Now (Live)</span>
+            <span>Now</span>
           </div>
         </div>
 
