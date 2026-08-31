@@ -1265,7 +1265,7 @@ export default function AITradingBotTerminal() {
                       </div>
                     </div>
                     <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                      Live Matrix
+                      Liquidation Matrix
                     </span>
                   </div>
 
@@ -1474,7 +1474,7 @@ export default function AITradingBotTerminal() {
                     {/* Institutional Whale Block Activity Stream */}
                     <div className="space-y-1.5 pt-1 border-t border-slate-100 dark:border-slate-800">
                       <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
-                        <span>Live Whale Prints Stream</span>
+                        <span>Whale Prints Stream</span>
                         <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
                       </div>
                       <div className="space-y-1">
