@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import CommandPalette from "@/components/common/CommandPalette";
+import ChatWidget from "@/components/chat/ChatWidget";
 import { WebSiteJsonLd, OrganizationJsonLd } from "@/components/seo/JsonLd";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -106,6 +107,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ChatWidget />
         </ThemeProvider>
       </body>
     </html>
