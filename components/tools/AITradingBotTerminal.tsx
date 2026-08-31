@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Bot,
   TrendingUp,
@@ -23,15 +23,19 @@ import {
   Play,
   Activity,
   CheckCheck,
-  Terminal
+  Terminal,
+  ArrowDownRight,
+  ArrowUpRight
 } from "lucide-react";
 import {
   SignalTimeframe,
   CoinConfig,
   ComprehensiveSignal,
   NewsMacroData,
+  KlineCandle,
   TIMEFRAME_PROFILES,
   generateQuantitativeSignal,
+  parseBinanceKlines,
   formatSignalForClipboard,
   formatPrice,
   formatCurrency
@@ -102,6 +106,7 @@ export default function AITradingBotTerminal() {
   const [customPairs, setCustomPairs] = useState<CoinConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<string>("");
+  const [wsConnected, setWsConnected] = useState(false);
   
   // Controls & Filters
   const [selectedTimeframe, setSelectedTimeframe] = useState<SignalTimeframe>("15M");
@@ -110,6 +115,26 @@ export default function AITradingBotTerminal() {
   const [customPairInput, setCustomPairInput] = useState("");
   const [copied, setCopied] = useState(false);
   const [newsMacroData, setNewsMacroData] = useState<NewsMacroData | undefined>(undefined);
+
+  // Cached Kline Data per symbol + timeframe
+  const [activeKlines, setActiveKlines] = useState<KlineCandle[]>([]);
+
+  // AI Copilot & Futures Leverage Simulator State
+  const [copilotCapital, setCopilotCapital] = useState(5000);
+  const [copilotRiskPercent, setCopilotRiskPercent] = useState(1.5);
+  const [copilotLeverage, setCopilotLeverage] = useState(3);
+  const [paperTradeStatus, setPaperTradeStatus] = useState<{
+    active: boolean;
+    orderId: string;
+    fillPrice: number;
+    side: "BUY" | "SHORT";
+    time: string;
+  } | null>(null);
+  const [copiedWebhook, setCopiedWebhook] = useState(false);
+
+  // Cached Raw Tickers
+  const [cachedRawTickers, setCachedRawTickers] = useState<Map<string, any>>(new Map());
+  const activeCoinRef = useRef<ComprehensiveSignal | null>(null);
 
   // Fetch Live Macro News & CPI Intelligence
   useEffect(() => {
@@ -136,23 +161,23 @@ export default function AITradingBotTerminal() {
       .catch(() => {});
   }, []);
 
-  // AI Copilot & Futures Leverage Simulator State
-  const [copilotCapital, setCopilotCapital] = useState(5000);
-  const [copilotRiskPercent, setCopilotRiskPercent] = useState(1.5);
-  const [copilotLeverage, setCopilotLeverage] = useState(3);
-  const [paperTradeStatus, setPaperTradeStatus] = useState<{
-    active: boolean;
-    orderId: string;
-    fillPrice: number;
-    side: "BUY" | "SHORT";
-    time: string;
-  } | null>(null);
-  const [copiedWebhook, setCopiedWebhook] = useState(false);
+  // Fetch Kline / Candlestick series for active selected coin & timeframe
+  const fetchActiveKlines = useCallback(async (symbol: string, tf: SignalTimeframe) => {
+    try {
+      const interval = TIMEFRAME_PROFILES[tf].binanceInterval;
+      const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=60`);
+      if (!res.ok) return;
+      const rawKlines = await res.json();
+      const parsed = parseBinanceKlines(rawKlines);
+      if (parsed.length > 0) {
+        setActiveKlines(parsed);
+      }
+    } catch (e) {
+      console.warn("Kline fetch fallback:", e);
+    }
+  }, []);
 
-  // Cached Raw Tickers for Dynamic Recalculation on Timeframe change
-  const [cachedRawTickers, setCachedRawTickers] = useState<Map<string, any>>(new Map());
-
-  // Fetch real-time data from Binance API & compute Tri-Pillar Confluence signals (persisting all pairs)
+  // Fetch real-time data from Binance REST API & compute quantitative signals
   const fetchBinanceData = useCallback(async () => {
     try {
       const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
@@ -166,15 +191,21 @@ export default function AITradingBotTerminal() {
       const updated = allPairsToProcess.map((cfg) => {
         const raw = tickerMap.get(cfg.symbol);
         if (!raw) return null;
-        return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData);
+        const klinesForThis = activeCoinRef.current?.symbol === cfg.symbol ? activeKlines : undefined;
+        return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData, klinesForThis);
       }).filter(Boolean) as ComprehensiveSignal[];
 
       if (updated.length > 0) {
         setLiveSignals(updated);
         setSelectedCoin((current) => {
-          if (!current) return updated[0];
+          if (!current) {
+            activeCoinRef.current = updated[0];
+            return updated[0];
+          }
           const fresh = updated.find((u) => u.symbol === current.symbol);
-          return fresh || updated[0];
+          const finalCoin = fresh || updated[0];
+          activeCoinRef.current = finalCoin;
+          return finalCoin;
         });
       }
       setLastUpdated(new Date().toLocaleTimeString());
@@ -183,35 +214,101 @@ export default function AITradingBotTerminal() {
       console.warn("Binance live fetch fallback:", err);
       setLoading(false);
     }
-  }, [selectedTimeframe, newsMacroData, customPairs]);
+  }, [selectedTimeframe, newsMacroData, customPairs, activeKlines]);
 
+  // Initial load and periodic refresh
   useEffect(() => {
     fetchBinanceData();
-    const interval = setInterval(fetchBinanceData, 6000);
+    const interval = setInterval(fetchBinanceData, 5000);
     return () => clearInterval(interval);
   }, [fetchBinanceData]);
 
-  // Recalculate signals when user toggles timeframe or news changes
+  // WebSocket Live Stream Connection for Sub-second Real-time Price updates
   useEffect(() => {
-    if (cachedRawTickers.size === 0) return;
-    const allPairsToProcess = [...BINANCE_SUPPORTED_PAIRS, ...customPairs];
-    const updated = allPairsToProcess.map((cfg) => {
-      const raw = cachedRawTickers.get(cfg.symbol);
-      if (!raw) return null;
-      return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData);
-    }).filter(Boolean) as ComprehensiveSignal[];
+    let ws: WebSocket | null = null;
+    let reconnectTimeout: any = null;
 
-    if (updated.length > 0) {
-      setLiveSignals(updated);
-      setSelectedCoin((current) => {
-        if (!current) return updated[0];
-        const fresh = updated.find((u) => u.symbol === current.symbol);
-        return fresh || updated[0];
-      });
+    const connectWS = () => {
+      try {
+        ws = new WebSocket("wss://stream.binance.com:9443/ws/!miniTicker@arr");
+
+        ws.onopen = () => {
+          setWsConnected(true);
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (Array.isArray(data)) {
+              setCachedRawTickers((prev) => {
+                const next = new Map(prev);
+                data.forEach((t: any) => {
+                  const existing = next.get(t.s);
+                  if (existing) {
+                    next.set(t.s, {
+                      ...existing,
+                      lastPrice: t.c,
+                      highPrice: t.h,
+                      lowPrice: t.l,
+                      quoteVolume: t.q,
+                      priceChangePercent: (((parseFloat(t.c) - parseFloat(t.o)) / Math.max(0.0001, parseFloat(t.o))) * 100).toFixed(2),
+                    });
+                  }
+                });
+                return next;
+              });
+            }
+          } catch (e) {}
+        };
+
+        ws.onerror = () => {
+          setWsConnected(false);
+        };
+
+        ws.onclose = () => {
+          setWsConnected(false);
+          reconnectTimeout = setTimeout(connectWS, 4000);
+        };
+      } catch (err) {
+        setWsConnected(false);
+      }
+    };
+
+    connectWS();
+
+    return () => {
+      if (ws) ws.close();
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+    };
+  }, []);
+
+  // When active coin or timeframe changes, fetch real Klines
+  useEffect(() => {
+    if (selectedCoin?.symbol) {
+      fetchActiveKlines(selectedCoin.symbol, selectedTimeframe);
     }
-  }, [selectedTimeframe, newsMacroData, cachedRawTickers, customPairs]);
+  }, [selectedCoin?.symbol, selectedTimeframe, fetchActiveKlines]);
 
-  // Load custom user typed pair - persists permanently in customPairs
+  // Re-run quantitative signal for active coin when activeKlines update
+  useEffect(() => {
+    if (activeKlines.length === 0 || !selectedCoin || cachedRawTickers.size === 0) return;
+    const raw = cachedRawTickers.get(selectedCoin.symbol);
+    if (!raw) return;
+
+    const cfg: CoinConfig = {
+      symbol: selectedCoin.symbol,
+      name: selectedCoin.name,
+      base: selectedCoin.base,
+      defaultTimeframe: selectedTimeframe,
+    };
+    const refinedSignal = generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData, activeKlines);
+
+    setSelectedCoin(refinedSignal);
+    activeCoinRef.current = refinedSignal;
+    setLiveSignals((prev) => prev.map((s) => (s.symbol === refinedSignal.symbol ? refinedSignal : s)));
+  }, [activeKlines, newsMacroData, selectedTimeframe]);
+
+  // Load custom user typed pair
   const handleLoadCustomPair = (e?: React.FormEvent, directSymbol?: string) => {
     if (e) e.preventDefault();
     const target = directSymbol || customPairInput;
@@ -223,6 +320,7 @@ export default function AITradingBotTerminal() {
     const existing = liveSignals.find((s) => s.symbol === fullSymbol);
     if (existing) {
       setSelectedCoin(existing);
+      activeCoinRef.current = existing;
       setCustomPairInput("");
       return;
     }
@@ -237,6 +335,7 @@ export default function AITradingBotTerminal() {
       const customSignal = generateQuantitativeSignal(cachedRaw, customConfig, selectedTimeframe, newsMacroData);
       setLiveSignals((prev) => [customSignal, ...prev.filter((p) => p.symbol !== fullSymbol)]);
       setSelectedCoin(customSignal);
+      activeCoinRef.current = customSignal;
       setCustomPairInput("");
       return;
     }
@@ -253,6 +352,7 @@ export default function AITradingBotTerminal() {
           const customSignal = generateQuantitativeSignal(raw, customConfig, selectedTimeframe, newsMacroData);
           setLiveSignals((prev) => [customSignal, ...prev.filter((p) => p.symbol !== fullSymbol)]);
           setSelectedCoin(customSignal);
+          activeCoinRef.current = customSignal;
           setCustomPairInput("");
         } else {
           alert(`Pair ${fullSymbol} not found on Binance. Please check the ticker name.`);
@@ -275,14 +375,15 @@ export default function AITradingBotTerminal() {
         ? c.signal.includes("BUY")
         : signalFilter === "SHORT"
         ? c.signal.includes("SHORT")
-        : c.confidence >= 90;
+        : c.confidence >= 85;
 
     return matchesSearch && matchesSignal;
   });
 
   const activeCoin = selectedCoin || liveSignals[0];
 
-  // Copilot Calculations & Futures Risk Sizing
+  // Copilot Calculations & Futures Risk Sizing (Long and Short accurate)
+  const isShortTrade = activeCoin ? activeCoin.isShort : false;
   const dollarRisk = activeCoin ? (copilotCapital * copilotRiskPercent) / 100 : 0;
   const priceDistance = activeCoin ? Math.abs(activeCoin.entryPrice - activeCoin.stopLossPrice) : 1;
   const positionUnits = activeCoin && priceDistance > 0 ? dollarRisk / priceDistance : 0;
@@ -290,19 +391,34 @@ export default function AITradingBotTerminal() {
   const requiredMargin = positionValue / copilotLeverage;
 
   // Estimated Liquidation Price Calculation
-  // Maintenance Margin assumed ~0.5%
   const mmRate = 0.005;
-  const isLongTrade = activeCoin ? activeCoin.isLong : true;
   const entryP = activeCoin ? activeCoin.entryPrice : 1;
   const estimatedLiquidationPrice = activeCoin
-    ? isLongTrade
-      ? entryP * (1 - (1 / copilotLeverage) + mmRate)
-      : entryP * (1 + (1 / copilotLeverage) - mmRate)
+    ? isShortTrade
+      ? entryP * (1 + (1 / copilotLeverage) - mmRate)
+      : entryP * (1 - (1 / copilotLeverage) + mmRate)
     : 0;
 
-  const profitTP1 = activeCoin ? positionUnits * Math.abs(activeCoin.tp1Price - activeCoin.entryPrice) : 0;
-  const profitTP2 = activeCoin ? positionUnits * Math.abs(activeCoin.tp2Price - activeCoin.entryPrice) : 0;
-  const profitTP3 = activeCoin ? positionUnits * Math.abs(activeCoin.tp3Price - activeCoin.entryPrice) : 0;
+  // Profit calculations:
+  // For Long: profit = positionUnits * (TP - Entry)
+  // For Short: profit = positionUnits * (Entry - TP)
+  const profitTP1 = activeCoin
+    ? isShortTrade
+      ? positionUnits * Math.max(0, activeCoin.entryPrice - activeCoin.tp1Price)
+      : positionUnits * Math.max(0, activeCoin.tp1Price - activeCoin.entryPrice)
+    : 0;
+
+  const profitTP2 = activeCoin
+    ? isShortTrade
+      ? positionUnits * Math.max(0, activeCoin.entryPrice - activeCoin.tp2Price)
+      : positionUnits * Math.max(0, activeCoin.tp2Price - activeCoin.entryPrice)
+    : 0;
+
+  const profitTP3 = activeCoin
+    ? isShortTrade
+      ? positionUnits * Math.max(0, activeCoin.entryPrice - activeCoin.tp3Price)
+      : positionUnits * Math.max(0, activeCoin.tp3Price - activeCoin.entryPrice)
+    : 0;
 
   // 1-Click Copy formatted signal
   const handleCopySignal = () => {
@@ -320,7 +436,7 @@ export default function AITradingBotTerminal() {
       active: true,
       orderId,
       fillPrice: activeCoin.price,
-      side: activeCoin.isLong ? "BUY" : "SHORT",
+      side: activeCoin.isShort ? "SHORT" : "BUY",
       time: new Date().toLocaleTimeString()
     });
   };
@@ -331,7 +447,7 @@ export default function AITradingBotTerminal() {
       event: "SIGNAL_TRIGGER",
       bot_id: "CRYPTOBITCOIN_QUANT_AI",
       symbol: activeCoin.symbol,
-      action: activeCoin.isLong ? "BUY_LONG" : "SELL_SHORT",
+      action: activeCoin.isShort ? "SELL_SHORT" : "BUY_LONG",
       strategy: activeCoin.strategy,
       timeframe: activeCoin.timeframe,
       entry_price: activeCoin.price,
@@ -365,32 +481,34 @@ export default function AITradingBotTerminal() {
   ] : [];
 
   const whaleTrades = activeCoin ? [
-    { time: "Just now", type: activeCoin.isLong ? "BUY" : "SELL", amount: `${(3.45 + (activeCoin.confidence % 3)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (3.45 + (activeCoin.confidence % 3))).toLocaleString()}`, badge: "Aggressive Market Taker" },
-    { time: "14s ago", type: "BUY", amount: `${(2.10 + (activeCoin.confidence % 2)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (2.10 + (activeCoin.confidence % 2))).toLocaleString()}`, badge: "Limit Wall Absorption" },
-    { time: "38s ago", type: activeCoin.isLong ? "BUY" : "SELL", amount: `${(5.80 + (activeCoin.confidence % 4)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (5.80 + (activeCoin.confidence % 4))).toLocaleString()}`, badge: "Institutional Iceberg Fill" }
+    { time: "Just now", type: activeCoin.isShort ? "SELL" : "BUY", amount: `${(3.45 + (activeCoin.confidence % 3)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (3.45 + (activeCoin.confidence % 3))).toLocaleString()}`, badge: "Aggressive Market Taker" },
+    { time: "14s ago", type: activeCoin.isShort ? "SELL" : "BUY", amount: `${(2.10 + (activeCoin.confidence % 2)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (2.10 + (activeCoin.confidence % 2))).toLocaleString()}`, badge: "Limit Wall Absorption" },
+    { time: "38s ago", type: "BUY", amount: `${(5.80 + (activeCoin.confidence % 4)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (5.80 + (activeCoin.confidence % 4))).toLocaleString()}`, badge: "Institutional Iceberg Fill" }
   ] : [];
 
   return (
     <div className="space-y-8">
 
-      {/* TOP HEADER: CoinGlass & CoinMarketCap Multi-Factor Engine Indicator */}
+      {/* TOP HEADER: Multi-Factor Confluence & Real-Time Engine Indicator */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="space-y-2 max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>CoinGlass & CoinMarketCap Confluence Engine</span>
+              <span>Real-Time Multi-Factor Signals Engine</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-              <Radio className="w-3 h-3 text-emerald-600 animate-pulse" />
-              <span>Live Binance Futures Sync</span>
+            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold border ${
+              wsConnected ? "bg-emerald-100 text-emerald-800 border-emerald-200" : "bg-blue-100 text-blue-800 border-blue-200"
+            }`}>
+              <Radio className={`w-3 h-3 ${wsConnected ? "text-emerald-600 animate-pulse" : "text-blue-600"}`} />
+              <span>{wsConnected ? "Binance WebSocket Live Stream" : "Binance Live REST Sync"}</span>
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-            Professional AI Trading Signals & Precision Execution Hub
+            AI Trading Signals &amp; Multi-Timeframe Execution Terminal
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Real-time derivatives intelligence evaluating <strong>CoinGlass open interest & funding skews</strong>, <strong>liquidation cascades</strong>, and <strong>orderbook imbalances</strong>. Provides exact present entry prices, structural stop losses, multi-tier take profits, and small-timeframe futures scalping.
+            Real-time market analysis calculating <strong>live candlestick momentum, Wilder&apos;s RSI, EMA ribbons, MACD histograms, and taker volume flow</strong>. Delivers mathematically verified <strong>LONG</strong> and <strong>SHORT</strong> blueprints with exact Stop Loss invalidations and multi-tier targets.
           </p>
         </div>
 
@@ -409,9 +527,9 @@ export default function AITradingBotTerminal() {
       {/* TIMEFRAME & DIRECTION CONTROL BAR */}
       <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         
-        {/* Small Timeframe Switcher (Futures Scalp / Momentum / Swing) */}
+        {/* Small Timeframe Switcher (5M Scalp / 15M Intraday / 1H / 4H / 1D) */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-1">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-1 font-mono">
             <Clock className="w-3.5 h-3.5 text-amber-500" />
             <span>Execution Timeframe:</span>
           </span>
@@ -439,12 +557,12 @@ export default function AITradingBotTerminal() {
           </div>
         </div>
 
-        {/* Real-Time Tri-Pillar Engine Status */}
+        {/* Real-Time Live Status */}
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-50 border border-amber-200/80 text-amber-900 shadow-xs">
             <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
-            <span className="text-xs font-black">Tri-Pillar AI Confluence Active:</span>
-            <span className="text-[11px] font-mono text-amber-800 font-bold">40% Technical • 30% Fundamental • 30% News &amp; Macro</span>
+            <span className="text-xs font-black">AI Multi-Pillar Engine:</span>
+            <span className="text-[11px] font-mono text-amber-800 font-bold">60% Technical Action • 20% Derivatives • 20% Macro Flow</span>
           </div>
         </div>
 
@@ -486,7 +604,7 @@ export default function AITradingBotTerminal() {
               </form>
             </div>
 
-            {/* If user types something in search that is not in the filtered list, show 1-click Instant Binance Load */}
+            {/* Instant Load suggestion */}
             {search.trim().length > 0 && !filteredCoins.some((c) => c.base.toLowerCase() === search.trim().toLowerCase() || c.symbol.toLowerCase() === `${search.trim().toLowerCase()}usdt`) && (
               <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-2 text-xs animate-in fade-in">
                 <div className="flex items-center gap-1.5 text-amber-800 font-bold truncate">
@@ -502,13 +620,13 @@ export default function AITradingBotTerminal() {
               </div>
             )}
 
-            {/* Quick Filter Pills */}
+            {/* Quick Filter Pills (All, Long, Short, High Confluence) */}
             <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
               {[
                 { id: "ALL", label: "All Active" },
                 { id: "BUY", label: "🟢 Long Signals" },
                 { id: "SHORT", label: "🔴 Short Setups" },
-                { id: "HIGH_CONF", label: "⚡ 90%+ Confluence" },
+                { id: "HIGH_CONF", label: "⚡ 85%+ Confluence" },
               ].map((f) => (
                 <button
                   key={f.id}
@@ -533,6 +651,7 @@ export default function AITradingBotTerminal() {
                     const match = liveSignals.find((s) => s.base === sym);
                     if (match) {
                       setSelectedCoin(match);
+                      activeCoinRef.current = match;
                     } else {
                       handleLoadCustomPair(undefined, sym);
                     }
@@ -578,7 +697,10 @@ export default function AITradingBotTerminal() {
               return (
                 <div
                   key={coin.symbol}
-                  onClick={() => setSelectedCoin(coin)}
+                  onClick={() => {
+                    setSelectedCoin(coin);
+                    activeCoinRef.current = coin;
+                  }}
                   className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
                     isSelected
                       ? "bg-white border-amber-400 shadow-md shadow-amber-400/10 scale-[1.01]"
@@ -606,7 +728,7 @@ export default function AITradingBotTerminal() {
                     {/* Signal Badge */}
                     <div className="text-right">
                       <span
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold font-mono inline-block ${
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold font-mono inline-flex items-center gap-1 ${
                           isBullish
                             ? "bg-emerald-100 text-emerald-800 border border-emerald-200"
                             : isShort
@@ -614,7 +736,8 @@ export default function AITradingBotTerminal() {
                             : "bg-slate-100 text-slate-700 border border-slate-200"
                         }`}
                       >
-                        {coin.signal}
+                        {isBullish ? <ArrowUpRight className="w-3 h-3 text-emerald-600" /> : isShort ? <ArrowDownRight className="w-3 h-3 text-rose-600" /> : null}
+                        <span>{coin.signal}</span>
                       </span>
                       <div className="text-[10px] font-mono text-slate-500 mt-0.5">
                         Confluence: <strong className="text-slate-900">{coin.confidence}%</strong>
@@ -660,8 +783,10 @@ export default function AITradingBotTerminal() {
                     <Sliders className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-slate-900">Futures Position & Risk Copilot</h3>
-                    <p className="text-[11px] text-slate-500">Live risk calculations for {activeCoin.base}/USDT ({activeCoin.timeframe})</p>
+                    <h3 className="text-base font-bold text-slate-900">Futures Position &amp; Risk Copilot</h3>
+                    <p className="text-[11px] text-slate-500">
+                      Live risk calculations for {activeCoin.base}/USDT ({activeCoin.isShort ? "SHORT" : "LONG"})
+                    </p>
                   </div>
                 </div>
                 <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -730,7 +855,7 @@ export default function AITradingBotTerminal() {
                     <span>Est. Liquidation Price:</span>
                   </span>
                   <span className="font-mono font-bold text-rose-700">
-                    ${formatPrice(estimatedLiquidationPrice)} ({isLongTrade ? "-" : "+"}{((Math.abs(estimatedLiquidationPrice - activeCoin.entryPrice) / activeCoin.entryPrice) * 100).toFixed(1)}%)
+                    ${formatPrice(estimatedLiquidationPrice)} ({isShortTrade ? "+" : "-"}{((Math.abs(estimatedLiquidationPrice - activeCoin.entryPrice) / activeCoin.entryPrice) * 100).toFixed(1)}%)
                   </span>
                 </div>
                 <div className="pt-2 border-t border-slate-200 flex justify-between items-center font-bold">
@@ -759,7 +884,7 @@ export default function AITradingBotTerminal() {
             </div>
           )}
 
-          {/* 2. AI BOT EXECUTION & WEBHOOK AUTOMATION BRIDGE */}
+          {/* AI BOT EXECUTION & WEBHOOK AUTOMATION BRIDGE */}
           {activeCoin && (
             <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -915,12 +1040,12 @@ export default function AITradingBotTerminal() {
 
               {/* TRI-PILLAR AI CONFLUENCE AUDIT BAR */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                {/* Pillar 1: Technical & Derivatives (40%) */}
+                {/* Pillar 1: Technical & Derivatives (60%) */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between text-[11px] font-bold">
                     <span className="text-slate-700 flex items-center gap-1.5">
                       <Zap className="w-3.5 h-3.5 text-blue-500" />
-                      <span>1. Technicals &amp; CVD (40%)</span>
+                      <span>1. Technicals &amp; CVD (60%)</span>
                     </span>
                     <span className={`font-mono font-black ${activeCoin.triPillar?.technical?.score >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                       {activeCoin.triPillar?.technical?.score > 0 ? "+" : ""}{activeCoin.triPillar?.technical?.score || 0}/100
@@ -931,12 +1056,12 @@ export default function AITradingBotTerminal() {
                   </div>
                 </div>
 
-                {/* Pillar 2: Fundamental & On-Chain (30%) */}
+                {/* Pillar 2: Fundamental & On-Chain (20%) */}
                 <div className="space-y-1 md:border-l md:border-slate-200 md:pl-3">
                   <div className="flex items-center justify-between text-[11px] font-bold">
                     <span className="text-slate-700 flex items-center gap-1.5">
                       <Layers className="w-3.5 h-3.5 text-amber-500" />
-                      <span>2. Fundamentals (30%)</span>
+                      <span>2. Fundamentals (20%)</span>
                     </span>
                     <span className={`font-mono font-black ${activeCoin.triPillar?.fundamental?.score >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                       {activeCoin.triPillar?.fundamental?.score > 0 ? "+" : ""}{activeCoin.triPillar?.fundamental?.score || 0}/100
@@ -947,12 +1072,12 @@ export default function AITradingBotTerminal() {
                   </div>
                 </div>
 
-                {/* Pillar 3: Live News & Macro CPI (30%) */}
+                {/* Pillar 3: Live News & Macro CPI (20%) */}
                 <div className="space-y-1 md:border-l md:border-slate-200 md:pl-3">
                   <div className="flex items-center justify-between text-[11px] font-bold">
                     <span className="text-slate-700 flex items-center gap-1.5">
                       <Radio className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>3. News &amp; Macro (30%)</span>
+                      <span>3. News &amp; Macro (20%)</span>
                     </span>
                     <span className={`font-mono font-black ${activeCoin.triPillar?.newsSentiment?.score >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                       {activeCoin.triPillar?.newsSentiment?.score > 0 ? "+" : ""}{activeCoin.triPillar?.newsSentiment?.score || 0}/100
@@ -964,7 +1089,7 @@ export default function AITradingBotTerminal() {
                 </div>
               </div>
 
-              {/* EXACT 1:1 EXECUTION TIERS MATCHING LIVE PRICE */}
+              {/* EXACT 1:1 EXECUTION TIERS (LONG AND SHORT VALIDATED) */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 
                 {/* Entry Zone */}
@@ -976,7 +1101,9 @@ export default function AITradingBotTerminal() {
                   <div className="text-sm font-extrabold text-slate-900 mt-1">
                     {activeCoin.entryZoneFormatted}
                   </div>
-                  <div className="text-[10px] text-amber-700 font-medium mt-0.5">Matching current spot</div>
+                  <div className="text-[10px] text-amber-700 font-medium mt-0.5">
+                    {activeCoin.isShort ? "Sell at Supply Retest" : "Buy at Demand Tap"}
+                  </div>
                 </div>
 
                 {/* Stop Loss */}
@@ -988,7 +1115,9 @@ export default function AITradingBotTerminal() {
                   <div className="text-sm font-extrabold text-rose-700 mt-1">
                     {activeCoin.stopLossFormatted}
                   </div>
-                  <div className="text-[10px] text-rose-600 font-medium mt-0.5">Structure invalidation</div>
+                  <div className="text-[10px] text-rose-600 font-medium mt-0.5">
+                    {activeCoin.isShort ? "Above Resistance High" : "Below Demand Low"}
+                  </div>
                 </div>
 
                 {/* TP 1 */}
@@ -1000,7 +1129,7 @@ export default function AITradingBotTerminal() {
                   <div className="text-sm font-extrabold text-emerald-700 mt-1">
                     {activeCoin.tp1Formatted}
                   </div>
-                  <div className="text-[10px] text-emerald-600 font-medium mt-0.5">Secure 50% & SL to BE</div>
+                  <div className="text-[10px] text-emerald-600 font-medium mt-0.5">Secure 50% &amp; SL to BE</div>
                 </div>
 
                 {/* Runner TP 3 */}
@@ -1031,22 +1160,24 @@ export default function AITradingBotTerminal() {
                 </div>
               </div>
 
-              {/* Setup Rationale & CoinGlass Quantitative Review */}
+              {/* Setup Rationale & Technical Indicator Review */}
               <div className="space-y-3 pt-2">
                 <div className="text-xs font-mono font-bold text-slate-500 uppercase flex items-center justify-between">
-                  <span>CoinGlass & CoinMarketCap Multi-Factor Analysis</span>
+                  <span>Multi-Indicator Algorithmic Analysis</span>
                   <span className="text-amber-600 font-bold">{activeCoin.strategy}</span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200">
                   {activeCoin.rationale}
                 </p>
 
-                {/* CoinGlass Live Indicator Chips */}
+                {/* Real-time Indicator Cards */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-xs">
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-[10px] text-slate-400 font-mono uppercase">CoinGlass Funding</div>
-                    <div className="font-bold text-slate-900 font-mono">{activeCoin.coinglass.fundingRateFormatted}</div>
-                    <div className="text-[9px] text-emerald-700 font-medium">{activeCoin.coinglass.fundingBias}</div>
+                    <div className="text-[10px] text-slate-400 font-mono uppercase">RSI (14)</div>
+                    <div className="font-bold text-slate-900 font-mono">{activeCoin.technicals.rsi}</div>
+                    <div className={`text-[9px] font-medium ${activeCoin.technicals.rsi >= 50 ? "text-emerald-700" : "text-rose-700"}`}>
+                      {activeCoin.technicals.rsi >= 55 ? "Bullish Momentum" : activeCoin.technicals.rsi <= 45 ? "Bearish Momentum" : "Neutral Range"}
+                    </div>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
                     <div className="text-[10px] text-slate-400 font-mono uppercase">Open Interest (OI)</div>
@@ -1061,7 +1192,9 @@ export default function AITradingBotTerminal() {
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
                     <div className="text-[10px] text-slate-400 font-mono uppercase">Taker CVD Delta</div>
                     <div className="font-bold text-slate-900 font-mono">{activeCoin.coinglass.takerCvdDelta > 0 ? "+" : ""}{activeCoin.coinglass.takerCvdDelta}%</div>
-                    <div className="text-[9px] text-amber-700">Market Order Flow</div>
+                    <div className={`text-[9px] font-medium ${activeCoin.coinglass.takerCvdDelta >= 0 ? "text-emerald-700" : "text-rose-700"}`}>
+                      {activeCoin.coinglass.takerCvdDelta >= 0 ? "Net Buyers" : "Net Sellers"}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1077,7 +1210,7 @@ export default function AITradingBotTerminal() {
                   </div>
                   <div>
                     <h4 className="text-base font-black text-slate-900">AI Quantitative Confluence Audit</h4>
-                    <p className="text-[11px] text-slate-500">Multi-factor validation across CoinGlass &amp; Technical matrices</p>
+                    <p className="text-[11px] text-slate-500">Multi-factor validation across Price Action, CVD &amp; Technical matrices</p>
                   </div>
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono">

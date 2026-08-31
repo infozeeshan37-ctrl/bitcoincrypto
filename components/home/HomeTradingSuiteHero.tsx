@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Bot,
   BarChart2,
@@ -28,7 +28,9 @@ import {
   Play,
   Activity,
   CheckCheck,
-  Terminal
+  Terminal,
+  ArrowUpRight,
+  ArrowDownRight
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -36,8 +38,10 @@ import {
   CoinConfig,
   ComprehensiveSignal,
   NewsMacroData,
+  KlineCandle,
   TIMEFRAME_PROFILES,
   generateQuantitativeSignal,
+  parseBinanceKlines,
   formatSignalForClipboard,
   formatPrice,
   formatCurrency
@@ -121,6 +125,8 @@ export default function HomeTradingSuiteHero() {
   const [copied, setCopied] = useState(false);
   const [cachedRawTickers, setCachedRawTickers] = useState<Map<string, any>>(new Map());
   const [newsMacroData, setNewsMacroData] = useState<NewsMacroData | undefined>(undefined);
+  const [activeKlines, setActiveKlines] = useState<KlineCandle[]>([]);
+  const activeCoinRef = useRef<ComprehensiveSignal | null>(null);
 
   // Fetch Live Macro News & CPI Intelligence
   useEffect(() => {
@@ -145,6 +151,22 @@ export default function HomeTradingSuiteHero() {
         }
       })
       .catch(() => {});
+  }, []);
+
+  // Fetch Kline / Candlestick series for active selected coin & timeframe
+  const fetchActiveKlines = useCallback(async (symbol: string, tf: SignalTimeframe) => {
+    try {
+      const interval = TIMEFRAME_PROFILES[tf].binanceInterval;
+      const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=60`);
+      if (!res.ok) return;
+      const rawKlines = await res.json();
+      const parsed = parseBinanceKlines(rawKlines);
+      if (parsed.length > 0) {
+        setActiveKlines(parsed);
+      }
+    } catch (e) {
+      console.warn("Kline fetch fallback:", e);
+    }
   }, []);
 
   // Copilot State
@@ -212,15 +234,21 @@ export default function HomeTradingSuiteHero() {
       const updated = allPairsToProcess.map((cfg) => {
         const raw = tickerMap.get(cfg.symbol);
         if (!raw) return null;
-        return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData);
+        const klinesForThis = activeCoinRef.current?.symbol === cfg.symbol ? activeKlines : undefined;
+        return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData, klinesForThis);
       }).filter(Boolean) as ComprehensiveSignal[];
 
       if (updated.length > 0) {
         setLiveSignals(updated);
         setSelectedCoin((current) => {
-          if (!current) return updated[0];
+          if (!current) {
+            activeCoinRef.current = updated[0];
+            return updated[0];
+          }
           const fresh = updated.find((u) => u.symbol === current.symbol);
-          return fresh || updated[0];
+          const finalCoin = fresh || updated[0];
+          activeCoinRef.current = finalCoin;
+          return finalCoin;
         });
       }
       setLoadingSignals(false);
@@ -228,33 +256,39 @@ export default function HomeTradingSuiteHero() {
       console.warn("Binance live fetch fallback:", err);
       setLoadingSignals(false);
     }
-  }, [selectedTimeframe, newsMacroData, customPairs]);
+  }, [selectedTimeframe, newsMacroData, customPairs, activeKlines]);
 
   useEffect(() => {
     fetchBinanceData();
-    const interval = setInterval(fetchBinanceData, 6000);
+    const interval = setInterval(fetchBinanceData, 5000);
     return () => clearInterval(interval);
   }, [fetchBinanceData]);
 
-  // Recalculate signals on timeframe or news change (persists all custom pairs!)
+  // When active coin or timeframe changes, fetch real Klines
   useEffect(() => {
-    if (cachedRawTickers.size === 0) return;
-    const allPairsToProcess = [...BINANCE_SUPPORTED_PAIRS, ...customPairs];
-    const updated = allPairsToProcess.map((cfg) => {
-      const raw = cachedRawTickers.get(cfg.symbol);
-      if (!raw) return null;
-      return generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData);
-    }).filter(Boolean) as ComprehensiveSignal[];
-
-    if (updated.length > 0) {
-      setLiveSignals(updated);
-      setSelectedCoin((current) => {
-        if (!current) return updated[0];
-        const fresh = updated.find((u) => u.symbol === current.symbol);
-        return fresh || updated[0];
-      });
+    if (selectedCoin?.symbol) {
+      fetchActiveKlines(selectedCoin.symbol, selectedTimeframe);
     }
-  }, [selectedTimeframe, newsMacroData, cachedRawTickers, customPairs]);
+  }, [selectedCoin?.symbol, selectedTimeframe, fetchActiveKlines]);
+
+  // Re-run quantitative signal for active coin when activeKlines update
+  useEffect(() => {
+    if (activeKlines.length === 0 || !selectedCoin || cachedRawTickers.size === 0) return;
+    const raw = cachedRawTickers.get(selectedCoin.symbol);
+    if (!raw) return;
+
+    const cfg: CoinConfig = {
+      symbol: selectedCoin.symbol,
+      name: selectedCoin.name,
+      base: selectedCoin.base,
+      defaultTimeframe: selectedTimeframe,
+    };
+    const refinedSignal = generateQuantitativeSignal(raw, cfg, selectedTimeframe, newsMacroData, activeKlines);
+
+    setSelectedCoin(refinedSignal);
+    activeCoinRef.current = refinedSignal;
+    setLiveSignals((prev) => prev.map((s) => (s.symbol === refinedSignal.symbol ? refinedSignal : s)));
+  }, [activeKlines, newsMacroData, selectedTimeframe]);
 
   // Fetch chart ticker
   useEffect(() => {
@@ -340,7 +374,7 @@ export default function HomeTradingSuiteHero() {
         ? c.signal.includes("BUY")
         : signalFilter === "SHORT"
         ? c.signal.includes("SHORT")
-        : c.confidence >= 90;
+        : c.confidence >= 85;
 
     return matchesSearch && matchesSignal;
   });
@@ -348,15 +382,30 @@ export default function HomeTradingSuiteHero() {
   const activeCoin = selectedCoin || liveSignals[0];
 
   // Copilot calculations
+  const isShortTrade = activeCoin ? activeCoin.isShort : false;
   const dollarRisk = activeCoin ? (copilotCapital * copilotRiskPercent) / 100 : 0;
   const priceDistance = activeCoin ? Math.abs(activeCoin.entryPrice - activeCoin.stopLossPrice) : 1;
   const positionUnits = activeCoin && priceDistance > 0 ? dollarRisk / priceDistance : 0;
   const positionValue = activeCoin ? positionUnits * activeCoin.entryPrice : 0;
   const requiredMargin = positionValue / copilotLeverage;
 
-  const profitTP1 = activeCoin ? positionUnits * Math.abs(activeCoin.tp1Price - activeCoin.entryPrice) : 0;
-  const profitTP2 = activeCoin ? positionUnits * Math.abs(activeCoin.tp2Price - activeCoin.entryPrice) : 0;
-  const profitTP3 = activeCoin ? positionUnits * Math.abs(activeCoin.tp3Price - activeCoin.entryPrice) : 0;
+  const profitTP1 = activeCoin
+    ? isShortTrade
+      ? positionUnits * Math.max(0, activeCoin.entryPrice - activeCoin.tp1Price)
+      : positionUnits * Math.max(0, activeCoin.tp1Price - activeCoin.entryPrice)
+    : 0;
+
+  const profitTP2 = activeCoin
+    ? isShortTrade
+      ? positionUnits * Math.max(0, activeCoin.entryPrice - activeCoin.tp2Price)
+      : positionUnits * Math.max(0, activeCoin.tp2Price - activeCoin.entryPrice)
+    : 0;
+
+  const profitTP3 = activeCoin
+    ? isShortTrade
+      ? positionUnits * Math.max(0, activeCoin.entryPrice - activeCoin.tp3Price)
+      : positionUnits * Math.max(0, activeCoin.tp3Price - activeCoin.entryPrice)
+    : 0;
 
   const handleCopySignal = () => {
     if (!activeCoin) return;
@@ -373,7 +422,7 @@ export default function HomeTradingSuiteHero() {
       active: true,
       orderId,
       fillPrice: activeCoin.price,
-      side: activeCoin.isLong ? "BUY" : "SHORT",
+      side: activeCoin.isShort ? "SHORT" : "BUY",
       time: new Date().toLocaleTimeString()
     });
   };
@@ -384,7 +433,7 @@ export default function HomeTradingSuiteHero() {
       event: "SIGNAL_TRIGGER",
       bot_id: "CRYPTOBITCOIN_QUANT_AI",
       symbol: activeCoin.symbol,
-      action: activeCoin.isLong ? "BUY_LONG" : "SELL_SHORT",
+      action: activeCoin.isShort ? "SELL_SHORT" : "BUY_LONG",
       strategy: activeCoin.strategy,
       timeframe: activeCoin.timeframe,
       entry_price: activeCoin.price,
@@ -1076,12 +1125,12 @@ export default function HomeTradingSuiteHero() {
 
                     {/* TRI-PILLAR AI CONFLUENCE AUDIT BAR (Technicals + Fundamentals + Live News) */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
-                      {/* Pillar 1: Technical & Derivatives (40%) */}
+                      {/* Pillar 1: Technical & Derivatives (60%) */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between text-[11px] font-bold">
                           <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                             <BarChart2 className="w-3.5 h-3.5 text-blue-500" />
-                            <span>1. Technicals &amp; CVD (40%)</span>
+                            <span>1. Technicals &amp; CVD (60%)</span>
                           </span>
                           <span className={`font-mono font-black ${activeCoin.triPillar?.technical?.score >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                             {activeCoin.triPillar?.technical?.score > 0 ? "+" : ""}{activeCoin.triPillar?.technical?.score || 0}/100
@@ -1092,12 +1141,12 @@ export default function HomeTradingSuiteHero() {
                         </div>
                       </div>
 
-                      {/* Pillar 2: Fundamental & On-Chain (30%) */}
+                      {/* Pillar 2: Fundamental & On-Chain (20%) */}
                       <div className="space-y-1 md:border-l md:border-slate-200 dark:md:border-slate-700 md:pl-3">
                         <div className="flex items-center justify-between text-[11px] font-bold">
                           <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                             <Layers className="w-3.5 h-3.5 text-amber-500" />
-                            <span>2. Fundamentals (30%)</span>
+                            <span>2. Fundamentals (20%)</span>
                           </span>
                           <span className={`font-mono font-black ${activeCoin.triPillar?.fundamental?.score >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                             {activeCoin.triPillar?.fundamental?.score > 0 ? "+" : ""}{activeCoin.triPillar?.fundamental?.score || 0}/100
@@ -1108,12 +1157,12 @@ export default function HomeTradingSuiteHero() {
                         </div>
                       </div>
 
-                      {/* Pillar 3: Live News & Macro CPI (30%) */}
+                      {/* Pillar 3: Live News & Macro CPI (20%) */}
                       <div className="space-y-1 md:border-l md:border-slate-200 dark:md:border-slate-700 md:pl-3">
                         <div className="flex items-center justify-between text-[11px] font-bold">
                           <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                             <Radio className="w-3.5 h-3.5 text-emerald-500" />
-                            <span>3. News &amp; Macro (30%)</span>
+                            <span>3. News &amp; Macro (20%)</span>
                           </span>
                           <span className={`font-mono font-black ${activeCoin.triPillar?.newsSentiment?.score >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                             {activeCoin.triPillar?.newsSentiment?.score > 0 ? "+" : ""}{activeCoin.triPillar?.newsSentiment?.score || 0}/100
