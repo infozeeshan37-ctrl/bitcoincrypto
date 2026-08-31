@@ -1,2 +1,20 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+Sitemap: https://www.bitcoincrypto.tech/sitemap.xml
+Host: https://www.bitcoincrypto.tech

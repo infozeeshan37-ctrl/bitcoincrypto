@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import {
   Flame,
@@ -23,7 +23,11 @@ import {
   Compass,
   Clock,
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  ChevronDown,
+  Maximize2,
+  Eye,
+  Crosshair
 } from "lucide-react";
 
 export interface CoinLiquidationProfile {
@@ -55,138 +59,184 @@ const SUPPORTED_LIQUIDATION_COINS: CoinLiquidationProfile[] = [
     symbol: "BTCUSDT",
     base: "BTC",
     name: "Bitcoin",
-    price: 78067.84,
+    price: 88450.0,
     change24h: 3.82,
-    total24hLiqUsd: 118450000,
-    longsLiqUsd: 38500000,
-    shortsLiqUsd: 79950000,
-    longsPercent: 32.5,
-    shortsPercent: 67.5,
-    openInterestUsd: "$34.58B",
-    topShortMagnetPrice: 81450.0,
-    topShortMagnetVol: "$46.8M",
-    topLongShelfPrice: 75200.0,
-    topLongShelfVol: "$38.2M",
+    total24hLiqUsd: 148500000,
+    longsLiqUsd: 42800000,
+    shortsLiqUsd: 105700000,
+    longsPercent: 28.8,
+    shortsPercent: 71.2,
+    openInterestUsd: "$36.80B",
+    topShortMagnetPrice: 91400.0,
+    topShortMagnetVol: "$58.4M",
+    topLongShelfPrice: 85200.0,
+    topLongShelfVol: "$46.2M",
     leverageTiers: {
-      tier100x: { shortPrice: 78850, longPrice: 77280, volShort: "$18.4M", volLong: "$12.1M" },
-      tier50x: { shortPrice: 79650, longPrice: 76500, volShort: "$32.6M", volLong: "$24.8M" },
-      tier25x: { shortPrice: 81200, longPrice: 74950, volShort: "$54.2M", volLong: "$41.5M" },
-      tier10x: { shortPrice: 85870, longPrice: 70260, volShort: "$88.0M", volLong: "$69.4M" },
+      tier100x: { shortPrice: 89330, longPrice: 87560, volShort: "$24.8M", volLong: "$16.2M" },
+      tier50x: { shortPrice: 90220, longPrice: 86680, volShort: "$42.6M", volLong: "$31.4M" },
+      tier25x: { shortPrice: 91980, longPrice: 84910, volShort: "$68.5M", volLong: "$52.0M" },
+      tier10x: { shortPrice: 97300, longPrice: 79600, volShort: "$112.0M", volLong: "$88.5M" },
     }
   },
   {
     symbol: "ETHUSDT",
     base: "ETH",
     name: "Ethereum",
-    price: 3120.5,
+    price: 3140.0,
     change24h: 2.65,
-    total24hLiqUsd: 64200000,
-    longsLiqUsd: 21800000,
-    shortsLiqUsd: 42400000,
-    longsPercent: 34.0,
-    shortsPercent: 66.0,
-    openInterestUsd: "$14.82B",
-    topShortMagnetPrice: 3245.0,
-    topShortMagnetVol: "$24.5M",
-    topLongShelfPrice: 2980.0,
-    topLongShelfVol: "$19.8M",
+    total24hLiqUsd: 68400000,
+    longsLiqUsd: 23400000,
+    shortsLiqUsd: 45000000,
+    longsPercent: 34.2,
+    shortsPercent: 65.8,
+    openInterestUsd: "$15.40B",
+    topShortMagnetPrice: 3265.0,
+    topShortMagnetVol: "$28.5M",
+    topLongShelfPrice: 2995.0,
+    topLongShelfVol: "$22.8M",
     leverageTiers: {
-      tier100x: { shortPrice: 3151, longPrice: 3089, volShort: "$9.2M", volLong: "$6.5M" },
-      tier50x: { shortPrice: 3183, longPrice: 3058, volShort: "$18.4M", volLong: "$14.1M" },
-      tier25x: { shortPrice: 3245, longPrice: 2995, volShort: "$28.6M", volLong: "$21.0M" },
-      tier10x: { shortPrice: 3432, longPrice: 2808, volShort: "$46.0M", volLong: "$38.5M" },
+      tier100x: { shortPrice: 3171, longPrice: 3109, volShort: "$11.2M", volLong: "$8.4M" },
+      tier50x: { shortPrice: 3203, longPrice: 3077, volShort: "$22.4M", volLong: "$17.1M" },
+      tier25x: { shortPrice: 3265, longPrice: 3014, volShort: "$34.6M", volLong: "$26.0M" },
+      tier10x: { shortPrice: 3454, longPrice: 2826, volShort: "$56.0M", volLong: "$44.5M" },
     }
   },
   {
     symbol: "SOLUSDT",
     base: "SOL",
     name: "Solana",
-    price: 194.3,
-    change24h: 4.95,
-    total24hLiqUsd: 28900000,
-    longsLiqUsd: 8900000,
-    shortsLiqUsd: 20000000,
-    longsPercent: 30.8,
-    shortsPercent: 69.2,
-    openInterestUsd: "$4.95B",
-    topShortMagnetPrice: 204.5,
-    topShortMagnetVol: "$14.2M",
-    topLongShelfPrice: 184.0,
-    topLongShelfVol: "$11.6M",
+    price: 198.5,
+    change24h: 5.45,
+    total24hLiqUsd: 34800000,
+    longsLiqUsd: 9800000,
+    shortsLiqUsd: 25000000,
+    longsPercent: 28.2,
+    shortsPercent: 71.8,
+    openInterestUsd: "$5.20B",
+    topShortMagnetPrice: 208.5,
+    topShortMagnetVol: "$18.2M",
+    topLongShelfPrice: 188.0,
+    topLongShelfVol: "$14.6M",
     leverageTiers: {
-      tier100x: { shortPrice: 196.2, longPrice: 192.3, volShort: "$4.1M", volLong: "$2.8M" },
-      tier50x: { shortPrice: 198.2, longPrice: 190.4, volShort: "$8.5M", volLong: "$6.2M" },
-      tier25x: { shortPrice: 202.1, longPrice: 186.5, volShort: "$16.4M", volLong: "$12.8M" },
-      tier10x: { shortPrice: 213.7, longPrice: 174.8, volShort: "$24.0M", volLong: "$18.5M" },
+      tier100x: { shortPrice: 200.5, longPrice: 196.5, volShort: "$5.4M", volLong: "$3.8M" },
+      tier50x: { shortPrice: 202.5, longPrice: 194.5, volShort: "$11.5M", volLong: "$8.2M" },
+      tier25x: { shortPrice: 206.4, longPrice: 190.5, volShort: "$21.4M", volLong: "$16.8M" },
+      tier10x: { shortPrice: 218.3, longPrice: 178.6, volShort: "$32.0M", volLong: "$24.5M" },
     }
   },
   {
     symbol: "BNBUSDT",
     base: "BNB",
     name: "BNB",
-    price: 642.3,
-    change24h: 1.45,
-    total24hLiqUsd: 9400000,
-    longsLiqUsd: 4100000,
-    shortsLiqUsd: 5300000,
-    longsPercent: 43.6,
-    shortsPercent: 56.4,
-    openInterestUsd: "$1.85B",
-    topShortMagnetPrice: 668.0,
-    topShortMagnetVol: "$5.1M",
-    topLongShelfPrice: 620.0,
-    topLongShelfVol: "$4.4M",
+    price: 648.0,
+    change24h: 1.85,
+    total24hLiqUsd: 11200000,
+    longsLiqUsd: 4600000,
+    shortsLiqUsd: 6600000,
+    longsPercent: 41.1,
+    shortsPercent: 58.9,
+    openInterestUsd: "$1.95B",
+    topShortMagnetPrice: 674.0,
+    topShortMagnetVol: "$6.2M",
+    topLongShelfPrice: 624.0,
+    topLongShelfVol: "$5.1M",
     leverageTiers: {
-      tier100x: { shortPrice: 648.7, longPrice: 635.8, volShort: "$1.5M", volLong: "$1.1M" },
-      tier50x: { shortPrice: 655.1, longPrice: 629.4, volShort: "$3.2M", volLong: "$2.6M" },
-      tier25x: { shortPrice: 668.0, longPrice: 616.6, volShort: "$5.8M", volLong: "$4.9M" },
-      tier10x: { shortPrice: 706.5, longPrice: 578.0, volShort: "$9.4M", volLong: "$7.8M" },
+      tier100x: { shortPrice: 654.5, longPrice: 641.5, volShort: "$1.9M", volLong: "$1.4M" },
+      tier50x: { shortPrice: 661.0, longPrice: 635.0, volShort: "$3.8M", volLong: "$3.1M" },
+      tier25x: { shortPrice: 674.0, longPrice: 622.0, volShort: "$7.2M", volLong: "$5.9M" },
+      tier10x: { shortPrice: 712.8, longPrice: 583.2, volShort: "$11.4M", volLong: "$9.2M" },
     }
   },
   {
     symbol: "XRPUSDT",
     base: "XRP",
     name: "XRP",
-    price: 2.45,
-    change24h: 4.15,
-    total24hLiqUsd: 14800000,
-    longsLiqUsd: 5200000,
-    shortsLiqUsd: 9600000,
-    longsPercent: 35.1,
-    shortsPercent: 64.9,
-    openInterestUsd: "$3.42B",
-    topShortMagnetPrice: 2.62,
-    topShortMagnetVol: "$6.8M",
-    topLongShelfPrice: 2.28,
-    topLongShelfVol: "$5.4M",
+    price: 2.52,
+    change24h: 4.85,
+    total24hLiqUsd: 18400000,
+    longsLiqUsd: 5800000,
+    shortsLiqUsd: 12600000,
+    longsPercent: 31.5,
+    shortsPercent: 68.5,
+    openInterestUsd: "$3.68B",
+    topShortMagnetPrice: 2.72,
+    topShortMagnetVol: "$8.4M",
+    topLongShelfPrice: 2.34,
+    topLongShelfVol: "$6.5M",
     leverageTiers: {
-      tier100x: { shortPrice: 2.47, longPrice: 2.42, volShort: "$2.1M", volLong: "$1.4M" },
-      tier50x: { shortPrice: 2.50, longPrice: 2.40, volShort: "$4.2M", volLong: "$3.1M" },
-      tier25x: { shortPrice: 2.55, longPrice: 2.35, volShort: "$7.5M", volLong: "$5.8M" },
-      tier10x: { shortPrice: 2.70, longPrice: 2.20, volShort: "$12.0M", volLong: "$9.2M" },
+      tier100x: { shortPrice: 2.545, longPrice: 2.495, volShort: "$2.8M", volLong: "$1.9M" },
+      tier50x: { shortPrice: 2.570, longPrice: 2.470, volShort: "$5.6M", volLong: "$4.1M" },
+      tier25x: { shortPrice: 2.620, longPrice: 2.420, volShort: "$9.8M", volLong: "$7.4M" },
+      tier10x: { shortPrice: 2.772, longPrice: 2.268, volShort: "$15.0M", volLong: "$11.8M" },
     }
   },
   {
     symbol: "DOGEUSDT",
     base: "DOGE",
     name: "Dogecoin",
-    price: 0.224,
-    change24h: 5.3,
-    total24hLiqUsd: 12500000,
-    longsLiqUsd: 3800000,
-    shortsLiqUsd: 8700000,
-    longsPercent: 30.4,
-    shortsPercent: 69.6,
-    openInterestUsd: "$2.15B",
-    topShortMagnetPrice: 0.245,
-    topShortMagnetVol: "$5.6M",
-    topLongShelfPrice: 0.205,
+    price: 0.238,
+    change24h: 6.2,
+    total24hLiqUsd: 16200000,
+    longsLiqUsd: 4600000,
+    shortsLiqUsd: 11600000,
+    longsPercent: 28.4,
+    shortsPercent: 71.6,
+    openInterestUsd: "$2.45B",
+    topShortMagnetPrice: 0.258,
+    topShortMagnetVol: "$7.2M",
+    topLongShelfPrice: 0.218,
+    topLongShelfVol: "$5.2M",
+    leverageTiers: {
+      tier100x: { shortPrice: 0.2404, longPrice: 0.2356, volShort: "$2.4M", volLong: "$1.6M" },
+      tier50x: { shortPrice: 0.2428, longPrice: 0.2332, volShort: "$4.8M", volLong: "$3.4M" },
+      tier25x: { shortPrice: 0.2475, longPrice: 0.2285, volShort: "$8.4M", volLong: "$6.1M" },
+      tier10x: { shortPrice: 0.2618, longPrice: 0.2142, volShort: "$13.5M", volLong: "$9.8M" },
+    }
+  },
+  {
+    symbol: "SUIUSDT",
+    base: "SUI",
+    name: "Sui",
+    price: 3.48,
+    change24h: 8.4,
+    total24hLiqUsd: 12800000,
+    longsLiqUsd: 3400000,
+    shortsLiqUsd: 9400000,
+    longsPercent: 26.6,
+    shortsPercent: 73.4,
+    openInterestUsd: "$1.15B",
+    topShortMagnetPrice: 3.82,
+    topShortMagnetVol: "$5.8M",
+    topLongShelfPrice: 3.16,
     topLongShelfVol: "$4.1M",
     leverageTiers: {
-      tier100x: { shortPrice: 0.226, longPrice: 0.221, volShort: "$1.8M", volLong: "$1.2M" },
-      tier50x: { shortPrice: 0.228, longPrice: 0.219, volShort: "$3.4M", volLong: "$2.5M" },
-      tier25x: { shortPrice: 0.233, longPrice: 0.215, volShort: "$6.1M", volLong: "$4.6M" },
-      tier10x: { shortPrice: 0.246, longPrice: 0.201, volShort: "$9.8M", volLong: "$7.4M" },
+      tier100x: { shortPrice: 3.515, longPrice: 3.445, volShort: "$1.8M", volLong: "$1.2M" },
+      tier50x: { shortPrice: 3.550, longPrice: 3.410, volShort: "$3.6M", volLong: "$2.5M" },
+      tier25x: { shortPrice: 3.620, longPrice: 3.340, volShort: "$6.5M", volLong: "$4.8M" },
+      tier10x: { shortPrice: 3.828, longPrice: 3.132, volShort: "$10.2M", volLong: "$7.5M" },
+    }
+  },
+  {
+    symbol: "PEPEUSDT",
+    base: "PEPE",
+    name: "Pepe",
+    price: 0.0000105,
+    change24h: 7.8,
+    total24hLiqUsd: 8900000,
+    longsLiqUsd: 2600000,
+    shortsLiqUsd: 6300000,
+    longsPercent: 29.2,
+    shortsPercent: 70.8,
+    openInterestUsd: "$680M",
+    topShortMagnetPrice: 0.0000116,
+    topShortMagnetVol: "$3.8M",
+    topLongShelfPrice: 0.0000094,
+    topLongShelfVol: "$2.9M",
+    leverageTiers: {
+      tier100x: { shortPrice: 0.0000106, longPrice: 0.0000104, volShort: "$1.2M", volLong: "$0.8M" },
+      tier50x: { shortPrice: 0.0000107, longPrice: 0.0000103, volShort: "$2.5M", volLong: "$1.7M" },
+      tier25x: { shortPrice: 0.0000109, longPrice: 0.0000101, volShort: "$4.5M", volLong: "$3.2M" },
+      tier10x: { shortPrice: 0.0000115, longPrice: 0.0000095, volShort: "$7.2M", volLong: "$5.1M" },
     }
   }
 ];
@@ -203,18 +253,33 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
     return match ? match.symbol : "BTCUSDT";
   });
 
-  const [timeframe, setTimeframe] = useState<"12h" | "24h" | "3d" | "7d">("24h");
-  const [activeHoverLevel, setActiveHoverLevel] = useState<any | null>(null);
+  const [timeframe, setTimeframe] = useState<"12h" | "24h" | "3d" | "7d" | "30d">("24h");
+  const [leverageFilter, setLeverageFilter] = useState<"ALL" | "100x" | "50x" | "25x" | "10x">("ALL");
+  const [exchangeFilter, setExchangeFilter] = useState<"ALL" | "Binance" | "Bybit" | "OKX" | "Deribit">("ALL");
+  
+  // Interactive Crosshair on Heatmap
+  const [hoveredPoint, setHoveredPoint] = useState<{
+    price: number;
+    timeLabel: string;
+    volUsd: number;
+    side: "SHORT" | "LONG";
+    leverage: string;
+    pctFromSpot: number;
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const chartRef = useRef<SVGSVGElement | null>(null);
 
   const activeCoin = useMemo(
     () => SUPPORTED_LIQUIDATION_COINS.find((c) => c.symbol === selectedCoinSymbol) || SUPPORTED_LIQUIDATION_COINS[0],
     [selectedCoinSymbol]
   );
 
-  // Real-time 1-second heartbeat state
+  // Real-time 1-second heartbeat state & live Binance price
   const [livePrice, setLivePrice] = useState<number>(activeCoin.price);
   const [priceDirection, setPriceDirection] = useState<"UP" | "DOWN" | "SAME">("SAME");
-  const [tickCounter, setTickCounter] = useState<number>(0);
+  const [wsConnected, setWsConnected] = useState<boolean>(true);
   const [liveEvents, setLiveEvents] = useState<Array<{
     id: string;
     side: "LONG" | "SHORT";
@@ -224,13 +289,20 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
     time: string;
   }>>([]);
 
-  // Reset live price on coin switch
+  // Fetch real Binance price for selected coin
   useEffect(() => {
-    setLivePrice(activeCoin.price);
-    setPriceDirection("SAME");
-  }, [activeCoin]);
+    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${activeCoin.symbol}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.lastPrice) {
+          const p = parseFloat(d.lastPrice);
+          if (p > 0) setLivePrice(p);
+        }
+      })
+      .catch(() => {});
+  }, [activeCoin.symbol]);
 
-  // Sync if prop changes
+  // Sync if initialSymbol prop changes
   useEffect(() => {
     if (initialSymbol) {
       const match = SUPPORTED_LIQUIDATION_COINS.find(
@@ -240,97 +312,174 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
     }
   }, [initialSymbol]);
 
-  // 1-Second Real-Time Pulse Engine
+  // 1-Second Sub-second Tick Engine & Live Liquidation Event Stream
   useEffect(() => {
     const timer = setInterval(() => {
-      setTickCounter((prev) => prev + 1);
-
-      // Micro-tick price fluctuation (±0.015% to ±0.04%)
-      const deltaPercent = (Math.random() * 0.0008 - 0.0004);
+      const deltaPercent = (Math.random() * 0.0006 - 0.0003);
       setLivePrice((prevPrice) => {
         const next = +(prevPrice * (1 + deltaPercent)).toFixed(
-          activeCoin.price < 1 ? 4 : activeCoin.price < 10 ? 3 : 2
+          activeCoin.price < 0.001 ? 7 : activeCoin.price < 1 ? 4 : activeCoin.price < 10 ? 3 : 2
         );
         setPriceDirection(next > prevPrice ? "UP" : next < prevPrice ? "DOWN" : "SAME");
         return next;
       });
 
-      // Periodically inject a new live forced liquidation event (every ~2 seconds)
-      if (Math.random() > 0.35) {
-        const isShort = Math.random() > 0.38;
-        const exchangeList = ["Binance Futures", "Bybit", "OKX Perpetual", "Deribit"];
-        const ex = exchangeList[Math.floor(Math.random() * exchangeList.length)];
-        const amount = Math.round(15000 + Math.random() * 380000);
+      if (Math.random() > 0.4) {
+        const isShort = Math.random() > 0.35;
+        const exchangeList = ["Binance Futures", "Bybit", "OKX Perpetual", "Deribit", "Bitget"];
+        const ex = exchangeFilter === "ALL" 
+          ? exchangeList[Math.floor(Math.random() * exchangeList.length)]
+          : `${exchangeFilter} Perpetual`;
+        const amount = Math.round(25000 + Math.random() * 450000);
         const newEvt = {
           id: `live-${Date.now()}-${Math.random()}`,
           side: isShort ? ("SHORT" as const) : ("LONG" as const),
-          price: +(livePrice * (isShort ? 1.002 : 0.998)).toFixed(livePrice < 1 ? 4 : 2),
+          price: +(livePrice * (isShort ? 1.0018 : 0.9982)).toFixed(livePrice < 1 ? 4 : 2),
           amountUsd: amount,
           exchange: ex,
           time: "Just now"
         };
-        setLiveEvents((prev) => [newEvt, ...prev.slice(0, 5)]);
+        setLiveEvents((prev) => [newEvt, ...prev.slice(0, 7)]);
       }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [activeCoin, livePrice]);
+  }, [activeCoin, livePrice, exchangeFilter]);
 
-  // Generate 6 Upper Short Liquidation Levels and 6 Lower Long Shelves based on livePrice
-  const heatmapBars = useMemo(() => {
+  // Dynamic 2D Heatmap Spectrogram Data Model (Grid of Price Tiers × Time Columns)
+  const heatmapMatrix = useMemo(() => {
     const p = livePrice;
-    const shortRatios = [1.012, 1.025, 1.042, 1.065, 1.088, 1.12];
-    const longRatios = [0.988, 0.975, 0.958, 0.935, 0.912, 0.88];
+    const numTimeSlots = timeframe === "12h" ? 24 : timeframe === "24h" ? 32 : timeframe === "3d" ? 36 : timeframe === "7d" ? 42 : 48;
+    const priceSpanPct = timeframe === "12h" ? 0.06 : timeframe === "24h" ? 0.09 : timeframe === "3d" ? 0.14 : timeframe === "7d" ? 0.20 : 0.28;
+    
+    const numBandsAbove = 14;
+    const numBandsBelow = 14;
+    const stepPct = priceSpanPct / numBandsAbove;
 
-    const shortBars = shortRatios.map((ratio, idx) => {
-      const price = +(p * ratio).toFixed(p < 1 ? 4 : p < 10 ? 3 : 2);
-      const intensity = [95, 82, 68, 54, 42, 30][idx];
-      const volMultiplier = [0.28, 0.22, 0.18, 0.14, 0.11, 0.07][idx];
-      const volUsd = Math.round(activeCoin.shortsLiqUsd * volMultiplier * 1.8);
-      const devPct = +((ratio - 1) * 100).toFixed(1);
-      const leverage = [100, 50, 25, 15, 10, 5][idx];
-      return {
-        id: `short-${idx}`,
-        side: "SHORT" as const,
-        price,
-        intensity,
-        volUsd,
-        devPct,
-        leverage,
-        label: `${leverage}x Short Cluster`,
-      };
+    // Price tiers from highest overhead down to lowest floor
+    const priceTiers: Array<{
+      price: number;
+      pctDiff: number;
+      side: "SHORT" | "LONG" | "SPOT";
+      leverage: string;
+      cumulativeVolUsd: number;
+      historyHeat: number[]; // Heat intensity 0-100 across time slots
+    }> = [];
+
+    // Upper Short Liquidation Tiers
+    for (let i = numBandsAbove; i >= 1; i--) {
+      const pctDiff = +(i * stepPct * 100).toFixed(1);
+      const tierPrice = +(p * (1 + (i * stepPct))).toFixed(p < 1 ? 4 : p < 10 ? 3 : 2);
+      
+      const lev = i <= 2 ? "100x" : i <= 5 ? "50x" : i <= 9 ? "25x" : "10x";
+      const baseVol = activeCoin.shortsLiqUsd * (i <= 4 ? 0.18 : i <= 8 ? 0.26 : 0.38) * (1 / numBandsAbove);
+      const cumulativeVolUsd = Math.round(baseVol * 2.8);
+
+      // Generate time series heat intensity (simulate accumulation of liquidation orders over time)
+      const historyHeat: number[] = [];
+      for (let t = 0; t < numTimeSlots; t++) {
+        const timeProgress = t / numTimeSlots;
+        // Peak intensity around dense clusters (e.g. 100x and 50x thresholds)
+        const isClusterCenter = i === 3 || i === 7 || i === 11;
+        const seed = Math.sin(t * 0.4 + i * 0.8) * 15;
+        const rawHeat = (isClusterCenter ? 65 : 25) + (timeProgress * 30) + seed;
+        historyHeat.push(Math.max(5, Math.min(98, Math.round(rawHeat))));
+      }
+
+      priceTiers.push({
+        price: tierPrice,
+        pctDiff,
+        side: "SHORT",
+        leverage: lev,
+        cumulativeVolUsd,
+        historyHeat,
+      });
+    }
+
+    // Mid Spot Tier
+    priceTiers.push({
+      price: p,
+      pctDiff: 0,
+      side: "SPOT",
+      leverage: "Spot",
+      cumulativeVolUsd: 0,
+      historyHeat: new Array(numTimeSlots).fill(0),
     });
 
-    const longBars = longRatios.map((ratio, idx) => {
-      const price = +(p * ratio).toFixed(p < 1 ? 4 : p < 10 ? 3 : 2);
-      const intensity = [90, 78, 64, 50, 38, 26][idx];
-      const volMultiplier = [0.26, 0.21, 0.17, 0.13, 0.12, 0.09][idx];
-      const volUsd = Math.round(activeCoin.longsLiqUsd * volMultiplier * 1.6);
-      const devPct = -+((1 - ratio) * 100).toFixed(1);
-      const leverage = [100, 50, 25, 15, 10, 5][idx];
-      return {
-        id: `long-${idx}`,
-        side: "LONG" as const,
-        price,
-        intensity,
-        volUsd,
-        devPct,
-        leverage,
-        label: `${leverage}x Long Shelf`,
-      };
-    });
+    // Lower Long Liquidation Tiers
+    for (let i = 1; i <= numBandsBelow; i++) {
+      const pctDiff = -+(i * stepPct * 100).toFixed(1);
+      const tierPrice = +(p * (1 - (i * stepPct))).toFixed(p < 1 ? 4 : p < 10 ? 3 : 2);
+      
+      const lev = i <= 2 ? "100x" : i <= 5 ? "50x" : i <= 9 ? "25x" : "10x";
+      const baseVol = activeCoin.longsLiqUsd * (i <= 4 ? 0.16 : i <= 8 ? 0.24 : 0.36) * (1 / numBandsBelow);
+      const cumulativeVolUsd = Math.round(baseVol * 2.4);
 
-    return { shortBars, longBars };
-  }, [activeCoin]);
+      const historyHeat: number[] = [];
+      for (let t = 0; t < numTimeSlots; t++) {
+        const timeProgress = t / numTimeSlots;
+        const isClusterCenter = i === 4 || i === 8 || i === 12;
+        const seed = Math.cos(t * 0.35 + i * 0.7) * 15;
+        const rawHeat = (isClusterCenter ? 60 : 20) + (timeProgress * 28) + seed;
+        historyHeat.push(Math.max(5, Math.min(95, Math.round(rawHeat))));
+      }
+
+      priceTiers.push({
+        price: tierPrice,
+        pctDiff,
+        side: "LONG",
+        leverage: lev,
+        cumulativeVolUsd,
+        historyHeat,
+      });
+    }
+
+    // Generate historical price trajectory curve across the time slots
+    const priceTrajectory: number[] = [];
+    const minPrice = priceTiers[priceTiers.length - 1].price;
+    const maxPrice = priceTiers[0].price;
+    const priceRange = maxPrice - minPrice;
+
+    for (let t = 0; t < numTimeSlots; t++) {
+      const progress = t / (numTimeSlots - 1);
+      // Realistic sinusoidal market walk with pullbacks
+      const wave1 = Math.sin(progress * Math.PI * 2.5) * 0.22;
+      const wave2 = Math.cos(progress * Math.PI * 4.2) * 0.08;
+      const trend = (progress - 0.5) * (activeCoin.change24h > 0 ? 0.18 : -0.15);
+      const simulatedPrice = p * (1 + wave1 + wave2 + trend);
+      priceTrajectory.push(Math.max(minPrice * 1.01, Math.min(maxPrice * 0.99, simulatedPrice)));
+    }
+    // Ensure final point is exact live price
+    priceTrajectory[priceTrajectory.length - 1] = p;
+
+    // Filter by leverage if user selected one
+    const filteredTiers = leverageFilter === "ALL"
+      ? priceTiers
+      : priceTiers.filter(t => t.side === "SPOT" || t.leverage === leverageFilter);
+
+    const maxCumVol = Math.max(...priceTiers.map(t => t.cumulativeVolUsd), 1);
+
+    return {
+      priceTiers: filteredTiers,
+      allTiers: priceTiers,
+      numTimeSlots,
+      priceTrajectory,
+      minPrice,
+      maxPrice,
+      priceRange,
+      maxCumVol,
+    };
+  }, [livePrice, timeframe, activeCoin, leverageFilter]);
 
   // Hourly Liquidation Bar Chart Data (24 hourly segments)
   const hourlyLiquidationHistory = useMemo(() => {
     const hours = [];
     for (let h = 23; h >= 0; h--) {
       const hourLabel = `${h === 0 ? "Now" : `${h}h ago`}`;
-      const isSpike = h === 4 || h === 11 || h === 18;
-      const baseShort = (activeCoin.shortsLiqUsd / 24) * (isSpike ? 2.4 : 0.8 + Math.sin(h * 0.5) * 0.3);
-      const baseLong = (activeCoin.longsLiqUsd / 24) * (isSpike ? 1.8 : 0.7 + Math.cos(h * 0.6) * 0.3);
+      const isSpike = h === 3 || h === 9 || h === 17;
+      const mult = exchangeFilter === "Binance" ? 0.48 : exchangeFilter === "Bybit" ? 0.28 : exchangeFilter === "OKX" ? 0.17 : 1.0;
+      const baseShort = (activeCoin.shortsLiqUsd / 24) * mult * (isSpike ? 2.8 : 0.8 + Math.sin(h * 0.5) * 0.35);
+      const baseLong = (activeCoin.longsLiqUsd / 24) * mult * (isSpike ? 2.1 : 0.7 + Math.cos(h * 0.6) * 0.3);
       hours.push({
         hour: hourLabel,
         shortUsd: Math.round(baseShort),
@@ -340,7 +489,7 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
       });
     }
     return hours;
-  }, [activeCoin]);
+  }, [activeCoin, exchangeFilter]);
 
   const maxHourlyLiq = useMemo(() => {
     return Math.max(...hourlyLiquidationHistory.map((h) => h.totalUsd), 1);
@@ -356,60 +505,152 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
   const fmtPrice = (n: number) => {
     if (n >= 1000) return `$${n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     if (n >= 1) return `$${n.toFixed(2)}`;
-    return `$${n.toFixed(4)}`;
+    if (n >= 0.001) return `$${n.toFixed(4)}`;
+    return `$${n.toFixed(7)}`;
+  };
+
+  // Colormap function for Heatmap spectrogram (0-100 -> RGBA)
+  // CoinGlass Palette: Dark Navy -> Purple -> Blue -> Cyan -> Green -> Yellow -> Neon Orange -> Red
+  const getHeatmapColor = (intensity: number, isShort: boolean) => {
+    if (intensity < 10) return "rgba(15, 23, 42, 0.4)";
+    if (intensity < 25) return "rgba(30, 27, 75, 0.65)";
+    if (intensity < 45) return "rgba(6, 182, 212, 0.75)";
+    if (intensity < 65) return "rgba(132, 204, 22, 0.85)";
+    if (intensity < 80) return "rgba(234, 179, 8, 0.92)";
+    if (intensity < 90) return "rgba(249, 115, 22, 0.96)";
+    return "rgba(239, 68, 68, 1.0)";
+  };
+
+  // SVG Chart Geometry Constants
+  const SVG_WIDTH = 900;
+  const SVG_HEIGHT = 440;
+  const HEATMAP_WIDTH = 710;
+  const PROFILE_WIDTH = 190;
+
+  // Handle Mouse Move on SVG for Crosshair Precision Inspector
+  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!chartRef.current) return;
+    const rect = chartRef.current.getBoundingClientRect();
+    const clientX = e.clientX - rect.left;
+    const clientY = e.clientY - rect.top;
+
+    const scaleX = SVG_WIDTH / rect.width;
+    const scaleY = SVG_HEIGHT / rect.height;
+
+    const svgX = clientX * scaleX;
+    const svgY = clientY * scaleY;
+
+    if (svgX < 0 || svgX > SVG_WIDTH || svgY < 0 || svgY > SVG_HEIGHT) {
+      setHoveredPoint(null);
+      return;
+    }
+
+    const { priceTiers, numTimeSlots, minPrice, maxPrice, priceRange } = heatmapMatrix;
+    const tierHeight = SVG_HEIGHT / priceTiers.length;
+    const tierIdx = Math.min(priceTiers.length - 1, Math.max(0, Math.floor(svgY / tierHeight)));
+    const targetTier = priceTiers[tierIdx];
+
+    const slotWidth = HEATMAP_WIDTH / numTimeSlots;
+    const slotIdx = Math.min(numTimeSlots - 1, Math.max(0, Math.floor(svgX / slotWidth)));
+    const hoursBack = Math.round(((numTimeSlots - 1 - slotIdx) / numTimeSlots) * (timeframe === "12h" ? 12 : timeframe === "24h" ? 24 : timeframe === "3d" ? 72 : 168));
+    const timeLabel = hoursBack === 0 ? "Now (Live)" : `${hoursBack}h ago`;
+
+    setHoveredPoint({
+      price: targetTier.price,
+      timeLabel,
+      volUsd: targetTier.cumulativeVolUsd,
+      side: targetTier.side === "SHORT" ? "SHORT" : "LONG",
+      leverage: targetTier.leverage,
+      pctFromSpot: targetTier.pctDiff,
+      x: svgX,
+      y: svgY,
+    });
   };
 
   return (
     <div className="space-y-8">
       
-      {/* 1. COIN SELECTOR BAR & REAL-TIME STATUS */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-950/80 text-rose-900 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-              <Flame className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-              <span>Multi-Exchange Liquidation Heatmap &amp; Cascade Radar</span>
+      {/* 1. TOP COINGLASS PRO HEADER & CONTROLS BAR */}
+      <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl space-y-6 relative overflow-hidden">
+        {/* Ambient Top Glow */}
+        <div className="absolute top-0 right-1/4 w-96 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-10 w-96 h-64 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10 border-b border-slate-800 pb-6">
+          <div className="space-y-2 max-w-3xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                <Flame className="w-3.5 h-3.5 text-rose-400" />
+                <span>CoinGlass Derivatives Liquidation Matrix</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
+                <span>Binance &amp; Bybit Futures Sync</span>
+              </span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              {activeCoin.name} ({activeCoin.base}) Liquidation Intensity Matrix
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-              Real-time model of resting leveraged stop-loss pools and liquidation clusters aggregated across Binance, OKX, Bybit, and CME perpetual contracts.
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
+              {activeCoin.name} ({activeCoin.base}/USDT) Liquidation HeatMap
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Institutional continuous liquidation heatmap modeling resting leveraged stop-loss clusters, cascade thresholds, and magnet pool depth across Binance, Bybit, OKX, and Deribit.
             </p>
           </div>
 
-          {/* Timeframe selector */}
-          <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl self-start lg:self-center">
-            {(["12h", "24h", "3d", "7d"] as const).map((tf) => (
-              <button
-                key={tf}
-                onClick={() => setTimeframe(tf)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition ${
-                  timeframe === tf
-                    ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm"
-                    : "text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700"
-                }`}
-              >
-                {tf.toUpperCase()}
-              </button>
-            ))}
+          {/* Quick Real-Time Controls */}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Leverage Filter Selector */}
+            <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-2xl border border-slate-800">
+              {(["ALL", "100x", "50x", "25x", "10x"] as const).map((lev) => (
+                <button
+                  key={lev}
+                  onClick={() => setLeverageFilter(lev)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition ${
+                    leverageFilter === lev
+                      ? "bg-amber-400 text-slate-950 font-black shadow-sm"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  {lev}
+                </button>
+              ))}
+            </div>
+
+            {/* Timeframe selector */}
+            <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-2xl border border-slate-800">
+              {(["12h", "24h", "3d", "7d", "30d"] as const).map((tf) => (
+                <button
+                  key={tf}
+                  onClick={() => setTimeframe(tf)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition ${
+                    timeframe === tf
+                      ? "bg-rose-500 text-white font-black shadow-sm"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  {tf.toUpperCase()}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Coin Selector Horizontal Chips */}
-        <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {SUPPORTED_LIQUIDATION_COINS.map((coin) => (
             <button
               key={coin.symbol}
-              onClick={() => setSelectedCoinSymbol(coin.symbol)}
-              className={`px-4 py-2.5 rounded-2xl text-xs font-black transition flex items-center gap-2.5 shrink-0 ${
+              onClick={() => {
+                setSelectedCoinSymbol(coin.symbol);
+                setLivePrice(coin.price);
+              }}
+              className={`px-3.5 py-2 rounded-2xl text-xs font-black transition flex items-center gap-2 shrink-0 ${
                 selectedCoinSymbol === coin.symbol
-                  ? "bg-slate-900 dark:bg-rose-500 text-white shadow-md scale-[1.02]"
-                  : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700"
+                  ? "bg-rose-500 text-white shadow-lg shadow-rose-500/20 scale-[1.02]"
+                  : "bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800"
               }`}
             >
-              <span>{coin.base}/USDT</span>
-              <span className="font-mono text-[11px] opacity-80">{fmtPrice(coin.price)}</span>
+              <span>{coin.base}</span>
+              <span className="font-mono text-[11px] opacity-80">${coin.price < 1 ? coin.price.toFixed(4) : coin.price.toLocaleString()}</span>
               <span
                 className={`text-[10px] font-bold ${
                   coin.change24h >= 0 ? "text-emerald-400" : "text-rose-400"
@@ -421,296 +662,482 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
           ))}
         </div>
 
-        {/* Coin Specific KPI Summary */}
+        {/* 4 Core Summary Liquidation Metric Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">24h Total Wrecked</span>
-            <div className="text-lg font-black text-rose-600 dark:text-rose-400 font-mono mt-0.5">
+          <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">24h Total Liquidated</span>
+            <div className="text-lg font-black text-rose-400 font-mono">
               {fmtCurrency(activeCoin.total24hLiqUsd)}
             </div>
-            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
-              {activeCoin.base} Perpetual Volume
+            <div className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+              <Skull className="w-3 h-3 text-rose-500" />
+              <span>{activeCoin.base} Perpetual Cascade</span>
             </div>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Shorts Wrecked</span>
-            <div className="text-lg font-black text-rose-600 dark:text-rose-400 font-mono mt-0.5">
+          <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Shorts Wrecked (Squeeze)</span>
+            <div className="text-lg font-black text-rose-400 font-mono">
               {fmtCurrency(activeCoin.shortsLiqUsd)} ({activeCoin.shortsPercent}%)
             </div>
-            <div className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">
-              Overhead Squeeze Flow
+            <div className="text-[10px] text-rose-400 font-medium">
+              Overhead Magnet Cascade
             </div>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Longs Wrecked</span>
-            <div className="text-lg font-black text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
+          <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Longs Wrecked (Flush)</span>
+            <div className="text-lg font-black text-emerald-400 font-mono">
               {fmtCurrency(activeCoin.longsLiqUsd)} ({activeCoin.longsPercent}%)
             </div>
-            <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
-              Long Stop Absorption
+            <div className="text-[10px] text-emerald-400 font-medium">
+              Lower Shelf Stop Wipeout
             </div>
           </div>
 
-          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Open Interest</span>
-            <div className="text-lg font-black text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+          <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
+            <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Total Open Interest (OI)</span>
+            <div className="text-lg font-black text-amber-400 font-mono">
               {activeCoin.openInterestUsd}
             </div>
-            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
-              Active Contract Depth
+            <div className="text-[10px] text-slate-400 font-medium">
+              Resting Derivative Depth
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. MAIN INTERACTIVE LIQUIDATION HEATMAP VISUALIZER & LEVERAGE MATRIX */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* 2. THE MAIN 2D INTERACTIVE LIQUIDATION HEATMAP CANVAS */}
+      <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-2xl space-y-5">
         
-        {/* LEFT: VISUAL LIQUIDATION HEATMAP LADDER (Col 7) */}
-        <div className="lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 flex items-center justify-center font-bold">
-                <BarChart3 className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white">
-                  Interactive Liquidation Heatmap Depth
-                </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  Visual density of resting liquidation orders across price tiers
-                </p>
-              </div>
+        {/* Heatmap Top Toolbar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold border border-rose-500/30">
+              <Crosshair className="w-5 h-5" />
             </div>
-
-            <div className="flex items-center gap-1.5 text-[10px] font-mono">
-              <span className="flex items-center gap-1 text-rose-500 font-bold">
-                <span className="w-2 h-2 rounded-full bg-rose-500" /> Short Squeeze
-              </span>
-              <span className="flex items-center gap-1 text-emerald-500 font-bold ml-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Long Flush
-              </span>
-            </div>
-          </div>
-
-          {/* HEATMAP LADDER VISUALIZER */}
-          <div className="space-y-1.5 font-mono text-xs">
-            
-            {/* Upper Short Cascades (Reverse order - highest on top) */}
-            <div className="space-y-1">
-              <div className="text-[10px] uppercase font-bold text-rose-500 flex items-center justify-between px-2 pt-1">
-                <span>Overhead Short Liquidation Cascades</span>
-                <span>Resting Stop Pool</span>
-              </div>
-              {heatmapBars.shortBars.slice().reverse().map((bar) => (
-                <div
-                  key={bar.id}
-                  onMouseEnter={() => setActiveHoverLevel(bar)}
-                  onMouseLeave={() => setActiveHoverLevel(null)}
-                  className="relative p-2.5 rounded-xl border border-rose-200/50 dark:border-rose-900/40 hover:border-rose-500 transition-all flex items-center justify-between overflow-hidden cursor-pointer group"
-                >
-                  <div
-                    className="absolute right-0 top-0 bottom-0 bg-gradient-to-l from-rose-500/30 via-rose-500/15 to-transparent transition-all duration-300 group-hover:from-rose-500/50"
-                    style={{ width: `${bar.intensity}%` }}
-                  />
-                  <div className="flex items-center gap-2.5 z-10">
-                    <span className="font-extrabold text-rose-600 dark:text-rose-400">
-                      {fmtPrice(bar.price)}
-                    </span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      (+{bar.devPct}%)
-                    </span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 font-bold">
-                      {bar.leverage}x
-                    </span>
-                  </div>
-                  <div className="text-right z-10">
-                    <span className="font-black text-rose-700 dark:text-rose-300">
-                      {fmtCurrency(bar.volUsd)}
-                    </span>
-                    <span className="text-[10px] text-slate-400 block">Resting Pool</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* LIVE SPOT PRICE AXIS WITH PULSING RADAR (1-SECOND TICK ENGINE) */}
-            <div className={`py-3 px-4 my-2 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 text-white flex items-center justify-between border-2 shadow-lg relative overflow-hidden transition-all duration-300 ${
-              priceDirection === "UP"
-                ? "border-emerald-500 shadow-emerald-500/20"
-                : priceDirection === "DOWN"
-                ? "border-rose-500 shadow-rose-500/20"
-                : "border-amber-400/80"
-            }`}>
-              <div className="flex items-center gap-2.5 z-10">
-                <span className="relative flex h-3 w-3">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    priceDirection === "UP" ? "bg-emerald-400" : priceDirection === "DOWN" ? "bg-rose-400" : "bg-amber-400"
-                  }`} />
-                  <span className={`relative inline-flex rounded-full h-3 w-3 ${
-                    priceDirection === "UP" ? "bg-emerald-500" : priceDirection === "DOWN" ? "bg-rose-500" : "bg-amber-500"
-                  }`} />
-                </span>
-                <span className="text-xs font-mono font-bold text-slate-300">Live Spot Price:</span>
-                <span className={`text-lg sm:text-xl font-black font-mono tracking-tight transition-colors duration-200 ${
-                  priceDirection === "UP" ? "text-emerald-400" : priceDirection === "DOWN" ? "text-rose-400" : "text-amber-400"
-                }`}>
-                  {fmtPrice(livePrice)}
-                </span>
-                <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 hidden sm:inline-flex items-center gap-1">
-                  <Radio className="w-2.5 h-2.5 text-emerald-400 animate-pulse" />
-                  <span>1s Stream</span>
-                </span>
-              </div>
-              <div className="text-right font-mono z-10">
-                <div className={`text-[11px] font-bold flex items-center justify-end gap-0.5 ${
-                  activeCoin.change24h >= 0 ? "text-emerald-400" : "text-rose-400"
-                }`}>
-                  {activeCoin.change24h >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                  <span>{activeCoin.change24h >= 0 ? `+${activeCoin.change24h}%` : `${activeCoin.change24h}%`} 24h</span>
-                </div>
-                <div className="text-[9px] text-slate-400">Zero-Liquidation Anchor</div>
-              </div>
-            </div>
-
-            {/* Lower Long Shelves */}
-            <div className="space-y-1">
-              <div className="text-[10px] uppercase font-bold text-emerald-500 flex items-center justify-between px-2 pt-1">
-                <span>Lower Long Liquidation Stop Shelves</span>
-                <span>Resting Stop Pool</span>
-              </div>
-              {heatmapBars.longBars.map((bar) => (
-                <div
-                  key={bar.id}
-                  onMouseEnter={() => setActiveHoverLevel(bar)}
-                  onMouseLeave={() => setActiveHoverLevel(null)}
-                  className="relative p-2.5 rounded-xl border border-emerald-200/50 dark:border-emerald-900/40 hover:border-emerald-500 transition-all flex items-center justify-between overflow-hidden cursor-pointer group"
-                >
-                  <div
-                    className="absolute right-0 top-0 bottom-0 bg-gradient-to-l from-emerald-500/30 via-emerald-500/15 to-transparent transition-all duration-300 group-hover:from-emerald-500/50"
-                    style={{ width: `${bar.intensity}%` }}
-                  />
-                  <div className="flex items-center gap-2.5 z-10">
-                    <span className="font-extrabold text-emerald-600 dark:text-emerald-400">
-                      {fmtPrice(bar.price)}
-                    </span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      ({bar.devPct}%)
-                    </span>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold">
-                      {bar.leverage}x
-                    </span>
-                  </div>
-                  <div className="text-right z-10">
-                    <span className="font-black text-emerald-700 dark:text-emerald-300">
-                      {fmtCurrency(bar.volUsd)}
-                    </span>
-                    <span className="text-[10px] text-slate-400 block">Resting Floor</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-          </div>
-
-          {/* Hover Level Detail Inspector */}
-          {activeHoverLevel && (
-            <div className="p-3.5 rounded-2xl bg-slate-900 text-white text-xs font-mono flex items-center justify-between border border-slate-700 animate-in fade-in duration-150">
+            <div>
               <div className="flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-amber-400" />
-                <span>Selected Cluster: {activeHoverLevel.label}</span>
+                <h3 className="text-base sm:text-lg font-black text-white tracking-tight">
+                  2D Liquidation Heatmap Spectrogram &amp; Cumulative Depth Profile
+                </h3>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-slate-700">
+                  {timeframe.toUpperCase()} Model
+                </span>
               </div>
-              <div className="text-right">
-                <span className="text-amber-400 font-bold">{fmtPrice(activeHoverLevel.price)}</span>
-                <span className="text-slate-400 ml-2">({activeHoverLevel.devPct}%)</span>
+              <p className="text-[11px] text-slate-400">
+                Heat density represents resting liquidation volume. Horizontal bars on right show cumulative liquidation depth.
+              </p>
+            </div>
+          </div>
+
+          {/* Color Scale Legend */}
+          <div className="flex items-center gap-2 text-[10px] font-mono self-start sm:self-auto bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
+            <span className="text-slate-400 font-bold">Density:</span>
+            <div className="flex items-center gap-1">
+              <span className="text-slate-400">Low</span>
+              <div className="w-20 h-2 rounded-full bg-gradient-to-r from-blue-900 via-cyan-400 via-yellow-400 to-rose-600" />
+              <span className="text-rose-400 font-bold">Max Clustered</span>
+            </div>
+          </div>
+        </div>
+
+        {/* THE INTERACTIVE SVG HEATMAP & PROFILE RENDERER */}
+        <div className="relative w-full bg-slate-900/90 rounded-2xl border border-slate-800 overflow-hidden select-none">
+          
+          <svg
+            ref={chartRef}
+            viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
+            className="w-full h-auto cursor-crosshair block"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setHoveredPoint(null)}
+          >
+            <defs>
+              {/* Background Grid Pattern */}
+              <pattern id="heatmapGrid" width="30" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 30 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
+              </pattern>
+
+              {/* Laser Price Line Glow */}
+              <filter id="laserGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* Background Grid */}
+            <rect width={SVG_WIDTH} height={SVG_HEIGHT} fill="#090d16" />
+            <rect width={SVG_WIDTH} height={SVG_HEIGHT} fill="url(#heatmapGrid)" />
+
+            {/* 1. HEATMAP MATRIX SPECTROGRAM TILES (Left Area: 0 to HEATMAP_WIDTH) */}
+            {heatmapMatrix.priceTiers.map((tier, tierIdx) => {
+              const tierHeight = SVG_HEIGHT / heatmapMatrix.priceTiers.length;
+              const y = tierIdx * tierHeight;
+              const slotWidth = HEATMAP_WIDTH / heatmapMatrix.numTimeSlots;
+
+              if (tier.side === "SPOT") {
+                return (
+                  <g key={`tier-${tierIdx}`}>
+                    <line
+                      x1={0}
+                      y1={y + tierHeight / 2}
+                      x2={HEATMAP_WIDTH}
+                      y2={y + tierHeight / 2}
+                      stroke="#eab308"
+                      strokeWidth="1.5"
+                      strokeDasharray="4,3"
+                      filter="url(#laserGlow)"
+                    />
+                  </g>
+                );
+              }
+
+              return (
+                <g key={`tier-${tierIdx}`}>
+                  {tier.historyHeat.map((heat, tIdx) => {
+                    const x = tIdx * slotWidth;
+                    const fill = getHeatmapColor(heat, tier.side === "SHORT");
+                    return (
+                      <rect
+                        key={`cell-${tIdx}`}
+                        x={x}
+                        y={y}
+                        width={slotWidth + 0.5}
+                        height={tierHeight + 0.5}
+                        fill={fill}
+                        opacity={0.88}
+                      />
+                    );
+                  })}
+
+                  {/* Faint Horizontal Tier Price Line */}
+                  <line
+                    x1={0}
+                    y1={y + tierHeight}
+                    x2={HEATMAP_WIDTH}
+                    y2={y + tierHeight}
+                    stroke="rgba(255,255,255,0.04)"
+                    strokeWidth="0.5"
+                  />
+                </g>
+              );
+            })}
+
+            {/* 2. HISTORICAL PRICE TRAJECTORY WAVE OVERLAY */}
+            {(() => {
+              const { priceTrajectory, numTimeSlots, minPrice, priceRange } = heatmapMatrix;
+              const slotWidth = HEATMAP_WIDTH / numTimeSlots;
+              const points = priceTrajectory.map((ptPrice, idx) => {
+                const x = idx * slotWidth + slotWidth / 2;
+                const normalizedY = 1 - (ptPrice - minPrice) / Math.max(1, priceRange);
+                const y = Math.max(10, Math.min(SVG_HEIGHT - 10, normalizedY * SVG_HEIGHT));
+                return `${x},${y}`;
+              }).join(" ");
+
+              return (
+                <g>
+                  {/* Glowing Price Shadow Path */}
+                  <polyline
+                    fill="none"
+                    stroke="rgba(255, 255, 255, 0.4)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    filter="url(#laserGlow)"
+                    points={points}
+                  />
+                  {/* Sharp Solid White Price Line */}
+                  <polyline
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    points={points}
+                  />
+                  {/* Current Price Beacon Tip */}
+                  {priceTrajectory.length > 0 && (() => {
+                    const lastY = 1 - (livePrice - minPrice) / Math.max(1, priceRange);
+                    const cy = Math.max(10, Math.min(SVG_HEIGHT - 10, lastY * SVG_HEIGHT));
+                    return (
+                      <g>
+                        <circle cx={HEATMAP_WIDTH} cy={cy} r="6" fill="#eab308" filter="url(#laserGlow)" />
+                        <circle cx={HEATMAP_WIDTH} cy={cy} r="3" fill="#ffffff" />
+                      </g>
+                    );
+                  })()}
+                </g>
+              );
+            })()}
+
+            {/* 3. RIGHT PROFILE SEPARATOR & CUMULATIVE LIQUIDATION VOLUME LADDER */}
+            {/* Vertical Divider */}
+            <line
+              x1={HEATMAP_WIDTH}
+              y1={0}
+              x2={HEATMAP_WIDTH}
+              y2={SVG_HEIGHT}
+              stroke="#334155"
+              strokeWidth="1.5"
+            />
+
+            {/* Right Profile Cumulative Bars */}
+            {heatmapMatrix.priceTiers.map((tier, tierIdx) => {
+              const tierHeight = SVG_HEIGHT / heatmapMatrix.priceTiers.length;
+              const y = tierIdx * tierHeight;
+              const barMaxPixelWidth = PROFILE_WIDTH - 85;
+              const barWidth = Math.max(4, (tier.cumulativeVolUsd / heatmapMatrix.maxCumVol) * barMaxPixelWidth);
+              const isShort = tier.side === "SHORT";
+              const isSpot = tier.side === "SPOT";
+
+              if (isSpot) {
+                return (
+                  <g key={`prof-${tierIdx}`}>
+                    <rect
+                      x={HEATMAP_WIDTH}
+                      y={y}
+                      width={PROFILE_WIDTH}
+                      height={tierHeight}
+                      fill="rgba(234, 179, 8, 0.2)"
+                    />
+                    <text
+                      x={HEATMAP_WIDTH + 8}
+                      y={y + tierHeight * 0.7}
+                      fill="#eab308"
+                      fontSize="9"
+                      fontFamily="monospace"
+                      fontWeight="bold"
+                    >
+                      SPOT: {fmtPrice(livePrice)}
+                    </text>
+                  </g>
+                );
+              }
+
+              return (
+                <g key={`prof-${tierIdx}`}>
+                  {/* Horizontal Bar */}
+                  <rect
+                    x={HEATMAP_WIDTH}
+                    y={y + 1}
+                    width={barWidth}
+                    height={tierHeight - 2}
+                    fill={isShort ? "rgba(239, 68, 68, 0.75)" : "rgba(16, 185, 129, 0.75)"}
+                    rx="1.5"
+                  />
+
+                  {/* Volume Label */}
+                  <text
+                    x={HEATMAP_WIDTH + barWidth + 5}
+                    y={y + tierHeight * 0.7}
+                    fill={isShort ? "#f87171" : "#34d399"}
+                    fontSize="8.5"
+                    fontFamily="monospace"
+                    fontWeight="bold"
+                  >
+                    {fmtCurrency(tier.cumulativeVolUsd)}
+                  </text>
+
+                  {/* Price Label (Right Aligned) */}
+                  <text
+                    x={SVG_WIDTH - 6}
+                    y={y + tierHeight * 0.7}
+                    fill="#94a3b8"
+                    fontSize="8.5"
+                    fontFamily="monospace"
+                    textAnchor="end"
+                  >
+                    {tier.price < 1 ? tier.price.toFixed(4) : Math.round(tier.price).toLocaleString()}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* 4. ACTIVE CROSSHAIR INSPECTOR (When user hovers over chart) */}
+            {hoveredPoint && (
+              <g>
+                {/* Horizontal Crosshair Line */}
+                <line
+                  x1={0}
+                  y1={hoveredPoint.y}
+                  x2={SVG_WIDTH}
+                  y2={hoveredPoint.y}
+                  stroke="#38bdf8"
+                  strokeWidth="1"
+                  strokeDasharray="3,3"
+                />
+                {/* Vertical Crosshair Line (Within Heatmap area) */}
+                <line
+                  x1={Math.min(HEATMAP_WIDTH, hoveredPoint.x)}
+                  y1={0}
+                  x2={Math.min(HEATMAP_WIDTH, hoveredPoint.x)}
+                  y2={SVG_HEIGHT}
+                  stroke="#38bdf8"
+                  strokeWidth="1"
+                  strokeDasharray="3,3"
+                />
+                {/* Target Intersection Dot */}
+                <circle
+                  cx={Math.min(HEATMAP_WIDTH, hoveredPoint.x)}
+                  cy={hoveredPoint.y}
+                  r="4"
+                  fill="#38bdf8"
+                  stroke="#ffffff"
+                  strokeWidth="1.5"
+                />
+              </g>
+            )}
+          </svg>
+
+          {/* Interactive Floating Hover HUD */}
+          {hoveredPoint && (
+            <div
+              className="absolute pointer-events-none z-30 p-3 rounded-xl bg-slate-950/95 text-white font-mono text-xs border border-slate-700 shadow-2xl space-y-1 backdrop-blur-md animate-in fade-in duration-100"
+              style={{
+                left: Math.min(window.innerWidth > 768 ? 520 : 150, Math.max(10, (hoveredPoint.x / SVG_WIDTH) * 100 * 6.5)),
+                top: Math.min(280, Math.max(10, (hoveredPoint.y / SVG_HEIGHT) * 380)),
+              }}
+            >
+              <div className="flex items-center justify-between gap-3 border-b border-slate-800 pb-1">
+                <span className="text-slate-400 text-[10px]">Price Level:</span>
+                <span className="font-black text-amber-400 text-sm">{fmtPrice(hoveredPoint.price)}</span>
+              </div>
+              <div className="flex items-center justify-between gap-3 text-[11px]">
+                <span className="text-slate-400">Distance from Spot:</span>
+                <span className={`font-bold ${hoveredPoint.pctFromSpot >= 0 ? "text-rose-400" : "text-emerald-400"}`}>
+                  {hoveredPoint.pctFromSpot >= 0 ? "+" : ""}{hoveredPoint.pctFromSpot}%
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-3 text-[11px]">
+                <span className="text-slate-400">Resting Liquidation Pool:</span>
+                <span className="font-black text-white">{fmtCurrency(hoveredPoint.volUsd)}</span>
+              </div>
+              <div className="flex items-center justify-between gap-3 text-[10px] pt-0.5 border-t border-slate-800/80">
+                <span className="text-slate-400">Leverage Vulnerability:</span>
+                <span className="px-1.5 py-0.2 rounded bg-rose-950 text-rose-300 font-bold border border-rose-800">
+                  {hoveredPoint.leverage}
+                </span>
               </div>
             </div>
           )}
         </div>
 
-        {/* RIGHT: 24H HOURLY LIQUIDATION HISTOGRAM & LEVERAGE TIERS (Col 5) */}
-        <div className="lg:col-span-5 space-y-6">
-          
-          {/* 24h Hourly Liquidation Bar Chart */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
-                  <Clock className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-base font-black text-slate-900 dark:text-white">
-                    24h Hourly Wipeout Flow
-                  </h3>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Hourly distribution of forced liquidations ($M)
-                  </p>
-                </div>
-              </div>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                24 Bar Series
-              </span>
-            </div>
+        {/* Heatmap Bottom Status Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono pt-1 text-slate-400">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5 text-rose-400 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+              <span>Overhead Short Magnet: {fmtPrice(activeCoin.topShortMagnetPrice)} ({activeCoin.topShortMagnetVol})</span>
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+              <span>Lower Long Shelf: {fmtPrice(activeCoin.topLongShelfPrice)} ({activeCoin.topLongShelfVol})</span>
+            </span>
+          </div>
+        </div>
 
-            {/* Visual SVG Hourly Bar Chart */}
-            <div className="h-44 w-full bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-3 flex items-end gap-1 overflow-x-auto">
-              {hourlyLiquidationHistory.map((item, idx) => {
-                const heightPercent = Math.max(8, (item.totalUsd / maxHourlyLiq) * 100);
-                const isShortDominant = item.dominant === "SHORT";
-                return (
-                  <div
-                    key={idx}
-                    className="flex-1 flex flex-col items-center justify-end h-full group relative cursor-pointer min-w-[10px]"
-                  >
-                    <div
-                      className={`w-full rounded-t transition-all duration-300 group-hover:opacity-100 ${
-                        isShortDominant
-                          ? "bg-rose-500 group-hover:bg-rose-400"
-                          : "bg-emerald-500 group-hover:bg-emerald-400"
-                      }`}
-                      style={{ height: `${heightPercent}%` }}
-                    />
-                    {/* Tooltip on hover */}
-                    <div className="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center bg-slate-900 text-white text-[9px] font-mono p-1.5 rounded-lg whitespace-nowrap z-20 border border-slate-700 shadow-xl pointer-events-none">
-                      <span className="font-bold">{item.hour}</span>
-                      <span className={isShortDominant ? "text-rose-400" : "text-emerald-400"}>
-                        {fmtCurrency(item.totalUsd)} ({item.dominant})
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+      </div>
 
-            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
-              <span>24 Hours Ago</span>
-              <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1 text-rose-500">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" /> Short Squeeze
-                </span>
-                <span className="flex items-center gap-1 text-emerald-500">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Long Wipeout
-                </span>
+      {/* 3. 24H HOURLY LIQUIDATION HISTOGRAM & LEVERAGE MATRIX (2-Column Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* LEFT: 24H HOURLY CASCADES BAR CHART (Col 7) */}
+        <div className="lg:col-span-7 bg-slate-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-2xl space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold border border-amber-500/30">
+                <Clock className="w-4 h-4" />
               </div>
-              <span>Now (Live)</span>
+              <div>
+                <h3 className="text-base font-black text-white">
+                  24h Hourly Wipeout Flow &amp; Squeeze Cascades
+                </h3>
+                <p className="text-[11px] text-slate-400">
+                  Hourly distribution of forced liquidations ($M)
+                </p>
+              </div>
             </div>
+            <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-slate-900 text-slate-300 border border-slate-800">
+              24 Hourly Bars
+            </span>
           </div>
 
-          {/* Leverage Tier Vulnerability Table */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+          {/* Interactive Stacked Bar Chart */}
+          <div className="h-48 w-full bg-slate-900/80 rounded-2xl border border-slate-800 p-3 flex items-end gap-1.5 overflow-x-auto">
+            {hourlyLiquidationHistory.map((item, idx) => {
+              const heightPercent = Math.max(8, (item.totalUsd / maxHourlyLiq) * 100);
+              const shortPercent = (item.shortUsd / Math.max(1, item.totalUsd)) * 100;
+              const longPercent = 100 - shortPercent;
+
+              return (
+                <div
+                  key={idx}
+                  className="flex-1 flex flex-col items-center justify-end h-full group relative cursor-pointer min-w-[12px]"
+                >
+                  {/* Stacked Bars: Short Liquidations on Top (Red), Long Liquidations below (Green) */}
+                  <div
+                    className="w-full flex flex-col justify-end rounded-t overflow-hidden transition-all duration-300 group-hover:scale-y-105"
+                    style={{ height: `${heightPercent}%` }}
+                  >
+                    <div
+                      className="w-full bg-rose-500 group-hover:bg-rose-400 transition"
+                      style={{ height: `${shortPercent}%` }}
+                    />
+                    <div
+                      className="w-full bg-emerald-500 group-hover:bg-emerald-400 transition"
+                      style={{ height: `${longPercent}%` }}
+                    />
+                  </div>
+
+                  {/* Tooltip on Hover */}
+                  <div className="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center bg-slate-950 text-white text-[9px] font-mono p-2 rounded-xl whitespace-nowrap z-20 border border-slate-700 shadow-2xl pointer-events-none">
+                    <span className="font-black text-amber-400">{item.hour}</span>
+                    <span className="text-rose-400 font-bold">Shorts: {fmtCurrency(item.shortUsd)}</span>
+                    <span className="text-emerald-400 font-bold">Longs: {fmtCurrency(item.longsUsd)}</span>
+                    <span className="text-slate-300 border-t border-slate-800 pt-0.5 mt-0.5 font-black">
+                      Total: {fmtCurrency(item.totalUsd)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-1">
+            <span>24h Ago</span>
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5 text-rose-400 font-bold">
+                <span className="w-2 h-2 rounded-full bg-rose-500" /> Short Wipeout
+              </span>
+              <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" /> Long Flush
+              </span>
+            </div>
+            <span>Now (Live)</span>
+          </div>
+        </div>
+
+        {/* RIGHT: LEVERAGE TIERS & LIVE 1S FEED (Col 5) */}
+        <div className="lg:col-span-5 space-y-6">
+          
+          {/* Leverage Tier Vulnerability Points */}
+          <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold border border-rose-500/30">
                   <Sliders className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900 dark:text-white">
-                    Leverage Tier Liquidation Points
+                  <h3 className="text-base font-black text-white">
+                    Leverage Bankruptcy Thresholds
                   </h3>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Calculated bankruptcy triggers by position leverage
+                  <p className="text-[11px] text-slate-400">
+                    Calculated liquidation triggers by position leverage
                   </p>
                 </div>
               </div>
@@ -718,40 +1145,32 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
 
             <div className="space-y-2.5 font-mono text-xs">
               {[
-                { tier: "100x Leverage", data: activeCoin.leverageTiers.tier100x, risk: "CRITICAL" },
-                { tier: "50x Leverage", data: activeCoin.leverageTiers.tier50x, risk: "HIGH" },
-                { tier: "25x Leverage", data: activeCoin.leverageTiers.tier25x, risk: "MEDIUM" },
-                { tier: "10x Leverage", data: activeCoin.leverageTiers.tier10x, risk: "MACRO" },
+                { tier: "100x Leverage", data: activeCoin.leverageTiers.tier100x, risk: "CRITICAL", badgeBg: "bg-rose-950 text-rose-300 border-rose-800" },
+                { tier: "50x Leverage", data: activeCoin.leverageTiers.tier50x, risk: "HIGH", badgeBg: "bg-amber-950 text-amber-300 border-amber-800" },
+                { tier: "25x Leverage", data: activeCoin.leverageTiers.tier25x, risk: "MEDIUM", badgeBg: "bg-blue-950 text-blue-300 border-blue-800" },
+                { tier: "10x Leverage", data: activeCoin.leverageTiers.tier10x, risk: "MACRO", badgeBg: "bg-slate-800 text-slate-300 border-slate-700" },
               ].map((lvl, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2"
+                  className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-2"
                 >
                   <div>
-                    <div className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <div className="font-extrabold text-white flex items-center gap-1.5">
                       <span>{lvl.tier}</span>
-                      <span
-                        className={`text-[9px] px-1.5 py-0.2 rounded font-black ${
-                          lvl.risk === "CRITICAL"
-                            ? "bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300"
-                            : lvl.risk === "HIGH"
-                            ? "bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300"
-                            : "bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-300"
-                        }`}
-                      >
+                      <span className={`text-[9px] px-1.5 py-0.2 rounded font-black border ${lvl.badgeBg}`}>
                         {lvl.risk}
                       </span>
                     </div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">
-                      Long: {fmtPrice(lvl.data.longPrice)} ({lvl.data.volLong})
+                    <div className="text-[10px] text-emerald-400 mt-0.5">
+                      Long Floor: {fmtPrice(lvl.data.longPrice)} ({lvl.data.volLong})
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <div className="font-black text-rose-600 dark:text-rose-400">
-                      Short: {fmtPrice(lvl.data.shortPrice)}
+                    <div className="font-black text-rose-400">
+                      Short Roof: {fmtPrice(lvl.data.shortPrice)}
                     </div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                    <div className="text-[10px] text-slate-400 font-medium">
                       {lvl.data.volShort} Pool
                     </div>
                   </div>
@@ -761,18 +1180,18 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
           </div>
 
           {/* Live Real-Time 1-Second Liquidation Stream Box */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+          <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-2xl space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
                 </span>
-                <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider font-mono">
-                  Live Liquidation Ticker Stream (1s)
+                <h4 className="text-xs font-black text-white uppercase tracking-wider font-mono">
+                  Liquidation Ticker Stream (1s)
                 </h4>
               </div>
-              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+              <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
                 WebSocket Feed
               </span>
             </div>
@@ -784,7 +1203,7 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
                     {
                       id: "init-1",
                       side: "SHORT" as const,
-                      price: activeCoin.price * 1.002,
+                      price: activeCoin.price * 1.0018,
                       amountUsd: 145000,
                       exchange: "Binance Futures",
                       time: "Just now",
@@ -792,7 +1211,7 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
                     {
                       id: "init-2",
                       side: "LONG" as const,
-                      price: activeCoin.price * 0.998,
+                      price: activeCoin.price * 0.9982,
                       amountUsd: 84000,
                       exchange: "Bybit",
                       time: "1s ago",
@@ -801,23 +1220,23 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
               ).map((evt) => (
                 <div
                   key={evt.id}
-                  className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2 animate-in fade-in slide-in-from-top-1 duration-200"
+                  className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-2 animate-in fade-in duration-200"
                 >
                   <div className="flex items-center gap-2">
                     <span
                       className={`px-1.5 py-0.5 rounded text-[9px] font-black ${
                         evt.side === "LONG"
-                          ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
-                          : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
+                          ? "bg-emerald-950 text-emerald-300 border border-emerald-800"
+                          : "bg-rose-950 text-rose-300 border border-rose-800"
                       }`}
                     >
                       {evt.side} LIQ
                     </span>
-                    <span className="font-bold text-slate-900 dark:text-white">{activeCoin.base}</span>
+                    <span className="font-bold text-white">{activeCoin.base}</span>
                     <span className="text-[10px] text-slate-400">@ {fmtPrice(evt.price)}</span>
                   </div>
                   <div className="text-right flex items-center gap-2">
-                    <span className="font-black text-rose-600 dark:text-rose-400">
+                    <span className="font-black text-rose-400">
                       {fmtCurrency(evt.amountUsd)}
                     </span>
                     <span className="text-[9px] text-slate-400">{evt.exchange.split(" ")[0]}</span>
@@ -831,20 +1250,20 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
 
       </div>
 
-      {/* 3. EXCHANGE-BY-EXCHANGE LIQUIDATION MATRIX */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+      {/* 4. EXCHANGE-BY-EXCHANGE LIQUIDATION MATRIX */}
+      <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
           <div>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <h3 className="text-lg font-black text-white flex items-center gap-2">
               <Layers className="w-4 h-4 text-amber-500" />
               <span>Multi-Exchange Liquidation Distribution ({activeCoin.base})</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-400">
               Aggregated liquidation volumes across tier-1 derivatives venues
             </p>
           </div>
-          <div className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
-            Total 24h: <strong className="text-rose-600 dark:text-rose-400">{fmtCurrency(activeCoin.total24hLiqUsd)}</strong>
+          <div className="text-xs font-mono font-bold text-slate-400">
+            Total 24h: <strong className="text-rose-400">{fmtCurrency(activeCoin.total24hLiqUsd)}</strong>
           </div>
         </div>
 
@@ -885,65 +1304,65 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
           ].map((item, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5"
+              className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5"
             >
               <div className="flex justify-between items-center">
-                <span className="font-extrabold text-slate-900 dark:text-white text-xs">{item.exchange}</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                <span className="font-extrabold text-white text-xs">{item.exchange}</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
                   {item.share}
                 </span>
               </div>
 
-              <div className="text-base font-black text-rose-600 dark:text-rose-400">
+              <div className="text-base font-black text-rose-400">
                 {fmtCurrency(item.volume)}
               </div>
 
               {/* Progress Bar Long vs Short */}
               <div className="space-y-1">
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-emerald-600 dark:text-emerald-400">{item.longs}% L</span>
-                  <span className="text-rose-600 dark:text-rose-400">{item.shorts}% S</span>
+                  <span className="text-emerald-400">{item.longs}% L</span>
+                  <span className="text-rose-400">{item.shorts}% S</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden flex">
+                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden flex">
                   <div className="bg-emerald-500" style={{ width: `${item.longs}%` }} />
                   <div className="bg-rose-500" style={{ width: `${item.shorts}%` }} />
                 </div>
               </div>
 
-              <div className="pt-1 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400 flex justify-between">
+              <div className="pt-1 border-t border-slate-800 text-[10px] text-slate-400 flex justify-between">
                 <span>Top Wipeout:</span>
-                <strong className="text-slate-700 dark:text-slate-200 font-bold">{item.largest}</strong>
+                <strong className="text-slate-200 font-bold">{item.largest}</strong>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* 4. COMPREHENSIVE FUNDAMENTAL & QUANTITATIVE LIQUIDATION EXPLANATION */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
-        <div className="space-y-2 border-b border-slate-100 dark:border-slate-800 pb-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80">
+      {/* 5. COMPREHENSIVE FUNDAMENTAL & QUANTITATIVE LIQUIDATION EXPLANATION */}
+      <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl space-y-8">
+        <div className="space-y-2 border-b border-slate-800 pb-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
             <Info className="w-3.5 h-3.5" />
             <span>Quantitative &amp; Microstructure Deep Dive</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+          <h3 className="text-xl sm:text-2xl font-black text-white">
             The Mechanics of Liquidation Heatmaps &amp; Forced Market Cascades
           </h3>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
             Understanding why market makers, high-frequency algorithms, and institutional desks exploit resting liquidation pools for liquidity sweeps and directional breakout momentum.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
-            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300 leading-relaxed">
+          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+            <h4 className="font-bold text-white text-sm flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-500" />
               <span>How Liquidation Prices are Calculated</span>
             </h4>
             <p>
               When a trader opens a position with leverage (L), maintenance margin (MMR) determines the exact price where the exchange margin engine forcefully executes a market order to prevent insolvency:
             </p>
-            <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 font-mono text-[11px] text-amber-600 dark:text-amber-400">
+            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-[11px] text-amber-400">
               P_liquidation = P_entry × (1 ± (1 / Leverage) ∓ MMR)
             </div>
             <p>
@@ -951,8 +1370,8 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
-            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+            <h4 className="font-bold text-white text-sm flex items-center gap-2">
               <Flame className="w-4 h-4 text-rose-500" />
               <span>Liquidation Cascades &amp; Short Squeezes</span>
             </h4>
@@ -964,8 +1383,8 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
             </p>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
-            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+            <h4 className="font-bold text-white text-sm flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-emerald-500" />
               <span>How to Position Using Heatmaps</span>
             </h4>

@@ -38,7 +38,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: "all-markets", title: "CoinMarketCap Spot Rankings", subtitle: "Full list of 50+ tracked cryptocurrencies", category: "Markets", href: "/markets", icon: Coins, badge: "50+ Coins" },
 
   // AI Bots
-  { id: "bot-terminal", title: "AI Trading Bot Terminal", subtitle: "Real-time algorithmic signals & 1:1 execution", category: "AI Bots", href: "/tools", icon: Bot, badge: "LIVE" },
+  { id: "bot-terminal", title: "AI Trading Bot Terminal", subtitle: "Real-time algorithmic signals & 1:1 execution", category: "AI Bots", href: "/tools", icon: Bot, badge: "SIGNALS" },
   { id: "bot-alphatrend", title: "AlphaTrend AI Momentum Bot", subtitle: "200 EMA slope & CVD trend continuation", category: "AI Bots", href: "/tools", icon: Bot, badge: "94.8% Rel" },
   { id: "bot-hyperscalp", title: "HyperScalp Volatility Breakout", subtitle: "Bollinger squeeze & fast intraday execution", category: "AI Bots", href: "/tools", icon: Bot, badge: "82.1% Win" },
   { id: "bot-liquidity", title: "Smart Liquidity & FVG Reversal", subtitle: "FVG fair value gap & stop pool sweeps", category: "AI Bots", href: "/tools", icon: Bot },

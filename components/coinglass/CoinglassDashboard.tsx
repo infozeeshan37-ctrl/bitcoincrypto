@@ -404,51 +404,6 @@ export default function CoinglassDashboard() {
         <div className="space-y-8">
           {/* Main Comprehensive Liquidation Heatmap Radar Component */}
           <LiquidationHeatmapRadar initialSymbol={searchParams.get("symbol") || "BTCUSDT"} />
-
-          {/* Real-time Forced Liquidation Stream Feed */}
-
-          {/* Recent Live Liquidations Stream */}
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-            <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <Activity className="w-4 h-4 text-rose-500" />
-              <span>Real-Time Forced Liquidation Stream</span>
-            </h3>
-
-            <div className="space-y-2.5">
-              {liquidations?.recentEvents.map((evt) => {
-                const isLong = evt.side === "LONG";
-                return (
-                  <div
-                    key={evt.id}
-                    className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-xs"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-lg font-mono font-black text-[10px] ${
-                          isLong
-                            ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
-                            : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
-                        }`}
-                      >
-                        {evt.side} LIQ
-                      </span>
-                      <div>
-                        <span className="font-extrabold text-slate-900 dark:text-white">{evt.symbol}</span>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-500 ml-2">on {evt.exchange}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                      <span className="font-mono font-black text-rose-600 dark:text-rose-400">
-                        {fmtCurrency(evt.amountUsd)}
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500">{evt.timeAgo}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       )}
 

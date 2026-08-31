@@ -371,7 +371,7 @@ export default function CoinMarketCapDashboard() {
               Automate Market Signals with Vetted AI Bots
             </h4>
             <p className="text-xs text-slate-900 font-medium leading-relaxed">
-              Plug these live prices directly into 5 algorithmic strategies with automated position sizing and exact Risk-to-Reward targets.
+              Plug these market prices directly into 5 algorithmic strategies with automated position sizing and exact Risk-to-Reward targets.
             </p>
           </div>
 
