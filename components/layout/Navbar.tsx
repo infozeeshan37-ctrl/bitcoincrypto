@@ -17,7 +17,8 @@ import {
   Zap,
   LineChart,
   Activity,
-  Search
+  Search,
+  Fish
 } from "lucide-react";
 import LiveTickerBar from "./LiveTickerBar";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -193,7 +194,30 @@ export default function Navbar() {
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
-                      Aggregated CLOB depth, whale prints, and slippage simulator.
+                      Aggregated CLOB depth, resting walls, and slippage simulator.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/whale-orders"
+                  onClick={() => setActiveDropdown(null)}
+                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-indigo-50/80 dark:hover:bg-indigo-950/30 transition group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <Fish className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition">
+                        Whale Orders &amp; Liquidity
+                      </span>
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">
+                        WHALES
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
+                      Institutional block trades, resting limit walls, and heatmaps.
                     </p>
                   </div>
                 </Link>
