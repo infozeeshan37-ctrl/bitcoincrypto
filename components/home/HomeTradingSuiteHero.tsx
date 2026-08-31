@@ -701,7 +701,7 @@ export default function HomeTradingSuiteHero() {
           <Link
             href="/news"
             className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open 24/7 Live Macro News Wire & US CPI Tracker"
+            title="Open 24/7 Macro News Wire & US CPI Tracker"
           >
             <Newspaper className="w-4 h-4 text-amber-500 group-hover:rotate-6 transition-transform" />
             <span>Latest News &amp; Macro Radar</span>
@@ -722,13 +722,13 @@ export default function HomeTradingSuiteHero() {
                     <span>Algorithmic Spot &amp; Derivatives Execution Engine</span>
                   </span>
 
-                  {/* 1-Second Live Heartbeat Badge */}
+                  {/* 1-Second Heartbeat Badge */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-xs">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                     </span>
-                    <span>1,000ms LIVE STREAM</span>
+                    <span>1,000ms REAL-TIME STREAM</span>
                   </div>
 
                   {/* Latency & Block Height Telemetry */}
@@ -739,10 +739,10 @@ export default function HomeTradingSuiteHero() {
                 </div>
 
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Live Algorithmic Signals &amp; Full Market Terminal
+                  Algorithmic Signals &amp; Full Market Terminal
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  High-frequency 1-second price action, dynamic entry zones, mathematically validated stop-losses, and multi-tier take-profits matching live TradingView candlestick charts 1:1.
+                  High-frequency 1-second price action, dynamic entry zones, mathematically validated stop-losses, and multi-tier take-profits matching TradingView candlestick charts 1:1.
                 </p>
               </div>
 
@@ -926,7 +926,7 @@ export default function HomeTradingSuiteHero() {
                         No pairs matching &quot;{search}&quot;
                       </div>
                       <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                        Type any coin symbol above and click &quot;Load Pair&quot; to fetch and calculate live signals directly from Binance.
+                        Type any coin symbol above and click &quot;Load Pair&quot; to fetch and calculate signals directly from Binance.
                       </p>
                       {search.trim().length > 0 && (
                         <button
@@ -999,7 +999,7 @@ export default function HomeTradingSuiteHero() {
                         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs items-center">
                           <div>
                             <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-mono flex items-center gap-1">
-                              Live Price
+                              Price
                               {tick === "up" && <span className="text-emerald-500 font-black text-[10px] animate-pulse">▲</span>}
                               {tick === "down" && <span className="text-rose-500 font-black text-[10px] animate-pulse">▼</span>}
                             </span>
@@ -1054,7 +1054,7 @@ export default function HomeTradingSuiteHero() {
                         <div>
                           <h4 className="text-base font-bold text-slate-900 dark:text-white">Trade Entry &amp; Risk Sizer</h4>
                           <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                            Live risk calculations for {activeCoin.base}/USDT ({activeCoin.isLong ? "LONG" : "SHORT"})
+                            Risk calculations for {activeCoin.base}/USDT ({activeCoin.isLong ? "LONG" : "SHORT"})
                           </p>
                         </div>
                       </div>
@@ -1160,7 +1160,7 @@ export default function HomeTradingSuiteHero() {
                       </div>
                       <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span>WebSocket Live</span>
+                        <span>WebSocket Stream</span>
                       </span>
                     </div>
 
@@ -1555,7 +1555,7 @@ export default function HomeTradingSuiteHero() {
                             href={`/coinglass?tab=liquidations&symbol=${activeCoin.symbol}`}
                             className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition flex items-center gap-1"
                           >
-                            <span>Live Heatmap</span>
+                            <span>Liquidation Heatmap</span>
                             <ArrowRight className="w-2.5 h-2.5" />
                           </Link>
                         </div>
@@ -1757,7 +1757,7 @@ export default function HomeTradingSuiteHero() {
                         <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
                           <span className="flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                            <span>Live Whale Prints Stream</span>
+                            <span>Whale Prints Stream</span>
                           </span>
                           <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
                         </div>
@@ -1917,7 +1917,7 @@ export default function HomeTradingSuiteHero() {
               </div>
 
               <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="text-slate-500 dark:text-slate-400">Live Price:</span>
+                <span className="text-slate-500 dark:text-slate-400">Current Price:</span>
                 <strong className="text-slate-900 dark:text-white">
                   ${terminalTicker.price >= 1000 ? terminalTicker.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : terminalTicker.price}
                 </strong>
