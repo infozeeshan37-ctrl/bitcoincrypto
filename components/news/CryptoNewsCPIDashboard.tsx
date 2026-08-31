@@ -306,19 +306,26 @@ export default function CryptoNewsCPIDashboard() {
             {/* Header & Controls */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                    <Newspaper className="w-5 h-5 text-blue-500" />
-                    <span>Real-Time Breaking Crypto &amp; Macro News Wire</span>
-                  </h2>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                    Verified Feeds
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Live reports connected to global economic bureaus, SEC filings, blockchain analytics, and institutional desks.
-                </p>
+      {/* 2. MAIN NEWS & MACRO WORKBENCH */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        {/* Navigation Tabs (All News / Macro CPI Battles / Federal Reserve / Institutional SEC) */}
+        <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <Flame className="w-4 h-4 text-amber-500" />
+                <h3 className="text-base font-black text-slate-900 dark:text-white">
+                  Institutional News Wire &amp; Macro Battles
+                </h3>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                  Verified Feeds
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Institutional reports connected to global economic bureaus, SEC filings, blockchain analytics, and institutional desks.
+              </p>
               </div>
 
               {/* Search */}

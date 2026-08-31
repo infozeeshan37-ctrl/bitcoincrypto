@@ -253,7 +253,7 @@ export default function LiveAgentView({
       {/* Main Conversation Messages Scroll Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3.5 min-h-0 bg-slate-900/60">
         {/* Connecting progress state */}
-        {isConnecting && (
+        {isConnecting ? (
           <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
             <div className="relative">
               <div className="w-14 h-14 rounded-full bg-amber-500/10 border-2 border-amber-400/40 flex items-center justify-center animate-pulse">

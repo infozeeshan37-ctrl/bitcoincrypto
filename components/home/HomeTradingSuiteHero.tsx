@@ -32,7 +32,8 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Newspaper,
-  Flame
+  Flame,
+  Fish
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -697,6 +698,18 @@ export default function HomeTradingSuiteHero() {
             <RefreshCw className="w-4 h-4" />
             <span>Spot Converter</span>
           </button>
+
+          <Link
+            href="/whale-orders"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-800 transition group shadow-xs"
+            title="Open Whale Orders & Institutional Liquidity Radar (CoinGlass Style)"
+          >
+            <Fish className="w-4 h-4 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
+            <span className="font-black">Whale Orders</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </Link>
 
           <Link
             href="/news"
