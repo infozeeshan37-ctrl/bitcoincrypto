@@ -125,14 +125,10 @@ export default function HomeLatestNewsRadar() {
 
   useEffect(() => {
     fetchNews();
-    const interval = setInterval(fetchNews, 60000);
-    const ticker = setInterval(() => {
-      setAutoRefreshCountdown((prev) => (prev > 1 ? prev - 1 : 60));
-    }, 1000);
+    const interval = setInterval(fetchNews, 300000); // 5-minute auto refresh
 
     return () => {
       clearInterval(interval);
-      clearInterval(ticker);
     };
   }, []);
 
@@ -186,7 +182,7 @@ export default function HomeLatestNewsRadar() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
-                LIVE WIRE
+                5m AUTO-FEED
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -195,7 +191,7 @@ export default function HomeLatestNewsRadar() {
           </div>
         </div>
 
-        {/* Action HUD: Search, Refresh, & Direct Link */}
+        {/* Action HUD: Search & Direct Link */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Quick Search */}
           <div className="relative">
@@ -216,17 +212,6 @@ export default function HomeLatestNewsRadar() {
               </button>
             )}
           </div>
-
-          {/* Refresh Button with Countdown */}
-          <button
-            onClick={fetchNews}
-            disabled={isLoading}
-            className="px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-xs disabled:opacity-50"
-            title="Refresh news stream"
-          >
-            <RefreshCw size={13} className={`text-amber-500 ${isLoading ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">Sync ({autoRefreshCountdown}s)</span>
-          </button>
 
           <Link
             href="/news"

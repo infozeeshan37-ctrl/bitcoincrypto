@@ -7,7 +7,6 @@ import {
   Calendar,
   TrendingUp,
   TrendingDown,
-  RefreshCw,
   Search,
   ExternalLink,
   Flame,
@@ -20,7 +19,14 @@ import {
   Landmark,
   Percent,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  BookOpen,
+  Share2,
+  Copy,
+  Check,
+  Zap,
+  Activity
 } from "lucide-react";
 import { CPIDataRelease, NewsItem } from "@/app/api/news/route";
 
@@ -68,8 +74,8 @@ export default function CryptoNewsCPIDashboard() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [lastSyncTime, setLastSyncTime] = useState("");
-  const [countdown, setCountdown] = useState(15);
+  const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
+  const [copiedArticle, setCopiedArticle] = useState(false);
 
   const fetchNewsAndCpi = useCallback(async () => {
     try {
@@ -80,39 +86,40 @@ export default function CryptoNewsCPIDashboard() {
           setNews(json.data.news || []);
           setCpi(json.data.cpi || null);
           setMacroFed(json.data.macroFed || null);
-          setLastSyncTime(new Date().toLocaleTimeString());
         }
       }
       setLoading(false);
-      setCountdown(15);
     } catch (err) {
-      console.warn("News & CPI fetch warning:", err);
+      console.warn("News & CPI background sync notice:", err);
       setLoading(false);
     }
   }, []);
 
+  // Automatic live fetch every 5 minutes (300,000 ms) in the background with zero manual buttons required
   useEffect(() => {
     fetchNewsAndCpi();
-    const interval = setInterval(fetchNewsAndCpi, 15000);
-    const timer = setInterval(() => {
-      setCountdown((prev) => (prev > 1 ? prev - 1 : 15));
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-      clearInterval(timer);
-    };
+    const interval = setInterval(fetchNewsAndCpi, 300000);
+    return () => clearInterval(interval);
   }, [fetchNewsAndCpi]);
 
-  const categories = ["All", "Macro & CPI", "Bitcoin", "Ethereum", "Institutional", "DeFi", "Regulation"];
+  const categories = ["All", "Macro & CPI", "Fed Rates", "Bitcoin", "Ethereum", "Institutional", "Derivatives", "DeFi", "Regulation"];
 
   const filteredNews = news.filter((item) => {
     const matchSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.source.toLowerCase().includes(searchQuery.toLowerCase());
+      item.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.affectedCoins && item.affectedCoins.some((c) => c.symbol.toLowerCase().includes(searchQuery.toLowerCase())));
     const matchCat = selectedCategory === "All" || item.category === selectedCategory;
     return matchSearch && matchCat;
   });
+
+  const handleCopyStory = () => {
+    if (!selectedArticle) return;
+    navigator.clipboard.writeText(`${selectedArticle.title} - Read more on BitcoinCrypto.tech`);
+    setCopiedArticle(true);
+    setTimeout(() => setCopiedArticle(false), 2500);
+  };
 
   return (
     <div className="space-y-10 pb-20">
@@ -129,34 +136,31 @@ export default function CryptoNewsCPIDashboard() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-blue-500/20 text-blue-300 border border-blue-500/30">
                   <Newspaper className="w-3.5 h-3.5 text-blue-400" />
-                  Crypto News & Macroeconomic Intelligence
+                  Real-Time Crypto News &amp; Macroeconomic Intelligence
+                </span>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  Auto-Sync 5m
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
-                US CPI Inflation Tracker & <br className="hidden sm:inline" />
+                US CPI Inflation Tracker &amp; <br className="hidden sm:inline" />
                 <span className="bg-gradient-to-r from-blue-400 via-amber-300 to-yellow-400 bg-clip-text text-transparent">
                   Macroeconomic Crypto News
                 </span>
               </h1>
               <p className="text-slate-400 text-xs sm:text-sm max-w-2xl mt-2 leading-relaxed">
-                Stay ahead of Bitcoin and crypto market volatility with real-time US Consumer Price Index releases, Federal Reserve FOMC interest rate odds, and verified institutional breaking news.
+                Stay ahead of Bitcoin and crypto market volatility with real-time US Consumer Price Index releases, Federal Reserve FOMC interest rate odds, and human-written institutional financial journalism.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={fetchNewsAndCpi}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition flex items-center gap-2 border border-slate-700"
-              >
-                <RefreshCw className={`w-3.5 h-3.5 text-blue-400 ${loading ? "animate-spin" : ""}`} />
-                <span>Fetch Latest News</span>
-              </button>
               <Link
                 href="/markets"
-                className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-md"
+                className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-md hover:scale-105"
               >
-                <span>Live Markets</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Explore Live Markets</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -197,7 +201,7 @@ export default function CryptoNewsCPIDashboard() {
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400">Rate Cut Probability</span>
               <div className="text-lg font-black text-emerald-400 font-mono">
-                {macroFed?.rateCut25bpsProbability || 84.5}%
+                {macroFed?.rateCut25bpsProbability || 88.5}%
               </div>
               <span className="text-[10px] text-emerald-300">
                 25 bps Easing Expected
@@ -299,7 +303,7 @@ export default function CryptoNewsCPIDashboard() {
                 <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Why CPI Moves Bitcoin
               </span>
               <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-snug">
-                Liquidity Cycles & Real Interest Rates
+                Liquidity Cycles &amp; Real Interest Rates
               </h4>
               <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
                 When CPI comes in lower than expectations, it gives the Federal Reserve room to cut interest rates. Lower rates expand global M2 money supply, creating tailwinds for digital assets like Bitcoin and Ethereum.
@@ -320,7 +324,7 @@ export default function CryptoNewsCPIDashboard() {
         {/* Historical CPI Releases Table */}
         <div className="space-y-3 pt-2">
           <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
-            Historical CPI Releases & Bitcoin Price Reaction
+            Historical CPI Releases &amp; Bitcoin Price Reaction
           </h3>
 
           <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
@@ -384,12 +388,18 @@ export default function CryptoNewsCPIDashboard() {
         {/* Header & Controls */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <Newspaper className="w-5 h-5 text-blue-500" />
-              <span>Real-Time Breaking Crypto & Macro News Wire</span>
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <Newspaper className="w-5 h-5 text-blue-500" />
+                <span>Real-Time Breaking Crypto &amp; Macro News Wire</span>
+              </h2>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                Live 5m Auto-Feed
+              </span>
+            </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Curated and verified news from institutional and decentralized intelligence sources.
+              Curated human-written financial journalism from institutional and decentralized intelligence desks.
             </p>
           </div>
 
@@ -398,7 +408,7 @@ export default function CryptoNewsCPIDashboard() {
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search news & reports..."
+              placeholder="Search news, topics, coins..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-slate-400"
@@ -430,9 +440,10 @@ export default function CryptoNewsCPIDashboard() {
             const isBear = item.sentiment === "BEARISH";
 
             return (
-              <div
+              <article
                 key={item.id}
-                className="p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-400 dark:hover:border-blue-500/60 hover:shadow-md transition space-y-3 flex flex-col justify-between"
+                onClick={() => setSelectedArticle(item)}
+                className="p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/70 dark:hover:border-blue-500/70 hover:shadow-lg transition-all duration-200 space-y-3.5 flex flex-col justify-between cursor-pointer group relative"
               >
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
@@ -440,7 +451,8 @@ export default function CryptoNewsCPIDashboard() {
                       <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
                         {item.category}
                       </span>
-                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono flex items-center gap-1">
+                        <Clock size={11} className="text-amber-500" />
                         {item.timeAgo}
                       </span>
                     </div>
@@ -458,45 +470,222 @@ export default function CryptoNewsCPIDashboard() {
                     </span>
                   </div>
 
-                  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white leading-snug hover:text-blue-600 dark:hover:text-blue-400 transition">
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {item.title}
                   </h3>
 
+                  {/* Author Desk Tag */}
+                  {item.author && (
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                      By <strong className="text-slate-700 dark:text-slate-300">{item.author.name}</strong> • {item.author.role}
+                    </div>
+                  )}
+
+                  {/* Paragraph lead */}
                   <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                    {item.summary}
+                    {item.paragraphs && item.paragraphs.length > 0 ? item.paragraphs[0] : item.summary}
                   </p>
 
+                  {/* Key Takeaways Highlight */}
                   {item.keyTakeaways && item.keyTakeaways.length > 0 && (
-                    <div className="text-[11px] text-amber-800 dark:text-amber-300 bg-amber-50/70 dark:bg-amber-950/40 p-2.5 rounded-xl border border-amber-200/80 dark:border-amber-800/60 space-y-1">
-                      <span className="font-bold flex items-center gap-1 text-[10px] uppercase font-mono">
-                        <Sparkles className="w-3 h-3 text-amber-500" /> Key Takeaway
+                    <div className="text-[11px] text-amber-900 dark:text-amber-300 bg-amber-50/70 dark:bg-amber-950/40 p-3 rounded-2xl border border-amber-200/80 dark:border-amber-800/60 space-y-1">
+                      <span className="font-bold flex items-center gap-1 text-[10px] uppercase font-mono text-amber-700 dark:text-amber-400">
+                        <Sparkles className="w-3.5 h-3.5" /> Key Takeaway
                       </span>
-                      <p className="line-clamp-2">{item.keyTakeaways[0]}</p>
+                      <p className="line-clamp-2 leading-relaxed">{item.keyTakeaways[0]}</p>
+                    </div>
+                  )}
+
+                  {/* Affected Tickers Pills */}
+                  {item.affectedCoins && item.affectedCoins.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                      <span className="text-[10px] font-mono text-slate-400">Pairs:</span>
+                      {item.affectedCoins.map((c) => (
+                        <span
+                          key={c.symbol}
+                          className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
+                        >
+                          ${c.symbol.replace("USDT", "")}
+                        </span>
+                      ))}
                     </div>
                   )}
                 </div>
 
                 <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                  <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 truncate max-w-[180px]">
+                  <span className="font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 truncate max-w-[180px]">
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
                     <span className="truncate">{item.source}</span>
                   </span>
-                  <a
-                    href={item.sourceUrl || (item as any).url || "https://www.google.com"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-bold flex items-center gap-1 shrink-0"
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedArticle(item);
+                    }}
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-black flex items-center gap-1 group/btn"
                   >
-                    <span>Read Source</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+                    <span>Read Full Analysis</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                  </button>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
 
       </div>
+
+      {/* 4. FULL IN-DEPTH ARTICLE MODAL READER */}
+      {selectedArticle && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center animate-in fade-in duration-200">
+          <div
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-3xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Bar with Category, Sentiment, and Close Button */}
+            <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-1 rounded-lg text-xs font-black uppercase tracking-wider bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                  {selectedArticle.category}
+                </span>
+
+                <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                  <Clock size={12} className="text-amber-500" />
+                  {selectedArticle.timeAgo} • {selectedArticle.readTime}
+                </span>
+
+                <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
+                  selectedArticle.sentiment === "BULLISH"
+                    ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300"
+                    : selectedArticle.sentiment === "BEARISH"
+                    ? "bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300"
+                    : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                }`}>
+                  {selectedArticle.sentiment} Impact
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyStory}
+                  className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition flex items-center gap-1"
+                  title="Share Analysis"
+                >
+                  {copiedArticle ? <Check size={14} className="text-emerald-500" /> : <Share2 size={14} />}
+                  <span className="hidden sm:inline">{copiedArticle ? "Copied" : "Share"}</span>
+                </button>
+
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition"
+                  title="Close Reader"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* Headline */}
+            <div className="space-y-2">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">
+                {selectedArticle.title}
+              </h2>
+
+              {selectedArticle.author && (
+                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                  <span className="font-bold text-slate-800 dark:text-slate-200">By {selectedArticle.author.name}</span>
+                  <span>•</span>
+                  <span>{selectedArticle.author.role} ({selectedArticle.author.desk})</span>
+                  <span>•</span>
+                  <span className="font-semibold text-blue-600 dark:text-blue-400 font-mono">Source: {selectedArticle.source}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Key Takeaways */}
+            {selectedArticle.keyTakeaways && selectedArticle.keyTakeaways.length > 0 && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/80 space-y-2.5">
+                <div className="flex items-center gap-2 text-xs font-black text-amber-900 dark:text-amber-300 uppercase font-mono">
+                  <Sparkles size={14} className="text-amber-500" />
+                  <span>Executive Key Takeaways</span>
+                </div>
+                <ul className="space-y-1.5 text-xs text-slate-800 dark:text-slate-200">
+                  {selectedArticle.keyTakeaways.map((t, idx) => (
+                    <li key={idx} className="flex items-start gap-2 leading-relaxed">
+                      <CheckCircle2 size={13} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Full Multi-Paragraph Body */}
+            <div className="space-y-4 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              {selectedArticle.paragraphs && selectedArticle.paragraphs.length > 0 ? (
+                selectedArticle.paragraphs.map((p, idx) => (
+                  <p key={idx} className="leading-relaxed">
+                    {p}
+                  </p>
+                ))
+              ) : (
+                <p className="leading-relaxed">{selectedArticle.summary}</p>
+              )}
+            </div>
+
+            {/* Affected Tickers Section */}
+            {selectedArticle.affectedCoins && selectedArticle.affectedCoins.length > 0 && (
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                  <Zap size={13} className="text-amber-500" />
+                  <span>Affected Trading Pairs &amp; Expected Projections</span>
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {selectedArticle.affectedCoins.map((coin) => (
+                    <div
+                      key={coin.symbol}
+                      className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs"
+                    >
+                      <div>
+                        <div className="font-mono font-black text-slate-900 dark:text-white">{coin.symbol}</div>
+                        {coin.expectedRange && (
+                          <div className="text-[10px] font-mono text-slate-500">{coin.expectedRange}</div>
+                        )}
+                      </div>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                        coin.impact === "BULLISH"
+                          ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300"
+                          : coin.impact === "BEARISH"
+                          ? "bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300"
+                          : "bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300"
+                      }`}>
+                        {coin.impact}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Footer Outbound Link */}
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+              <span className="text-slate-500 font-mono text-[11px]">
+                Audited Wire Broadcast • 24/7 Financial Intelligence Desk
+              </span>
+              <a
+                href={selectedArticle.sourceUrl || selectedArticle.url || "https://www.google.com"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold flex items-center gap-1.5 transition shadow-sm"
+              >
+                <span>Read Verified Primary Source</span>
+                <ExternalLink size={13} />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
