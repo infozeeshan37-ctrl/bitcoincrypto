@@ -1541,18 +1541,20 @@ export default function HomeTradingSuiteHero() {
                         </div>
 
                         {/* 24h Channel Range Progress Bar */}
-                        <div className="space-y-1.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                        <div className="space-y-2 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                           <div className="flex justify-between items-center text-xs font-mono">
-                            <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                              <span className="w-2 h-2 rounded-full bg-rose-500" /> Low: <strong className="text-slate-900 dark:text-white">${formatPrice(activeCoin.low24h)}</strong>
+                            <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-bold">
+                              <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                              <span>Low:</span>
+                              <strong className="text-slate-900 dark:text-white font-extrabold">${formatPrice(activeCoin.low24h)}</strong>
                             </span>
-                            <span className="font-bold text-amber-600 dark:text-amber-400 text-[11px]">
-                              ${formatPrice(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(1)}%)
-                            </span>
-                            <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                              High: <strong className="text-slate-900 dark:text-white">${formatPrice(activeCoin.high24h)}</strong> <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                            <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-bold">
+                              <span>High:</span>
+                              <strong className="text-slate-900 dark:text-white font-extrabold">${formatPrice(activeCoin.high24h)}</strong>
+                              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                             </span>
                           </div>
+
                           <div className="relative w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                             <div
                               className="absolute top-0 bottom-0 bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 rounded-full transition-all duration-500"
@@ -1572,6 +1574,13 @@ export default function HomeTradingSuiteHero() {
                                 )}%`
                               }}
                             />
+                          </div>
+
+                          <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-0.5">
+                            <span>24h Range Channel</span>
+                            <span className="font-bold text-amber-600 dark:text-amber-400">
+                              Spread: ${formatPrice(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(1)}%)
+                            </span>
                           </div>
                         </div>
 
@@ -1714,7 +1723,7 @@ export default function HomeTradingSuiteHero() {
                       </div>
 
                       {/* Institutional Whale Block Activity Stream */}
-                      <div className="space-y-1.5 pt-1 border-t border-slate-100 dark:border-slate-800">
+                      <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
                         <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
                           <span className="flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
@@ -1722,29 +1731,34 @@ export default function HomeTradingSuiteHero() {
                           </span>
                           <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
                         </div>
-                        <div className="space-y-1">
+                        <div className="space-y-1.5">
                           {dynamicWhaleTrades.map((tr) => (
                             <div
                               key={tr.id}
-                              className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-mono transition-all duration-300 animate-in fade-in slide-in-from-top-1"
+                              className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs font-mono transition-all duration-300 gap-2"
                             >
-                              <div className="flex items-center gap-1.5">
+                              <div className="flex items-center gap-2 min-w-0">
                                 <span
-                                  className={`px-1 py-0.2 rounded text-[9px] font-black ${
+                                  className={`px-1.5 py-0.5 rounded text-[10px] font-black shrink-0 ${
                                     tr.type === "BUY"
-                                      ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
-                                      : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
+                                      ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                                      : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
                                   }`}
                                 >
                                   {tr.type}
                                 </span>
-                                <span className="font-bold text-slate-900 dark:text-white">
-                                  {tr.amount} <span className="text-slate-400 text-[10px]">({tr.value})</span>
-                                </span>
+                                <div className="truncate">
+                                  <span className="font-extrabold text-slate-900 dark:text-white">{tr.amount}</span>
+                                  <span className="text-slate-500 dark:text-slate-400 text-[11px] ml-1.5 font-medium">({tr.value})</span>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-[9px] text-amber-600 dark:text-amber-400 hidden sm:inline">{tr.badge}</span>
-                                <span className="text-[9px] text-slate-400 font-bold">{tr.time}</span>
+                              <div className="flex items-center gap-2 shrink-0 text-right">
+                                <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate max-w-[120px] hidden sm:inline">
+                                  {tr.badge}
+                                </span>
+                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold whitespace-nowrap bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-800">
+                                  {tr.time}
+                                </span>
                               </div>
                             </div>
                           ))}
