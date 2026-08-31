@@ -2186,7 +2186,7 @@ export default function HomeTradingSuiteHero() {
               <div className="text-center space-y-2">
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Real-Time Cryptocurrency Spot Converter</h3>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                  Instant multi-currency exchange calculations powered by live institutional liquidity pricing.
+                  Instant multi-currency exchange calculations powered by real-time institutional liquidity pricing.
                 </p>
               </div>
 
