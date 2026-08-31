@@ -510,11 +510,30 @@ export default function Navbar() {
                 </div>
                 <div>
                   <span className="font-bold text-slate-900 dark:text-white block text-xs">L2 Order Book Terminal</span>
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400">Aggregated depth & whale tape</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">Aggregated depth &amp; resting walls</span>
                 </div>
               </div>
               <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-400 text-slate-950">
                 DEPTH
+              </span>
+            </Link>
+
+            <Link
+              href="/whale-orders"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-indigo-50/70 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-700/60 transition"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center">
+                  <Fish className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-900 dark:text-white block text-xs">Whale Orders &amp; Liquidity</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">Institutional blocks, walls &amp; heatmap</span>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">
+                WHALES
               </span>
             </Link>
           </div>

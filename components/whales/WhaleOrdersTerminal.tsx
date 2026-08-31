@@ -129,7 +129,7 @@ export default function WhaleOrdersTerminal() {
                 </span>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  Live Sync (Binance, CME, Coinbase, OKX)
+                  Real-Time Sync (Binance, CME, Coinbase, OKX)
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
@@ -155,7 +155,7 @@ export default function WhaleOrdersTerminal() {
                 href="/orderbook"
                 className="px-5 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-md hover:scale-105"
               >
-                <span>Live L2 Order Book</span>
+                <span>L2 Order Book</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -440,7 +440,7 @@ export default function WhaleOrdersTerminal() {
                 </div>
                 <div>
                   <h3 className="text-base font-black text-slate-900 dark:text-white">
-                    Live Whale Block Trade Tape
+                    Whale Block Trade Tape
                   </h3>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
                     Real-time executions &gt; $100K USD

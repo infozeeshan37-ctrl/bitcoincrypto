@@ -32,6 +32,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.95,
     },
     {
+      url: `${baseUrl}/whale-orders`,
+      lastModified: currentDate,
+      changeFrequency: "always",
+      priority: 0.95,
+    },
+    {
       url: `${baseUrl}/tools`,
       lastModified: currentDate,
       changeFrequency: "hourly",
