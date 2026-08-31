@@ -632,7 +632,7 @@ export default function HomeTradingSuiteHero() {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Real-time algorithmic trading bot, multi-coin market scanner, live TradingView charts, and exact risk execution calculators.
+            Real-time algorithmic trading bot, multi-coin market scanner, TradingView charts, and exact risk execution calculators.
           </p>
         </div>
 
@@ -659,7 +659,7 @@ export default function HomeTradingSuiteHero() {
             }`}
           >
             <BarChart2 className="w-4 h-4" />
-            <span>Live Chart Terminal</span>
+            <span>Chart Terminal</span>
           </button>
 
           <button

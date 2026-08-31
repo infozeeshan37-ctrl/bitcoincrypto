@@ -136,10 +136,10 @@ export default function LiveEcosystemOverview() {
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Market &amp; Macro Intelligence</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping ml-1" />
-              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-black">1s LIVE</span>
+              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-black">1s STREAM</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-              Live Market &amp; Macro Ecosystem
+              Market &amp; Macro Ecosystem
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               Real-time cryptocurrency analytics across CoinMarketCap spot rankings, Coinglass derivatives, and US macroeconomic releases.
@@ -246,7 +246,7 @@ export default function LiveEcosystemOverview() {
               href="/markets"
               className="w-full py-2.5 bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-bold text-center transition flex items-center justify-center gap-1.5 shadow-sm mt-2"
             >
-              <span>Explore Live Markets Dashboard</span>
+              <span>Explore Spot Markets Dashboard</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
