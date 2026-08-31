@@ -175,7 +175,7 @@ export default function HomeLatestNewsRadar() {
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                Live Macro &amp; Crypto News Terminal
+                Macro &amp; Crypto News Terminal
               </h2>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 shadow-xs">
                 <span className="relative flex h-2 w-2">
