@@ -27,7 +27,7 @@ export interface NewsItem {
   url: string;
   publishedAt: string;
   timeAgo: string;
-  category: "Macro & CPI" | "Bitcoin" | "Ethereum" | "DeFi" | "Regulation" | "Institutional";
+  category: "Macro & CPI" | "Fed Rates" | "Geopolitics" | "Bitcoin" | "Ethereum" | "DeFi" | "Regulation" | "Institutional";
   sentiment: "BULLISH" | "BEARISH" | "NEUTRAL";
   hotScore: number;
   readTime: string;
@@ -40,8 +40,8 @@ const FALLBACK_NEWS: NewsItem[] = [
     summary: "The latest Consumer Price Index print came in lower than consensus estimates (2.7% vs 2.9% forecast), fueling expectations for aggressive Federal Reserve rate cuts and driving crypto liquidity.",
     source: "Bloomberg Macro / BLS",
     url: "https://www.bls.gov/cpi/",
-    publishedAt: new Date(Date.now() - 25 * 60000).toISOString(),
-    timeAgo: "25m ago",
+    publishedAt: new Date(Date.now() - 15 * 60000).toISOString(),
+    timeAgo: "15m ago",
     category: "Macro & CPI",
     sentiment: "BULLISH",
     hotScore: 98,
@@ -49,51 +49,51 @@ const FALLBACK_NEWS: NewsItem[] = [
   },
   {
     id: "news-2",
-    title: "Bitcoin Open Interest Surpasses $34 Billion as Derivatives Traders Eye Breakout",
-    summary: "Coinglass data confirms aggregated perpetual futures open interest has reclaimed record heights across Binance and CME, accompanied by healthy positive funding rates.",
-    source: "Coinglass Terminal",
-    url: "https://www.coinglass.com",
-    publishedAt: new Date(Date.now() - 55 * 60000).toISOString(),
-    timeAgo: "55m ago",
-    category: "Bitcoin",
+    title: "Federal Reserve FOMC Minutes Signal Slower QT and Potential 25bps Rate Cut",
+    summary: "Fed officials noted declining core services inflation and labor market cooling, strengthening the case for liquidity easing in the upcoming policy meeting.",
+    source: "Federal Reserve Board",
+    url: "https://www.federalreserve.gov",
+    publishedAt: new Date(Date.now() - 38 * 60000).toISOString(),
+    timeAgo: "38m ago",
+    category: "Fed Rates",
     sentiment: "BULLISH",
     hotScore: 94,
     readTime: "4 min read",
   },
   {
     id: "news-3",
-    title: "Federal Reserve FOMC Minutes Signal Slower QT and Potential 25bps Rate Cut",
-    summary: "Fed officials noted declining core services inflation and labor market cooling, strengthening the case for liquidity easing in the upcoming September policy meeting.",
-    source: "Federal Reserve Board",
-    url: "https://www.federalreserve.gov",
-    publishedAt: new Date(Date.now() - 120 * 60000).toISOString(),
-    timeAgo: "2h ago",
-    category: "Macro & CPI",
-    sentiment: "BULLISH",
-    hotScore: 91,
-    readTime: "5 min read",
+    title: "Geopolitical Tensions Accelerate Safe-Haven Capital Rotation into Bitcoin and Gold",
+    summary: "Global macro uncertainties in the Middle East and international commodity corridors drive heightened demand for non-sovereign, censorship-resistant digital settlement assets.",
+    source: "Reuters Macro Intelligence",
+    url: "https://www.reuters.com",
+    publishedAt: new Date(Date.now() - 75 * 60000).toISOString(),
+    timeAgo: "1h ago",
+    category: "Geopolitics",
+    sentiment: "NEUTRAL",
+    hotScore: 92,
+    readTime: "4 min read",
   },
   {
     id: "news-4",
-    title: "Ethereum L2 Gas Consumption Drops 85% Post-Dencun as Blob Subsidies Accelerate",
-    summary: "Layer-2 networks including Arbitrum, Optimism, and Base report record daily active addresses while maintaining sub-cent execution fees.",
-    source: "Etherscan Intelligence",
-    url: "https://etherscan.io",
-    publishedAt: new Date(Date.now() - 240 * 60000).toISOString(),
-    timeAgo: "4h ago",
-    category: "Ethereum",
+    title: "Bitcoin Open Interest Surpasses $34 Billion as Derivatives Traders Eye Breakout",
+    summary: "Coinglass data confirms aggregated perpetual futures open interest has reclaimed record heights across Binance and CME, accompanied by healthy positive funding rates.",
+    source: "Coinglass Terminal",
+    url: "https://www.coinglass.com",
+    publishedAt: new Date(Date.now() - 110 * 60000).toISOString(),
+    timeAgo: "1h ago",
+    category: "Bitcoin",
     sentiment: "BULLISH",
-    hotScore: 86,
-    readTime: "3 min read",
+    hotScore: 94,
+    readTime: "4 min read",
   },
   {
     id: "news-5",
-    title: "Global Spot ETF Net Daily Inflows Exceed $620 Million Across Major Issuers",
+    title: "Global Spot ETF Net Daily Inflows Exceed $620 Million Across Wall Street Desks",
     summary: "BlackRock IBIT and Fidelity FBTC recorded their strongest joint accumulation session this quarter as macro hedge funds reposition for digital gold exposure.",
     source: "Farside Investors",
     url: "https://farside.co.uk",
-    publishedAt: new Date(Date.now() - 360 * 60000).toISOString(),
-    timeAgo: "6h ago",
+    publishedAt: new Date(Date.now() - 180 * 60000).toISOString(),
+    timeAgo: "3h ago",
     category: "Institutional",
     sentiment: "BULLISH",
     hotScore: 92,
@@ -105,8 +105,8 @@ const FALLBACK_NEWS: NewsItem[] = [
     summary: "New regulatory guidance creates a clearer compliance path for institutional custodians offering non-custodial delegated proof-of-stake validation.",
     source: "SEC Filings",
     url: "https://www.sec.gov",
-    publishedAt: new Date(Date.now() - 480 * 60000).toISOString(),
-    timeAgo: "8h ago",
+    publishedAt: new Date(Date.now() - 320 * 60000).toISOString(),
+    timeAgo: "5h ago",
     category: "Regulation",
     sentiment: "NEUTRAL",
     hotScore: 81,
@@ -114,15 +114,15 @@ const FALLBACK_NEWS: NewsItem[] = [
   },
   {
     id: "news-7",
-    title: "DeFi Total Value Locked (TVL) Reclaims $110B Led by Liquid Restaking Protocols",
-    summary: "Symbiotic, EigenLayer, and Uniswap v4 testnet integrations drive significant yield-seeking capital back into on-chain liquidity pools.",
-    source: "DefiLlama",
-    url: "https://defillama.com",
-    publishedAt: new Date(Date.now() - 600 * 60000).toISOString(),
-    timeAgo: "10h ago",
-    category: "DeFi",
+    title: "Ethereum L2 Gas Consumption Drops 85% Post-Dencun as Blob Subsidies Accelerate",
+    summary: "Layer-2 networks including Arbitrum, Optimism, and Base report record daily active addresses while maintaining sub-cent execution fees.",
+    source: "Etherscan Intelligence",
+    url: "https://etherscan.io",
+    publishedAt: new Date(Date.now() - 480 * 60000).toISOString(),
+    timeAgo: "8h ago",
+    category: "Ethereum",
     sentiment: "BULLISH",
-    hotScore: 84,
+    hotScore: 86,
     readTime: "3 min read",
   },
 ];
@@ -192,7 +192,6 @@ const HISTORICAL_CPI_RELEASES: CPIDataRelease[] = [
 
 export async function GET() {
   try {
-    // Attempt to fetch live crypto news if available from public API
     let liveNews = [...FALLBACK_NEWS];
     try {
       const newsRes = await fetch("https://min-api.cryptocompare.com/data/v2/news/?lang=EN", {
@@ -201,21 +200,20 @@ export async function GET() {
       if (newsRes.ok) {
         const json = await newsRes.json();
         if (json.Data && Array.isArray(json.Data) && json.Data.length > 0) {
-          const apiItems: NewsItem[] = json.Data.slice(0, 8).map((item: any, idx: number) => {
-            const isMacro = item.title.toLowerCase().includes("cpi") ||
-              item.title.toLowerCase().includes("inflation") ||
-              item.title.toLowerCase().includes("fed") ||
-              item.title.toLowerCase().includes("rate");
+          const apiItems: NewsItem[] = json.Data.slice(0, 10).map((item: any, idx: number) => {
+            const titleLower = item.title.toLowerCase();
+            const isMacro = titleLower.includes("cpi") || titleLower.includes("inflation") || titleLower.includes("inflationary");
+            const isFed = titleLower.includes("fed") || titleLower.includes("rate") || titleLower.includes("fomc") || titleLower.includes("powell") || titleLower.includes("interest");
+            const isGeopolitics = titleLower.includes("war") || titleLower.includes("conflict") || titleLower.includes("sanction") || titleLower.includes("tariff") || titleLower.includes("geopolitic");
 
-            const category: NewsItem["category"] = isMacro
-              ? "Macro & CPI"
-              : item.categories.includes("BTC")
-              ? "Bitcoin"
-              : item.categories.includes("ETH")
-              ? "Ethereum"
-              : item.categories.includes("DeFi")
-              ? "DeFi"
-              : "Institutional";
+            let category: NewsItem["category"] = "Institutional";
+            if (isMacro) category = "Macro & CPI";
+            else if (isFed) category = "Fed Rates";
+            else if (isGeopolitics) category = "Geopolitics";
+            else if (item.categories?.includes("BTC") || titleLower.includes("bitcoin")) category = "Bitcoin";
+            else if (item.categories?.includes("ETH") || titleLower.includes("ethereum")) category = "Ethereum";
+            else if (item.categories?.includes("DeFi") || titleLower.includes("defi")) category = "DeFi";
+            else if (titleLower.includes("sec") || titleLower.includes("regulation") || titleLower.includes("law")) category = "Regulation";
 
             const timeDiff = Math.max(1, Math.round((Date.now() - item.published_on * 1000) / 60000));
             const timeAgo = timeDiff < 60 ? `${timeDiff}m ago` : `${Math.round(timeDiff / 60)}h ago`;
@@ -229,17 +227,17 @@ export async function GET() {
               publishedAt: new Date(item.published_on * 1000).toISOString(),
               timeAgo,
               category,
-              sentiment: item.title.toLowerCase().includes("surge") || item.title.toLowerCase().includes("gain") || item.title.toLowerCase().includes("bull")
+              sentiment: titleLower.includes("surge") || titleLower.includes("gain") || titleLower.includes("bull") || titleLower.includes("rally")
                 ? "BULLISH"
-                : item.title.toLowerCase().includes("drop") || item.title.toLowerCase().includes("crash") || item.title.toLowerCase().includes("bear")
+                : titleLower.includes("drop") || titleLower.includes("crash") || titleLower.includes("bear") || titleLower.includes("fall")
                 ? "BEARISH"
                 : "NEUTRAL",
-              hotScore: Math.floor(80 + Math.random() * 18),
+              hotScore: Math.floor(82 + Math.random() * 16),
               readTime: "3 min read",
             };
           });
-          // Merge with high-priority macro CPI news
-          liveNews = [FALLBACK_NEWS[0], FALLBACK_NEWS[1], ...apiItems.slice(0, 6)];
+          // Merge high-priority macro & geopolitical news with live feeds
+          liveNews = [FALLBACK_NEWS[0], FALLBACK_NEWS[1], FALLBACK_NEWS[2], ...apiItems.slice(0, 7)];
         }
       }
     } catch (e) {

@@ -30,7 +30,8 @@ import {
   CheckCheck,
   Terminal,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Newspaper
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -50,6 +51,7 @@ import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChar
 import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
+import HomeLatestNewsRadar from "@/components/home/HomeLatestNewsRadar";
 
 const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
   { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", defaultTimeframe: "15M" },
@@ -111,7 +113,7 @@ const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
 ];
 
 export default function HomeTradingSuiteHero() {
-  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter">("bot");
+  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "news">("bot");
 
   // 1. Bot & Signals State (Single Authoritative Direction per Asset)
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
@@ -694,6 +696,18 @@ export default function HomeTradingSuiteHero() {
           >
             <RefreshCw className="w-4 h-4" />
             <span>Spot Converter</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("news")}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+              activeTab === "news"
+                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+            }`}
+          >
+            <Newspaper className="w-4 h-4 text-amber-950 dark:text-amber-300" />
+            <span>Latest News &amp; Macro Radar</span>
           </button>
         </div>
 
@@ -1766,6 +1780,11 @@ export default function HomeTradingSuiteHero() {
                       </div>
                     </div>
 
+                    {/* Live Latest News & Macro Radar (Right-side News Section) */}
+                    <div className="pt-3">
+                      <HomeLatestNewsRadar />
+                    </div>
+
                   </div>
 
                 </div>
@@ -2199,6 +2218,13 @@ export default function HomeTradingSuiteHero() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* 6. TAB 6: LATEST NEWS & GLOBAL MACRO RADAR */}
+        {activeTab === "news" && (
+          <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in">
+            <HomeLatestNewsRadar />
           </div>
         )}
 
