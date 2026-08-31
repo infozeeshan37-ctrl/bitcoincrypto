@@ -25,8 +25,12 @@ import {
   CheckCheck,
   Terminal,
   ArrowDownRight,
-  ArrowUpRight
+  ArrowUpRight,
+  ArrowRight,
+  ChevronRight,
+  Flame
 } from "lucide-react";
+import Link from "next/link";
 import {
   SignalTimeframe,
   CoinConfig,
@@ -1356,120 +1360,152 @@ export default function AITradingBotTerminal() {
                   </div>
                 </div>
 
-                {/* Algorithmic Rationale Snippet */}
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                  <div className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase mb-1">
-                    Order Thesis: {activeCoin.strategy}
-                  </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                    {activeCoin.rationale}
-                  </p>
-                </div>
-              </div>
-
-              {/* CARD 2: REAL-TIME ORDERBOOK DEPTH & INSTITUTIONAL WHALE RADAR */}
-              <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
-                        <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                      </div>
+                    {/* Algorithmic Rationale Snippet */}
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
                       <div>
-                        <h4 className="text-base font-black text-slate-900 dark:text-white">
-                          Orderbook &amp; Whale Radar
-                        </h4>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                          L2 depth &amp; block taker prints
+                        <div className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase mb-1">
+                          Order Thesis: {activeCoin.strategy}
+                        </div>
+                        <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
+                          {activeCoin.rationale}
                         </p>
                       </div>
-                    </div>
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                      L2 Depth
-                    </span>
-                  </div>
 
-                  {/* Orderbook Depth Ladder */}
-                  <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
-                    <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 dark:text-slate-500 uppercase pb-0.5 border-b border-slate-200 dark:border-slate-700">
-                      <span>Price ($)</span>
-                      <span>Size ({activeCoin.base})</span>
-                      <span>Vol</span>
-                    </div>
-
-                    {/* Asks (Red) */}
-                    <div className="space-y-1">
-                      {mockAskLevels.map((lvl, i) => (
-                        <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
-                          <div
-                            className="absolute right-0 top-0 bottom-0 bg-rose-500/10 dark:bg-rose-500/20"
-                            style={{ width: `${lvl.depth}%` }}
-                          />
-                          <span className="text-rose-600 dark:text-rose-400 font-bold z-10">${formatPrice(lvl.price)}</span>
-                          <span className="text-slate-600 dark:text-slate-300 z-10">{lvl.size}</span>
-                          <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Mid Price Separator */}
-                    <div className="py-1 px-2 rounded-lg bg-slate-900 dark:bg-slate-950 text-white flex justify-between items-center text-[11px] font-mono border border-slate-800 dark:border-slate-700">
-                      <span className="text-[9px] text-amber-400 font-bold uppercase flex items-center gap-1">
-                        <Radio className="w-2.5 h-2.5 text-amber-400 animate-pulse" /> Mid Spot:
-                      </span>
-                      <span className="font-black text-amber-400">${formatPrice(activeCoin.price)}</span>
-                      <span className="text-[9px] text-slate-400 font-bold">Spread 0.01%</span>
-                    </div>
-
-                    {/* Bids (Green) */}
-                    <div className="space-y-1">
-                      {mockBidLevels.map((lvl, i) => (
-                        <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
-                          <div
-                            className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 dark:bg-emerald-500/20"
-                            style={{ width: `${lvl.depth}%` }}
-                          />
-                          <span className="text-emerald-600 dark:text-emerald-400 font-bold z-10">${formatPrice(lvl.price)}</span>
-                          <span className="text-slate-600 dark:text-slate-300 z-10">{lvl.size}</span>
-                          <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Institutional Whale Block Activity Stream */}
-                <div className="space-y-1.5 pt-1 border-t border-slate-100 dark:border-slate-800">
-                  <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
-                    <span>Live Whale Prints Stream</span>
-                    <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
-                  </div>
-                  <div className="space-y-1">
-                    {whaleTrades.slice(0, 3).map((tr, idx) => (
-                      <div
-                        key={idx}
-                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-mono"
+                      {/* Launch Full Liquidation Radar Button */}
+                      <Link
+                        href={`/coinglass?tab=liquidations&symbol=${activeCoin.symbol}`}
+                        className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
                       >
-                        <div className="flex items-center gap-1.5">
-                          <span
-                            className={`px-1 py-0.2 rounded text-[9px] font-black ${
-                              tr.type === "BUY"
-                                ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
-                                : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
-                            }`}
-                          >
-                            {tr.type}
-                          </span>
-                          <span className="font-bold text-slate-900 dark:text-white">
-                            {tr.amount} <span className="text-slate-400 dark:text-slate-500 text-[10px]">({tr.value})</span>
-                          </span>
-                        </div>
-                        <span className="text-[9px] text-slate-400 dark:text-slate-500">{tr.time}</span>
-                      </div>
-                    ))}
+                        <Flame className="w-3.5 h-3.5 fill-amber-400" />
+                        <span>Launch Full Liquidation Radar ({activeCoin.base})</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </div>
+
+                  {/* CARD 2: REAL-TIME ORDERBOOK DEPTH & INSTITUTIONAL WHALE RADAR */}
+                  <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <Link
+                          href={`/orderbook?symbol=${activeCoin.symbol}`}
+                          className="flex items-center gap-2 group hover:opacity-80 transition"
+                        >
+                          <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
+                            <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                          </div>
+                          <div>
+                            <h4 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1">
+                              <span>Orderbook &amp; Whale Radar</span>
+                              <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition" />
+                            </h4>
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                              L2 depth &amp; block taker prints
+                            </p>
+                          </div>
+                        </Link>
+                        <Link
+                          href={`/orderbook?symbol=${activeCoin.symbol}`}
+                          className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition flex items-center gap-1"
+                        >
+                          <span>L2 Terminal</span>
+                          <ArrowRight className="w-2.5 h-2.5" />
+                        </Link>
+                      </div>
+
+                      {/* Orderbook Depth Ladder */}
+                      <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                        <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 dark:text-slate-500 uppercase pb-0.5 border-b border-slate-200 dark:border-slate-700">
+                          <span>Price ($)</span>
+                          <span>Size ({activeCoin.base})</span>
+                          <span>Vol</span>
+                        </div>
+
+                        {/* Asks (Red) */}
+                        <div className="space-y-1">
+                          {mockAskLevels.map((lvl, i) => (
+                            <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
+                              <div
+                                className="absolute right-0 top-0 bottom-0 bg-rose-500/10 dark:bg-rose-500/20"
+                                style={{ width: `${lvl.depth}%` }}
+                              />
+                              <span className="text-rose-600 dark:text-rose-400 font-bold z-10">${formatPrice(lvl.price)}</span>
+                              <span className="text-slate-600 dark:text-slate-300 z-10">{lvl.size}</span>
+                              <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Mid Price Separator */}
+                        <div className="py-1 px-2 rounded-lg bg-slate-900 dark:bg-slate-950 text-white flex justify-between items-center text-[11px] font-mono border border-slate-800 dark:border-slate-700">
+                          <span className="text-[9px] text-amber-400 font-bold uppercase flex items-center gap-1">
+                            <Radio className="w-2.5 h-2.5 text-amber-400 animate-pulse" /> Mid Spot:
+                          </span>
+                          <span className="font-black text-amber-400">${formatPrice(activeCoin.price)}</span>
+                          <span className="text-[9px] text-slate-400 font-bold">Spread 0.01%</span>
+                        </div>
+
+                        {/* Bids (Green) */}
+                        <div className="space-y-1">
+                          {mockBidLevels.map((lvl, i) => (
+                            <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
+                              <div
+                                className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 dark:bg-emerald-500/20"
+                                style={{ width: `${lvl.depth}%` }}
+                              />
+                              <span className="text-emerald-600 dark:text-emerald-400 font-bold z-10">${formatPrice(lvl.price)}</span>
+                              <span className="text-slate-600 dark:text-slate-300 z-10">{lvl.size}</span>
+                              <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Institutional Whale Block Activity Stream */}
+                    <div className="space-y-1.5 pt-1 border-t border-slate-100 dark:border-slate-800">
+                      <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
+                        <span>Live Whale Prints Stream</span>
+                        <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
+                      </div>
+                      <div className="space-y-1">
+                        {whaleTrades.slice(0, 3).map((tr, idx) => (
+                          <div
+                            key={idx}
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-mono"
+                          >
+                            <div className="flex items-center gap-1.5">
+                              <span
+                                className={`px-1 py-0.2 rounded text-[9px] font-black ${
+                                  tr.type === "BUY"
+                                    ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                                    : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
+                                }`}
+                              >
+                                {tr.type}
+                              </span>
+                              <span className="font-bold text-slate-900 dark:text-white">
+                                {tr.amount} <span className="text-slate-400 dark:text-slate-500 text-[10px]">({tr.value})</span>
+                              </span>
+                            </div>
+                            <span className="text-[9px] text-slate-400 dark:text-slate-500">{tr.time}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Launch Full L2 Orderbook Terminal Button */}
+                      <div className="pt-2">
+                        <Link
+                          href={`/orderbook?symbol=${activeCoin.symbol}`}
+                          className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
+                        >
+                          <Activity className="w-3.5 h-3.5" />
+                          <span>Launch Full L2 Orderbook Terminal ({activeCoin.base})</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
 
             </div>
 

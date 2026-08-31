@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import CoinglassDashboard from "@/components/coinglass/CoinglassDashboard";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 
@@ -20,7 +21,9 @@ export default function CoinglassPage() {
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 sm:py-12 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: "Coinglass Derivatives Radar", href: "/coinglass" }]} />
-        <CoinglassDashboard />
+        <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center font-bold text-slate-400">Loading Derivatives Radar...</div>}>
+          <CoinglassDashboard />
+        </Suspense>
       </div>
     </main>
   );

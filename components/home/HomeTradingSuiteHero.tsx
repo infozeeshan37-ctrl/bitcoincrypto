@@ -31,7 +31,8 @@ import {
   Terminal,
   ArrowUpRight,
   ArrowDownRight,
-  Newspaper
+  Newspaper,
+  Flame
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -1536,22 +1537,30 @@ export default function HomeTradingSuiteHero() {
                     <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
                       <div className="space-y-4">
                         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-                          <div className="flex items-center gap-2">
+                          <Link
+                            href={`/coinglass?tab=liquidations&symbol=${activeCoin.symbol}`}
+                            className="flex items-center gap-2 group hover:opacity-80 transition"
+                          >
                             <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
                               <Layers className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                             </div>
                             <div>
-                              <h4 className="text-base font-black text-slate-900 dark:text-white">
-                                Liquidation Pools &amp; Range
+                              <h4 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1">
+                                <span>Liquidation Pools &amp; Range</span>
+                                <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition" />
                               </h4>
                               <p className="text-[11px] text-slate-500 dark:text-slate-400">
                                 Resting stop clusters &amp; 24h positioning
                               </p>
                             </div>
-                          </div>
-                          <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                            Live Matrix
-                          </span>
+                          </Link>
+                          <Link
+                            href={`/coinglass?tab=liquidations&symbol=${activeCoin.symbol}`}
+                            className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition flex items-center gap-1"
+                          >
+                            <span>Live Heatmap</span>
+                            <ArrowRight className="w-2.5 h-2.5" />
+                          </Link>
                         </div>
 
                         {/* 24h Channel Range Progress Bar */}
@@ -1654,14 +1663,16 @@ export default function HomeTradingSuiteHero() {
                         </div>
                       </div>
 
-                      {/* Algorithmic Rationale Snippet */}
-                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-                        <div className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase mb-1">
-                          Order Thesis: {activeCoin.strategy}
-                        </div>
-                        <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                          {activeCoin.rationale}
-                        </p>
+                      {/* Launch Full Liquidation Radar Button */}
+                      <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                        <Link
+                          href={`/coinglass?tab=liquidations&symbol=${activeCoin.symbol}`}
+                          className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
+                        >
+                          <Flame className="w-3.5 h-3.5 fill-amber-400" />
+                          <span>Launch Full Liquidation Radar ({activeCoin.base})</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
                       </div>
                     </div>
 
@@ -1669,22 +1680,30 @@ export default function HomeTradingSuiteHero() {
                     <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                          <div className="flex items-center gap-2">
+                          <Link
+                            href={`/orderbook?symbol=${activeCoin.symbol}`}
+                            className="flex items-center gap-2 group hover:opacity-80 transition"
+                          >
                             <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
                               <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                             </div>
                             <div>
-                              <h4 className="text-base font-black text-slate-900 dark:text-white">
-                                Orderbook &amp; Whale Radar
+                              <h4 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1">
+                                <span>Orderbook &amp; Whale Radar</span>
+                                <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition" />
                               </h4>
                               <p className="text-[11px] text-slate-500 dark:text-slate-400">
                                 L2 depth &amp; block taker prints
                               </p>
                             </div>
-                          </div>
-                          <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-                            L2 Depth
-                          </span>
+                          </Link>
+                          <Link
+                            href={`/orderbook?symbol=${activeCoin.symbol}`}
+                            className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition flex items-center gap-1"
+                          >
+                            <span>L2 Terminal</span>
+                            <ArrowRight className="w-2.5 h-2.5" />
+                          </Link>
                         </div>
 
                         {/* Orderbook Depth Ladder */}
@@ -1776,6 +1795,18 @@ export default function HomeTradingSuiteHero() {
                               </div>
                             </div>
                           ))}
+                        </div>
+
+                        {/* Launch Full L2 Orderbook Terminal Button */}
+                        <div className="pt-2">
+                          <Link
+                            href={`/orderbook?symbol=${activeCoin.symbol}`}
+                            className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
+                          >
+                            <Activity className="w-3.5 h-3.5" />
+                            <span>Launch Full L2 Orderbook Terminal ({activeCoin.base})</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
                         </div>
                       </div>
                     </div>

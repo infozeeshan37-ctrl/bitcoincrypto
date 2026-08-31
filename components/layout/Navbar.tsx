@@ -16,6 +16,7 @@ import {
   Sparkles,
   Zap,
   LineChart,
+  Activity,
   Search
 } from "lucide-react";
 import LiveTickerBar from "./LiveTickerBar";
@@ -170,6 +171,29 @@ export default function Navbar() {
                     </div>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
                       Perpetual open interest, liquidations, and long/short ratio.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/orderbook"
+                  onClick={() => setActiveDropdown(null)}
+                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-amber-50/80 dark:hover:bg-amber-950/30 transition group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition">
+                        L2 Order Book Terminal
+                      </span>
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-400 text-slate-950">
+                        DEPTH
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
+                      Aggregated CLOB depth, whale prints, and slippage simulator.
                     </p>
                   </div>
                 </Link>
@@ -448,6 +472,25 @@ export default function Navbar() {
               </div>
               <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-900/40 text-rose-800 dark:text-rose-300">
                 OI & Liq
+              </span>
+            </Link>
+
+            <Link
+              href="/orderbook"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-amber-50/70 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-700/60 transition"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center">
+                  <Activity className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-900 dark:text-white block text-xs">L2 Order Book Terminal</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">Aggregated depth & whale tape</span>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-400 text-slate-950">
+                DEPTH
               </span>
             </Link>
           </div>

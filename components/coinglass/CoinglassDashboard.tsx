@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   Flame,
   TrendingUp,
@@ -84,6 +85,9 @@ interface LongShortRatioData {
 }
 
 export default function CoinglassDashboard() {
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+
   const [openInterestList, setOpenInterestList] = useState<OpenInterestData[]>([]);
   const [totalOiFormatted, setTotalOiFormatted] = useState("$68.20B");
   const [fundingRates, setFundingRates] = useState<FundingRateItem[]>([]);
@@ -93,7 +97,15 @@ export default function CoinglassDashboard() {
   const [loading, setLoading] = useState(true);
   const [lastSyncTime, setLastSyncTime] = useState("");
   const [countdown, setCountdown] = useState(10);
-  const [selectedTab, setSelectedTab] = useState<"oi" | "liquidations" | "funding" | "longshort">("oi");
+  const [selectedTab, setSelectedTab] = useState<"oi" | "liquidations" | "funding" | "longshort">(
+    tabParam === "liquidations" || tabParam === "funding" || tabParam === "longshort" ? tabParam : "oi"
+  );
+
+  useEffect(() => {
+    if (tabParam && ["oi", "liquidations", "funding", "longshort"].includes(tabParam)) {
+      setSelectedTab(tabParam as any);
+    }
+  }, [tabParam]);
 
   const fetchCoinglassData = useCallback(async () => {
     try {
