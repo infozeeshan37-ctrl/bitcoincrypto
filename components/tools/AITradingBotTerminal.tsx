@@ -501,12 +501,6 @@ export default function AITradingBotTerminal() {
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
               <span>Real-Time Multi-Factor Signals Engine</span>
             </span>
-            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold border ${
-              wsConnected ? "bg-emerald-100 text-emerald-800 border-emerald-200" : "bg-blue-100 text-blue-800 border-blue-200"
-            }`}>
-              <Radio className={`w-3 h-3 ${wsConnected ? "text-emerald-600 animate-pulse" : "text-blue-600"}`} />
-              <span>{wsConnected ? "Binance WebSocket Stream" : "Binance REST Sync"}</span>
-            </span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
             AI Trading Signals &amp; Multi-Timeframe Execution Terminal
@@ -906,8 +900,8 @@ export default function AITradingBotTerminal() {
                   </div>
                 </div>
                 <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>WebSocket Stream</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>Automated Bridge</span>
                 </span>
               </div>
 
@@ -1474,7 +1468,7 @@ export default function AITradingBotTerminal() {
                     {/* Institutional Whale Block Activity Stream */}
                     <div className="space-y-1.5 pt-1 border-t border-slate-100 dark:border-slate-800">
                       <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
-                        <span>Whale Prints Stream</span>
+                        <span>Whale Prints</span>
                         <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
                       </div>
                       <div className="space-y-1">

@@ -133,10 +133,6 @@ export default function WhaleOrdersTerminal() {
                   <Fish className="w-4 h-4 text-indigo-400" />
                   Institutional Whale Orderflow &amp; Block Tape
                 </span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  Real-Time Sync (Binance, CME, Coinbase, OKX)
-                </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
                 Whale Orders &amp; <br className="hidden sm:inline" />
@@ -455,7 +451,7 @@ export default function WhaleOrdersTerminal() {
               </div>
 
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
-                Streaming
+                Active
               </span>
             </div>
 
@@ -648,7 +644,7 @@ export default function WhaleOrdersTerminal() {
         <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
             <ShieldAlert className="w-4 h-4 text-emerald-500 shrink-0" />
-            <span>Verified multi-exchange data aggregated directly from Binance REST/WebSocket, CME Institutional, and on-chain whale clusters.</span>
+            <span>Institutional market data aggregated across global spot, derivatives, and on-chain whale clusters.</span>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">

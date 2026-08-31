@@ -1183,16 +1183,13 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
           <div className="bg-slate-950 text-white rounded-3xl p-6 sm:p-7 border border-slate-800 shadow-2xl space-y-3">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
-                </span>
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
                 <h4 className="text-xs font-black text-white uppercase tracking-wider font-mono">
-                  Liquidation Ticker Stream (1s)
+                  Liquidation Alert Feed
                 </h4>
               </div>
               <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
-                WebSocket Feed
+                Radar Feed
               </span>
             </div>
 

@@ -171,10 +171,6 @@ export default function CryptoNewsCPIDashboard() {
                   <Swords className="w-3 h-3 text-amber-400" />
                   Macro Battles &amp; Interest Rate Matrix
                 </span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  Real-Time API Connected
-                </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
                 Crypto Market Battles, <br className="hidden sm:inline" />

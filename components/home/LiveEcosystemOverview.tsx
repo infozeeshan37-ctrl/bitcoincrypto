@@ -135,8 +135,6 @@ export default function LiveEcosystemOverview() {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 mb-2">
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Market &amp; Macro Intelligence</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping ml-1" />
-              <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-black">1s STREAM</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               Market &amp; Macro Ecosystem

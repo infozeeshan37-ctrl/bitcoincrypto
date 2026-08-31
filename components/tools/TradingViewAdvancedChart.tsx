@@ -326,7 +326,7 @@ function TradingViewAdvancedChartComponent({
               {cleanSymbol}
             </span>
             <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-800/40">
-              WebSocket Stream
+              Active
             </span>
           </div>
 
@@ -560,7 +560,7 @@ function TradingViewAdvancedChartComponent({
         <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-xs bg-slate-900/40 pointer-events-none">
           <div className="flex items-center gap-2 font-mono">
             <RefreshCw className="w-4 h-4 animate-spin text-amber-400" />
-            <span>Connecting TradingView WebSocket Engine...</span>
+            <span>Loading TradingView Chart...</span>
           </div>
         </div>
       </div>

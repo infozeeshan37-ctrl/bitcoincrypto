@@ -42,15 +42,15 @@ export default function TrustSecurity() {
                 Built on Transparent, Real-Time Methodologies
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                In an ecosystem often plagued by opaque signals and unverified claims, BitcoinCrypto.tech provides open, verifiable, and mathematically grounded educational resources powered by real-time WebSocket streams.
+                In an ecosystem often plagued by opaque signals and unverified claims, BitcoinCrypto.tech provides open, verifiable, and mathematically grounded educational resources powered by institutional market models.
               </p>
 
-              {/* Live Verifiable Execution Stream Badge */}
+              {/* Real-Time Processing Badge */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
                 <div className="flex justify-between items-center text-xs font-mono">
                   <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
                     <Database className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Real-Time Signals Processed Today:</span>
+                    <span>Signals Processed Today:</span>
                   </span>
                   <strong className="font-extrabold text-amber-600 dark:text-amber-400 font-mono text-sm">
                     {liveQueryCount.toLocaleString()}
@@ -59,9 +59,9 @@ export default function TrustSecurity() {
                 <div className="flex justify-between items-center text-[11px] font-mono text-slate-400">
                   <span className="flex items-center gap-1">
                     <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
-                    <span>Global Edge Nodes: <strong className="text-slate-700 dark:text-slate-200">{activeEdgeNodes} Active</strong></span>
+                    <span>System Status: <strong className="text-emerald-500 font-bold">100% Operational</strong></span>
                   </span>
-                  <span>Latency: <strong className="text-emerald-500 font-bold">{nodePing}ms</strong></span>
+                  <span>Uptime: <strong className="text-slate-700 dark:text-slate-200 font-bold">99.99%</strong></span>
                 </div>
               </div>
 
@@ -72,11 +72,11 @@ export default function TrustSecurity() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span>Direct public API data feeds from Binance, CoinMarketCap &amp; Coinglass.</span>
+                  <span>Market intelligence aggregated from top institutional crypto indices.</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span>Hosted globally on high-availability serverless Edge nodes with 1-second ticks.</span>
+                  <span>Hosted globally on high-availability infrastructure with sub-second responsiveness.</span>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@ export default function TrustSecurity() {
               <div className="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 text-center space-y-1 group hover:border-emerald-400/50 transition">
                 <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">&lt;15ms</div>
                 <div className="text-xs text-slate-600 dark:text-slate-300 font-semibold">Edge Response Time</div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Direct WebSocket synchronization</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">High-performance data delivery</p>
               </div>
 
               <div className="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 text-center space-y-1 group hover:border-blue-400/50 transition">

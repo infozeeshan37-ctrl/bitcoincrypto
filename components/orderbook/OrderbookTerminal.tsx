@@ -1056,7 +1056,7 @@ export default function OrderbookTerminal() {
               </div>
               <div className="text-right font-mono">
                 <div className="text-[11px] text-emerald-400 font-bold">Spread: ${spreadUsd} ({spreadBps} bps)</div>
-                <div className="text-[9px] text-slate-400">1s Ticks Stream</div>
+                <div className="text-[9px] text-slate-400">Tick Feed</div>
               </div>
             </div>
 
@@ -1292,8 +1292,8 @@ export default function OrderbookTerminal() {
                 </p>
               </div>
             </div>
-            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse">
-              STREAMING
+            <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+              MONITORED
             </span>
           </div>
 

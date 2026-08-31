@@ -276,26 +276,17 @@ export default function LiveTickerBar() {
         {/* 2. LEFT PINNED: HEADLIGHT LIVE BADGE & GLOBAL MACRO METRICS */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0 bg-slate-950/95 py-1 pr-3 border-r border-slate-800/80 shadow-md">
           
-          {/* Pulsing Live Beacon with 1-Second Heartbeat */}
+          {/* Market Ticker Badge */}
           <Link
             href="/markets"
-            className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/90 text-emerald-300 border border-emerald-700/60 shadow-xs hover:bg-emerald-900/80 transition group"
-            title="1,000ms WebSocket Stream Synchronized with Zero Latency"
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-900 text-amber-400 border border-slate-700/80 shadow-xs hover:bg-slate-800 transition group"
+            title="Cryptocurrency Market Ticker"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span className="text-[10px] font-black tracking-wider uppercase font-mono group-hover:text-white transition flex items-center gap-1">
-              STREAM <span className="text-[9px] text-emerald-400 font-mono hidden sm:inline">1s</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="text-[10px] font-black tracking-wider uppercase font-mono group-hover:text-white transition">
+              MARKETS
             </span>
           </Link>
-
-          {/* Real-time Latency Pill */}
-          <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">
-            <Activity className="w-2.5 h-2.5 text-emerald-400 animate-pulse" />
-            <span className="text-emerald-400 font-bold">{latencyMs}ms</span>
-          </div>
 
           {/* Quick Global Metrics Chips */}
           <div className="hidden md:flex items-center gap-2.5 text-slate-400 font-medium text-[11px]">
