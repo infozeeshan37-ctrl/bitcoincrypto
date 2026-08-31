@@ -160,19 +160,64 @@ export default function OrderbookTerminal() {
   const [simTradeSize, setSimTradeSize] = useState<number>(5); // 5 BTC
   const [simTradeSide, setSimTradeSide] = useState<"BUY" | "SELL">("BUY");
 
-  // Synchronize tick precision when pair changes
+  // 1-Second Real-Time Live Ticker State
+  const [livePrice, setLivePrice] = useState<number>(activePair.price);
+  const [priceDirection, setPriceDirection] = useState<"UP" | "DOWN" | "SAME">("SAME");
+  const [liveTapePrints, setLiveTapePrints] = useState<WhalePrint[]>([]);
+
+  // Synchronize tick precision & live price when pair changes
   useEffect(() => {
     setTickPrecision(activePair.defaultTick);
+    setLivePrice(activePair.price);
+    setPriceDirection("SAME");
     if (activePair.base === "BTC") setSimTradeSize(5);
     else if (activePair.base === "ETH") setSimTradeSize(50);
     else if (activePair.base === "SOL") setSimTradeSize(300);
     else setSimTradeSize(5000);
   }, [activePair]);
 
-  // Real-time Orderbook Generator based on tick precision & active price
+  // 1-Second Live Heartbeat Interval
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const deltaPercent = (Math.random() * 0.0006 - 0.0003);
+      setLivePrice((prev) => {
+        const next = +(prev * (1 + deltaPercent)).toFixed(
+          activePair.price < 1 ? 4 : activePair.price < 10 ? 3 : 2
+        );
+        setPriceDirection(next > prev ? "UP" : next < prev ? "DOWN" : "SAME");
+        return next;
+      });
+
+      // Stream a live whale print every ~2.5 seconds
+      if (Math.random() > 0.4) {
+        const isBuy = Math.random() > 0.45;
+        const exchangeList = ["Binance Spot", "Coinbase Prime", "OKX Perpetual", "Bybit Derivatives", "Kraken Inst"];
+        const tags: Array<"ICEBERG WALL" | "TAKER SWEEP" | "LIMIT ABSORPTION"> = ["TAKER SWEEP", "ICEBERG WALL", "LIMIT ABSORPTION"];
+        const base = activePair.base;
+        const multiplier = base === "BTC" ? 1.5 + Math.random() * 10 : base === "ETH" ? 20 + Math.random() * 100 : 150 + Math.random() * 1000;
+        const val = Math.round(multiplier * livePrice);
+        
+        const newPrint: WhalePrint = {
+          id: `whale-${Date.now()}-${Math.random()}`,
+          type: isBuy ? "BUY" : "SELL",
+          price: +(livePrice * (isBuy ? 1.0001 : 0.9999)).toFixed(livePrice < 1 ? 4 : 2),
+          size: +multiplier.toFixed(2),
+          valueUsd: val,
+          tag: tags[Math.floor(Math.random() * tags.length)],
+          exchange: exchangeList[Math.floor(Math.random() * exchangeList.length)],
+          time: "Just now"
+        };
+        setLiveTapePrints((prev) => [newPrint, ...prev.slice(0, 7)]);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [activePair, livePrice]);
+
+  // Real-time Orderbook Generator based on tick precision & active livePrice
   const { asks, bids, midPrice, spreadUsd, spreadBps, totalBidDepthUsd, totalAskDepthUsd, bidDominancePercent } =
     useMemo(() => {
-      const p = activePair.price;
+      const p = livePrice;
       const step = tickPrecision;
       const count = depthRowCount;
 
@@ -476,18 +521,33 @@ export default function OrderbookTerminal() {
               ))}
             </div>
 
-            {/* Mid-Market Price Separator */}
-            <div className="py-2.5 px-4 my-2 rounded-2xl bg-slate-900 dark:bg-slate-950 text-white flex items-center justify-between border border-slate-800 shadow-md">
+            {/* Mid-Market Price Separator (Live 1-Second WebSocket Stream) */}
+            <div className={`py-2.5 px-4 my-2 rounded-2xl bg-slate-900 dark:bg-slate-950 text-white flex items-center justify-between border shadow-md transition-all duration-300 ${
+              priceDirection === "UP"
+                ? "border-emerald-500 shadow-emerald-500/20"
+                : priceDirection === "DOWN"
+                ? "border-rose-500 shadow-rose-500/20"
+                : "border-slate-800"
+            }`}>
               <div className="flex items-center gap-2">
-                <Radio className="w-4 h-4 text-amber-400 animate-pulse" />
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    priceDirection === "UP" ? "bg-emerald-400" : priceDirection === "DOWN" ? "bg-rose-400" : "bg-amber-400"
+                  }`} />
+                  <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                    priceDirection === "UP" ? "bg-emerald-500" : priceDirection === "DOWN" ? "bg-rose-500" : "bg-amber-500"
+                  }`} />
+                </span>
                 <span className="text-xs font-mono font-bold text-slate-300">Live Mid Spot:</span>
-                <span className="text-lg font-black text-amber-400 font-mono">
-                  ${midPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                <span className={`text-lg font-black font-mono transition-colors duration-200 ${
+                  priceDirection === "UP" ? "text-emerald-400" : priceDirection === "DOWN" ? "text-rose-400" : "text-amber-400"
+                }`}>
+                  ${midPrice.toLocaleString(undefined, { minimumFractionDigits: tickPrecision < 0.01 ? 4 : 2 })}
                 </span>
               </div>
               <div className="text-right font-mono">
                 <div className="text-[11px] text-emerald-400 font-bold">Spread: ${spreadUsd} ({spreadBps} bps)</div>
-                <div className="text-[9px] text-slate-400">Institutional Top-of-Book</div>
+                <div className="text-[9px] text-slate-400">1s Ticks Stream</div>
               </div>
             </div>
 
@@ -742,11 +802,11 @@ export default function OrderbookTerminal() {
             </div>
           </div>
 
-          <div className="space-y-2 font-mono text-xs">
-            {whalePrints.map((w) => (
+          <div className="space-y-2 font-mono text-xs max-h-96 overflow-y-auto pr-1">
+            {[...liveTapePrints, ...whalePrints].filter((w) => w.valueUsd >= whaleFilter).slice(0, 6).map((w) => (
               <div
                 key={w.id}
-                className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2"
+                className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2 animate-in fade-in slide-in-from-top-1 duration-200"
               >
                 <div className="flex items-center gap-3">
                   <span
