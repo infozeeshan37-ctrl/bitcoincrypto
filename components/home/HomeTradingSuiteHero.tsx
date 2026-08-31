@@ -697,6 +697,16 @@ export default function HomeTradingSuiteHero() {
             <RefreshCw className="w-4 h-4" />
             <span>Spot Converter</span>
           </button>
+
+          <Link
+            href="/news"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
+            title="Open 24/7 Live Macro News Wire & US CPI Tracker"
+          >
+            <Newspaper className="w-4 h-4 text-amber-500 group-hover:rotate-6 transition-transform" />
+            <span>Latest News &amp; Macro Radar</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
+          </Link>
         </div>
 
         {/* 3. ACTIVE SUITE CARD: TAB 1 (AI TRADING BOT & SIGNALS - EXACT MATCH TO USER SCREENSHOT) */}
