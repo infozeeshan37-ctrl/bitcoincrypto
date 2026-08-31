@@ -646,11 +646,11 @@ export async function GET() {
                 "Primary document and outbound references verified."
               ],
               affectedCoins: [
-                { symbol: "BTCUSDT", name: "Bitcoin", impact: "VOLATILE", expectedRange: "Live Reaction" },
-                { symbol: "ETHUSDT", name: "Ethereum", impact: "VOLATILE", expectedRange: "Live Reaction" }
+                { symbol: "BTCUSDT", name: "Bitcoin", impact: "VOLATILE", expectedRange: "Market Reaction" },
+                { symbol: "ETHUSDT", name: "Ethereum", impact: "VOLATILE", expectedRange: "Market Reaction" }
               ],
               author: {
-                name: item.source_info?.name || "CryptoCompare Live Wire",
+                name: item.source_info?.name || "CryptoCompare News Wire",
                 role: "Financial News Correspondent",
                 desk: "Real-Time Intelligence Network"
               },
