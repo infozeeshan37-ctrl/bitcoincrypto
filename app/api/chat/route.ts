@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { buildAgentSystemPrompt, simulateHumanAgentReply, DEFAULT_MODELS } from '@/lib/chat/groqClient';
 import { AGENT_PERSONAS } from '@/lib/chat/agentsData';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -12,6 +15,7 @@ export async function POST(req: NextRequest) {
 
     // If no API key configured on server, return simulated desk reply
     if (!apiKey || apiKey.trim() === '') {
+      console.warn('GROQ_API_KEY not found in server environment variables.');
       const lastUserMsg = messages?.[messages.length - 1]?.text || '';
       const reply = simulateHumanAgentReply(lastUserMsg, agent, messages || []);
       return NextResponse.json({
@@ -23,11 +27,11 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = buildAgentSystemPrompt(agent);
     const formattedMessages = (messages || [])
-      .filter((m: { sender: string }) => m.sender === 'user' || m.sender === 'agent')
+      .filter((m: { sender: string; text?: string }) => (m.sender === 'user' || m.sender === 'agent') && m.text && m.text.trim())
       .slice(-12)
       .map((m: { sender: string; text: string }) => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
-        content: m.text,
+        content: m.text.trim(),
       }));
 
     // Try candidate models in order of capability & availability
@@ -49,6 +53,7 @@ export async function POST(req: NextRequest) {
             temperature: 0.7,
             max_tokens: 650,
           }),
+          cache: 'no-store',
         });
 
         if (response.ok) {
@@ -73,7 +78,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // If all models failed, fall back to dynamic desk engine
+    // Fallback if all models failed
     console.error('All Groq models failed. Last error:', lastError);
     const lastUserMsg = messages?.[messages.length - 1]?.text || '';
     const fallbackReply = simulateHumanAgentReply(lastUserMsg, agent, messages || []);

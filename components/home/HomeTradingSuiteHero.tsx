@@ -930,13 +930,18 @@ export default function HomeTradingSuiteHero() {
                     const isSelected = activeCoin?.symbol === coin.symbol;
                     const isBull = coin.signal.includes("BUY");
                     const isBear = coin.signal.includes("SHORT");
+                    const tick = scannerTickDirection[coin.symbol];
 
                     return (
                       <div
                         key={coin.symbol}
                         onClick={() => setSelectedCoin(coin)}
-                        className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
-                          isSelected
+                        className={`p-4 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
+                          tick === "up"
+                            ? "bg-emerald-50/50 dark:bg-emerald-950/30 border-emerald-400 shadow-lg shadow-emerald-500/20 ring-1 ring-emerald-400/50 scale-[1.01]"
+                            : tick === "down"
+                            ? "bg-rose-50/50 dark:bg-rose-950/30 border-rose-400 shadow-lg shadow-rose-500/20 ring-1 ring-rose-400/50 scale-[1.01]"
+                            : isSelected
                             ? "bg-white dark:bg-slate-900 border-amber-400 dark:border-amber-400 shadow-md shadow-amber-400/10 scale-[1.01]"
                             : "bg-white dark:bg-slate-900 border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/60"
                         }`}
@@ -978,17 +983,39 @@ export default function HomeTradingSuiteHero() {
                           </div>
                         </div>
 
-                        {/* Price & Level preview */}
-                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                        {/* Price & Level preview with 1-Second Flash */}
+                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs items-center">
                           <div>
-                            <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-mono">Live Price</span>
-                            <div className="font-extrabold text-slate-900 dark:text-white">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-mono flex items-center gap-1">
+                              Live Price
+                              {tick === "up" && <span className="text-emerald-500 font-black text-[10px] animate-pulse">▲</span>}
+                              {tick === "down" && <span className="text-rose-500 font-black text-[10px] animate-pulse">▼</span>}
+                            </span>
+                            <div
+                              className={`font-extrabold font-mono transition-colors duration-200 ${
+                                tick === "up"
+                                  ? "text-emerald-600 dark:text-emerald-400 font-black scale-105 inline-block"
+                                  : tick === "down"
+                                  ? "text-rose-600 dark:text-rose-400 font-black scale-105 inline-block"
+                                  : "text-slate-900 dark:text-white"
+                              }`}
+                            >
                               ${formatPrice(coin.price)}
                             </div>
                           </div>
                           <div>
                             <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-mono">24h Change</span>
-                            <div className={`font-bold text-[11px] ${coin.change24h >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
+                            <div
+                              className={`font-mono text-[11px] font-bold transition-all duration-200 inline-block px-1 py-0.2 rounded ${
+                                tick === "up"
+                                  ? "bg-emerald-500 text-slate-950 font-black shadow-xs"
+                                  : tick === "down"
+                                  ? "bg-rose-500 text-white font-black shadow-xs"
+                                  : coin.change24h >= 0
+                                  ? "text-emerald-600 dark:text-emerald-400"
+                                  : "text-rose-600 dark:text-rose-400"
+                              }`}
+                            >
                               {coin.change24h >= 0 ? "+" : ""}{coin.change24h.toFixed(2)}%
                             </div>
                           </div>
@@ -1205,10 +1232,10 @@ export default function HomeTradingSuiteHero() {
                   {/* ACTIVE BOT STRATEGY & COIN EXECUTION CARD */}
                   <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                     
-                    {/* Top: Active Symbol & Single Authoritative AI Direction Verdict */}
+                    {/* Top: Active Symbol & Single Authoritative AI Direction Verdict with 1-Second Price Blinking */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2.5 mb-1">
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2.5">
                           <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
                             {activeCoin.base}/USDT
                           </h3>
@@ -1216,13 +1243,50 @@ export default function HomeTradingSuiteHero() {
                             {activeCoin.strategy}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-2">
-                          <span>Live Binance Spot: <strong className="text-slate-900 dark:text-white">${formatPrice(activeCoin.price)}</strong></span>
-                          <span>•</span>
-                          <span className={activeCoin.change24h >= 0 ? "text-emerald-600 dark:text-emerald-400 font-bold" : "text-rose-600 dark:text-rose-400 font-bold"}>
-                            {activeCoin.change24h >= 0 ? "+" : ""}{activeCoin.change24h.toFixed(2)}%
-                          </span>
-                        </p>
+
+                        {/* Large Live Spot Price Display with 1-Second Flashing Engine */}
+                        <div className="flex flex-wrap items-center gap-3">
+                          <div
+                            className={`px-3.5 py-1.5 rounded-2xl border-2 transition-all duration-300 flex items-center gap-2 font-mono ${
+                              activeCoinTick === "up"
+                                ? "bg-emerald-500/20 border-emerald-400 text-emerald-400 shadow-lg shadow-emerald-500/30 scale-105"
+                                : activeCoinTick === "down"
+                                ? "bg-rose-500/20 border-rose-400 text-rose-400 shadow-lg shadow-rose-500/30 scale-105"
+                                : "bg-slate-100 dark:bg-slate-800/90 border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                            }`}
+                          >
+                            <span className="text-[10px] text-slate-400 uppercase font-bold">Spot:</span>
+                            <strong className="text-lg sm:text-xl font-black tracking-tight">
+                              ${formatPrice(activeCoin.price)}
+                            </strong>
+                            {activeCoinTick === "up" && (
+                              <span className="text-xs font-black text-emerald-400 animate-bounce">▲</span>
+                            )}
+                            {activeCoinTick === "down" && (
+                              <span className="text-xs font-black text-rose-400 animate-bounce">▼</span>
+                            )}
+                          </div>
+
+                          <div
+                            className={`font-mono text-xs font-extrabold px-2.5 py-1.5 rounded-xl border transition-all duration-300 ${
+                              activeCoinTick === "up"
+                                ? "bg-emerald-500 text-slate-950 border-emerald-400"
+                                : activeCoinTick === "down"
+                                ? "bg-rose-500 text-white border-rose-400"
+                                : activeCoin.change24h >= 0
+                                ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
+                                : "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800"
+                            }`}
+                          >
+                            {activeCoin.change24h >= 0 ? "+" : ""}
+                            {activeCoin.change24h.toFixed(2)}% (24h)
+                          </div>
+
+                          <div className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <span>1s Heartbeat Active</span>
+                          </div>
+                        </div>
                       </div>
 
                       {/* Single Authoritative AI Direction Verdict Badge (No Ambiguity) */}
@@ -1652,14 +1716,17 @@ export default function HomeTradingSuiteHero() {
                       {/* Institutional Whale Block Activity Stream */}
                       <div className="space-y-1.5 pt-1 border-t border-slate-100 dark:border-slate-800">
                         <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
-                          <span>Whale Block Prints</span>
-                          <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$100K Trades</span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                            <span>Live Whale Prints Stream</span>
+                          </span>
+                          <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
                         </div>
                         <div className="space-y-1">
-                          {whaleTrades.slice(0, 2).map((tr, idx) => (
+                          {dynamicWhaleTrades.map((tr) => (
                             <div
-                              key={idx}
-                              className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-mono"
+                              key={tr.id}
+                              className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-mono transition-all duration-300 animate-in fade-in slide-in-from-top-1"
                             >
                               <div className="flex items-center gap-1.5">
                                 <span
@@ -1675,7 +1742,10 @@ export default function HomeTradingSuiteHero() {
                                   {tr.amount} <span className="text-slate-400 text-[10px]">({tr.value})</span>
                                 </span>
                               </div>
-                              <span className="text-[9px] text-slate-400">{tr.time}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[9px] text-amber-600 dark:text-amber-400 hidden sm:inline">{tr.badge}</span>
+                                <span className="text-[9px] text-slate-400 font-bold">{tr.time}</span>
+                              </div>
                             </div>
                           ))}
                         </div>
