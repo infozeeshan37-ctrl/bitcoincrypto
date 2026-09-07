@@ -84,6 +84,8 @@ export default function CryptoNewsCPIDashboard() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedTimeframe, setSelectedTimeframe] = useState<"all" | "live" | "week" | "month" | "historical">("all");
+  const [visibleCount, setVisibleCount] = useState<number>(12);
   const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
   const [selectedBattle, setSelectedBattle] = useState<MacroBattle | null>(null);
   const [copiedArticle, setCopiedArticle] = useState(false);
@@ -136,9 +138,25 @@ export default function CryptoNewsCPIDashboard() {
       item.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (item.whyItMatters && item.whyItMatters.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (item.affectedCoins && item.affectedCoins.some((c) => c.symbol.toLowerCase().includes(searchQuery.toLowerCase())));
+    
     const matchCat = selectedCategory === "All" || item.category === selectedCategory;
-    return matchSearch && matchCat;
+
+    const itemAgeMs = Date.now() - new Date(item.publishedAt).getTime();
+    let matchTime = true;
+    if (selectedTimeframe === "live") {
+      matchTime = itemAgeMs <= 24 * 60 * 60 * 1000 && !item.isHistorical;
+    } else if (selectedTimeframe === "week") {
+      matchTime = itemAgeMs <= 7 * 24 * 60 * 60 * 1000;
+    } else if (selectedTimeframe === "month") {
+      matchTime = itemAgeMs <= 30 * 24 * 60 * 60 * 1000;
+    } else if (selectedTimeframe === "historical") {
+      matchTime = item.isHistorical === true || itemAgeMs > 7 * 24 * 60 * 60 * 1000;
+    }
+
+    return matchSearch && matchCat && matchTime;
   });
+
+  const displayedNews = filteredNews.slice(0, visibleCount);
 
   const handleCopyStory = () => {
     if (!selectedArticle) return;
@@ -296,7 +314,7 @@ export default function CryptoNewsCPIDashboard() {
         </button>
       </div>
 
-      {/* TAB 1: REAL-TIME NEWS WIRE */}
+      {/* TAB 1: REAL-TIME NEWS WIRE & HISTORICAL ARCHIVE */}
       {activeTab === "news" && (
         <div className="space-y-6">
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
@@ -306,7 +324,7 @@ export default function CryptoNewsCPIDashboard() {
                 <div className="flex items-center gap-2">
                   <Flame className="w-4 h-4 text-amber-500" />
                   <h3 className="text-base font-black text-slate-900 dark:text-white">
-                    Live Crypto News Wire ({news.length} Real-Time Stories)
+                    Live Crypto News Wire &amp; Historical Archive ({filteredNews.length} Stories Available)
                   </h3>
                   <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
@@ -314,7 +332,7 @@ export default function CryptoNewsCPIDashboard() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Continuously aggregating verified breaking reports from Cointelegraph, Decrypt, CryptoSlate, Bitcoin.com, and institutional news wires.
+                  Browse real-time breaking news alongside a searchable historical archive of past macroeconomic catalysts and crypto events.
                 </p>
               </div>
 
@@ -324,11 +342,25 @@ export default function CryptoNewsCPIDashboard() {
                   <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    placeholder="Search topic, coin, battle..."
+                    placeholder="Search past news, CPI, coin, event..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setVisibleCount(12);
+                    }}
                     className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-slate-400"
                   />
+                  {searchQuery && (
+                    <button
+                      onClick={() => {
+                        setSearchQuery("");
+                        setVisibleCount(12);
+                      }}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
 
                 <button
@@ -346,12 +378,76 @@ export default function CryptoNewsCPIDashboard() {
               </div>
             </div>
 
+            {/* Timeframe Filter Navigation Bar */}
+            <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+              <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase px-2">Timeline:</span>
+              {[
+                { id: "all", label: `🔥 All News & Archive (${news.length})` },
+                { id: "live", label: "⚡ Live Stream (Last 24h)" },
+                { id: "week", label: "🗓️ Past 7 Days" },
+                { id: "month", label: "📅 Past 30 Days" },
+                { id: "historical", label: "🏛️ Historical Archive" },
+              ].map((tf) => (
+                <button
+                  key={tf.id}
+                  onClick={() => {
+                    setSelectedTimeframe(tf.id as any);
+                    setVisibleCount(12);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${
+                    selectedTimeframe === tf.id
+                      ? "bg-slate-900 dark:bg-blue-600 text-white shadow-sm font-black"
+                      : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700"
+                  }`}
+                >
+                  {tf.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Historical Milestone Quick Jump Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+              <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider shrink-0 mr-1">
+                ⭐ Major Catalysts:
+              </span>
+              {[
+                { label: "⚡ $50B YCC Buyback", query: "Yield Curve Control" },
+                { label: "🚀 $150K Hate Rally", query: "Hate Rally" },
+                { label: "💎 Ethena $4B Basis", query: "Ethena" },
+                { label: "📊 July CPI (2.7%)", query: "CPI" },
+                { label: "🏛️ FIT21 Bill", query: "FIT21" },
+                { label: "🌍 BRICS Reserve", query: "BRICS" },
+                { label: "💳 Visa Solana", query: "Visa" },
+                { label: "⛏️ 700 EH/s Hashrate", query: "Hashrate" },
+              ].map((m, mIdx) => (
+                <button
+                  key={mIdx}
+                  onClick={() => {
+                    setSearchQuery(m.query);
+                    setSelectedCategory("All");
+                    setSelectedTimeframe("all");
+                    setVisibleCount(12);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition border ${
+                    searchQuery === m.query
+                      ? "bg-amber-400 text-slate-950 border-amber-400 font-black shadow-xs"
+                      : "bg-amber-50/60 dark:bg-amber-950/30 text-amber-900 dark:text-amber-300 border-amber-200/60 dark:border-amber-800/60 hover:bg-amber-100"
+                  }`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
             {/* Category Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
               {categories.map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    setVisibleCount(12);
+                  }}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
                     selectedCategory === cat
                       ? "bg-blue-600 text-white shadow-sm font-black"
@@ -365,7 +461,7 @@ export default function CryptoNewsCPIDashboard() {
 
             {/* News Cards Stream Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredNews.map((item) => {
+              {displayedNews.map((item) => {
                 const isBull = item.sentiment === "BULLISH";
                 const isBear = item.sentiment === "BEARISH";
 
@@ -399,17 +495,24 @@ export default function CryptoNewsCPIDashboard() {
                           </span>
                         </div>
 
-                        <span
-                          className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
-                            isBull
-                              ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
-                              : isBear
-                              ? "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
-                              : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
-                          }`}
-                        >
-                          {item.sentiment}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          {item.isHistorical && (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-black bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300/40">
+                              ARCHIVE
+                            </span>
+                          )}
+                          <span
+                            className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
+                              isBull
+                                ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300"
+                                : isBear
+                                ? "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300"
+                                : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                            }`}
+                          >
+                            {item.sentiment}
+                          </span>
+                        </div>
                       </div>
 
                       <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug line-clamp-3">
@@ -444,6 +547,23 @@ export default function CryptoNewsCPIDashboard() {
                 );
               })}
             </div>
+
+            {/* Load More Pagination & Counter */}
+            {filteredNews.length > visibleCount && (
+              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-xs text-slate-500 dark:text-slate-400 font-mono font-medium">
+                  Showing <strong className="text-slate-900 dark:text-white">{displayedNews.length}</strong> of <strong className="text-slate-900 dark:text-white">{filteredNews.length}</strong> stories ({selectedTimeframe === "all" ? "Live & Historical Archive" : selectedTimeframe} filter)
+                </div>
+
+                <button
+                  onClick={() => setVisibleCount((prev) => prev + 12)}
+                  className="px-6 py-3 rounded-2xl bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-500 text-white text-xs font-black transition flex items-center gap-2 shadow-md"
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>Load More News &amp; Past Stories (+12)</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

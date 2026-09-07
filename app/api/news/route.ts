@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { HISTORICAL_NEWS_ARCHIVE, HistoricalNewsItem } from "@/lib/newsArchive";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
@@ -53,6 +54,7 @@ export interface NewsItem {
   hotScore: number;
   readTime: string;
   marketImpact: "HIGH" | "MEDIUM" | "STRATEGIC";
+  isHistorical?: boolean;
 }
 
 export interface MacroBattle {
@@ -290,9 +292,9 @@ const HISTORICAL_CPI_RELEASES: CPIDataRelease[] = [
   },
 ];
 
-// In-memory cache for ultra-fast response (<10ms) with 60s TTL
-let cachedNews: NewsItem[] | null = null;
-let lastCacheTime = 0;
+// Persistent cache combining live RSS items + permanent historical archive
+let persistentNewsList: NewsItem[] = [...HISTORICAL_NEWS_ARCHIVE];
+let lastLiveFetchTime = 0;
 const CACHE_TTL_MS = 60 * 1000;
 
 function unescapeHtml(str: string): string {
@@ -450,7 +452,8 @@ function parseXmlItem(itemXml: string, sourceName: string): NewsItem | null {
     sentiment,
     hotScore: 88 + (diffMinutes % 11),
     readTime: "3 min read",
-    marketImpact: (category === "Macro & CPI" || category === "Fed Rates" || category === "Bitcoin") ? "HIGH" : "MEDIUM"
+    marketImpact: (category === "Macro & CPI" || category === "Fed Rates" || category === "Bitcoin") ? "HIGH" : "MEDIUM",
+    isHistorical: false
   };
 }
 
@@ -474,7 +477,7 @@ async function fetchRssFeed(url: string, sourceName: string): Promise<NewsItem[]
     const itemsXml = xml.split(/<item[\s>]/i).slice(1).map((x) => x.split(/<\/item>/i)[0]);
     const items: NewsItem[] = [];
 
-    for (const itemXml of itemsXml.slice(0, 15)) {
+    for (const itemXml of itemsXml.slice(0, 20)) {
       const parsed = parseXmlItem(itemXml, sourceName);
       if (parsed) items.push(parsed);
     }
@@ -487,12 +490,14 @@ async function fetchRssFeed(url: string, sourceName: string): Promise<NewsItem[]
 export async function GET() {
   const now = Date.now();
 
-  // Return from in-memory cache if valid
-  if (cachedNews && (now - lastCacheTime < CACHE_TTL_MS)) {
+  // If live fetch was done within 60s, return combined persistent archive directly
+  if (now - lastLiveFetchTime < CACHE_TTL_MS && persistentNewsList.length > HISTORICAL_NEWS_ARCHIVE.length) {
     return NextResponse.json({
       success: true,
       data: {
-        news: cachedNews,
+        news: persistentNewsList,
+        historicalCount: HISTORICAL_NEWS_ARCHIVE.length,
+        liveCount: persistentNewsList.length - HISTORICAL_NEWS_ARCHIVE.length,
         macroBattles: MACRO_BATTLES,
         centralBankPolicies: CENTRAL_BANK_POLICIES,
         cpi: {
@@ -548,36 +553,36 @@ export async function GET() {
     const feedResults = await Promise.all(feeds.map((f) => fetchRssFeed(f.url, f.name)));
     const liveItems = feedResults.flat();
 
-    // Sort by publication timestamp (newest first)
-    liveItems.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    // Merge live articles with the historical archive, ensuring news is NEVER cleared!
+    const combinedAll = [...liveItems, ...persistentNewsList, ...HISTORICAL_NEWS_ARCHIVE];
 
     // Deduplicate by normalized title
     const seenTitles = new Set<string>();
-    const deduplicatedLive: NewsItem[] = [];
+    const deduplicatedCombined: NewsItem[] = [];
 
-    for (const item of liveItems) {
-      const norm = item.title.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 30);
+    for (const item of combinedAll) {
+      const norm = item.title.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 35);
       if (!seenTitles.has(norm)) {
         seenTitles.add(norm);
-        deduplicatedLive.push(item);
+        deduplicatedCombined.push(item);
       }
     }
 
-    if (deduplicatedLive.length > 0) {
-      cachedNews = deduplicatedLive.slice(0, 60);
-      lastCacheTime = now;
-    }
-  } catch (e) {
-    console.warn("Live RSS aggregator warning:", e);
-  }
+    // Sort by publication timestamp (newest first, followed by historical)
+    deduplicatedCombined.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-  // Fallback if network was completely offline
-  const finalNews = cachedNews && cachedNews.length > 0 ? cachedNews : [];
+    persistentNewsList = deduplicatedCombined.slice(0, 250);
+    lastLiveFetchTime = now;
+  } catch (e) {
+    console.warn("Live RSS aggregator merge notice:", e);
+  }
 
   return NextResponse.json({
     success: true,
     data: {
-      news: finalNews,
+      news: persistentNewsList,
+      historicalCount: HISTORICAL_NEWS_ARCHIVE.length,
+      liveCount: Math.max(0, persistentNewsList.length - HISTORICAL_NEWS_ARCHIVE.length),
       macroBattles: MACRO_BATTLES,
       centralBankPolicies: CENTRAL_BANK_POLICIES,
       cpi: {
