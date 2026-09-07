@@ -33,7 +33,8 @@ import {
   Cpu,
   ShieldCheck,
   Fuel,
-  Coins
+  Coins,
+  RefreshCw
 } from "lucide-react";
 import { CPIDataRelease, NewsItem, MacroBattle, CentralBankPolicy } from "@/app/api/news/route";
 
@@ -305,28 +306,43 @@ export default function CryptoNewsCPIDashboard() {
                 <div className="flex items-center gap-2">
                   <Flame className="w-4 h-4 text-amber-500" />
                   <h3 className="text-base font-black text-slate-900 dark:text-white">
-                    Institutional News Wire &amp; Macro Battles
+                    Live Crypto News Wire ({news.length} Real-Time Stories)
                   </h3>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                    Verified Feeds
+                    LIVE 24/7 STREAM
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Institutional reports connected to global economic bureaus, SEC filings, blockchain analytics, and institutional desks.
+                  Continuously aggregating verified breaking reports from Cointelegraph, Decrypt, CryptoSlate, Bitcoin.com, and institutional news wires.
                 </p>
               </div>
 
-              {/* Search */}
-              <div className="relative w-full md:w-72">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search topic, battle, coin..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-slate-400"
-                />
+              {/* Search & Sync Actions */}
+              <div className="flex items-center gap-2.5 w-full md:w-auto">
+                <div className="relative flex-1 md:w-64">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search topic, coin, battle..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-slate-400"
+                  />
+                </div>
+
+                <button
+                  onClick={() => {
+                    setLoading(true);
+                    fetchNewsAndMacro();
+                  }}
+                  disabled={loading}
+                  className="px-3.5 py-2 rounded-xl text-xs font-black bg-blue-600 hover:bg-blue-500 text-white transition flex items-center gap-1.5 shrink-0 shadow-sm disabled:opacity-50"
+                  title="Force re-sync with all live crypto news wires"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+                  <span>{loading ? "Syncing..." : "Sync Live News"}</span>
+                </button>
               </div>
             </div>
 
@@ -348,7 +364,7 @@ export default function CryptoNewsCPIDashboard() {
             </div>
 
             {/* News Cards Stream Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredNews.map((item) => {
                 const isBull = item.sentiment === "BULLISH";
                 const isBear = item.sentiment === "BEARISH";
@@ -357,9 +373,21 @@ export default function CryptoNewsCPIDashboard() {
                   <article
                     key={item.id}
                     onClick={() => setSelectedArticle(item)}
-                    className="p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/70 dark:hover:border-blue-500/70 hover:shadow-lg transition-all duration-200 space-y-3.5 flex flex-col justify-between cursor-pointer group relative"
+                    className="p-5 rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500/70 dark:hover:border-blue-500/70 hover:shadow-lg transition-all duration-200 space-y-3.5 flex flex-col justify-between cursor-pointer group relative overflow-hidden"
                   >
-                    <div className="space-y-2.5">
+                    <div className="space-y-3">
+                      {/* Featured News Thumbnail if available */}
+                      {item.imageUrl && (
+                        <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-950 border border-slate-100 dark:border-slate-800">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                          />
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
@@ -384,7 +412,7 @@ export default function CryptoNewsCPIDashboard() {
                         </span>
                       </div>
 
-                      <h3 className="text-base font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                      <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug line-clamp-3">
                         {item.title}
                       </h3>
 
@@ -396,18 +424,18 @@ export default function CryptoNewsCPIDashboard() {
                       {item.whyItMatters && (
                         <div className="p-2.5 rounded-xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/70 text-[11px] text-amber-950 dark:text-amber-200 leading-relaxed">
                           <strong className="text-amber-800 dark:text-amber-400 font-bold block mb-0.5">💡 Why this matters for Crypto:</strong>
-                          {item.whyItMatters}
+                          <span className="line-clamp-2">{item.whyItMatters}</span>
                         </div>
                       )}
                     </div>
 
                     <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-[11px]">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                        <span>Source: <strong className="text-slate-900 dark:text-white">{item.source}</strong></span>
+                      <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-[11px] truncate max-w-[150px]">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span className="truncate">Source: <strong className="text-slate-900 dark:text-white">{item.source}</strong></span>
                       </div>
 
-                      <span className="text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1 text-[11px] group-hover:underline">
+                      <span className="text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1 text-[11px] group-hover:underline shrink-0">
                         <span>Read Full Analysis</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>
@@ -857,6 +885,17 @@ export default function CryptoNewsCPIDashboard() {
             {/* Modal Content */}
             <div className="p-6 overflow-y-auto space-y-6 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
               
+              {/* Featured Cover Image if available */}
+              {selectedArticle.imageUrl && (
+                <div className="relative w-full aspect-video sm:aspect-[21/9] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-md">
+                  <img
+                    src={selectedArticle.imageUrl}
+                    alt={selectedArticle.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
               {/* Why it Matters Callout */}
               {selectedArticle.whyItMatters && (
                 <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs text-amber-950 dark:text-amber-200">

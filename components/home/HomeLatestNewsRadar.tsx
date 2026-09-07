@@ -422,6 +422,17 @@ export default function HomeLatestNewsRadar() {
                 </div>
               </div>
 
+              {/* Featured Cover Image if available */}
+              {activeItem.imageUrl && (
+                <div className="relative w-full aspect-video sm:aspect-[21/9] rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-md">
+                  <img
+                    src={activeItem.imageUrl}
+                    alt={activeItem.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
               {/* Main Headline */}
               <div className="space-y-2">
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-snug">
