@@ -111,10 +111,10 @@ export default function CryptoNewsCPIDashboard() {
     }
   }, []);
 
-  // Automatic live fetch every 5 minutes in background
+  // Automatic live fetch every 60 seconds in background
   useEffect(() => {
     fetchNewsAndMacro();
-    const interval = setInterval(fetchNewsAndMacro, 300000);
+    const interval = setInterval(fetchNewsAndMacro, 60000);
     return () => clearInterval(interval);
   }, [fetchNewsAndMacro]);
 
@@ -144,7 +144,7 @@ export default function CryptoNewsCPIDashboard() {
     const itemAgeMs = Date.now() - new Date(item.publishedAt).getTime();
     let matchTime = true;
     if (selectedTimeframe === "live") {
-      matchTime = itemAgeMs <= 24 * 60 * 60 * 1000 && !item.isHistorical;
+      matchTime = !item.isHistorical || itemAgeMs <= 48 * 60 * 60 * 1000;
     } else if (selectedTimeframe === "week") {
       matchTime = itemAgeMs <= 7 * 24 * 60 * 60 * 1000;
     } else if (selectedTimeframe === "month") {

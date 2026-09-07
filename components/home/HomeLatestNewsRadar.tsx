@@ -125,7 +125,7 @@ export default function HomeLatestNewsRadar() {
 
   useEffect(() => {
     fetchNews();
-    const interval = setInterval(fetchNews, 300000); // 5-minute auto refresh
+    const interval = setInterval(fetchNews, 60000); // 60-second auto refresh
 
     return () => {
       clearInterval(interval);
@@ -182,7 +182,7 @@ export default function HomeLatestNewsRadar() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
-                5m AUTO-FEED
+                LIVE AUTO-FEED
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -191,7 +191,7 @@ export default function HomeLatestNewsRadar() {
           </div>
         </div>
 
-        {/* Action HUD: Search & Direct Link */}
+        {/* Action HUD: Search, Refresh & Direct Link */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Quick Search */}
           <div className="relative">
@@ -212,6 +212,15 @@ export default function HomeLatestNewsRadar() {
               </button>
             )}
           </div>
+
+          <button
+            onClick={fetchNews}
+            disabled={isLoading}
+            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-xs disabled:opacity-50"
+            title="Sync latest live news feeds"
+          >
+            <RefreshCw size={14} className={isLoading ? 'animate-spin text-amber-500' : ''} />
+          </button>
 
           <Link
             href="/news"

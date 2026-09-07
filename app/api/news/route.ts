@@ -321,9 +321,9 @@ function unescapeHtml(str: string): string {
 
 function parseXmlItem(itemXml: string, sourceName: string): NewsItem | null {
   const getTag = (tag: string) => {
-    const cdataMatch = itemXml.match(new RegExp("<" + tag + "[^>]*><!\[CDATA\[([\s\S]*?)\]\]></" + tag + ">", "i"));
+    const cdataMatch = itemXml.match(new RegExp("<" + tag + "[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]></" + tag + ">", "i"));
     if (cdataMatch) return cdataMatch[1].trim();
-    const match = itemXml.match(new RegExp("<" + tag + "[^>]*>([\s\S]*?)</" + tag + ">", "i"));
+    const match = itemXml.match(new RegExp("<" + tag + "[^>]*>([\\s\\S]*?)</" + tag + ">", "i"));
     return match ? match[1].trim() : "";
   };
 
@@ -331,14 +331,21 @@ function parseXmlItem(itemXml: string, sourceName: string): NewsItem | null {
   const title = unescapeHtml(rawTitle);
   if (!title || title.length < 5) return null;
 
-  const link = getTag("link") || getTag("guid") || "";
-  const pubDateStr = getTag("pubDate") || getTag("dc:date") || "";
-  const rawDesc = getTag("description") || getTag("content:encoded") || "";
-  const creator = unescapeHtml(getTag("dc:creator") || getTag("author") || `${sourceName} Desk`);
+  // Link handling (RSS <link> vs Atom <link href="..."> vs <guid>)
+  let link = getTag("link") || getTag("guid") || "";
+  const linkHrefMatch = itemXml.match(/<link[^>]+href=["']([^"']+)["']/i);
+  if (linkHrefMatch && linkHrefMatch[1]) {
+    link = linkHrefMatch[1];
+  }
+
+  const pubDateStr = getTag("pubDate") || getTag("published") || getTag("updated") || getTag("dc:date") || "";
+  const rawDesc = getTag("description") || getTag("summary") || getTag("content:encoded") || getTag("content") || "";
+  const creator = unescapeHtml(getTag("dc:creator") || getTag("author") || getTag("name") || `${sourceName} Desk`);
 
   // Extract featured image
   let imageUrl: string | undefined = undefined;
   const mediaMatch = itemXml.match(/<media:content[^>]+url=["']([^"']+)["']/i) ||
+                     itemXml.match(/<media:thumbnail[^>]+url=["']([^"']+)["']/i) ||
                      itemXml.match(/<enclosure[^>]+url=["']([^"']+)["']/i) ||
                      itemXml.match(/<img[^>]+src=["']([^"']+)["']/i);
   if (mediaMatch && mediaMatch[1] && mediaMatch[1].startsWith("http")) {
@@ -411,7 +418,7 @@ function parseXmlItem(itemXml: string, sourceName: string): NewsItem | null {
   const diffMs = Math.max(1, Date.now() - pubDate.getTime());
   const diffMinutes = Math.floor(diffMs / 60000);
   let timeAgo = "Just now";
-  if (diffMinutes < 60) timeAgo = `${diffMinutes}m ago`;
+  if (diffMinutes < 60) timeAgo = `${Math.max(1, diffMinutes)}m ago`;
   else if (diffMinutes < 1440) timeAgo = `${Math.floor(diffMinutes / 60)}h ago`;
   else timeAgo = `${Math.floor(diffMinutes / 1440)}d ago`;
 
@@ -460,13 +467,13 @@ function parseXmlItem(itemXml: string, sourceName: string): NewsItem | null {
 async function fetchRssFeed(url: string, sourceName: string): Promise<NewsItem[]> {
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 4500);
+    const timeout = setTimeout(() => controller.abort(), 6000);
 
     const res = await fetch(url, {
       signal: controller.signal,
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "application/rss+xml, application/xml, text/xml, */*"
+        "Accept": "application/rss+xml, application/xml, text/xml, application/atom+xml, */*"
       },
       next: { revalidate: 60 }
     });
@@ -474,10 +481,16 @@ async function fetchRssFeed(url: string, sourceName: string): Promise<NewsItem[]
 
     if (!res.ok) return [];
     const xml = await res.text();
-    const itemsXml = xml.split(/<item[\s>]/i).slice(1).map((x) => x.split(/<\/item>/i)[0]);
+    
+    // Support both RSS <item> and Atom <entry>
+    const isAtom = xml.includes("<entry");
+    const itemsXml = isAtom
+      ? xml.split(/<entry[\s>]/i).slice(1).map((x) => x.split(/<\/entry>/i)[0])
+      : xml.split(/<item[\s>]/i).slice(1).map((x) => x.split(/<\/item>/i)[0]);
+      
     const items: NewsItem[] = [];
 
-    for (const itemXml of itemsXml.slice(0, 20)) {
+    for (const itemXml of itemsXml.slice(0, 25)) {
       const parsed = parseXmlItem(itemXml, sourceName);
       if (parsed) items.push(parsed);
     }
@@ -490,7 +503,7 @@ async function fetchRssFeed(url: string, sourceName: string): Promise<NewsItem[]
 export async function GET() {
   const now = Date.now();
 
-  // If live fetch was done within 60s, return combined persistent archive directly
+  // If live fetch was done recently, return cached list
   if (now - lastLiveFetchTime < CACHE_TTL_MS && persistentNewsList.length > HISTORICAL_NEWS_ARCHIVE.length) {
     return NextResponse.json({
       success: true,
@@ -539,19 +552,23 @@ export async function GET() {
     });
   }
 
-  // Fetch live articles across 6 tier-1 crypto news feeds concurrently
+  // Fetch live articles across 8 tier-1 crypto news feeds concurrently
   const feeds = [
     { url: "https://cointelegraph.com/rss", name: "Cointelegraph" },
     { url: "https://decrypt.co/feed", name: "Decrypt" },
     { url: "https://cryptoslate.com/feed/", name: "CryptoSlate" },
     { url: "https://news.bitcoin.com/feed/", name: "Bitcoin.com" },
     { url: "https://bitcoinmagazine.com/.rss/full/", name: "Bitcoin Magazine" },
-    { url: "https://u.today/rss", name: "U.Today" }
+    { url: "https://u.today/rss", name: "U.Today" },
+    { url: "https://www.theblock.co/rss.xml", name: "The Block" },
+    { url: "https://www.coindesk.com/arc/outboundfeeds/rss/", name: "CoinDesk" }
   ];
 
   try {
-    const feedResults = await Promise.all(feeds.map((f) => fetchRssFeed(f.url, f.name)));
-    const liveItems = feedResults.flat();
+    const feedSettled = await Promise.allSettled(feeds.map((f) => fetchRssFeed(f.url, f.name)));
+    const liveItems = feedSettled
+      .filter((r): r is PromiseFulfilledResult<NewsItem[]> => r.status === "fulfilled")
+      .flatMap((r) => r.value);
 
     // Merge live articles with the historical archive, ensuring news is NEVER cleared!
     const combinedAll = [...liveItems, ...persistentNewsList, ...HISTORICAL_NEWS_ARCHIVE];
@@ -571,7 +588,7 @@ export async function GET() {
     // Sort by publication timestamp (newest first, followed by historical)
     deduplicatedCombined.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-    persistentNewsList = deduplicatedCombined.slice(0, 250);
+    persistentNewsList = deduplicatedCombined.slice(0, 300);
     lastLiveFetchTime = now;
   } catch (e) {
     console.warn("Live RSS aggregator merge notice:", e);
