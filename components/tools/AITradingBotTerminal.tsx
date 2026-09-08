@@ -46,13 +46,16 @@ import {
   formatCurrency
 } from "@/lib/aiSignalEngine";
 
-const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
+const BINANCE_TOP_PAIRS: CoinConfig[] = [
   { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", defaultTimeframe: "15M" },
   { symbol: "ETHUSDT", name: "Ethereum", base: "ETH", defaultTimeframe: "15M" },
   { symbol: "SOLUSDT", name: "Solana", base: "SOL", defaultTimeframe: "15M" },
   { symbol: "BNBUSDT", name: "BNB", base: "BNB", defaultTimeframe: "1H" },
   { symbol: "XRPUSDT", name: "XRP", base: "XRP", defaultTimeframe: "15M" },
   { symbol: "DOGEUSDT", name: "Dogecoin", base: "DOGE", defaultTimeframe: "5M" },
+];
+
+const SEARCHABLE_COINS_DIRECTORY: CoinConfig[] = [
   { symbol: "ADAUSDT", name: "Cardano", base: "ADA", defaultTimeframe: "1H" },
   { symbol: "AVAXUSDT", name: "Avalanche", base: "AVAX", defaultTimeframe: "15M" },
   { symbol: "SUIUSDT", name: "Sui", base: "SUI", defaultTimeframe: "5M" },
@@ -104,6 +107,8 @@ const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
   { symbol: "JTOUSDT", name: "Jito", base: "JTO", defaultTimeframe: "15M" },
   { symbol: "STRKUSDT", name: "Starknet", base: "STRK", defaultTimeframe: "15M" }
 ];
+
+const ALL_SEARCHABLE_COINS: CoinConfig[] = [...BINANCE_TOP_PAIRS, ...SEARCHABLE_COINS_DIRECTORY];
 
 export default function AITradingBotTerminal() {
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
@@ -192,7 +197,7 @@ export default function AITradingBotTerminal() {
       allTickers.forEach((t: any) => tickerMap.set(t.symbol, t));
       setCachedRawTickers(tickerMap);
 
-      const allPairsToProcess = [...BINANCE_SUPPORTED_PAIRS, ...customPairs];
+      const allPairsToProcess = [...ALL_SEARCHABLE_COINS, ...customPairs];
       const updated = allPairsToProcess.map((cfg) => {
         const raw = tickerMap.get(cfg.symbol);
         if (!raw) return null;
@@ -366,8 +371,16 @@ export default function AITradingBotTerminal() {
       .catch(() => alert(`Could not load ${fullSymbol} from Binance.`));
   };
 
-  // Filter coins
-  const filteredCoins = liveSignals.filter((c) => {
+  // Filter coins (Only show top pairs by default; search across full directory when query is provided)
+  const filteredCoins = (search.trim().length > 0
+    ? liveSignals
+    : liveSignals.filter(
+        (c) =>
+          BINANCE_TOP_PAIRS.some((top) => top.symbol === c.symbol) ||
+          customPairs.some((cp) => cp.symbol === c.symbol) ||
+          (selectedCoin && selectedCoin.symbol === c.symbol)
+      )
+  ).filter((c) => {
     const matchesSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.symbol.toLowerCase().includes(search.toLowerCase()) ||

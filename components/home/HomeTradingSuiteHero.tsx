@@ -57,13 +57,18 @@ import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails"
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 
-const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
+// Top primary coins shown by default (Zero scroll clutter)
+const BINANCE_TOP_PAIRS: CoinConfig[] = [
   { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", defaultTimeframe: "15M" },
   { symbol: "ETHUSDT", name: "Ethereum", base: "ETH", defaultTimeframe: "15M" },
   { symbol: "SOLUSDT", name: "Solana", base: "SOL", defaultTimeframe: "15M" },
   { symbol: "BNBUSDT", name: "BNB", base: "BNB", defaultTimeframe: "1H" },
   { symbol: "XRPUSDT", name: "XRP", base: "XRP", defaultTimeframe: "15M" },
   { symbol: "DOGEUSDT", name: "Dogecoin", base: "DOGE", defaultTimeframe: "5M" },
+];
+
+// Extended directory of coins searchable by name or ticker
+const SEARCHABLE_COINS_DIRECTORY: CoinConfig[] = [
   { symbol: "ADAUSDT", name: "Cardano", base: "ADA", defaultTimeframe: "1H" },
   { symbol: "AVAXUSDT", name: "Avalanche", base: "AVAX", defaultTimeframe: "15M" },
   { symbol: "SUIUSDT", name: "Sui", base: "SUI", defaultTimeframe: "5M" },
@@ -115,6 +120,8 @@ const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
   { symbol: "JTOUSDT", name: "Jito", base: "JTO", defaultTimeframe: "15M" },
   { symbol: "STRKUSDT", name: "Starknet", base: "STRK", defaultTimeframe: "15M" }
 ];
+
+const ALL_SEARCHABLE_COINS: CoinConfig[] = [...BINANCE_TOP_PAIRS, ...SEARCHABLE_COINS_DIRECTORY];
 
 export default function HomeTradingSuiteHero() {
   const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi" | "liquidation">("bot");
@@ -317,7 +324,7 @@ export default function HomeTradingSuiteHero() {
       allTickers.forEach((t: any) => tickerMap.set(t.symbol, t));
       setCachedRawTickers(tickerMap);
 
-      const allPairsToProcess = [...BINANCE_SUPPORTED_PAIRS, ...customPairs];
+      const allPairsToProcess = [...ALL_SEARCHABLE_COINS, ...customPairs];
       const updated = allPairsToProcess.map((cfg) => {
         const raw = tickerMap.get(cfg.symbol);
         if (!raw) return null;
@@ -448,7 +455,15 @@ export default function HomeTradingSuiteHero() {
       .catch(() => alert(`Could not load ${fullSymbol} from Binance.`));
   };
 
-  const filteredCoins = liveSignals.filter((c) => {
+  const filteredCoins = (search.trim().length > 0
+    ? liveSignals
+    : liveSignals.filter(
+        (c) =>
+          BINANCE_TOP_PAIRS.some((top) => top.symbol === c.symbol) ||
+          customPairs.some((cp) => cp.symbol === c.symbol) ||
+          (selectedCoin && selectedCoin.symbol === c.symbol)
+      )
+  ).filter((c) => {
     const matchesSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.symbol.toLowerCase().includes(search.toLowerCase()) ||
