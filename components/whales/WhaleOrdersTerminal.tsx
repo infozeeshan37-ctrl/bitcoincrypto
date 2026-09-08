@@ -187,12 +187,7 @@ export default function WhaleOrdersTerminal() {
   return (
     <div className="space-y-10 pb-20">
       
-      {/* 1. PROFESSIONAL REAL-TIME WHALE ORDERS & LARGE TRADES GRAPH (STARTING COMPONENT MATCHING REFERENCE PHOTO) */}
-      <section id="whale-chart-terminal">
-        <WhaleOrdersChartTerminal />
-      </section>
-
-      {/* 2. HERO BANNER WITH LIVE WHALE HUD */}
+      {/* 1. HERO BANNER WITH LIVE WHALE HUD */}
       <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 border border-indigo-900/40 shadow-xl relative overflow-hidden">
         {/* Glow Effects */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -777,6 +772,11 @@ export default function WhaleOrdersTerminal() {
         </div>
 
       </div>
+
+      {/* 3. PROFESSIONAL REAL-TIME WHALE ORDERS & LARGE TRADES GRAPH */}
+      <section id="whale-chart-terminal">
+        <WhaleOrdersChartTerminal />
+      </section>
 
       {/* 4. COMPREHENSIVE IN-DEPTH PLAIN-ENGLISH EDUCATIONAL GUIDE (COINGLASS MASTERCLASS) */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">

@@ -471,26 +471,6 @@ export default function AITradingBotTerminal() {
     setTimeout(() => setCopiedWebhook(false), 2500);
   };
 
-  // Micro orderbook ladder calculations
-  const depthPriceStep = activeCoin ? activeCoin.price * 0.0006 : 10;
-  const mockAskLevels = activeCoin ? [
-    { price: activeCoin.price + depthPriceStep * 3, size: (0.78 * (copilotCapital / 1000)).toFixed(3), total: "$1.45M", depth: 85 },
-    { price: activeCoin.price + depthPriceStep * 2, size: (0.52 * (copilotCapital / 1000)).toFixed(3), total: "$890K", depth: 60 },
-    { price: activeCoin.price + depthPriceStep * 1, size: (0.34 * (copilotCapital / 1000)).toFixed(3), total: "$460K", depth: 35 },
-  ] : [];
-
-  const mockBidLevels = activeCoin ? [
-    { price: activeCoin.price - depthPriceStep * 1, size: (0.46 * (copilotCapital / 1000)).toFixed(3), total: "$620K", depth: 42 },
-    { price: activeCoin.price - depthPriceStep * 2, size: (0.94 * (copilotCapital / 1000)).toFixed(3), total: "$1.72M", depth: 95 },
-    { price: activeCoin.price - depthPriceStep * 3, size: (0.68 * (copilotCapital / 1000)).toFixed(3), total: "$980K", depth: 72 },
-  ] : [];
-
-  const whaleTrades = activeCoin ? [
-    { time: "Just now", type: activeCoin.isShort ? "SELL" : "BUY", amount: `${(3.45 + (activeCoin.confidence % 3)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (3.45 + (activeCoin.confidence % 3))).toLocaleString()}`, badge: "Aggressive Market Taker" },
-    { time: "14s ago", type: activeCoin.isShort ? "SELL" : "BUY", amount: `${(2.10 + (activeCoin.confidence % 2)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (2.10 + (activeCoin.confidence % 2))).toLocaleString()}`, badge: "Limit Wall Absorption" },
-    { time: "38s ago", type: "BUY", amount: `${(5.80 + (activeCoin.confidence % 4)).toFixed(2)} ${activeCoin.base}`, value: `$${Math.round(activeCoin.price * (5.80 + (activeCoin.confidence % 4))).toLocaleString()}`, badge: "Institutional Iceberg Fill" }
-  ] : [];
-
   return (
     <div className="space-y-8">
 

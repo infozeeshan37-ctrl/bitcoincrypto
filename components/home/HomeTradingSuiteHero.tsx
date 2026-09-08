@@ -139,14 +139,6 @@ export default function HomeTradingSuiteHero() {
   const [activeCoinTick, setActiveCoinTick] = useState<"up" | "down" | null>(null);
   const [latencyMs, setLatencyMs] = useState(14);
   const [blockHeight, setBlockHeight] = useState(886418);
-  const [orderbookStepOffset, setOrderbookStepOffset] = useState(0);
-  const [dynamicWhaleTrades, setDynamicWhaleTrades] = useState<
-    Array<{ id: string; time: string; type: "BUY" | "SELL"; amount: string; value: string; badge: string }>
-  >([
-    { id: "w-1", time: "Just now", type: "BUY", amount: "5.40 BTC", value: "$477,630", badge: "Aggressive Market Taker" },
-    { id: "w-2", time: "4s ago", type: "BUY", amount: "32.80 ETH", value: "$102,336", badge: "Limit Wall Absorption" },
-    { id: "w-3", time: "8s ago", type: "SELL", amount: "350.00 SOL", value: "$64,650", badge: "Institutional Iceberg Fill" },
-  ]);
 
   // Fetch Live Macro News & CPI Intelligence
   useEffect(() => {
@@ -239,41 +231,7 @@ export default function HomeTradingSuiteHero() {
         return updatedCoin;
       });
 
-      // 3. Shift orderbook depth ladder offset
-      setOrderbookStepOffset((prev) => (prev + 1) % 100);
-
-      // 4. Periodically stream new institutional whale block prints every 3 seconds
-      if (tickCount % 3 === 0 && activeCoinRef.current) {
-        const coin = activeCoinRef.current;
-        const isBuy = Math.random() > 0.4;
-        const sizeMult = 1.5 + Math.random() * 4;
-        const amt = `${sizeMult.toFixed(2)} ${coin.base}`;
-        const val = `$${Math.round(coin.price * sizeMult).toLocaleString()}`;
-        const badges = [
-          "Aggressive Market Taker",
-          "Limit Wall Absorption",
-          "Institutional Iceberg Fill",
-          "TWAP Smart Flow",
-        ];
-        const newTrade = {
-          id: `whale-${Date.now()}`,
-          time: "Just now",
-          type: (isBuy ? "BUY" : "SELL") as "BUY" | "SELL",
-          amount: amt,
-          value: val,
-          badge: badges[Math.floor(Math.random() * badges.length)],
-        };
-
-        setDynamicWhaleTrades((prevTrades) => [
-          newTrade,
-          ...prevTrades.slice(0, 2).map((t, idx) => ({
-            ...t,
-            time: idx === 0 ? "3s ago" : "7s ago",
-          })),
-        ]);
-      }
-
-      // 5. Fluctuate latency slightly (11ms - 17ms)
+      // 3. Fluctuate latency slightly (11ms - 17ms)
       if (tickCount % 4 === 0) {
         setLatencyMs(11 + Math.floor(Math.random() * 6));
       }
@@ -580,21 +538,6 @@ export default function HomeTradingSuiteHero() {
     setCopiedWebhook(true);
     setTimeout(() => setCopiedWebhook(false), 2500);
   };
-
-  // Dynamic 1-second fluctuating orderbook ladder
-  const depthPriceStep = activeCoin ? activeCoin.price * 0.0006 : 10;
-  const oOffset = (orderbookStepOffset % 5) * 0.08;
-  const mockAskLevels = activeCoin ? [
-    { price: activeCoin.price + depthPriceStep * 3, size: (0.78 + oOffset).toFixed(3), total: `$${(1.45 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(85 + (orderbookStepOffset % 7) * 2)) },
-    { price: activeCoin.price + depthPriceStep * 2, size: (0.52 + oOffset * 0.8).toFixed(3), total: `$${(0.89 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(60 + (orderbookStepOffset % 9) * 3)) },
-    { price: activeCoin.price + depthPriceStep * 1, size: (0.34 + oOffset * 0.5).toFixed(3), total: `$${(0.46 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(35 + (orderbookStepOffset % 11) * 2)) },
-  ] : [];
-
-  const mockBidLevels = activeCoin ? [
-    { price: activeCoin.price - depthPriceStep * 1, size: (0.46 + oOffset * 0.6).toFixed(3), total: `$${(0.62 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(42 + (orderbookStepOffset % 8) * 3)) },
-    { price: activeCoin.price - depthPriceStep * 2, size: (0.94 + oOffset * 1.1).toFixed(3), total: `$${(1.72 + oOffset * 0.3).toFixed(2)}M`, depth: Math.min(95, Math.round(92 - (orderbookStepOffset % 6) * 2)) },
-    { price: activeCoin.price - depthPriceStep * 3, size: (0.68 + oOffset * 0.7).toFixed(3), total: `$${(0.98 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(72 + (orderbookStepOffset % 7) * 2)) },
-  ] : [];
 
   // DCA Calculations
   const totalMonths = dcaYears * 12;
