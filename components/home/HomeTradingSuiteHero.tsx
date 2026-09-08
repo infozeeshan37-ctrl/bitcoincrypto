@@ -889,7 +889,7 @@ export default function HomeTradingSuiteHero() {
                 </div>
 
                 {/* Live Signals Stream List */}
-                <div className="space-y-2.5 max-h-[580px] overflow-y-auto pr-1">
+                <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
                   {filteredCoins.length === 0 && (
                     <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
                       <Search className="w-8 h-8 text-slate-400 mx-auto" />
@@ -1271,125 +1271,6 @@ export default function HomeTradingSuiteHero() {
                     </div>
 
                   </div>
-
-                  {/* AI ENTRY COPILOT & FAST RISK SIZER (POSITIONED ON RIGHT TO BALANCE HEIGHTS) */}
-                  <div className="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
-                          <Sliders className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <h4 className="text-base font-bold text-slate-900 dark:text-white">Futures Position &amp; Risk Copilot</h4>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                            Risk calculations for {activeCoin.base}/USDT ({activeCoin.isLong ? "LONG" : "SHORT"})
-                          </p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                        R:R {activeCoin.rrRatioFormatted}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase">Capital ($)</label>
-                        <input
-                          type="number"
-                          value={copilotCapital}
-                          onChange={(e) => setCopilotCapital(Math.max(10, Number(e.target.value)))}
-                          className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase">Risk (%)</label>
-                        <input
-                          type="number"
-                          step="0.5"
-                          min="0.5"
-                          max="10"
-                          value={copilotRiskPercent}
-                          onChange={(e) => setCopilotRiskPercent(Number(e.target.value))}
-                          className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase">Leverage</label>
-                        <select
-                          value={copilotLeverage}
-                          onChange={(e) => setCopilotLeverage(Number(e.target.value))}
-                          className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        >
-                          <option value={1}>1x (Spot)</option>
-                          <option value={2}>2x</option>
-                          <option value={3}>3x (Safe)</option>
-                          <option value={5}>5x (Scalp)</option>
-                          <option value={10}>10x (Aggressive)</option>
-                          <option value={20}>20x (High Risk)</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs">
-                      <div>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Max Risk at SL</span>
-                        <div className="font-black text-rose-600 dark:text-rose-400">-${dollarRisk.toFixed(2)} ({copilotRiskPercent}%)</div>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Position Units</span>
-                        <div className="font-extrabold text-slate-900 dark:text-white truncate">
-                          {positionUnits >= 1 ? positionUnits.toFixed(4) : positionUnits.toFixed(2)} {activeCoin.base}
-                        </div>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Required Margin</span>
-                        <div className="font-bold text-amber-700 dark:text-amber-400">${Math.round(requiredMargin).toLocaleString()}</div>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Target Profit (TP2)</span>
-                        <div className="font-extrabold text-emerald-600 dark:text-emerald-400">+${profitTP2.toFixed(2)}</div>
-                      </div>
-                    </div>
-
-                    {/* Action buttons: Copy Setup & Paper Trade */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <button
-                        onClick={handleCopySignal}
-                        className="w-full py-2.5 bg-slate-950 dark:bg-slate-800 hover:bg-slate-900 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow-sm border border-slate-800 dark:border-slate-700"
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="w-4 h-4 text-emerald-400" />
-                            <span className="text-emerald-300">Trade Setup Copied!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-4 h-4 text-amber-400" />
-                            <span>Copy Trade Setup</span>
-                          </>
-                        )}
-                      </button>
-
-                      <button
-                        onClick={handleSimulateExecution}
-                        className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition shadow-sm"
-                      >
-                        <Play className="w-4 h-4 text-slate-950 fill-current" />
-                        <span>Simulate Paper Trade</span>
-                      </button>
-                    </div>
-
-                    {paperTradeStatus?.active && (
-                      <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between text-xs text-emerald-800 dark:text-emerald-300 font-mono animate-in fade-in">
-                        <span className="font-bold">
-                          ⚡ Paper Order Filled: {paperTradeStatus.side} {activeCoin.base} @ ${formatPrice(paperTradeStatus.fillPrice)}
-                        </span>
-                        <span className="text-[10px] text-slate-400 font-sans">ID: {paperTradeStatus.orderId}</span>
-                      </div>
-                    )}
-
-                  </div>
-
                 </div>
               )}
 
