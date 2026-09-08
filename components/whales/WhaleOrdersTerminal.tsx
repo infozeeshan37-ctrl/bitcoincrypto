@@ -28,6 +28,8 @@ import {
   Sliders,
   Copy,
   Check,
+  Radio,
+  ChevronRight,
   BookOpen,
   Anchor,
   HelpCircle
@@ -58,6 +60,79 @@ export default function WhaleOrdersTerminal() {
   const [sideFilter, setSideFilter] = useState<"ALL" | "BUY" | "SELL">("ALL");
   const [exchangeFilter, setExchangeFilter] = useState<string>("ALL");
   const [copiedTrade, setCopiedTrade] = useState<string | null>(null);
+  const [orderbookStepOffset, setOrderbookStepOffset] = useState(0);
+  const [dynamicWhaleTrades, setDynamicWhaleTrades] = useState<
+    Array<{ id: string; time: string; type: "BUY" | "SELL"; amount: string; value: string; badge: string }>
+  >([
+    { id: "w-1", time: "Just now", type: "BUY", amount: "5.21 BTC", value: "$478,320", badge: "TWAP Smart Flow" },
+    { id: "w-2", time: "3s ago", type: "BUY", amount: "1.52 BTC", value: "$139,840", badge: "Aggressive Market Taker" },
+    { id: "w-3", time: "7s ago", type: "BUY", amount: "2.38 BTC", value: "$218,960", badge: "Limit Wall Absorption" },
+  ]);
+
+  const activeCoin = SUPPORTED_COINS.find((c) => c.symbol === selectedSymbol) || SUPPORTED_COINS[0];
+
+  // Dynamic 1-second continuous tick for orderbook & radar
+  useEffect(() => {
+    let tickCount = 0;
+    const interval = setInterval(() => {
+      tickCount++;
+      setOrderbookStepOffset((prev) => (prev + 1) % 100);
+
+      if (tickCount % 3 === 0) {
+        const isBuy = Math.random() > 0.4;
+        const curPrice = sentiment?.currentPrice || (selectedSymbol === "BTCUSDT" ? 88450 : selectedSymbol === "ETHUSDT" ? 3120 : 180);
+        const sizeMult = 0.5 + Math.random() * 4;
+        const amt = `${sizeMult.toFixed(2)} ${activeCoin.base}`;
+        const val = `$${Math.round(curPrice * sizeMult).toLocaleString()}`;
+        const badges = [
+          "TWAP Smart Flow",
+          "Aggressive Market Taker",
+          "Limit Wall Absorption",
+          "Institutional Iceberg Fill",
+          "Dark Pool Cross",
+          "CEX-DEX Arb Sweep",
+        ];
+        const randomBadge = badges[Math.floor(Math.random() * badges.length)];
+
+        setDynamicWhaleTrades((prev) => [
+          {
+            id: `w-${Date.now()}`,
+            time: "Just now",
+            type: isBuy ? "BUY" : "SELL",
+            amount: amt,
+            value: val,
+            badge: randomBadge,
+          },
+          ...prev.slice(0, 3).map((item, idx) => ({
+            ...item,
+            time: `${(idx + 1) * 3}s ago`,
+          })),
+        ]);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [sentiment?.currentPrice, selectedSymbol, activeCoin.base]);
+
+  const formatPrice = (p: number) => {
+    if (p >= 1000) return p.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (p >= 1) return p.toFixed(2);
+    return p.toFixed(4);
+  };
+
+  const currentMidPrice = sentiment?.currentPrice || (selectedSymbol === "BTCUSDT" ? 78517.68 : selectedSymbol === "ETHUSDT" ? 3120 : 180);
+  const depthPriceStep = currentMidPrice * 0.0006;
+  const oOffset = (orderbookStepOffset % 5) * 0.08;
+  const mockAskLevels = [
+    { price: currentMidPrice + depthPriceStep * 3, size: (0.86 + oOffset).toFixed(3), total: `$${(1.47 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(85 + (orderbookStepOffset % 7) * 2)) },
+    { price: currentMidPrice + depthPriceStep * 2, size: (0.584 + oOffset * 0.8).toFixed(3), total: `$${(0.90 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(60 + (orderbookStepOffset % 9) * 3)) },
+    { price: currentMidPrice + depthPriceStep * 1, size: (0.380 + oOffset * 0.5).toFixed(3), total: `$${(0.47 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(35 + (orderbookStepOffset % 11) * 2)) },
+  ];
+
+  const mockBidLevels = [
+    { price: currentMidPrice - depthPriceStep * 1, size: (0.508 + oOffset * 0.6).toFixed(3), total: `$${(0.63 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(42 + (orderbookStepOffset % 8) * 3)) },
+    { price: currentMidPrice - depthPriceStep * 2, size: (1.028 + oOffset * 1.1).toFixed(3), total: `$${(1.74 + oOffset * 0.3).toFixed(2)}M`, depth: Math.min(95, Math.round(92 - (orderbookStepOffset % 6) * 2)) },
+    { price: currentMidPrice - depthPriceStep * 3, size: (0.736 + oOffset * 0.7).toFixed(3), total: `$${(1.00 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(72 + (orderbookStepOffset % 7) * 2)) },
+  ];
 
   const fetchWhaleData = useCallback(async (sym: string) => {
     try {
@@ -108,8 +183,6 @@ export default function WhaleOrdersTerminal() {
     setCopiedTrade(order.id);
     setTimeout(() => setCopiedTrade(null), 2000);
   };
-
-  const activeCoin = SUPPORTED_COINS.find((c) => c.symbol === selectedSymbol) || SUPPORTED_COINS[0];
 
   return (
     <div className="space-y-10 pb-20">
@@ -434,6 +507,141 @@ export default function WhaleOrdersTerminal() {
         {/* RIGHT COLUMN: REAL-TIME STREAMING WHALE TAPE & CONTROLS (Col 5) */}
         <div className="lg:col-span-5 space-y-6">
           
+          {/* REAL-TIME ORDERBOOK DEPTH & INSTITUTIONAL WHALE RADAR */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <Link
+                  href={`/orderbook?symbol=${selectedSymbol}`}
+                  className="flex items-center gap-2 group hover:opacity-80 transition"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
+                    <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1">
+                      <span>Orderbook &amp; Whale Radar</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition" />
+                    </h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      L2 depth &amp; block taker prints
+                    </p>
+                  </div>
+                </Link>
+                <Link
+                  href={`/orderbook?symbol=${selectedSymbol}`}
+                  className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition flex items-center gap-1"
+                >
+                  <span>L2 Terminal</span>
+                  <ArrowRight className="w-2.5 h-2.5" />
+                </Link>
+              </div>
+
+              {/* Orderbook Depth Ladder */}
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 dark:text-slate-500 uppercase pb-0.5 border-b border-slate-200 dark:border-slate-700">
+                  <span>Price ($)</span>
+                  <span>Size ({activeCoin.base})</span>
+                  <span>Vol</span>
+                </div>
+
+                {/* Asks (Red) */}
+                <div className="space-y-1">
+                  {mockAskLevels.map((lvl, i) => (
+                    <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
+                      <div
+                        className="absolute right-0 top-0 bottom-0 bg-rose-500/10 dark:bg-rose-500/20"
+                        style={{ width: `${lvl.depth}%` }}
+                      />
+                      <span className="text-rose-600 dark:text-rose-400 font-bold z-10">${formatPrice(lvl.price)}</span>
+                      <span className="text-slate-600 dark:text-slate-400 z-10">{lvl.size}</span>
+                      <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mid Price Separator */}
+                <div className="py-1 px-2 rounded-lg bg-slate-900 dark:bg-slate-950 text-white flex justify-between items-center text-[11px] font-mono border border-slate-800">
+                  <span className="text-[9px] text-amber-400 font-bold uppercase flex items-center gap-1">
+                    <Radio className="w-2.5 h-2.5 text-amber-400 animate-pulse" /> Mid Spot:
+                  </span>
+                  <span className="font-black text-amber-400">${formatPrice(currentMidPrice)}</span>
+                  <span className="text-[9px] text-slate-400 font-bold">Spread 0.01%</span>
+                </div>
+
+                {/* Bids (Green) */}
+                <div className="space-y-1">
+                  {mockBidLevels.map((lvl, i) => (
+                    <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
+                      <div
+                        className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 dark:bg-emerald-500/20"
+                        style={{ width: `${lvl.depth}%` }}
+                      />
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold z-10">${formatPrice(lvl.price)}</span>
+                      <span className="text-slate-600 dark:text-slate-400 z-10">{lvl.size}</span>
+                      <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Institutional Whale Block Activity Stream */}
+            <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span>Whale Prints</span>
+                </span>
+                <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
+              </div>
+              <div className="space-y-1.5">
+                {dynamicWhaleTrades.map((tr) => (
+                  <div
+                    key={tr.id}
+                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs font-mono transition-all duration-300 gap-2"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span
+                        className={`px-1.5 py-0.5 rounded text-[10px] font-black shrink-0 ${
+                          tr.type === "BUY"
+                            ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                            : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
+                        }`}
+                      >
+                        {tr.type}
+                      </span>
+                      <div className="truncate">
+                        <span className="font-extrabold text-slate-900 dark:text-white">{tr.amount}</span>
+                        <span className="text-slate-500 dark:text-slate-400 text-[11px] ml-1.5 font-medium">({tr.value})</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 text-right">
+                      <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate max-w-[120px] hidden sm:inline">
+                        {tr.badge}
+                      </span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold whitespace-nowrap bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-800">
+                        {tr.time}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Launch Full L2 Orderbook Terminal Button */}
+              <div className="pt-2">
+                <Link
+                  href={`/orderbook?symbol=${selectedSymbol}`}
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
+                >
+                  <Activity className="w-3.5 h-3.5" />
+                  <span>Launch Full L2 Orderbook Terminal ({activeCoin.base})</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">

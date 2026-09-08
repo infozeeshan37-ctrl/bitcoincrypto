@@ -1532,11 +1532,11 @@ export default function HomeTradingSuiteHero() {
                     </div>
                   </div>
 
-                  {/* 3. BOTTOM 2-COLUMN INSTITUTIONAL INTELLIGENCE (LIQUIDATION POOLS & ORDERBOOK DEPTH) */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                  {/* 3. BOTTOM INSTITUTIONAL MACRO INTELLIGENCE */}
+                  <div className="grid grid-cols-1 gap-6 items-stretch">
                     
-                    {/* CARD 1: US CPI INFLATION INTELLIGENCE & AI MACRO RADAR */}
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
+                    {/* CARD: US CPI INFLATION INTELLIGENCE & AI MACRO RADAR */}
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                       <div className="space-y-4">
                         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                           <Link
@@ -1584,7 +1584,7 @@ export default function HomeTradingSuiteHero() {
                         </div>
 
                         {/* CPI Key Metrics Grid */}
-                        <div className="grid grid-cols-2 gap-2.5 font-mono text-xs">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-mono text-xs">
                           <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-0.5">
                             <div className="text-[10px] uppercase font-bold text-slate-400">Latest Headline CPI</div>
                             <div className="text-sm font-black text-emerald-600 dark:text-emerald-400">2.7% YoY</div>
@@ -1619,7 +1619,7 @@ export default function HomeTradingSuiteHero() {
                       </div>
 
                       {/* Launch Full CPI AI Predictor Button */}
-                      <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                      <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
                         <Link
                           href="/cpi"
                           className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
@@ -1628,141 +1628,6 @@ export default function HomeTradingSuiteHero() {
                           <span>Launch Full US CPI AI Predictor &amp; Scenarios</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
-                      </div>
-                    </div>
-
-                    {/* CARD 2: REAL-TIME ORDERBOOK DEPTH & INSTITUTIONAL WHALE RADAR */}
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                          <Link
-                            href={`/orderbook?symbol=${activeCoin.symbol}`}
-                            className="flex items-center gap-2 group hover:opacity-80 transition"
-                          >
-                            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
-                              <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                            </div>
-                            <div>
-                              <h4 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1">
-                                <span>Orderbook &amp; Whale Radar</span>
-                                <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition" />
-                              </h4>
-                              <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                                L2 depth &amp; block taker prints
-                              </p>
-                            </div>
-                          </Link>
-                          <Link
-                            href={`/orderbook?symbol=${activeCoin.symbol}`}
-                            className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition flex items-center gap-1"
-                          >
-                            <span>L2 Terminal</span>
-                            <ArrowRight className="w-2.5 h-2.5" />
-                          </Link>
-                        </div>
-
-                        {/* Orderbook Depth Ladder */}
-                        <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
-                          <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 dark:text-slate-500 uppercase pb-0.5 border-b border-slate-200 dark:border-slate-700">
-                            <span>Price ($)</span>
-                            <span>Size ({activeCoin.base})</span>
-                            <span>Vol</span>
-                          </div>
-
-                          {/* Asks (Red) */}
-                          <div className="space-y-1">
-                            {mockAskLevels.map((lvl, i) => (
-                              <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
-                                <div
-                                  className="absolute right-0 top-0 bottom-0 bg-rose-500/10 dark:bg-rose-500/20"
-                                  style={{ width: `${lvl.depth}%` }}
-                                />
-                                <span className="text-rose-600 dark:text-rose-400 font-bold z-10">${formatPrice(lvl.price)}</span>
-                                <span className="text-slate-600 dark:text-slate-400 z-10">{lvl.size}</span>
-                                <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Mid Price Separator */}
-                          <div className="py-1 px-2 rounded-lg bg-slate-900 dark:bg-slate-950 text-white flex justify-between items-center text-[11px] font-mono border border-slate-800">
-                            <span className="text-[9px] text-amber-400 font-bold uppercase flex items-center gap-1">
-                              <Radio className="w-2.5 h-2.5 text-amber-400 animate-pulse" /> Mid Spot:
-                            </span>
-                            <span className="font-black text-amber-400">${formatPrice(activeCoin.price)}</span>
-                            <span className="text-[9px] text-slate-400 font-bold">Spread 0.01%</span>
-                          </div>
-
-                          {/* Bids (Green) */}
-                          <div className="space-y-1">
-                            {mockBidLevels.map((lvl, i) => (
-                              <div key={i} className="relative flex justify-between items-center text-[11px] font-mono py-0.5 px-1 rounded overflow-hidden">
-                                <div
-                                  className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 dark:bg-emerald-500/20"
-                                  style={{ width: `${lvl.depth}%` }}
-                                />
-                                <span className="text-emerald-600 dark:text-emerald-400 font-bold z-10">${formatPrice(lvl.price)}</span>
-                                <span className="text-slate-600 dark:text-slate-400 z-10">{lvl.size}</span>
-                                <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Institutional Whale Block Activity Stream */}
-                      <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
-                        <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
-                          <span className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                            <span>Whale Prints</span>
-                          </span>
-                          <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
-                        </div>
-                        <div className="space-y-1.5">
-                          {dynamicWhaleTrades.map((tr) => (
-                            <div
-                              key={tr.id}
-                              className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs font-mono transition-all duration-300 gap-2"
-                            >
-                              <div className="flex items-center gap-2 min-w-0">
-                                <span
-                                  className={`px-1.5 py-0.5 rounded text-[10px] font-black shrink-0 ${
-                                    tr.type === "BUY"
-                                      ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
-                                      : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
-                                  }`}
-                                >
-                                  {tr.type}
-                                </span>
-                                <div className="truncate">
-                                  <span className="font-extrabold text-slate-900 dark:text-white">{tr.amount}</span>
-                                  <span className="text-slate-500 dark:text-slate-400 text-[11px] ml-1.5 font-medium">({tr.value})</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2 shrink-0 text-right">
-                                <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate max-w-[120px] hidden sm:inline">
-                                  {tr.badge}
-                                </span>
-                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold whitespace-nowrap bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-800">
-                                  {tr.time}
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Launch Full L2 Orderbook Terminal Button */}
-                        <div className="pt-2">
-                          <Link
-                            href={`/orderbook?symbol=${activeCoin.symbol}`}
-                            className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
-                          >
-                            <Activity className="w-3.5 h-3.5" />
-                            <span>Launch Full L2 Orderbook Terminal ({activeCoin.base})</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </Link>
-                        </div>
                       </div>
                     </div>
 
