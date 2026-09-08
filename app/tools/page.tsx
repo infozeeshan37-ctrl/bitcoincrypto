@@ -56,6 +56,16 @@ function ToolsContent() {
     change24h: 2.4
   });
 
+  // Tab change handler that updates the browser URL bar synchronously
+  const handleTabChange = (tab: "bot" | "terminal" | "dca" | "sizer" | "converter" | "liquidation") => {
+    setActiveTab(tab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.pushState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+    }
+  };
+
   // Sync tab/symbol when search params change
   useEffect(() => {
     if (tabParam && ["bot", "terminal", "dca", "sizer", "converter", "liquidation"].includes(tabParam)) {
@@ -163,66 +173,90 @@ function ToolsContent() {
 
         {/* Navigation Tabs Bar */}
         <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm max-w-3xl mx-auto">
-          <button
-            onClick={() => setActiveTab("bot")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+          <a
+            href="/tools?tab=bot"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("bot");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "bot"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
-            <Bot className="w-4 h-4 text-amber-700 dark:text-amber-950" /> AI Trading Bot & Signals
-          </button>
-          <button
-            onClick={() => setActiveTab("terminal")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+            <Bot className="w-4 h-4 text-amber-700 dark:text-amber-950" /> AI Trading Bot &amp; Signals
+          </a>
+          <a
+            href="/tools?tab=terminal"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("terminal");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "terminal"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <BarChart2 className="w-4 h-4" /> Chart Terminal
-          </button>
-          <button
-            onClick={() => setActiveTab("dca")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+          </a>
+          <a
+            href="/tools?tab=dca"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("dca");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "dca"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <Calculator className="w-4 h-4" /> DCA Simulator
-          </button>
-          <button
-            onClick={() => setActiveTab("sizer")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+          </a>
+          <a
+            href="/tools?tab=sizer"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("sizer");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "sizer"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <Sliders className="w-4 h-4" /> Position Sizer
-          </button>
-          <button
-            onClick={() => setActiveTab("converter")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+          </a>
+          <a
+            href="/tools?tab=converter"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("converter");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "converter"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <RefreshCw className="w-4 h-4" /> Spot Converter
-          </button>
-          <button
-            onClick={() => setActiveTab("liquidation")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+          </a>
+          <a
+            href="/tools?tab=liquidation"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("liquidation");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "liquidation"
                 ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             <Flame className="w-4 h-4 text-rose-500" /> CoinGlass Liquidation
-          </button>
+          </a>
         </div>
 
         {/* TAB 1: AI TRADING BOT & SIGNALS */}

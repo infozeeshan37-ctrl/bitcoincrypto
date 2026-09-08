@@ -137,8 +137,49 @@ const SEARCHABLE_COINS_DIRECTORY: CoinConfig[] = [
 
 const ALL_SEARCHABLE_COINS: CoinConfig[] = [...BINANCE_TOP_PAIRS, ...SEARCHABLE_COINS_DIRECTORY];
 
+type HeroTab = "bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi" | "liquidation";
+
 export default function HomeTradingSuiteHero() {
-  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi" | "liquidation">("bot");
+  const [activeTab, setActiveTab] = useState<HeroTab>("bot");
+
+  // Tab change handler that updates the browser URL bar synchronously
+  const handleTabChange = (tab: HeroTab) => {
+    setActiveTab(tab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.pushState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+    }
+  };
+
+  // Sync active tab on mount and on browser back/forward navigation
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const syncTabFromUrl = () => {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get("tab")?.toLowerCase();
+        if (tab === "terminal" || tab === "chart") {
+          setActiveTab("terminal");
+        } else if (tab === "dca") {
+          setActiveTab("dca");
+        } else if (tab === "sizer" || tab === "position") {
+          setActiveTab("sizer");
+        } else if (tab === "converter") {
+          setActiveTab("converter");
+        } else if (tab === "cpi" || tab === "macro") {
+          setActiveTab("cpi");
+        } else if (tab === "liquidation" || tab === "liquidations" || tab === "coinglass") {
+          setActiveTab("liquidation");
+        } else if (tab === "bot" || tab === "signals") {
+          setActiveTab("bot");
+        }
+      };
+
+      syncTabFromUrl();
+      window.addEventListener("popstate", syncTabFromUrl);
+      return () => window.removeEventListener("popstate", syncTabFromUrl);
+    }
+  }, []);
 
   // 1. Bot & Signals State (Single Authoritative Direction per Asset)
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
@@ -620,11 +661,15 @@ export default function HomeTradingSuiteHero() {
           </p>
         </div>
 
-        {/* 2. CENTERED TAB NAVIGATION BAR (MATCHING USER SCREENSHOT) */}
+        {/* 2. CENTERED TAB NAVIGATION BAR (MATCHING USER SCREENSHOT & SYNCHRONIZED URL LINKS) */}
         <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm max-w-4xl mx-auto">
-          <button
-            onClick={() => setActiveTab("bot")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-black transition ${
+          <a
+            href="/?tab=bot"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("bot");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-black transition cursor-pointer ${
               activeTab === "bot"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 font-bold"
@@ -632,11 +677,15 @@ export default function HomeTradingSuiteHero() {
           >
             <Bot className="w-4 h-4 text-amber-950 dark:text-amber-300" />
             <span>AI Trading Bot &amp; Signals</span>
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab("terminal")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+          <a
+            href="/?tab=terminal"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("terminal");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "terminal"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -644,11 +693,15 @@ export default function HomeTradingSuiteHero() {
           >
             <BarChart2 className="w-4 h-4" />
             <span>Chart Terminal</span>
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab("dca")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+          <a
+            href="/?tab=dca"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("dca");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "dca"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -656,11 +709,15 @@ export default function HomeTradingSuiteHero() {
           >
             <Calculator className="w-4 h-4" />
             <span>DCA Simulator</span>
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab("sizer")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+          <a
+            href="/?tab=sizer"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("sizer");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "sizer"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -668,11 +725,15 @@ export default function HomeTradingSuiteHero() {
           >
             <Sliders className="w-4 h-4" />
             <span>Position Sizer</span>
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab("converter")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+          <a
+            href="/?tab=converter"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("converter");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "converter"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -680,11 +741,15 @@ export default function HomeTradingSuiteHero() {
           >
             <RefreshCw className="w-4 h-4" />
             <span>Spot Converter</span>
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab("liquidation")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+          <a
+            href="/?tab=liquidation"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("liquidation");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "liquidation"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -692,11 +757,15 @@ export default function HomeTradingSuiteHero() {
           >
             <Flame className="w-4 h-4 text-rose-500" />
             <span>CoinGlass Liquidation</span>
-          </button>
+          </a>
 
-          <button
-            onClick={() => setActiveTab("cpi")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+          <a
+            href="/?tab=cpi"
+            onClick={(e) => {
+              e.preventDefault();
+              handleTabChange("cpi");
+            }}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
               activeTab === "cpi"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
@@ -704,12 +773,10 @@ export default function HomeTradingSuiteHero() {
           >
             <Sparkles className="w-4 h-4 text-amber-500" />
             <span>US CPI AI Predictor</span>
-          </button>
+          </a>
 
           <Link
             href="/whale-orders"
-            target="_blank"
-            rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-800 transition group shadow-xs"
             title="Open Whale Orders & Institutional Liquidity Radar (CoinGlass Style)"
           >
