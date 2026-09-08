@@ -28,7 +28,8 @@ import {
   ArrowUpRight,
   ArrowRight,
   ChevronRight,
-  Flame
+  Flame,
+  Landmark
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -1241,150 +1242,101 @@ export default function AITradingBotTerminal() {
             {/* 3. BOTTOM 2-COLUMN INSTITUTIONAL INTELLIGENCE (LIQUIDATION POOLS & ORDERBOOK DEPTH) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
               
-              {/* CARD 1: LIQUIDATION MAGNET POOLS & 24H ORDER FLOW */}
+              {/* CARD 1: US CPI INFLATION INTELLIGENCE & AI MACRO RADAR */}
               <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-                    <div className="flex items-center gap-2">
+                    <Link
+                      href="/cpi"
+                      className="flex items-center gap-2 group hover:opacity-80 transition"
+                    >
                       <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
-                        <Layers className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                        <Landmark className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                       </div>
                       <div>
-                        <h4 className="text-base font-black text-slate-900 dark:text-white">
-                          Liquidation Pools &amp; Range
+                        <h4 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1">
+                          <span>US CPI &amp; Macro AI Radar</span>
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition" />
                         </h4>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                          Resting stop clusters &amp; 24h positioning
+                          BLS inflation prints &amp; crypto liquidity catalyst
                         </p>
                       </div>
-                    </div>
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                      Liquidation Matrix
-                    </span>
+                    </Link>
+                    <Link
+                      href="/cpi"
+                      className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition flex items-center gap-1"
+                    >
+                      <Sparkles className="w-3 h-3 text-amber-500" />
+                      <span>AI Predictor</span>
+                      <ArrowRight className="w-2.5 h-2.5" />
+                    </Link>
                   </div>
 
-                  {/* 24h Channel Range Progress Bar */}
-                  <div className="space-y-2 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                    <div className="flex justify-between items-center text-xs font-mono">
-                      <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-bold">
-                        <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
-                        <span>Low:</span>
-                        <strong className="text-slate-900 dark:text-white font-extrabold">${formatPrice(activeCoin.low24h)}</strong>
+                  {/* Next CPI Release Countdown Strip */}
+                  <div className="p-3.5 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-950 text-white border border-slate-800 space-y-1.5 font-mono text-xs">
+                    <div className="flex justify-between items-center text-[10px] text-amber-400 font-bold">
+                      <span className="flex items-center gap-1.5">
+                        <Radio className="w-3 h-3 text-amber-400 animate-ping" />
+                        <span>Upcoming BLS CPI Release</span>
                       </span>
-                      <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5 font-bold">
-                        <span>High:</span>
-                        <strong className="text-slate-900 dark:text-white font-extrabold">${formatPrice(activeCoin.high24h)}</strong>
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      <span className="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                        Sep 11, 2026
                       </span>
                     </div>
-
-                    <div className="relative w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                      <div
-                        className="absolute top-0 bottom-0 bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 rounded-full transition-all duration-500"
-                        style={{ width: "100%" }}
-                      />
-                      <div
-                        className="absolute top-0 bottom-0 w-2.5 bg-slate-950 dark:bg-white border-2 border-white dark:border-slate-950 rounded-full shadow -ml-1 transition-all duration-300"
-                        style={{
-                          left: `${Math.max(
-                            5,
-                            Math.min(
-                              95,
-                              ((activeCoin.price - activeCoin.low24h) /
-                                Math.max(1, activeCoin.high24h - activeCoin.low24h)) *
-                                100
-                            )
-                          )}%`
-                        }}
-                      />
-                    </div>
-
-                    <div className="flex justify-between items-center text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-0.5">
-                      <span>24h Range Channel</span>
-                      <span className="font-bold text-amber-600 dark:text-amber-400">
-                        Spread: ${formatPrice(activeCoin.high24h - activeCoin.low24h)} ({(((activeCoin.high24h - activeCoin.low24h) / Math.max(1, activeCoin.low24h)) * 100).toFixed(1)}%)
-                      </span>
+                    <div className="flex justify-between items-baseline pt-1">
+                      <span className="text-slate-300 text-xs font-sans">Next Print Expectation:</span>
+                      <span className="text-base font-black text-emerald-400">2.6% YoY (Cooling)</span>
                     </div>
                   </div>
 
-                  {/* Liquidation Magnet Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div className="p-3 rounded-2xl bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-800/80 space-y-0.5">
-                      <div className="text-[10px] font-bold text-rose-700 dark:text-rose-300 uppercase font-mono flex items-center justify-between">
-                        <span>Short Magnet</span>
-                        <span>Target</span>
-                      </div>
-                      <div className="text-sm font-black text-rose-800 dark:text-rose-200 font-mono">
-                        ${formatPrice(activeCoin.coinglass.liquidationUpperMagnet)}
-                      </div>
-                      <div className="text-[10px] text-rose-600 dark:text-rose-400 font-medium">
-                        {activeCoin.coinglass.liquidationUpperPoolUsd}
-                      </div>
+                  {/* CPI Key Metrics Grid */}
+                  <div className="grid grid-cols-2 gap-2.5 font-mono text-xs">
+                    <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-0.5">
+                      <div className="text-[10px] uppercase font-bold text-slate-400">Latest Headline CPI</div>
+                      <div className="text-sm font-black text-emerald-600 dark:text-emerald-400">2.7% YoY</div>
+                      <div className="text-[9px] text-emerald-500 font-bold">Beat Consensus (-0.3%)</div>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 space-y-0.5">
-                      <div className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase font-mono flex items-center justify-between">
-                        <span>Long Shelf</span>
-                        <span>Floor</span>
-                      </div>
-                      <div className="text-sm font-black text-emerald-800 dark:text-emerald-200 font-mono">
-                        ${formatPrice(activeCoin.coinglass.liquidationLowerMagnet)}
-                      </div>
-                      <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
-                        {activeCoin.coinglass.liquidationLowerPoolUsd}
-                      </div>
+                    <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-0.5">
+                      <div className="text-[10px] uppercase font-bold text-slate-400">AI Neural Forecast</div>
+                      <div className="text-sm font-black text-amber-600 dark:text-amber-400">2.60% YoY</div>
+                      <div className="text-[9px] text-slate-400">94.5% Model Confidence</div>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-0.5">
+                      <div className="text-[10px] uppercase font-bold text-slate-400">Fed 50bps Cut Odds</div>
+                      <div className="text-sm font-black text-slate-900 dark:text-white">88.4% Prob</div>
+                      <div className="text-[9px] text-emerald-500 font-bold">CME FedWatch</div>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-0.5">
+                      <div className="text-[10px] uppercase font-bold text-slate-400">Crypto Reaction Target</div>
+                      <div className="text-sm font-black text-emerald-600 dark:text-emerald-400">$84K - $88K</div>
+                      <div className="text-[9px] text-emerald-500 font-bold">+6% to +10% Expansion</div>
                     </div>
                   </div>
 
-                  {/* Micro Indicators Grid */}
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">RSI (14)</div>
-                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.technicals.rsi}</div>
-                      <div className="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">
-                        {activeCoin.technicals.rsi > 50 ? "Bullish Momentum" : "Neutral / Oversold"}
-                      </div>
-                    </div>
-                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">Open Interest (OI)</div>
-                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.coinglass.openInterestFormatted}</div>
-                      <div className="text-[9px] text-slate-500 dark:text-slate-400">{activeCoin.coinglass.openInterestTrend}</div>
-                    </div>
-                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">L/S Ratio</div>
-                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.coinglass.longShortRatio} ({activeCoin.coinglass.longAccountPercent}% L)</div>
-                      <div className="text-[9px] text-slate-500 dark:text-slate-400">Retail Sentiment</div>
-                    </div>
-                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
-                      <div className="text-[9px] text-slate-400 dark:text-slate-500 font-mono uppercase">Orderbook Flow</div>
-                      <div className="font-bold text-slate-900 dark:text-white font-mono text-xs">{activeCoin.technicals.rsi > 50 ? "Bid Wall" : "Ask Wall"}</div>
-                      <div className="text-[9px] text-amber-600 dark:text-amber-400 truncate">{activeCoin.technicals.orderbookImbalance}</div>
-                    </div>
+                  {/* Macro Lead Drivers */}
+                  <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 text-[10px] font-mono text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                    <span>WTI Oil: $72/bbl (-8.4%)</span>
+                    <span>Used Cars: -1.2%</span>
+                    <span className="text-emerald-500 font-bold">M2 Expanding</span>
                   </div>
                 </div>
 
-                    {/* Algorithmic Rationale Snippet */}
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
-                      <div>
-                        <div className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase mb-1">
-                          Order Thesis: {activeCoin.strategy}
-                        </div>
-                        <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
-                          {activeCoin.rationale}
-                        </p>
-                      </div>
-
-                      {/* Launch Full Liquidation Radar Button */}
-                      <Link
-                        href={`/coinglass?tab=liquidations&symbol=${activeCoin.symbol}`}
-                        className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
-                      >
-                        <Flame className="w-3.5 h-3.5 fill-amber-400" />
-                        <span>Launch Full Liquidation Radar ({activeCoin.base})</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  </div>
+                {/* Launch Full CPI AI Predictor Button */}
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                  <Link
+                    href="/cpi"
+                    className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Launch Full US CPI AI Predictor &amp; Scenarios</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
 
                   {/* CARD 2: REAL-TIME ORDERBOOK DEPTH & INSTITUTIONAL WHALE RADAR */}
                   <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between">
