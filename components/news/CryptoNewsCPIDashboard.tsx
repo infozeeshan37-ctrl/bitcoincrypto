@@ -37,6 +37,7 @@ import {
   RefreshCw
 } from "lucide-react";
 import { CPIDataRelease, NewsItem, MacroBattle, CentralBankPolicy } from "@/app/api/news/route";
+import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
 
 interface CPIOverview {
   latest: {

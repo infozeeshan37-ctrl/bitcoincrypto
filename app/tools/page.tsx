@@ -143,16 +143,19 @@ function ToolsContent() {
         <Breadcrumbs items={[{ label: "AI Trading Tools & Terminal", href: "/tools" }]} />
 
         {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/80 border border-amber-200 dark:border-amber-700/80 text-amber-900 dark:text-amber-300 shadow-sm">
-            <Bot className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-            <span>AI Trading Bot & Professional Analytics</span>
+        <div className="text-center max-w-2xl mx-auto space-y-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/30 text-amber-700 dark:text-amber-300 shadow-xs">
+            <Bot className="w-3.5 h-3.5 text-amber-500" />
+            <span>AI Trading Bot &amp; Algorithmic Intelligence</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Cryptocurrency Trading Suite & Signals Engine
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            Cryptocurrency Trading Suite &amp;{" "}
+            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              Signals Engine
+            </span>
           </h1>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            Real-time algorithmic trading bot, multi-coin market scanner, TradingView charts, and exact risk execution calculators.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+            Real-time algorithmic trading bot, multi-coin market scanner, live TradingView charts, and risk execution calculators.
           </p>
         </div>
 

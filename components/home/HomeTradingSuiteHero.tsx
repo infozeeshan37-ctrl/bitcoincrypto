@@ -53,6 +53,7 @@ import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChar
 import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
+import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
 
 const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
   { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", defaultTimeframe: "15M" },
@@ -114,7 +115,7 @@ const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
 ];
 
 export default function HomeTradingSuiteHero() {
-  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter">("bot");
+  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi">("bot");
 
   // 1. Bot & Signals State (Single Authoritative Direction per Asset)
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
@@ -615,25 +616,25 @@ export default function HomeTradingSuiteHero() {
   const convertedResult = toAsset === "USD" ? fromValueInUSD : fromValueInUSD / (rates[toAsset] || 1);
 
   return (
-    <section className="relative pt-10 pb-16 sm:pt-14 sm:pb-20 bg-gradient-to-b from-slate-100 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900/70 dark:to-slate-950 border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <section className="relative pt-6 pb-10 sm:pt-8 sm:pb-12 bg-gradient-to-b from-slate-100 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900/70 dark:to-slate-950 border-b border-slate-200/80 dark:border-slate-800 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
 
-        {/* 1. TOP CENTER HEADER (MATCHING USER SCREENSHOT) */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/80 border border-amber-200 dark:border-amber-700/80 text-amber-900 dark:text-amber-300 shadow-sm">
-            <Bot className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-            <span>AI Trading Bot &amp; Professional Analytics</span>
+        {/* 1. COMPACT & PROFESSIONAL HERO HEADER */}
+        <div className="text-center max-w-2xl mx-auto space-y-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/30 text-amber-700 dark:text-amber-300 shadow-xs">
+            <Bot className="w-3.5 h-3.5 text-amber-500" />
+            <span>AI Trading Bot &amp; Algorithmic Intelligence</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.15]">
-            Cryptocurrency Trading Suite &amp; <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            Cryptocurrency Trading Suite &amp;{" "}
+            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
               Signals Engine
             </span>
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Real-time algorithmic trading bot, multi-coin market scanner, TradingView charts, and exact risk execution calculators.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+            Real-time algorithmic trading bot, multi-coin market scanner, live TradingView charts, and risk execution calculators.
           </p>
         </div>
 
@@ -697,6 +698,18 @@ export default function HomeTradingSuiteHero() {
           >
             <RefreshCw className="w-4 h-4" />
             <span>Spot Converter</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("cpi")}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+              activeTab === "cpi"
+                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <span>US CPI AI Predictor</span>
           </button>
 
           <Link
@@ -2240,6 +2253,11 @@ export default function HomeTradingSuiteHero() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* 8. TAB 6: US CPI AI PREDICTOR & INFLATION INTELLIGENCE */}
+        {activeTab === "cpi" && (
+          <CPIMacroAIPredictor />
         )}
 
       </div>
