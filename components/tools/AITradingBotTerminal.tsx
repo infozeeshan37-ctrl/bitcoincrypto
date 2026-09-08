@@ -989,149 +989,277 @@ export default function AITradingBotTerminal() {
 
             </div>
 
-            {/* AI CPI INFLATION & MACRO FUTURE PREDICTOR BOT */}
-            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
-              <div className="space-y-4">
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                      <Landmark className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-base font-bold text-slate-900">US CPI &amp; Macro AI Predictor</h3>
-                        <span className="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 animate-pulse">
-                          LIVE BOT
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500">
-                        Neural BLS Inflation Forecast &amp; Crypto Liquidity Impact
-                      </p>
-                    </div>
-                  </div>
-                  <Link
-                    href="/cpi"
-                    className="text-xs font-bold text-amber-600 hover:text-amber-500 flex items-center gap-1 transition"
-                  >
-                    <span>Full Model</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+          </div>
+        )}
 
-                {/* Countdown / Status Banner */}
-                <div className="p-3 rounded-2xl bg-slate-950 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 border border-slate-800">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                    </span>
-                    <div>
-                      <div className="text-[10px] font-mono text-amber-400 uppercase font-bold">
-                        Target Release: August 2026 CPI
-                      </div>
-                      <div className="text-xs font-extrabold text-slate-100">
-                        Sep 11, 2026 @ 08:30 AM EST (BLS)
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-[11px] font-mono text-emerald-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800 flex items-center gap-1 shrink-0 font-bold">
-                    <Sparkles className="w-3 h-3 text-amber-400" />
-                    <span>94.8% AI Confidence</span>
-                  </div>
-                </div>
+      </div>
 
-                {/* 4 Forecast Metrics Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
-                    <span className="text-[10px] text-slate-500 uppercase font-mono">Consensus Est.</span>
-                    <div className="text-sm font-black text-slate-900 mt-0.5">2.6% YoY</div>
-                    <div className="text-[10px] text-slate-500 font-medium">Prev: 2.7%</div>
-                  </div>
+      {/* FULL WIDTH: US CPI & MACRO AI PREDICTOR SUITE (LENGTHWISE DETAILS COVERING FULL WIDTH) */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        
+        {/* Suite Top Header & Release Countdown Bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold shadow-sm">
+              <Landmark className="w-5 h-5 text-amber-500" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h3 className="text-lg sm:text-xl font-black text-slate-900">
+                  US CPI &amp; Macro AI Predictor
+                </h3>
+                <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                  LIVE AI BOT
+                </span>
+                <span className="text-xs font-mono font-bold text-slate-400">
+                  AlphaMacro AI v4.2
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Neural Network BLS Inflation Forecasting Engine &amp; Bitcoin Liquidity Volatility Matrix
+              </p>
+            </div>
+          </div>
 
-                  <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200">
-                    <span className="text-[10px] text-emerald-700 uppercase font-mono font-bold">AI Forecast</span>
-                    <div className="text-sm font-black text-emerald-600 mt-0.5">2.60% YoY</div>
-                    <div className="text-[10px] text-emerald-700 font-bold">Cooling Beat</div>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Countdown Badge */}
+            <div className="px-4 py-2 rounded-2xl bg-slate-950 text-white flex items-center gap-3 border border-slate-800 shadow-sm">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <div>
+                  <div className="text-[10px] font-mono text-amber-400 uppercase font-bold">
+                    Next BLS Release: August 2026 CPI
                   </div>
-
-                  <div className="p-3 rounded-2xl bg-amber-50/70 border border-amber-200">
-                    <span className="text-[10px] text-amber-800 uppercase font-mono font-bold">Fed 50bps Cut</span>
-                    <div className="text-sm font-black text-amber-700 mt-0.5">88.4% Odds</div>
-                    <div className="text-[10px] text-amber-700 font-medium">Dovish Easing</div>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-purple-50/70 border border-purple-200">
-                    <span className="text-[10px] text-purple-700 uppercase font-mono font-bold">BTC Target</span>
-                    <div className="text-sm font-black text-purple-700 mt-0.5">$84K - $88K</div>
-                    <div className="text-[10px] text-purple-700 font-medium">+4.8% Rally Bias</div>
-                  </div>
-                </div>
-
-                {/* Leading Macro Indicators Live Strip */}
-                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 uppercase font-bold">
-                    <span>Leading Macro Driver Feeds</span>
-                    <span className="text-emerald-700 flex items-center gap-1">
-                      <Activity className="w-3 h-3" /> Live Feed
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
-                      <span className="text-[11px] text-slate-600 font-medium">🛢️ WTI Crude Oil</span>
-                      <span className="font-mono font-bold text-slate-900">$72/bbl <span className="text-emerald-700 text-[10px]">(-1.8%)</span></span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
-                      <span className="text-[11px] text-slate-600 font-medium">🚗 Used Vehicles</span>
-                      <span className="font-mono font-bold text-emerald-700">-1.2% MoM</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
-                      <span className="text-[11px] text-slate-600 font-medium">🏠 Shelter (OER)</span>
-                      <span className="font-mono font-bold text-emerald-700">Decelerating</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
-                      <span className="text-[11px] text-slate-600 font-medium">💵 Global M2</span>
-                      <span className="font-mono font-bold text-amber-700">+$1.4T Expansion</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Predictive Scenario Matrix */}
-                <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-white">
-                  <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 uppercase">
-                    <span className="font-bold text-amber-400">AI Volatility Reaction Matrix</span>
-                    <span>Predicted Path</span>
-                  </div>
-                  <div className="space-y-1.5 font-mono text-[11px]">
-                    <div className="flex items-center justify-between p-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">
-                      <span className="font-bold">Beat (&lt; 2.6% YoY)</span>
-                      <span className="font-semibold text-right">🚀 BTC Surge to $88K+ • Fed Fast Easing</span>
-                    </div>
-                    <div className="flex items-center justify-between p-1.5 rounded-lg bg-amber-950/40 border border-amber-500/30 text-amber-300">
-                      <span className="font-bold">In-Line (2.6% - 2.8%)</span>
-                      <span className="font-semibold text-right">📈 Steady Inflow $82K - $85K</span>
-                    </div>
-                    <div className="flex items-center justify-between p-1.5 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300">
-                      <span className="font-bold">Miss (&gt; 2.9% YoY)</span>
-                      <span className="font-semibold text-right">⚠️ Hawkish Dip to $74K Flush</span>
-                    </div>
+                  <div className="text-xs font-extrabold text-slate-100 font-mono">
+                    Sep 11, 2026 @ 08:30 AM EST
                   </div>
                 </div>
               </div>
+              <div className="pl-3 border-l border-slate-800 text-[11px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>94.8% Confidence</span>
+              </div>
+            </div>
 
-              {/* CTA button linking to /cpi */}
-              <Link
-                href="/cpi"
-                className="w-full py-2.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition shadow-md group mt-2"
-              >
-                <Landmark className="w-4 h-4 text-slate-950" />
-                <span>Launch Full US CPI AI Predictor &amp; Scenarios</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+            <Link
+              href="/cpi"
+              className="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-2xl text-xs font-black flex items-center gap-1.5 transition shadow-sm"
+            >
+              <span>Full Macro Terminal</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+
+        {/* 2-Column Lengthwise Grid filling left and right sides seamlessly */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* LEFT SIDE: Leading Macro Drivers & Fed Easing Fundamentals (Col 6) */}
+          <div className="lg:col-span-6 space-y-4">
+            
+            {/* Leading Macro Indicators 4-Box Grid */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-900 uppercase font-mono flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>1. Real-Time Macro Input Feeds</span>
+                </span>
+                <span className="text-[10px] font-mono text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                  LIVE TELEMETRY
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5 text-xs">
+                <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                  <div className="text-[10px] text-slate-400 font-mono uppercase">🛢️ WTI Crude Oil</div>
+                  <div className="font-mono font-black text-slate-900 text-sm">
+                    $72.00/bbl <span className="text-emerald-500 text-[11px]">(-1.8%)</span>
+                  </div>
+                  <div className="text-[10px] text-emerald-600 font-medium">Deflationary drag on headline</div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                  <div className="text-[10px] text-slate-400 font-mono uppercase">🚗 Manheim Used Cars</div>
+                  <div className="font-mono font-black text-emerald-500 text-sm">
+                    -1.2% MoM
+                  </div>
+                  <div className="text-[10px] text-emerald-600 font-medium">Auto goods disinflation</div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                  <div className="text-[10px] text-slate-400 font-mono uppercase">🏠 Shelter &amp; OER (36% CPI)</div>
+                  <div className="font-mono font-black text-slate-900 text-sm">
+                    +0.24% MoM
+                  </div>
+                  <div className="text-[10px] text-emerald-600 font-medium">Housing lag cooling off</div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                  <div className="text-[10px] text-slate-400 font-mono uppercase">💵 Global M2 Liquidity</div>
+                  <div className="font-mono font-black text-amber-500 text-sm">
+                    +$1.4T
+                  </div>
+                  <div className="text-[10px] text-amber-600 font-medium">Global monetary expansion</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Fed Rate Cut Odds & Policy Shift */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-900 uppercase font-mono flex items-center gap-1.5">
+                  <Landmark className="w-3.5 h-3.5 text-amber-500" />
+                  <span>2. Fed Monetary Policy Easing Gauge</span>
+                </span>
+                <span className="font-mono font-bold text-amber-600 text-[11px]">
+                  CME FedWatch Implied
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-600 font-medium">50bps Rate Cut Odds (Dovish Easing):</span>
+                  <span className="font-mono font-black text-emerald-600 text-sm">88.4% Prob</span>
+                </div>
+                <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden flex">
+                  <div className="bg-emerald-500 h-full rounded-full transition-all duration-700" style={{ width: "88.4%" }} />
+                  <div className="bg-amber-400 h-full transition-all duration-700" style={{ width: "11.6%" }} />
+                </div>
+                <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-0.5">
+                  <span>Target Fed Funds: 5.25% - 5.50%</span>
+                  <span className="text-emerald-500 font-bold">Aggressive Easing Expected</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Historical BLS CPI Track Record Strip */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-950 text-white space-y-2.5 text-xs border border-slate-800">
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 uppercase">
+                <span className="font-bold text-amber-400">3. Historical CPI Impact vs Bitcoin</span>
+                <span>1h / 24h Volatility</span>
+              </div>
+              <div className="space-y-1.5 font-mono text-[11px]">
+                <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <div>
+                    <span className="font-bold text-slate-200">July 2026 Print: </span>
+                    <span className="text-emerald-400 font-bold">2.7% YoY (Beat)</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-emerald-400 font-black">+5.12% BTC Surge</span>
+                    <span className="text-slate-400 text-[10px] ml-1.5">($164M Shorts Wrecked)</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <div>
+                    <span className="font-bold text-slate-200">June 2026 Print: </span>
+                    <span className="text-emerald-400 font-bold">3.0% YoY (Beat)</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-emerald-400 font-black">+3.40% BTC Surge</span>
+                    <span className="text-slate-400 text-[10px] ml-1.5">($98M Shorts Wrecked)</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
-        )}
+
+          {/* RIGHT SIDE: AI Neural Forecast & Crypto Volatility Scenario Matrix (Col 6) */}
+          <div className="lg:col-span-6 space-y-4">
+            
+            {/* 4 Forecast Metrics Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-[10px] text-slate-500 uppercase font-mono font-bold">Consensus Est.</span>
+                <div className="text-base font-black text-slate-900 mt-0.5 font-mono">2.6% YoY</div>
+                <div className="text-[10px] text-slate-500 font-medium">Prev: 2.7%</div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200">
+                <span className="text-[10px] text-emerald-700 uppercase font-mono font-bold">AI Forecast</span>
+                <div className="text-base font-black text-emerald-600 mt-0.5 font-mono">2.60% YoY</div>
+                <div className="text-[10px] text-emerald-700 font-bold">Cooling Beat</div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                <span className="text-[10px] text-slate-500 uppercase font-mono font-bold">Core CPI Pred</span>
+                <div className="text-base font-black text-slate-900 mt-0.5 font-mono">3.02% YoY</div>
+                <div className="text-[10px] text-slate-500 font-medium">Ex-Food &amp; Energy</div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-purple-50/80 border border-purple-200">
+                <span className="text-[10px] text-purple-700 uppercase font-mono font-bold">BTC Target</span>
+                <div className="text-base font-black text-purple-700 mt-0.5 font-mono">$84K - $88K</div>
+                <div className="text-[10px] text-purple-700 font-medium">+4.8% Rally Bias</div>
+              </div>
+            </div>
+
+            {/* Volatility Reaction Matrix Card */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 text-xs text-white">
+              <div className="flex justify-between items-center text-[11px] font-mono text-slate-400 uppercase">
+                <span className="font-bold text-amber-400">AI Volatility Reaction Matrix</span>
+                <span>Scenario Modeling</span>
+              </div>
+
+              <div className="space-y-2 font-mono text-xs">
+                <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 space-y-1">
+                  <div className="flex items-center justify-between font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span>Scenario A: Cooling Beat (&lt; 2.6% YoY)</span>
+                    </span>
+                    <span className="text-emerald-400 font-extrabold">+6% to +10% Surge</span>
+                  </div>
+                  <p className="text-[11px] text-emerald-200 font-sans">
+                    Massive short squeeze to $88,000+. Fed 50bps rate cut certainty triggers aggressive institutional rotation into Bitcoin &amp; ETH.
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-300 space-y-1">
+                  <div className="flex items-center justify-between font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-400" />
+                      <span>Scenario B: In-Line Print (2.6% – 2.8% YoY)</span>
+                    </span>
+                    <span className="text-amber-400 font-extrabold">+2% to +4% Expansion</span>
+                  </div>
+                  <p className="text-[11px] text-amber-200 font-sans">
+                    Orderly range accumulation $82,000 – $85,000. Steady spot ETF inflows continue with benign volatility.
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 space-y-1">
+                  <div className="flex items-center justify-between font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-rose-400" />
+                      <span>Scenario C: Hot Miss (&gt; 2.9% YoY)</span>
+                    </span>
+                    <span className="text-rose-400 font-extrabold">-3% to -5% Dip</span>
+                  </div>
+                  <p className="text-[11px] text-rose-200 font-sans">
+                    Temporary hawkish liquidation wick towards $74,000 key support before long-term accumulation bids absorb sell pressure.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Full-width action button */}
+            <Link
+              href="/cpi"
+              className="w-full py-3.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 rounded-2xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 transition shadow-lg group"
+            >
+              <Landmark className="w-4 h-4 text-slate-950" />
+              <span>Launch Full US CPI AI Predictor &amp; Scenario Simulator</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+          </div>
+
+        </div>
 
       </div>
 
