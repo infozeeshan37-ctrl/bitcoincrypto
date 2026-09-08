@@ -58,7 +58,7 @@ export const AGENT_PERSONAS: AgentPersona[] = [
     title: 'Algorithmic Systems & AI Signals Engineer',
     department: 'Quantitative AI & Technical Operations',
     experience: '6+ yrs algorithmic systems',
-    specialties: ['TradingMomo AI Signals', 'Webhooks & REST API', 'Coinglass Metric Feeds', 'Trading Bot Setup'],
+    specialties: ['TradingMomo Signals', 'Webhooks & REST API', 'Coinglass Metric Feeds', 'Algorithmic Strategy Setup'],
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
     badge: 'Tech Engineer',
     rating: 4.94,

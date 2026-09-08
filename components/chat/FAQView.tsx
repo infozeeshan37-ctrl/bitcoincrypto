@@ -9,7 +9,7 @@ import {
   Sparkles,
   ShieldCheck,
   TrendingUp,
-  Bot,
+  Activity,
   Percent,
   Lock,
   LayoutGrid,
@@ -35,7 +35,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   all: <LayoutGrid size={15} />,
   platform: <ShieldCheck size={15} />,
   trading: <TrendingUp size={15} />,
-  signals: <Bot size={15} />,
+  signals: <Activity size={15} />,
   fees: <Percent size={15} />,
   security: <Lock size={15} />,
 };
@@ -82,7 +82,7 @@ export default function FAQView({
             {/* Animated Mascot Mini Icon */}
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 p-0.5 shadow-md flex items-center justify-center">
               <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <Bot size={22} className="text-amber-400 animate-pulse" />
+                <Sparkles size={22} className="text-amber-400 animate-pulse" />
               </div>
             </div>
             <div>

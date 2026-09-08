@@ -33,7 +33,7 @@ export default function Hero() {
               href="#ai-signals-hub"
               className="px-6 py-3.5 rounded-xl text-sm font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 shadow-sm hover:shadow transition flex items-center gap-2"
             >
-              <span>Explore AI Trading Bots</span> <ArrowRight className="w-4 h-4" />
+              <span>Explore Algorithmic Signals</span> <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/tools"

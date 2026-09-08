@@ -16,7 +16,6 @@ import {
   Sparkles,
   CheckCircle2,
   ShieldAlert,
-  Bot,
   Search,
   Gauge,
   Activity,
@@ -152,13 +151,13 @@ function ToolsContent() {
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-10 sm:py-16 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
 
-        <Breadcrumbs items={[{ label: "AI Trading Tools & Terminal", href: "/tools" }]} />
+        <Breadcrumbs items={[{ label: "Trading Tools & Signal Terminal", href: "/tools" }]} />
 
         {/* Page Header */}
         <div className="text-center max-w-2xl mx-auto space-y-2.5">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/30 text-amber-700 dark:text-amber-300 shadow-xs">
-            <Bot className="w-3.5 h-3.5 text-amber-500" />
-            <span>AI Trading Bot &amp; Algorithmic Intelligence</span>
+            <Cpu className="w-3.5 h-3.5 text-amber-500" />
+            <span>Quantitative Trading &amp; Algorithmic Intelligence</span>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
             Cryptocurrency Trading Suite &amp;{" "}
@@ -167,7 +166,7 @@ function ToolsContent() {
             </span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
-            Real-time algorithmic trading bot, multi-coin market scanner, live TradingView charts, and risk execution calculators.
+            Real-time algorithmic trading signals, multi-coin market scanner, live TradingView charts, and risk execution calculators.
           </p>
         </div>
 
@@ -185,7 +184,7 @@ function ToolsContent() {
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
-            <Bot className="w-4 h-4 text-amber-700 dark:text-amber-950" /> AI Trading Bot &amp; Signals
+            <Activity className="w-4 h-4 text-amber-700 dark:text-amber-950" /> Algorithmic Signals &amp; Scanner
           </a>
           <a
             href="/tools?tab=terminal"
@@ -277,7 +276,7 @@ function ToolsContent() {
           </a>
         </div>
 
-        {/* TAB 1: AI TRADING BOT & SIGNALS */}
+        {/* TAB 1: ALGORITHMIC SIGNALS & SCANNER */}
         {activeTab === "bot" && <AITradingBotTerminal />}
 
         {/* TAB 2: STANDALONE TRADINGVIEW TERMINAL */}

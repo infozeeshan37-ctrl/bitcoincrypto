@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   Search,
   Coins,
-  Bot,
+  Activity,
   Flame,
   Newspaper,
   BookOpen,
@@ -22,7 +22,7 @@ interface SearchItem {
   id: string;
   title: string;
   subtitle: string;
-  category: "Markets" | "AI Bots" | "Derivatives" | "Macro & CPI" | "Concepts" | "Research";
+  category: "Markets" | "Algo Signals" | "Derivatives" | "Macro & CPI" | "Concepts" | "Research";
   href: string;
   icon: React.ElementType;
   badge?: string;
@@ -37,12 +37,12 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: "doge-spot", title: "Dogecoin (DOGE)", subtitle: "Decentralized peer-to-peer digital currency", category: "Markets", href: "/markets", icon: Coins },
   { id: "all-markets", title: "CoinMarketCap Spot Rankings", subtitle: "Full list of 50+ tracked cryptocurrencies", category: "Markets", href: "/markets", icon: Coins, badge: "50+ Coins" },
 
-  // AI Bots
-  { id: "bot-terminal", title: "AI Trading Bot Terminal", subtitle: "Real-time algorithmic signals & 1:1 execution", category: "AI Bots", href: "/tools", icon: Bot, badge: "SIGNALS" },
-  { id: "bot-alphatrend", title: "AlphaTrend AI Momentum Bot", subtitle: "200 EMA slope & CVD trend continuation", category: "AI Bots", href: "/tools", icon: Bot, badge: "94.8% Rel" },
-  { id: "bot-hyperscalp", title: "HyperScalp Volatility Breakout", subtitle: "Bollinger squeeze & fast intraday execution", category: "AI Bots", href: "/tools", icon: Bot, badge: "82.1% Win" },
-  { id: "bot-liquidity", title: "Smart Liquidity & FVG Reversal", subtitle: "FVG fair value gap & stop pool sweeps", category: "AI Bots", href: "/tools", icon: Bot },
-  { id: "bot-dca", title: "Grid DCA Cycle Accumulator", subtitle: "Automated geometric ladder accumulation", category: "AI Bots", href: "/tools", icon: Bot, badge: "96.2% Rel" },
+  // Algo Signals
+  { id: "bot-terminal", title: "Algorithmic Signals Terminal", subtitle: "Real-time quantitative signals & 1:1 execution", category: "Algo Signals", href: "/tools", icon: Activity, badge: "SIGNALS" },
+  { id: "bot-alphatrend", title: "AlphaTrend Momentum Strategy", subtitle: "200 EMA slope & CVD trend continuation", category: "Algo Signals", href: "/tools", icon: Activity, badge: "94.8% Rel" },
+  { id: "bot-hyperscalp", title: "HyperScalp Volatility Breakout", subtitle: "Bollinger squeeze & fast intraday execution", category: "Algo Signals", href: "/tools", icon: Activity, badge: "82.1% Win" },
+  { id: "bot-liquidity", title: "Smart Liquidity & FVG Reversal", subtitle: "FVG fair value gap & stop pool sweeps", category: "Algo Signals", href: "/tools", icon: Activity },
+  { id: "bot-dca", title: "Grid DCA Cycle Accumulator", subtitle: "Automated geometric ladder accumulation", category: "Algo Signals", href: "/tools", icon: Activity, badge: "96.2% Rel" },
 
   // Derivatives
   { id: "coinglass-hub", title: "Coinglass Derivatives Hub", subtitle: "Aggregate open interest & multi-exchange liquidation", category: "Derivatives", href: "/coinglass", icon: Flame, badge: "$68B+ OI" },
@@ -161,7 +161,7 @@ export default function CommandPalette() {
                   setSelectedIndex(0);
                 }}
                 onKeyDown={handleKeyDownNav}
-                placeholder="Search coins, AI bots, derivatives, CPI inflation, concepts, research..."
+                placeholder="Search coins, algorithmic signals, derivatives, CPI inflation, concepts, research..."
                 className="w-full bg-transparent text-sm sm:text-base font-semibold text-slate-900 dark:text-white focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
               <button
@@ -180,7 +180,7 @@ export default function CommandPalette() {
                     No results found for &ldquo;{query}&rdquo;
                   </p>
                   <p className="text-xs text-slate-400">
-                    Try searching for &ldquo;BTC&rdquo;, &ldquo;AI Bots&rdquo;, &ldquo;Open Interest&rdquo;, &ldquo;CPI&rdquo;, or &ldquo;DCA&rdquo;.
+                    Try searching for &ldquo;BTC&rdquo;, &ldquo;Algo Signals&rdquo;, &ldquo;Open Interest&rdquo;, &ldquo;CPI&rdquo;, or &ldquo;DCA&rdquo;.
                   </p>
                 </div>
               ) : (

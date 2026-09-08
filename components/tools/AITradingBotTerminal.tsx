@@ -449,7 +449,7 @@ export default function AITradingBotTerminal() {
 
   const handleSimulateExecution = () => {
     if (!activeCoin) return;
-    const orderId = `BOT-${Math.floor(100000 + Math.random() * 900000)}`;
+    const orderId = `SIG-${Math.floor(100000 + Math.random() * 900000)}`;
     setPaperTradeStatus({
       active: true,
       orderId,
@@ -463,7 +463,7 @@ export default function AITradingBotTerminal() {
     if (!activeCoin) return;
     const payload = {
       event: "SIGNAL_TRIGGER",
-      bot_id: "CRYPTOBITCOIN_QUANT_AI",
+      strategy_id: "CRYPTOBITCOIN_QUANT_STRATEGY",
       symbol: activeCoin.symbol,
       action: activeCoin.isShort ? "SELL_SHORT" : "BUY_LONG",
       strategy: activeCoin.strategy,
@@ -1006,14 +1006,14 @@ export default function AITradingBotTerminal() {
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
                 <h3 className="text-lg sm:text-xl font-black text-slate-900">
-                  US CPI &amp; Macro AI Predictor
+                  US CPI &amp; Macro Intelligence Forecaster
                 </h3>
                 <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                  LIVE AI BOT
+                  LIVE INTELLIGENCE
                 </span>
                 <span className="text-xs font-mono font-bold text-slate-400">
-                  AlphaMacro AI v4.2
+                  AlphaMacro Engine v4.2
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">

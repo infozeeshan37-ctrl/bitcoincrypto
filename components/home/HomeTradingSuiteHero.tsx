@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import {
-  Bot,
+  Cpu,
   BarChart2,
   Calculator,
   Sliders,
@@ -582,7 +582,7 @@ export default function HomeTradingSuiteHero() {
 
   const handleSimulateExecution = () => {
     if (!activeCoin) return;
-    const orderId = `BOT-${Math.floor(100000 + Math.random() * 900000)}`;
+    const orderId = `SIG-${Math.floor(100000 + Math.random() * 900000)}`;
     setPaperTradeStatus({
       active: true,
       orderId,
@@ -596,7 +596,7 @@ export default function HomeTradingSuiteHero() {
     if (!activeCoin) return;
     const payload = {
       event: "SIGNAL_TRIGGER",
-      bot_id: "CRYPTOBITCOIN_QUANT_AI",
+      strategy_id: "CRYPTOBITCOIN_QUANT_STRATEGY",
       symbol: activeCoin.symbol,
       action: activeCoin.isShort ? "SELL_SHORT" : "BUY_LONG",
       strategy: activeCoin.strategy,
@@ -645,8 +645,8 @@ export default function HomeTradingSuiteHero() {
         {/* 1. COMPACT & PROFESSIONAL HERO HEADER */}
         <div className="text-center max-w-2xl mx-auto space-y-2.5">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/30 text-amber-700 dark:text-amber-300 shadow-xs">
-            <Bot className="w-3.5 h-3.5 text-amber-500" />
-            <span>AI Trading Bot &amp; Algorithmic Intelligence</span>
+            <Cpu className="w-3.5 h-3.5 text-amber-500" />
+            <span>Quantitative Trading &amp; Algorithmic Intelligence</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -657,7 +657,7 @@ export default function HomeTradingSuiteHero() {
           </h1>
 
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
-            Real-time algorithmic trading bot, multi-coin market scanner, live TradingView charts, and risk execution calculators.
+            Real-time algorithmic trading signals, multi-coin market scanner, live TradingView charts, and risk execution calculators.
           </p>
         </div>
 
@@ -672,8 +672,8 @@ export default function HomeTradingSuiteHero() {
                 : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 font-bold"
             }`}
           >
-            <Bot className="w-4 h-4 text-amber-950 dark:text-amber-300" />
-            <span>AI Trading Bot &amp; Signals</span>
+            <Activity className="w-4 h-4 text-amber-950 dark:text-amber-300" />
+            <span>Algorithmic Signals &amp; Scanner</span>
           </Link>
 
           <Link
@@ -757,7 +757,7 @@ export default function HomeTradingSuiteHero() {
           </Link>
         </div>
 
-        {/* 3. ACTIVE SUITE CARD: TAB 1 (AI TRADING BOT & SIGNALS - EXACT MATCH TO USER SCREENSHOT) */}
+        {/* 3. ACTIVE SUITE CARD: TAB 1 (ALGORITHMIC SIGNALS & SCANNER) */}
         {activeTab === "bot" && (
           <div className="space-y-6">
 
@@ -1122,7 +1122,7 @@ export default function HomeTradingSuiteHero() {
                         </div>
                       </div>
 
-                      {/* Single Authoritative AI Direction Verdict Badge (No Ambiguity) */}
+                      {/* Single Authoritative Direction Verdict Badge (No Ambiguity) */}
                       <div className="flex flex-col sm:items-end gap-1">
                         <div
                           className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-xs font-black shadow-sm ${
@@ -1142,10 +1142,10 @@ export default function HomeTradingSuiteHero() {
                           )}
                           <span>
                             {activeCoin.isLong
-                              ? "🟢 SINGLE AI POSITION: LONG / BUY"
+                              ? "🟢 QUANT DIRECTION: LONG / BUY"
                               : activeCoin.isShort
-                              ? "🔴 SINGLE AI POSITION: SHORT / SELL"
-                              : "⚪ AI POSITION: NEUTRAL / WAIT"}
+                              ? "🔴 QUANT DIRECTION: SHORT / SELL"
+                              : "⚪ QUANT DIRECTION: NEUTRAL / WAIT"}
                           </span>
                         </div>
                         <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500">
@@ -1330,14 +1330,14 @@ export default function HomeTradingSuiteHero() {
                   <div>
                     <div className="flex flex-wrap items-center gap-2.5">
                       <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
-                        US CPI &amp; Macro AI Predictor
+                        US CPI &amp; Macro Intelligence Forecaster
                       </h3>
                       <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                        LIVE AI BOT
+                        LIVE INTELLIGENCE
                       </span>
                       <span className="text-xs font-mono font-bold text-slate-400">
-                        AlphaMacro AI v4.2
+                        AlphaMacro Engine v4.2
                       </span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">

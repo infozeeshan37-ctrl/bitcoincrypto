@@ -48,7 +48,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/tools" className="hover:text-amber-400 transition flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-emerald-400" /> AI Trading Bot Terminal
+                  <Activity className="w-3.5 h-3.5 text-emerald-400" /> Algorithmic Signals Terminal
                 </Link>
               </li>
             </ul>
@@ -89,7 +89,7 @@ export default function Footer() {
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
           <p>&copy; {new Date().getFullYear()} <strong>BitcoinCrypto.tech</strong>. All rights reserved.</p>
           <p className="max-w-xl text-center md:text-right">
-            <strong>Disclaimer:</strong> Real-time cryptocurrency metrics, derivatives open interest, CPI estimates, and algorithmic trading bot signals are published strictly for educational and analytical purposes and do not constitute financial advice.
+            <strong>Disclaimer:</strong> Real-time cryptocurrency metrics, derivatives open interest, CPI estimates, and algorithmic trading signals are published strictly for educational and analytical purposes and do not constitute financial advice.
           </p>
         </div>
 

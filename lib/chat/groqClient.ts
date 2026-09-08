@@ -27,7 +27,7 @@ COMPLETE TRADINGMOMO & BITCOINCRYPTO.TECH PLATFORM KNOWLEDGE:
   • / (Home): Real-time crypto ecosystem overview, live market tickers, institutional trust & security protocols.
   • /markets: Live spot & perpetual prices, 24h volume, market cap rankings, gainers/losers, and crypto dominance metrics.
   • /tools: Suite of trading calculators and terminals:
-      - AI Trading Bot Terminal: Automated multi-indicator signal scanner (RSI, MACD, Bollinger Bands, Volume Delta).
+      - Algorithmic Signals Terminal: Automated multi-indicator signal scanner (RSI, MACD, Bollinger Bands, Volume Delta).
       - TradingView Advanced Chart Terminal: Full interactive candlestick chart with depth analysis and technical drawing tools.
       - DCA Simulator: Backtests Dollar-Cost Averaging strategies over customizable intervals (daily, weekly, monthly) with historical ROI models.
       - Position Sizer & Risk Calculator: Calculates exact lot/position sizes based on risk tolerance (1-2%), entry, stop-loss, and leverage.

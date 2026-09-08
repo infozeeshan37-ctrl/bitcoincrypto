@@ -361,14 +361,14 @@ export default function CoinMarketCapDashboard() {
           </div>
         </div>
 
-        {/* AI Bot Quick Launcher Promo */}
+        {/* Algorithmic Execution Promo */}
         <div className="bg-gradient-to-br from-amber-500 to-yellow-400 text-slate-950 p-5 rounded-3xl shadow-sm space-y-3 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-slate-950 font-black text-xs uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" /> AI Bot Auto Execution
+              <Sparkles className="w-4 h-4" /> Algorithmic Auto Execution
             </div>
             <h4 className="text-lg font-black leading-tight">
-              Automate Market Signals with Vetted AI Bots
+              Automate Market Signals with Quantitative Strategies
             </h4>
             <p className="text-xs text-slate-900 font-medium leading-relaxed">
               Plug these market prices directly into 5 algorithmic strategies with automated position sizing and exact Risk-to-Reward targets.
@@ -379,7 +379,7 @@ export default function CoinMarketCapDashboard() {
             href="/tools"
             className="w-full py-2.5 bg-slate-950 text-white rounded-xl text-xs font-black text-center hover:bg-slate-900 transition flex items-center justify-center gap-1.5 shadow-md"
           >
-            <span>Launch Bot Terminal</span>
+            <span>Launch Signals Terminal</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-amber-400" />
           </Link>
         </div>

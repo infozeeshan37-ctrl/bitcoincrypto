@@ -14,7 +14,6 @@ import {
   Check,
   Star,
   ShieldCheck,
-  Bot,
   Sparkles,
   Info,
   Clock,

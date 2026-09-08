@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI Crypto Trading Bot, Chart Terminal & DCA Simulator | BitcoinCrypto.tech",
+  title: "Algorithmic Trading Signals, Chart Terminal & DCA Simulator | BitcoinCrypto.tech",
   description:
-    "Institutional algorithmic trading suite: real-time AI signal scanner, TradingView advanced chart terminal, DCA compound return simulator, and exact position size risk calculator.",
+    "Institutional algorithmic trading suite: real-time quantitative signal scanner, TradingView advanced chart terminal, DCA compound return simulator, and exact position size risk calculator.",
   alternates: {
     canonical: "/tools",
   },
   openGraph: {
-    title: "AI Crypto Trading Bot & Terminal Suite | BitcoinCrypto.tech",
+    title: "Algorithmic Trading Signals & Terminal Suite | BitcoinCrypto.tech",
     description:
       "Algorithmic crypto trading signals, TradingView charts, DCA simulators, and exact position sizing calculators.",
     url: "https://www.bitcoincrypto.tech/tools",
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cryptocurrency AI Signals & Trading Suite | BitcoinCrypto.tech",
+    title: "Cryptocurrency Algorithmic Signals & Trading Suite | BitcoinCrypto.tech",
     description:
-      "Real-time algorithmic trading bot, TradingView charting, DCA simulators, and risk execution tools.",
+      "Real-time algorithmic trading signals, TradingView charting, DCA simulators, and risk execution tools.",
   },
 };
 

@@ -1043,12 +1043,12 @@ export function generateQuantitativeSignal(
  */
 export function formatSignalForClipboard(signal: ComprehensiveSignal, leverage: number = 3): string {
   const dirEmoji = signal.isLong
-    ? "🟢 SINGLE AI POSITION: LONG (BUY)"
+    ? "🟢 QUANT DIRECTION: LONG (BUY)"
     : signal.isShort
-    ? "🔴 SINGLE AI POSITION: SHORT (SELL)"
-    : "⚪ AI POSITION: NEUTRAL (CAPITAL PRESERVATION)";
+    ? "🔴 QUANT DIRECTION: SHORT (SELL)"
+    : "⚪ QUANT DIRECTION: NEUTRAL (CAPITAL PRESERVATION)";
 
-  return `⚡ [AI TRADING BOT SIGNAL] ${signal.base}/USDT ${dirEmoji}
+  return `⚡ [ALGORITHMIC QUANT SIGNAL] ${signal.base}/USDT ${dirEmoji}
 ━━━━━━━━━━━━━━━━━━━━
 ⏱️ Timeframe: ${signal.timeframe} (${signal.timeframeProfile.name})
 🎯 Strategy: ${signal.strategy}
