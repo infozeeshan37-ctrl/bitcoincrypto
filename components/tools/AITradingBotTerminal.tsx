@@ -53,28 +53,28 @@ const BINANCE_TOP_PAIRS: CoinConfig[] = [
   { symbol: "BNBUSDT", name: "BNB", base: "BNB", defaultTimeframe: "1H" },
   { symbol: "XRPUSDT", name: "XRP", base: "XRP", defaultTimeframe: "15M" },
   { symbol: "DOGEUSDT", name: "Dogecoin", base: "DOGE", defaultTimeframe: "5M" },
-];
-
-const SEARCHABLE_COINS_DIRECTORY: CoinConfig[] = [
+  { symbol: "SUIUSDT", name: "Sui", base: "SUI", defaultTimeframe: "5M" },
+  { symbol: "PEPEUSDT", name: "Pepe", base: "PEPE", defaultTimeframe: "5M" },
   { symbol: "ADAUSDT", name: "Cardano", base: "ADA", defaultTimeframe: "1H" },
   { symbol: "AVAXUSDT", name: "Avalanche", base: "AVAX", defaultTimeframe: "15M" },
-  { symbol: "SUIUSDT", name: "Sui", base: "SUI", defaultTimeframe: "5M" },
   { symbol: "LINKUSDT", name: "Chainlink", base: "LINK", defaultTimeframe: "1H" },
   { symbol: "NEARUSDT", name: "NEAR Protocol", base: "NEAR", defaultTimeframe: "15M" },
-  { symbol: "PEPEUSDT", name: "Pepe", base: "PEPE", defaultTimeframe: "5M" },
   { symbol: "SHIBUSDT", name: "Shiba Inu", base: "SHIB", defaultTimeframe: "15M" },
-  { symbol: "DOTUSDT", name: "Polkadot", base: "DOT", defaultTimeframe: "1H" },
-  { symbol: "LTCUSDT", name: "Litecoin", base: "LTC", defaultTimeframe: "4H" },
-  { symbol: "APTUSDT", name: "Aptos", base: "APT", defaultTimeframe: "15M" },
+  { symbol: "TAOUSDT", name: "Bittensor", base: "TAO", defaultTimeframe: "15M" },
+  { symbol: "INJUSDT", name: "Injective", base: "INJ", defaultTimeframe: "1H" },
+  { symbol: "KASUSDT", name: "Kaspa", base: "KAS", defaultTimeframe: "15M" },
   { symbol: "TIAUSDT", name: "Celestia", base: "TIA", defaultTimeframe: "15M" },
   { symbol: "RENDERUSDT", name: "Render", base: "RENDER", defaultTimeframe: "1H" },
   { symbol: "FETUSDT", name: "Artificial Superintelligence", base: "FET", defaultTimeframe: "1H" },
+  { symbol: "DOTUSDT", name: "Polkadot", base: "DOT", defaultTimeframe: "1H" },
+];
+
+const SEARCHABLE_COINS_DIRECTORY: CoinConfig[] = [
+  { symbol: "LTCUSDT", name: "Litecoin", base: "LTC", defaultTimeframe: "4H" },
+  { symbol: "APTUSDT", name: "Aptos", base: "APT", defaultTimeframe: "15M" },
   { symbol: "WIFUSDT", name: "dogwifhat", base: "WIF", defaultTimeframe: "5M" },
-  { symbol: "KASUSDT", name: "Kaspa", base: "KAS", defaultTimeframe: "15M" },
   { symbol: "ICPUSDT", name: "Internet Computer", base: "ICP", defaultTimeframe: "1H" },
   { symbol: "TRXUSDT", name: "TRON", base: "TRX", defaultTimeframe: "4H" },
-  { symbol: "TAOUSDT", name: "Bittensor", base: "TAO", defaultTimeframe: "15M" },
-  { symbol: "INJUSDT", name: "Injective", base: "INJ", defaultTimeframe: "1H" },
   { symbol: "FILUSDT", name: "Filecoin", base: "FIL", defaultTimeframe: "1H" },
   { symbol: "ARBUSDT", name: "Arbitrum", base: "ARB", defaultTimeframe: "15M" },
   { symbol: "OPUSDT", name: "Optimism", base: "OP", defaultTimeframe: "15M" },
@@ -661,7 +661,7 @@ export default function AITradingBotTerminal() {
           </div>
 
           {/* Real-Time Coin Signals Stream */}
-          <div className="space-y-3 max-h-[640px] overflow-y-auto pr-1">
+          <div className="space-y-3 max-h-[1600px] xl:max-h-[1900px] overflow-y-auto pr-1 scrollbar-thin">
             {filteredCoins.length === 0 && (
               <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 space-y-3">
                 <Search className="w-8 h-8 text-slate-400 mx-auto" />

@@ -57,7 +57,7 @@ import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails"
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 
-// Top primary coins shown by default (Zero scroll clutter)
+// Top primary coins shown by default (Dense institutional terminal layout)
 const BINANCE_TOP_PAIRS: CoinConfig[] = [
   { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", defaultTimeframe: "15M" },
   { symbol: "ETHUSDT", name: "Ethereum", base: "ETH", defaultTimeframe: "15M" },
@@ -65,6 +65,20 @@ const BINANCE_TOP_PAIRS: CoinConfig[] = [
   { symbol: "BNBUSDT", name: "BNB", base: "BNB", defaultTimeframe: "1H" },
   { symbol: "XRPUSDT", name: "XRP", base: "XRP", defaultTimeframe: "15M" },
   { symbol: "DOGEUSDT", name: "Dogecoin", base: "DOGE", defaultTimeframe: "5M" },
+  { symbol: "SUIUSDT", name: "Sui", base: "SUI", defaultTimeframe: "5M" },
+  { symbol: "PEPEUSDT", name: "Pepe", base: "PEPE", defaultTimeframe: "5M" },
+  { symbol: "ADAUSDT", name: "Cardano", base: "ADA", defaultTimeframe: "1H" },
+  { symbol: "AVAXUSDT", name: "Avalanche", base: "AVAX", defaultTimeframe: "15M" },
+  { symbol: "LINKUSDT", name: "Chainlink", base: "LINK", defaultTimeframe: "1H" },
+  { symbol: "NEARUSDT", name: "NEAR Protocol", base: "NEAR", defaultTimeframe: "15M" },
+  { symbol: "SHIBUSDT", name: "Shiba Inu", base: "SHIB", defaultTimeframe: "15M" },
+  { symbol: "TAOUSDT", name: "Bittensor", base: "TAO", defaultTimeframe: "15M" },
+  { symbol: "INJUSDT", name: "Injective", base: "INJ", defaultTimeframe: "1H" },
+  { symbol: "KASUSDT", name: "Kaspa", base: "KAS", defaultTimeframe: "15M" },
+  { symbol: "TIAUSDT", name: "Celestia", base: "TIA", defaultTimeframe: "15M" },
+  { symbol: "RENDERUSDT", name: "Render", base: "RENDER", defaultTimeframe: "1H" },
+  { symbol: "FETUSDT", name: "Artificial Superintelligence", base: "FET", defaultTimeframe: "1H" },
+  { symbol: "DOTUSDT", name: "Polkadot", base: "DOT", defaultTimeframe: "1H" },
 ];
 
 // Extended directory of coins searchable by name or ticker
@@ -889,7 +903,7 @@ export default function HomeTradingSuiteHero() {
                 </div>
 
                 {/* Live Signals Stream List */}
-                <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
+                <div className="space-y-2.5 max-h-[1600px] xl:max-h-[1900px] overflow-y-auto pr-1 scrollbar-thin">
                   {filteredCoins.length === 0 && (
                     <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
                       <Search className="w-8 h-8 text-slate-400 mx-auto" />
