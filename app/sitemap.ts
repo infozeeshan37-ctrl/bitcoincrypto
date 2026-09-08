@@ -50,6 +50,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/cpi`,
+      lastModified: currentDate,
+      changeFrequency: "hourly",
+      priority: 0.95,
+    },
+    {
       url: `${baseUrl}/concepts`,
       lastModified: currentDate,
       changeFrequency: "weekly",

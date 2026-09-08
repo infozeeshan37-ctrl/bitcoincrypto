@@ -278,6 +278,29 @@ export default function Navbar() {
                 </Link>
 
                 <Link
+                  href="/cpi"
+                  onClick={() => setActiveDropdown(null)}
+                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-amber-50/80 dark:hover:bg-amber-950/30 transition group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition">
+                        US CPI AI Predictor
+                      </span>
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">
+                        AI MODEL
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
+                      Neural inflation forecast & crypto volatility predictor.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
                   href="/news"
                   onClick={() => setActiveDropdown(null)}
                   className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-blue-50/80 dark:hover:bg-blue-950/30 transition group"
@@ -560,6 +583,25 @@ export default function Navbar() {
               </div>
               <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-400 text-slate-950">
                 SIGNALS
+              </span>
+            </Link>
+
+            <Link
+              href="/cpi"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-amber-50/70 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-700/60 transition"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-amber-400/20 text-amber-900 dark:text-amber-300 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-900 dark:text-white block text-xs">US CPI AI Predictor</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">Neural inflation & crypto volatility model</span>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-amber-400 text-slate-950">
+                AI CPI
               </span>
             </Link>
 

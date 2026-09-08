@@ -19,7 +19,8 @@ import {
   Bot,
   Search,
   Gauge,
-  Activity
+  Activity,
+  Flame
 } from "lucide-react";
 import AITradingBotTerminal from "@/components/tools/AITradingBotTerminal";
 import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChart";
@@ -27,14 +28,15 @@ import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
+import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 
 function ToolsContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
   const symbolParam = searchParams.get("symbol");
 
-  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter">(
-    tabParam === "terminal" || tabParam === "dca" || tabParam === "sizer" || tabParam === "converter"
+  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "liquidation">(
+    tabParam === "terminal" || tabParam === "dca" || tabParam === "sizer" || tabParam === "converter" || tabParam === "liquidation"
       ? tabParam
       : "bot"
   );
@@ -56,7 +58,7 @@ function ToolsContent() {
 
   // Sync tab/symbol when search params change
   useEffect(() => {
-    if (tabParam && ["bot", "terminal", "dca", "sizer", "converter"].includes(tabParam)) {
+    if (tabParam && ["bot", "terminal", "dca", "sizer", "converter", "liquidation"].includes(tabParam)) {
       setActiveTab(tabParam as any);
     }
     if (symbolParam) {
@@ -210,6 +212,16 @@ function ToolsContent() {
             }`}
           >
             <RefreshCw className="w-4 h-4" /> Spot Converter
+          </button>
+          <button
+            onClick={() => setActiveTab("liquidation")}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+              activeTab === "liquidation"
+                ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+            }`}
+          >
+            <Flame className="w-4 h-4 text-rose-500" /> CoinGlass Liquidation
           </button>
         </div>
 
@@ -632,6 +644,9 @@ function ToolsContent() {
             </div>
           </div>
         )}
+
+        {/* TAB 6: COINGLASS LIQUIDATION INTELLIGENCE SUITE */}
+        {activeTab === "liquidation" && <CoinGlassLiquidationTool />}
 
       </div>
     </div>
