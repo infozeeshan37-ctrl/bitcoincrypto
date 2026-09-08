@@ -588,7 +588,7 @@ export async function GET() {
     // Sort by publication timestamp (newest first, followed by historical)
     deduplicatedCombined.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-    persistentNewsList = deduplicatedCombined.slice(0, 300);
+    persistentNewsList = deduplicatedCombined.slice(0, 1200);
     lastLiveFetchTime = now;
   } catch (e) {
     console.warn("Live RSS aggregator merge notice:", e);
