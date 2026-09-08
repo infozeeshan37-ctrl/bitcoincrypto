@@ -989,112 +989,145 @@ export default function AITradingBotTerminal() {
 
             </div>
 
-            {/* AI COPILOT & FUTURES LEVERAGE RISK SIZER (POSITIONED ON RIGHT) */}
-            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                    <Sliders className="w-4 h-4" />
+            {/* AI CPI INFLATION & MACRO FUTURE PREDICTOR BOT */}
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+              <div className="space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                      <Landmark className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base font-bold text-slate-900">US CPI &amp; Macro AI Predictor</h3>
+                        <span className="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 animate-pulse">
+                          LIVE BOT
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500">
+                        Neural BLS Inflation Forecast &amp; Crypto Liquidity Impact
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900">Futures Position &amp; Risk Copilot</h3>
-                    <p className="text-[11px] text-slate-500">
-                      Risk calculations for {activeCoin.base}/USDT ({activeCoin.isShort ? "SHORT" : "LONG"})
-                    </p>
-                  </div>
-                </div>
-                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  R:R {activeCoin.rrRatioFormatted}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase">Capital ($)</label>
-                  <input
-                    type="number"
-                    value={copilotCapital}
-                    onChange={(e) => setCopilotCapital(Math.max(10, Number(e.target.value)))}
-                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase">Risk (%)</label>
-                  <input
-                    type="number"
-                    step="0.5"
-                    min="0.5"
-                    max="10"
-                    value={copilotRiskPercent}
-                    onChange={(e) => setCopilotRiskPercent(Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase">Leverage</label>
-                  <select
-                    value={copilotLeverage}
-                    onChange={(e) => setCopilotLeverage(Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  <Link
+                    href="/cpi"
+                    className="text-xs font-bold text-amber-600 hover:text-amber-500 flex items-center gap-1 transition"
                   >
-                    <option value={1}>1x (Spot)</option>
-                    <option value={2}>2x</option>
-                    <option value={3}>3x (Safe)</option>
-                    <option value={5}>5x (Scalp)</option>
-                    <option value={10}>10x (Aggressive)</option>
-                    <option value={20}>20x (High Risk)</option>
-                  </select>
+                    <span>Full Model</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                {/* Countdown / Status Banner */}
+                <div className="p-3 rounded-2xl bg-slate-950 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 border border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    </span>
+                    <div>
+                      <div className="text-[10px] font-mono text-amber-400 uppercase font-bold">
+                        Target Release: August 2026 CPI
+                      </div>
+                      <div className="text-xs font-extrabold text-slate-100">
+                        Sep 11, 2026 @ 08:30 AM EST (BLS)
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-[11px] font-mono text-emerald-400 bg-slate-900 px-2.5 py-1 rounded-xl border border-slate-800 flex items-center gap-1 shrink-0 font-bold">
+                    <Sparkles className="w-3 h-3 text-amber-400" />
+                    <span>94.8% AI Confidence</span>
+                  </div>
+                </div>
+
+                {/* 4 Forecast Metrics Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono">Consensus Est.</span>
+                    <div className="text-sm font-black text-slate-900 mt-0.5">2.6% YoY</div>
+                    <div className="text-[10px] text-slate-500 font-medium">Prev: 2.7%</div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                    <span className="text-[10px] text-emerald-700 uppercase font-mono font-bold">AI Forecast</span>
+                    <div className="text-sm font-black text-emerald-600 mt-0.5">2.60% YoY</div>
+                    <div className="text-[10px] text-emerald-700 font-bold">Cooling Beat</div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-amber-50/70 border border-amber-200">
+                    <span className="text-[10px] text-amber-800 uppercase font-mono font-bold">Fed 50bps Cut</span>
+                    <div className="text-sm font-black text-amber-700 mt-0.5">88.4% Odds</div>
+                    <div className="text-[10px] text-amber-700 font-medium">Dovish Easing</div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-purple-50/70 border border-purple-200">
+                    <span className="text-[10px] text-purple-700 uppercase font-mono font-bold">BTC Target</span>
+                    <div className="text-sm font-black text-purple-700 mt-0.5">$84K - $88K</div>
+                    <div className="text-[10px] text-purple-700 font-medium">+4.8% Rally Bias</div>
+                  </div>
+                </div>
+
+                {/* Leading Macro Indicators Live Strip */}
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 uppercase font-bold">
+                    <span>Leading Macro Driver Feeds</span>
+                    <span className="text-emerald-700 flex items-center gap-1">
+                      <Activity className="w-3 h-3" /> Live Feed
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
+                      <span className="text-[11px] text-slate-600 font-medium">🛢️ WTI Crude Oil</span>
+                      <span className="font-mono font-bold text-slate-900">$72/bbl <span className="text-emerald-700 text-[10px]">(-1.8%)</span></span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
+                      <span className="text-[11px] text-slate-600 font-medium">🚗 Used Vehicles</span>
+                      <span className="font-mono font-bold text-emerald-700">-1.2% MoM</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
+                      <span className="text-[11px] text-slate-600 font-medium">🏠 Shelter (OER)</span>
+                      <span className="font-mono font-bold text-emerald-700">Decelerating</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
+                      <span className="text-[11px] text-slate-600 font-medium">💵 Global M2</span>
+                      <span className="font-mono font-bold text-amber-700">+$1.4T Expansion</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Predictive Scenario Matrix */}
+                <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-white">
+                  <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 uppercase">
+                    <span className="font-bold text-amber-400">AI Volatility Reaction Matrix</span>
+                    <span>Predicted Path</span>
+                  </div>
+                  <div className="space-y-1.5 font-mono text-[11px]">
+                    <div className="flex items-center justify-between p-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">
+                      <span className="font-bold">Beat (&lt; 2.6% YoY)</span>
+                      <span className="font-semibold text-right">🚀 BTC Surge to $88K+ • Fed Fast Easing</span>
+                    </div>
+                    <div className="flex items-center justify-between p-1.5 rounded-lg bg-amber-950/40 border border-amber-500/30 text-amber-300">
+                      <span className="font-bold">In-Line (2.6% - 2.8%)</span>
+                      <span className="font-semibold text-right">📈 Steady Inflow $82K - $85K</span>
+                    </div>
+                    <div className="flex items-center justify-between p-1.5 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300">
+                      <span className="font-bold">Miss (&gt; 2.9% YoY)</span>
+                      <span className="font-semibold text-right">⚠️ Hawkish Dip to $74K Flush</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Output Metrics */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-500">Max Dollar Risk at Stop Loss:</span>
-                  <span className="font-black text-rose-600">-${dollarRisk.toFixed(2)} ({copilotRiskPercent}%)</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-500">Recommended Position Units:</span>
-                  <span className="font-extrabold text-slate-900">
-                    {positionUnits >= 1 ? positionUnits.toFixed(4) : positionUnits.toFixed(2)} {activeCoin.base} (≈ ${Math.round(positionValue).toLocaleString()})
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-500">Required Margin ({copilotLeverage}x):</span>
-                  <span className="font-bold text-amber-700">${Math.round(requiredMargin).toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center pt-1 border-t border-slate-200/80">
-                  <span className="text-slate-500 flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3 text-amber-500" />
-                    <span>Est. Liquidation Price:</span>
-                  </span>
-                  <span className="font-mono font-bold text-rose-700">
-                    ${formatPrice(estimatedLiquidationPrice)} ({isShortTrade ? "+" : "-"}{((Math.abs(estimatedLiquidationPrice - activeCoin.entryPrice) / activeCoin.entryPrice) * 100).toFixed(1)}%)
-                  </span>
-                </div>
-                <div className="pt-2 border-t border-slate-200 flex justify-between items-center font-bold">
-                  <span className="text-emerald-700">Target Profit (TP2):</span>
-                  <span className="text-emerald-600 font-extrabold">+${profitTP2.toFixed(2)} (+{((profitTP2 / copilotCapital) * 100).toFixed(1)}%)</span>
-                </div>
-              </div>
-
-              {/* 1-Click Copy Signal Button */}
-              <button
-                onClick={handleCopySignal}
-                className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow-sm"
+              {/* CTA button linking to /cpi */}
+              <Link
+                href="/cpi"
+                className="w-full py-2.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition shadow-md group mt-2"
               >
-                {copied ? (
-                  <>
-                    <Check className="w-4 h-4 text-emerald-400" />
-                    <span className="text-emerald-300">Trade Setup Copied (Telegram/Discord Format)!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4 text-amber-400" />
-                    <span>Copy Full Signal Blueprint &amp; Levels</span>
-                  </>
-                )}
-              </button>
+                <Landmark className="w-4 h-4 text-slate-950" />
+                <span>Launch Full US CPI AI Predictor &amp; Scenarios</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
           </div>
