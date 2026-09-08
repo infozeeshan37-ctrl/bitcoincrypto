@@ -750,36 +750,7 @@ export default function HomeTradingSuiteHero() {
 
         {/* 3. ACTIVE SUITE CARD: TAB 1 (AI TRADING BOT & SIGNALS - EXACT MATCH TO USER SCREENSHOT) */}
         {activeTab === "bot" && (
-          <div className="space-y-8">
-            
-            {/* SUB-CARD HEADER WITH 1-SECOND LIVE STATUS HUD */}
-            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="space-y-2 max-w-3xl">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80 shadow-sm">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                    <span>Algorithmic Spot &amp; Derivatives Execution Engine</span>
-                  </span>
-                </div>
-
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Algorithmic Signals &amp; Full Market Terminal
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  High-frequency 1-second price action, dynamic entry zones, mathematically validated stop-losses, and multi-tier take-profits matching TradingView candlestick charts 1:1.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  onClick={fetchBinanceData}
-                  className="px-5 py-3 rounded-2xl bg-slate-950 dark:bg-slate-800 hover:bg-slate-900 dark:hover:bg-slate-700 text-white text-xs font-black transition flex items-center gap-2 shadow-sm border border-slate-800 dark:border-slate-700 group"
-                >
-                  <RefreshCw className={`w-4 h-4 text-amber-400 group-hover:rotate-180 transition-transform duration-500 ${loadingSignals ? "animate-spin" : ""}`} />
-                  <span>Refresh Signals</span>
-                </button>
-              </div>
-            </div>
+          <div className="space-y-6">
 
             {/* 1. EXECUTION TIMEFRAME & TRI-PILLAR ENGINE CONTROL BAR */}
             <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -814,8 +785,8 @@ export default function HomeTradingSuiteHero() {
                 </div>
               </div>
 
-              {/* Real-time Horizon & Confluence Status */}
-              <div className="flex flex-wrap items-center gap-2">
+              {/* Real-time Horizon & Confluence Status + Refresh */}
+              <div className="flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800/80 text-amber-900 dark:text-amber-300 shadow-xs">
                   <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 animate-pulse" />
                   <span className="text-xs font-black">Strategy Horizon:</span>
@@ -823,6 +794,15 @@ export default function HomeTradingSuiteHero() {
                     {TIMEFRAME_PROFILES[selectedTimeframe].name} ({TIMEFRAME_PROFILES[selectedTimeframe].typicalHoldDuration}) • {TIMEFRAME_PROFILES[selectedTimeframe].recommendedLeverage}
                   </span>
                 </div>
+
+                <button
+                  onClick={fetchBinanceData}
+                  className="px-3.5 py-1.5 rounded-2xl bg-slate-950 dark:bg-slate-800 hover:bg-slate-900 dark:hover:bg-slate-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm border border-slate-800 dark:border-slate-700 group"
+                  title="Force refresh live market signals"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 text-amber-400 group-hover:rotate-180 transition-transform duration-500 ${loadingSignals ? "animate-spin" : ""}`} />
+                  <span>Refresh</span>
+                </button>
               </div>
 
             </div>
