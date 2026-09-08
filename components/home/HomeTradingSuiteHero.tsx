@@ -903,7 +903,7 @@ export default function HomeTradingSuiteHero() {
                 </div>
 
                 {/* Live Signals Stream List */}
-                <div className="space-y-2.5 max-h-[1600px] xl:max-h-[1900px] overflow-y-auto pr-1 scrollbar-thin">
+                <div className="space-y-2.5 max-h-[440px] xl:max-h-[460px] overflow-y-auto pr-1 scrollbar-thin">
                   {filteredCoins.length === 0 && (
                     <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-3">
                       <Search className="w-8 h-8 text-slate-400 mx-auto" />
