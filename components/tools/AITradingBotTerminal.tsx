@@ -766,121 +766,11 @@ export default function AITradingBotTerminal() {
             })}
           </div>
 
-          {/* AI COPILOT & FUTURES LEVERAGE RISK SIZER */}
-          {activeCoin && (
-            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
-                    <Sliders className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900">Futures Position &amp; Risk Copilot</h3>
-                    <p className="text-[11px] text-slate-500">
-                      Risk calculations for {activeCoin.base}/USDT ({activeCoin.isShort ? "SHORT" : "LONG"})
-                    </p>
-                  </div>
-                </div>
-                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  R:R {activeCoin.rrRatioFormatted}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase">Capital ($)</label>
-                  <input
-                    type="number"
-                    value={copilotCapital}
-                    onChange={(e) => setCopilotCapital(Math.max(10, Number(e.target.value)))}
-                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase">Risk (%)</label>
-                  <input
-                    type="number"
-                    step="0.5"
-                    min="0.5"
-                    max="10"
-                    value={copilotRiskPercent}
-                    onChange={(e) => setCopilotRiskPercent(Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase">Leverage</label>
-                  <select
-                    value={copilotLeverage}
-                    onChange={(e) => setCopilotLeverage(Number(e.target.value))}
-                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  >
-                    <option value={1}>1x (Spot)</option>
-                    <option value={2}>2x</option>
-                    <option value={3}>3x (Safe)</option>
-                    <option value={5}>5x (Scalp)</option>
-                    <option value={10}>10x (Aggressive)</option>
-                    <option value={20}>20x (High Risk)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Output Metrics */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-500">Max Dollar Risk at Stop Loss:</span>
-                  <span className="font-black text-rose-600">-${dollarRisk.toFixed(2)} ({copilotRiskPercent}%)</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-500">Recommended Position Units:</span>
-                  <span className="font-extrabold text-slate-900">
-                    {positionUnits >= 1 ? positionUnits.toFixed(4) : positionUnits.toFixed(2)} {activeCoin.base} (≈ ${Math.round(positionValue).toLocaleString()})
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-500">Required Margin ({copilotLeverage}x):</span>
-                  <span className="font-bold text-amber-700">${Math.round(requiredMargin).toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center pt-1 border-t border-slate-200/80">
-                  <span className="text-slate-500 flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3 text-amber-500" />
-                    <span>Est. Liquidation Price:</span>
-                  </span>
-                  <span className="font-mono font-bold text-rose-700">
-                    ${formatPrice(estimatedLiquidationPrice)} ({isShortTrade ? "+" : "-"}{((Math.abs(estimatedLiquidationPrice - activeCoin.entryPrice) / activeCoin.entryPrice) * 100).toFixed(1)}%)
-                  </span>
-                </div>
-                <div className="pt-2 border-t border-slate-200 flex justify-between items-center font-bold">
-                  <span className="text-emerald-700">Target Profit (TP2):</span>
-                  <span className="text-emerald-600 font-extrabold">+${profitTP2.toFixed(2)} (+{((profitTP2 / copilotCapital) * 100).toFixed(1)}%)</span>
-                </div>
-              </div>
-
-              {/* 1-Click Copy Signal Button */}
-              <button
-                onClick={handleCopySignal}
-                className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow-sm"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-4 h-4 text-emerald-400" />
-                    <span className="text-emerald-300">Trade Setup Copied (Telegram/Discord Format)!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4 text-amber-400" />
-                    <span>Copy Full Signal Blueprint &amp; Levels</span>
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-
         </div>
 
         {/* RIGHT COLUMN: 1:1 SYNCHRONIZED EXECUTION BLUEPRINT (Col 7) */}
         {activeCoin && (
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 flex flex-col space-y-6">
 
             {/* Active Coin Header & Parameters */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
@@ -1099,34 +989,112 @@ export default function AITradingBotTerminal() {
 
             </div>
 
-            {/* 6-FACTOR ALGORITHMIC CONFLUENCE CHECKLIST */}
-            <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            {/* AI COPILOT & FUTURES LEVERAGE RISK SIZER (POSITIONED ON RIGHT) */}
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                    <ShieldAlert className="w-4 h-4 text-emerald-600" />
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                    <Sliders className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-slate-900">AI Quantitative Confluence Audit</h4>
-                    <p className="text-[11px] text-slate-500">Multi-factor validation across Price Action, CVD &amp; Technical matrices</p>
+                    <h3 className="text-base font-bold text-slate-900">Futures Position &amp; Risk Copilot</h3>
+                    <p className="text-[11px] text-slate-500">
+                      Risk calculations for {activeCoin.base}/USDT ({activeCoin.isShort ? "SHORT" : "LONG"})
+                    </p>
                   </div>
                 </div>
-                <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 font-mono">
-                  Grade A+ ({activeCoin.confidence}% Match)
+                <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  R:R {activeCoin.rrRatioFormatted}
                 </span>
               </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                {activeCoin.confluenceAudit.map((item, idx) => (
-                  <div key={idx} className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-bold text-slate-900">{item.title}</div>
-                      <div className="text-[10px] text-slate-500">{item.metric}</div>
-                    </div>
-                  </div>
-                ))}
+
+              <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-600 uppercase">Capital ($)</label>
+                  <input
+                    type="number"
+                    value={copilotCapital}
+                    onChange={(e) => setCopilotCapital(Math.max(10, Number(e.target.value)))}
+                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-600 uppercase">Risk (%)</label>
+                  <input
+                    type="number"
+                    step="0.5"
+                    min="0.5"
+                    max="10"
+                    value={copilotRiskPercent}
+                    onChange={(e) => setCopilotRiskPercent(Number(e.target.value))}
+                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-600 uppercase">Leverage</label>
+                  <select
+                    value={copilotLeverage}
+                    onChange={(e) => setCopilotLeverage(Number(e.target.value))}
+                    className="w-full px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  >
+                    <option value={1}>1x (Spot)</option>
+                    <option value={2}>2x</option>
+                    <option value={3}>3x (Safe)</option>
+                    <option value={5}>5x (Scalp)</option>
+                    <option value={10}>10x (Aggressive)</option>
+                    <option value={20}>20x (High Risk)</option>
+                  </select>
+                </div>
               </div>
+
+              {/* Output Metrics */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-500">Max Dollar Risk at Stop Loss:</span>
+                  <span className="font-black text-rose-600">-${dollarRisk.toFixed(2)} ({copilotRiskPercent}%)</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-500">Recommended Position Units:</span>
+                  <span className="font-extrabold text-slate-900">
+                    {positionUnits >= 1 ? positionUnits.toFixed(4) : positionUnits.toFixed(2)} {activeCoin.base} (≈ ${Math.round(positionValue).toLocaleString()})
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-500">Required Margin ({copilotLeverage}x):</span>
+                  <span className="font-bold text-amber-700">${Math.round(requiredMargin).toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center pt-1 border-t border-slate-200/80">
+                  <span className="text-slate-500 flex items-center gap-1">
+                    <AlertTriangle className="w-3 h-3 text-amber-500" />
+                    <span>Est. Liquidation Price:</span>
+                  </span>
+                  <span className="font-mono font-bold text-rose-700">
+                    ${formatPrice(estimatedLiquidationPrice)} ({isShortTrade ? "+" : "-"}{((Math.abs(estimatedLiquidationPrice - activeCoin.entryPrice) / activeCoin.entryPrice) * 100).toFixed(1)}%)
+                  </span>
+                </div>
+                <div className="pt-2 border-t border-slate-200 flex justify-between items-center font-bold">
+                  <span className="text-emerald-700">Target Profit (TP2):</span>
+                  <span className="text-emerald-600 font-extrabold">+${profitTP2.toFixed(2)} (+{((profitTP2 / copilotCapital) * 100).toFixed(1)}%)</span>
+                </div>
+              </div>
+
+              {/* 1-Click Copy Signal Button */}
+              <button
+                onClick={handleCopySignal}
+                className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow-sm"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    <span className="text-emerald-300">Trade Setup Copied (Telegram/Discord Format)!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 text-amber-400" />
+                    <span>Copy Full Signal Blueprint &amp; Levels</span>
+                  </>
+                )}
+              </button>
             </div>
 
           </div>
