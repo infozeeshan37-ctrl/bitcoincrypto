@@ -54,6 +54,7 @@ import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
+import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 
 const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
   { symbol: "BTCUSDT", name: "Bitcoin", base: "BTC", defaultTimeframe: "15M" },
@@ -115,7 +116,7 @@ const BINANCE_SUPPORTED_PAIRS: CoinConfig[] = [
 ];
 
 export default function HomeTradingSuiteHero() {
-  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi">("bot");
+  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi" | "liquidation">("bot");
 
   // 1. Bot & Signals State (Single Authoritative Direction per Asset)
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
@@ -698,6 +699,18 @@ export default function HomeTradingSuiteHero() {
           >
             <RefreshCw className="w-4 h-4" />
             <span>Spot Converter</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("liquidation")}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition ${
+              activeTab === "liquidation"
+                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+            }`}
+          >
+            <Flame className="w-4 h-4 text-rose-500" />
+            <span>CoinGlass Liquidation</span>
           </button>
 
           <button
@@ -2258,6 +2271,11 @@ export default function HomeTradingSuiteHero() {
         {/* 8. TAB 6: US CPI AI PREDICTOR & INFLATION INTELLIGENCE */}
         {activeTab === "cpi" && (
           <CPIMacroAIPredictor />
+        )}
+
+        {/* 9. TAB 7: COINGLASS LIQUIDATION INTELLIGENCE SUITE */}
+        {activeTab === "liquidation" && (
+          <CoinGlassLiquidationTool />
         )}
 
       </div>
