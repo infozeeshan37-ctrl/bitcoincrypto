@@ -257,6 +257,24 @@ function ToolsContent() {
           >
             <Flame className="w-4 h-4 text-rose-500" /> CoinGlass Liquidation
           </a>
+          <a
+            href="/cpi"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" /> US CPI AI Predictor
+          </a>
+          <a
+            href="/whale-orders"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-800 transition"
+          >
+            Whale Orders ↗
+          </a>
+          <a
+            href="/news"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+          >
+            News Wire ↗
+          </a>
         </div>
 
         {/* TAB 1: AI TRADING BOT & SIGNALS */}

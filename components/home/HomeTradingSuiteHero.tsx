@@ -661,14 +661,11 @@ export default function HomeTradingSuiteHero() {
           </p>
         </div>
 
-        {/* 2. CENTERED TAB NAVIGATION BAR (MATCHING USER SCREENSHOT & SYNCHRONIZED URL LINKS) */}
+        {/* 2. CENTERED TAB NAVIGATION BAR (LINKED TO DEDICATED TOOL PAGES & URLS) */}
         <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm max-w-4xl mx-auto">
-          <a
+          <Link
             href="/?tab=bot"
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange("bot");
-            }}
+            onClick={() => handleTabChange("bot")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-black transition cursor-pointer ${
               activeTab === "bot"
                 ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
@@ -677,103 +674,67 @@ export default function HomeTradingSuiteHero() {
           >
             <Bot className="w-4 h-4 text-amber-950 dark:text-amber-300" />
             <span>AI Trading Bot &amp; Signals</span>
-          </a>
+          </Link>
 
-          <a
-            href="/?tab=terminal"
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange("terminal");
-            }}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-              activeTab === "terminal"
-                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
-            }`}
+          <Link
+            href="/tools?tab=terminal"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
+            title="Open Live Chart Terminal"
           >
             <BarChart2 className="w-4 h-4" />
             <span>Chart Terminal</span>
-          </a>
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
+          </Link>
 
-          <a
-            href="/?tab=dca"
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange("dca");
-            }}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-              activeTab === "dca"
-                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
-            }`}
+          <Link
+            href="/tools?tab=dca"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
+            title="Open DCA Simulator"
           >
             <Calculator className="w-4 h-4" />
             <span>DCA Simulator</span>
-          </a>
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
+          </Link>
 
-          <a
-            href="/?tab=sizer"
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange("sizer");
-            }}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-              activeTab === "sizer"
-                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
-            }`}
+          <Link
+            href="/tools?tab=sizer"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
+            title="Open Position Sizer"
           >
             <Sliders className="w-4 h-4" />
             <span>Position Sizer</span>
-          </a>
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
+          </Link>
 
-          <a
-            href="/?tab=converter"
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange("converter");
-            }}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-              activeTab === "converter"
-                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
-            }`}
+          <Link
+            href="/tools?tab=converter"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
+            title="Open Spot Converter"
           >
             <RefreshCw className="w-4 h-4" />
             <span>Spot Converter</span>
-          </a>
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
+          </Link>
 
-          <a
-            href="/?tab=liquidation"
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange("liquidation");
-            }}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-              activeTab === "liquidation"
-                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
-            }`}
+          <Link
+            href="/coinglass?tab=liquidations"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
+            title="Open CoinGlass Liquidation Radar"
           >
             <Flame className="w-4 h-4 text-rose-500" />
             <span>CoinGlass Liquidation</span>
-          </a>
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-rose-500 transition-colors" />
+          </Link>
 
-          <a
-            href="/?tab=cpi"
-            onClick={(e) => {
-              e.preventDefault();
-              handleTabChange("cpi");
-            }}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition cursor-pointer ${
-              activeTab === "cpi"
-                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
-            }`}
+          <Link
+            href="/cpi"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
+            title="Open US CPI AI Predictor & Macro Radar"
           >
             <Sparkles className="w-4 h-4 text-amber-500" />
             <span>US CPI AI Predictor</span>
-          </a>
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
+          </Link>
 
           <Link
             href="/whale-orders"
