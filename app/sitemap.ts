@@ -1,17 +1,25 @@
 import { MetadataRoute } from "next";
 import { articles } from "@/lib/blogData";
+import { coinPredictions } from "@/lib/coinPredictionsData";
+import { conceptGuides } from "@/lib/conceptsData";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.bitcoincrypto.tech";
   const currentDate = new Date().toISOString();
 
-  // Static routes with priorities and change frequency
+  // 1. Static Core Landing Pages
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/`,
       lastModified: currentDate,
       changeFrequency: "hourly",
       priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/predictions`,
+      lastModified: currentDate,
+      changeFrequency: "always",
+      priority: 0.95,
     },
     {
       url: `${baseUrl}/markets`,
@@ -38,6 +46,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.95,
     },
     {
+      url: `${baseUrl}/cpi`,
+      lastModified: currentDate,
+      changeFrequency: "hourly",
+      priority: 0.95,
+    },
+    {
       url: `${baseUrl}/tools`,
       lastModified: currentDate,
       changeFrequency: "hourly",
@@ -48,18 +62,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: currentDate,
       changeFrequency: "hourly",
       priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/cpi`,
-      lastModified: currentDate,
-      changeFrequency: "hourly",
-      priority: 0.95,
-    },
-    {
-      url: `${baseUrl}/predictions`,
-      lastModified: currentDate,
-      changeFrequency: "always",
-      priority: 0.95,
     },
     {
       url: `${baseUrl}/concepts`,
@@ -81,7 +83,39 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Dynamic research articles
+  // 2. Dedicated Programmatic Coin AI Price Prediction Pages (15 Cryptos)
+  const predictionRoutes: MetadataRoute.Sitemap = coinPredictions.map((coin) => ({
+    url: `${baseUrl}/predictions/${coin.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "always",
+    priority: 0.9,
+  }));
+
+  // 3. Dedicated Individual Standalone Tool Pages
+  const dedicatedToolSlugs = [
+    "trading-bot",
+    "chart-terminal",
+    "dca-simulator",
+    "position-sizer",
+    "crypto-converter",
+    "liquidation-heatmap",
+  ];
+  const toolRoutes: MetadataRoute.Sitemap = dedicatedToolSlugs.map((slug) => ({
+    url: `${baseUrl}/tools/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: "daily",
+    priority: 0.85,
+  }));
+
+  // 4. Quantitative & Market Structure Concept Guides (8 Guides)
+  const conceptRoutes: MetadataRoute.Sitemap = conceptGuides.map((guide) => ({
+    url: `${baseUrl}/concepts/${guide.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
+
+  // 5. Macro Research Desk Articles (11 In-Depth Articles)
   const blogRoutes: MetadataRoute.Sitemap = articles.map((art) => ({
     url: `${baseUrl}/blog/${art.slug}`,
     lastModified: currentDate,
@@ -89,5 +123,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...blogRoutes];
+  return [
+    ...staticRoutes,
+    ...predictionRoutes,
+    ...toolRoutes,
+    ...conceptRoutes,
+    ...blogRoutes,
+  ];
 }

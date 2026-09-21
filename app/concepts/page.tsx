@@ -213,6 +213,109 @@ export default function ConceptsPage() {
           ))}
         </div>
 
+        {/* Individual Deep-Dive Concept Guides */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 mb-2">
+                <BookOpen className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> Deep-Dive Mathematical Guides
+              </div>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                Quantitative Models &amp; Mechanism Guides
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Peer-reviewed research and mathematical foundations across market microstructure, on-chain valuation, and derivatives.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                slug: "order-book-microstructure-and-depth",
+                title: "Order Book Microstructure & Liquidity Depth",
+                cat: "Market Microstructure",
+                time: "9 min read",
+                desc: "CLOB mechanics, cumulative bid/ask depth walls, slippage curves, and high-frequency market maker behavior."
+              },
+              {
+                slug: "crypto-funding-rates-and-basis-trading",
+                title: "Perpetual Funding Rates & Basis Arbitrage",
+                cat: "Derivatives & Quant",
+                time: "11 min read",
+                desc: "8-hour funding rate equilibrium, delta-neutral cash & carry basis trade, and short squeeze mechanics."
+              },
+              {
+                slug: "dollar-cost-averaging-dca-math-and-models",
+                title: "Dollar-Cost Averaging (DCA) Mathematical Models",
+                cat: "Portfolio Management",
+                time: "8 min read",
+                desc: "Harmonic mean purchase price advantage, drawdown recovery curves, and dynamic Value Averaging (VA)."
+              },
+              {
+                slug: "cpi-inflation-crypto-volatility-correlation",
+                title: "US CPI Inflation Prints & Crypto Volatility",
+                cat: "Macroeconomics",
+                time: "10 min read",
+                desc: "BLS inflation prints, Fed rate cut probabilities, real interest rates, and US Dollar (DXY) divergence."
+              },
+              {
+                slug: "mvrv-z-score-onchain-cycle-tops-bottoms",
+                title: "MVRV Z-Score & On-Chain Valuation",
+                cat: "On-Chain Analytics",
+                time: "12 min read",
+                desc: "Market Value to Realized Value standard deviation bands for detecting macro cycle tops and generational bottoms."
+              },
+              {
+                slug: "liquidation-heatmaps-and-short-squeeze-mechanics",
+                title: "Liquidation Heatmaps & Short Squeezes",
+                cat: "Market Microstructure",
+                time: "10 min read",
+                desc: "Margin liquidation cascades, forced market orders, and how institutional desks engineer liquidity sweeps."
+              },
+              {
+                slug: "yield-curve-control-and-bitcoin-liquidity",
+                title: "Yield Curve Control (YCC) & Bitcoin",
+                cat: "Macroeconomics",
+                time: "13 min read",
+                desc: "Treasury duration management, bond buybacks, reverse repo drainage, and sovereign debt monetization."
+              },
+              {
+                slug: "proof-of-useful-inference-decentralized-ai",
+                title: "Proof of Useful Inference (PoUI) & Decentralized AI",
+                cat: "Decentralized AI",
+                time: "11 min read",
+                desc: "Decentralized GPU compute spot markets, verifiable machine learning inference, and Bittensor subnets."
+              }
+            ].map((g) => (
+              <Link
+                key={g.slug}
+                href={`/concepts/${g.slug}`}
+                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-400 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 group"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-400 mb-2">
+                    <span className="text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-md">
+                      {g.cat}
+                    </span>
+                    <span>{g.time}</span>
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">
+                    {g.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
+                    {g.desc}
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-amber-600 dark:text-amber-400">
+                  <span>Read Complete Mathematical Guide</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Interactive Trading Glossary */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
           <div>
@@ -220,7 +323,7 @@ export default function ConceptsPage() {
               <BookOpen className="w-3.5 h-3.5 text-amber-500" /> Reference Index
             </div>
             <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              Cryptocurrency & Derivatives Glossary
+              Cryptocurrency &amp; Derivatives Glossary
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               Essential definitions and mathematical terminology used across institutional desks.
