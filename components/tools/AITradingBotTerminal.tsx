@@ -1034,10 +1034,10 @@ export default function AITradingBotTerminal() {
                 </span>
                 <div>
                   <div className="text-[10px] font-mono text-amber-400 uppercase font-bold">
-                    Next BLS Release: August 2026 CPI
+                    Next BLS Release: {nextCpiEvent.period} CPI
                   </div>
                   <div className="text-xs font-extrabold text-slate-100 font-mono">
-                    Sep 11, 2026 @ 08:30 AM EST
+                    {nextCpiEvent.releaseDateFull}
                   </div>
                 </div>
               </div>
