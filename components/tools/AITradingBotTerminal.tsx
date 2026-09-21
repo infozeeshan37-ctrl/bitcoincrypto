@@ -32,6 +32,7 @@ import {
   Landmark
 } from "lucide-react";
 import Link from "next/link";
+import { getNextCPIRelease } from "@/lib/cpiSchedule";
 import {
   SignalTimeframe,
   CoinConfig,
@@ -111,6 +112,7 @@ const SEARCHABLE_COINS_DIRECTORY: CoinConfig[] = [
 const ALL_SEARCHABLE_COINS: CoinConfig[] = [...BINANCE_TOP_PAIRS, ...SEARCHABLE_COINS_DIRECTORY];
 
 export default function AITradingBotTerminal() {
+  const [nextCpiEvent, setNextCpiEvent] = useState(() => getNextCPIRelease());
   const [liveSignals, setLiveSignals] = useState<ComprehensiveSignal[]>([]);
   const [selectedCoin, setSelectedCoin] = useState<ComprehensiveSignal | null>(null);
   const [customPairs, setCustomPairs] = useState<CoinConfig[]>([]);
