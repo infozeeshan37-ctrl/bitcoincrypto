@@ -14,6 +14,7 @@ import {
   Activity,
   Zap
 } from "lucide-react";
+import { getNextCPIRelease, getLatestReleasedCPI } from "@/lib/cpiSchedule";
 
 export default function LiveEcosystemOverview() {
   const [coins, setCoins] = useState<any[]>([
@@ -27,9 +28,16 @@ export default function LiveEcosystemOverview() {
   const [oiFormatted, setOiFormatted] = useState("$68.20B");
   const [liquidationsTotal, setLiquidationsTotal] = useState("$248.6M");
   const [longRatio, setLongRatio] = useState(53.4);
-
-  // Live second-by-second countdown to next CPI event (Sep 11, 2026 12:30:00 UTC)
-  const [countdown, setCountdown] = useState({ days: 11, hours: 14, minutes: 28, seconds: 45 });
+  const [nextCpiEvent, setNextCpiEvent] = useState(() => getNextCPIRelease());
+  const [countdown, setCountdown] = useState(() => {
+    const event = getNextCPIRelease();
+    return {
+      days: event.daysRemaining,
+      hours: event.hoursRemaining,
+      minutes: event.minutesRemaining,
+      seconds: event.secondsRemaining
+    };
+  });
 
   useEffect(() => {
     // 1. Fetch initial live markets
@@ -107,13 +115,15 @@ export default function LiveEcosystemOverview() {
         return parseFloat(Math.min(56, Math.max(51, prev + delta)).toFixed(1));
       });
 
-      // Decrement countdown seconds live
-      setCountdown((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        return { ...prev, days: Math.max(0, prev.days - 1), hours: 23, minutes: 59, seconds: 59 };
-      });
+      // Dynamically recalculate live countdown to upcoming BLS release
+      const event = getNextCPIRelease();
+      setNextCpiEvent(event);
+      const diffMs = Math.max(0, event.targetTimestamp - Date.now());
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+      setCountdown({ days, hours, minutes, seconds });
     }, 1000);
 
     return () => clearInterval(timer);
@@ -318,7 +328,7 @@ export default function LiveEcosystemOverview() {
               <div className="space-y-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-between">
                   <span className="text-slate-500 dark:text-slate-400">Latest Headline CPI:</span>
-                  <strong className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold">{cpi?.latest?.actualYoY || 2.7}% (Beat Exp)</strong>
+                  <strong className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold">{cpi?.latest?.actualYoY || 2.6}% (Beat Exp)</strong>
                 </div>
 
                 {/* Live Second-by-Second Countdown Timer */}
@@ -328,7 +338,7 @@ export default function LiveEcosystemOverview() {
                       <Clock className="w-3 h-3 text-blue-600 dark:text-blue-400 animate-spin" />
                       <span>Next CPI Countdown:</span>
                     </span>
-                    <span className="text-blue-600 dark:text-blue-400 font-extrabold">Sep 11, 2026</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-extrabold">{nextCpiEvent.releaseDate}</span>
                   </div>
                   <div className="grid grid-cols-4 gap-1 text-center font-mono pt-0.5">
                     <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-blue-200 dark:border-blue-800">

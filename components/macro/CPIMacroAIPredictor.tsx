@@ -39,197 +39,17 @@ import {
   Target,
   LineChart
 } from "lucide-react";
+import {
+  getNextCPIRelease,
+  getLatestReleasedCPI,
+  getHistoricalCPIDatabase,
+  CPIReleaseEvent,
+  HistoricalCPIRecord
+} from "@/lib/cpiSchedule";
 
-export interface HistoricalCPIEntry {
-  id: string;
-  period: string;
-  releaseDate: string;
-  actualYoY: number;
-  forecastYoY: number;
-  previousYoY: number;
-  actualMoM: number;
-  coreActualYoY: number;
-  coreForecastYoY: number;
-  outcome: "BEAT (Cooling)" | "IN-LINE" | "MISS (Hot)";
-  btcImpact1h: string;
-  btcImpact24h: string;
-  liquidationsUsd: string;
-  marketRegime: "SUPER BULLISH" | "BULLISH EXPANSION" | "NEUTRAL CHOP" | "HAWKISH FLUSH";
-  summary: string;
-}
+export type HistoricalCPIEntry = HistoricalCPIRecord;
 
-const HISTORICAL_CPI_DATABASE: HistoricalCPIEntry[] = [
-  {
-    id: "cpi-2026-07",
-    period: "July 2026",
-    releaseDate: "Aug 13, 2026",
-    actualYoY: 2.7,
-    forecastYoY: 2.9,
-    previousYoY: 3.0,
-    actualMoM: 0.15,
-    coreActualYoY: 3.1,
-    coreForecastYoY: 3.2,
-    outcome: "BEAT (Cooling)",
-    btcImpact1h: "+2.84%",
-    btcImpact24h: "+5.12%",
-    liquidationsUsd: "$164.4M Shorts Wrecked",
-    marketRegime: "SUPER BULLISH",
-    summary: "Headline CPI cooled to 2.7%, crushing consensus. Triggered massive short squeeze on BTC from $74.2K to $78.1K as Fed 50bps rate cut odds soared to 84%."
-  },
-  {
-    id: "cpi-2026-06",
-    period: "June 2026",
-    releaseDate: "Jul 11, 2026",
-    actualYoY: 3.0,
-    forecastYoY: 3.1,
-    previousYoY: 3.3,
-    actualMoM: 0.20,
-    coreActualYoY: 3.3,
-    coreForecastYoY: 3.4,
-    outcome: "BEAT (Cooling)",
-    btcImpact1h: "+1.95%",
-    btcImpact24h: "+3.40%",
-    liquidationsUsd: "$98.2M Shorts Wrecked",
-    marketRegime: "BULLISH EXPANSION",
-    summary: "Below-forecast inflation reinforced expectation of Federal Reserve monetary easing cycle. Immediate risk-on rotation into Bitcoin ETFs and ETH."
-  },
-  {
-    id: "cpi-2026-05",
-    period: "May 2026",
-    releaseDate: "Jun 12, 2026",
-    actualYoY: 3.3,
-    forecastYoY: 3.3,
-    previousYoY: 3.4,
-    actualMoM: 0.25,
-    coreActualYoY: 3.4,
-    coreForecastYoY: 3.4,
-    outcome: "IN-LINE",
-    btcImpact1h: "-0.40%",
-    btcImpact24h: "+0.85%",
-    liquidationsUsd: "$42.0M Mixed",
-    marketRegime: "NEUTRAL CHOP",
-    summary: "As-expected print resulted in initial range-bound chop before gradual recovery as market absorbed stable disinflationary glide-path."
-  },
-  {
-    id: "cpi-2026-04",
-    period: "April 2026",
-    releaseDate: "May 15, 2026",
-    actualYoY: 3.4,
-    forecastYoY: 3.2,
-    previousYoY: 3.5,
-    actualMoM: 0.35,
-    coreActualYoY: 3.6,
-    coreForecastYoY: 3.5,
-    outcome: "MISS (Hot)",
-    btcImpact1h: "-2.15%",
-    btcImpact24h: "-1.45%",
-    liquidationsUsd: "$112.5M Longs Wrecked",
-    marketRegime: "HAWKISH FLUSH",
-    summary: "Sticky shelter inflation caused temporary hawkish repricing and Treasury yield spike. BTC flushed to $66.5K before finding high-volume whale bid absorption."
-  },
-  {
-    id: "cpi-2026-03",
-    period: "March 2026",
-    releaseDate: "Apr 10, 2026",
-    actualYoY: 3.5,
-    forecastYoY: 3.4,
-    previousYoY: 3.2,
-    actualMoM: 0.38,
-    coreActualYoY: 3.8,
-    coreForecastYoY: 3.7,
-    outcome: "MISS (Hot)",
-    btcImpact1h: "-3.40%",
-    btcImpact24h: "-2.80%",
-    liquidationsUsd: "$185.0M Longs Wrecked",
-    marketRegime: "HAWKISH FLUSH",
-    summary: "Higher energy and services print delayed initial Fed pivot expectations, creating a steep liquidation wick across high-leverage altcoins."
-  },
-  {
-    id: "cpi-2026-02",
-    period: "February 2026",
-    releaseDate: "Mar 12, 2026",
-    actualYoY: 3.2,
-    forecastYoY: 3.3,
-    previousYoY: 3.4,
-    actualMoM: 0.18,
-    coreActualYoY: 3.7,
-    coreForecastYoY: 3.7,
-    outcome: "BEAT (Cooling)",
-    btcImpact1h: "+3.10%",
-    btcImpact24h: "+6.25%",
-    liquidationsUsd: "$140.0M Shorts Wrecked",
-    marketRegime: "SUPER BULLISH",
-    summary: "Rapid drop in used vehicle and freight prices sparked huge institutional accumulation rally across crypto spot markets."
-  },
-  {
-    id: "cpi-2026-01",
-    period: "January 2026",
-    releaseDate: "Feb 13, 2026",
-    actualYoY: 3.4,
-    forecastYoY: 3.4,
-    previousYoY: 3.5,
-    actualMoM: 0.28,
-    coreActualYoY: 3.8,
-    coreForecastYoY: 3.8,
-    outcome: "IN-LINE",
-    btcImpact1h: "+0.35%",
-    btcImpact24h: "+1.20%",
-    liquidationsUsd: "$35.0M Mixed",
-    marketRegime: "NEUTRAL CHOP",
-    summary: "January reweighting met institutional expectations without surprises. Volatility was absorbed within 2 hours, resuming the primary upward trend."
-  },
-  {
-    id: "cpi-2025-12",
-    period: "December 2025",
-    releaseDate: "Jan 14, 2026",
-    actualYoY: 3.5,
-    forecastYoY: 3.7,
-    previousYoY: 3.7,
-    actualMoM: 0.12,
-    coreActualYoY: 3.9,
-    coreForecastYoY: 4.0,
-    outcome: "BEAT (Cooling)",
-    btcImpact1h: "+2.40%",
-    btcImpact24h: "+4.80%",
-    liquidationsUsd: "$122.0M Shorts Wrecked",
-    marketRegime: "BULLISH EXPANSION",
-    summary: "Year-end holiday spending failed to produce inflation spikes. Crypto market responded with aggressive spot buying across BTC and major Layer 1s."
-  },
-  {
-    id: "cpi-2025-11",
-    period: "November 2025",
-    releaseDate: "Dec 11, 2025",
-    actualYoY: 3.7,
-    forecastYoY: 3.6,
-    previousYoY: 3.6,
-    actualMoM: 0.31,
-    coreActualYoY: 4.0,
-    coreForecastYoY: 3.9,
-    outcome: "MISS (Hot)",
-    btcImpact1h: "-1.80%",
-    btcImpact24h: "-0.90%",
-    liquidationsUsd: "$78.0M Longs Wrecked",
-    marketRegime: "HAWKISH FLUSH",
-    summary: "Slight uptick in airfare and medical services triggered algorithmic selloff that was rapidly bought up by long-term spot holders by the Asian session."
-  },
-  {
-    id: "cpi-2025-10",
-    period: "October 2025",
-    releaseDate: "Nov 13, 2025",
-    actualYoY: 3.6,
-    forecastYoY: 3.8,
-    previousYoY: 3.9,
-    actualMoM: 0.10,
-    coreActualYoY: 4.0,
-    coreForecastYoY: 4.1,
-    outcome: "BEAT (Cooling)",
-    btcImpact1h: "+3.65%",
-    btcImpact24h: "+7.10%",
-    liquidationsUsd: "$210.5M Shorts Wrecked",
-    marketRegime: "SUPER BULLISH",
-    summary: "Major disinflationary milestone as headline inflation plunged 0.3% below consensus. Sparked a multi-week rally across the entire crypto market cap."
-  }
-];
+const HISTORICAL_CPI_DATABASE: HistoricalCPIEntry[] = getHistoricalCPIDatabase();
 
 // BLS CPI Basket Weights Architecture
 const BLS_BASKET_COMPONENTS = [
@@ -341,44 +161,73 @@ export default function CPIMacroAIPredictor() {
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  // Next CPI Target Release Details
-  const NEXT_CPI_RELEASE = {
-    period: "August 2026",
-    date: "September 11, 2026",
-    timeEST: "08:30 AM EST",
-    timeUTC: "12:30 PM UTC",
-    timeGMT: "01:30 PM BST",
-    timePKT: "05:30 PM PKT",
-    timeSGT: "08:30 PM SGT",
-    timeJST: "09:30 PM JST",
-    daysRemaining: 3,
-    consensusYoY: 2.6,
-    previousYoY: 2.7,
-    coreConsensusYoY: 3.0,
-  };
+  // Dynamic Next & Latest BLS CPI Releases
+  const [nextCpiEvent, setNextCpiEvent] = useState<CPIReleaseEvent>(() => getNextCPIRelease());
+  const [latestReleased, setLatestReleased] = useState<CPIReleaseEvent>(() => getLatestReleasedCPI());
+
+  // Dynamic live countdown
+  const [countdown, setCountdown] = useState({
+    days: nextCpiEvent.daysRemaining,
+    hours: nextCpiEvent.hoursRemaining,
+    minutes: nextCpiEvent.minutesRemaining,
+    seconds: nextCpiEvent.secondsRemaining,
+  });
+
+  useEffect(() => {
+    const updateCountdown = () => {
+      const currentNext = getNextCPIRelease();
+      setNextCpiEvent(currentNext);
+      setLatestReleased(getLatestReleasedCPI());
+
+      const diffMs = Math.max(0, currentNext.targetTimestamp - Date.now());
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+      setCountdown({ days, hours, minutes, seconds });
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const getActiveReleaseTime = () => {
+    const isEDT = nextCpiEvent.releaseDateFull.includes("EDT");
+    const tzAbbrev = isEDT ? "EDT" : "EST";
     switch (selectedTimezone) {
-      case "EST": return NEXT_CPI_RELEASE.timeEST;
-      case "UTC": return NEXT_CPI_RELEASE.timeUTC;
-      case "GMT": return NEXT_CPI_RELEASE.timeGMT;
-      case "PKT": return NEXT_CPI_RELEASE.timePKT;
-      case "SGT": return NEXT_CPI_RELEASE.timeSGT;
-      case "JST": return NEXT_CPI_RELEASE.timeJST;
-      default: return NEXT_CPI_RELEASE.timeEST;
+      case "EST": return `08:30 AM ${tzAbbrev}`;
+      case "UTC": return "12:30 PM UTC";
+      case "GMT": return "01:30 PM BST";
+      case "PKT": return "05:30 PM PKT";
+      case "SGT": return "08:30 PM SGT";
+      case "JST": return "09:30 PM JST";
+      default: return `08:30 AM ${tzAbbrev}`;
     }
+  };
+
+  const NEXT_CPI_RELEASE = {
+    period: nextCpiEvent.period,
+    date: nextCpiEvent.releaseDate,
+    daysRemaining: countdown.days,
+    hoursRemaining: countdown.hours,
+    minutesRemaining: countdown.minutes,
+    secondsRemaining: countdown.seconds,
+    consensusYoY: nextCpiEvent.consensusYoY,
+    previousYoY: nextCpiEvent.previousYoY,
+    coreConsensusYoY: nextCpiEvent.coreForecastYoY,
   };
 
   // Dynamic AI Forecast Calculation based on macro inputs
   const aiForecast = useMemo(() => {
-    // Baseline model: 2.60%
+    const base = nextCpiEvent.consensusYoY;
     const oilDiff = (energyOilPrice - 75) * 0.015; // each $10 oil move affects CPI by ~0.15%
     const shelterDiff = (shelterTrend + 0.1) * 0.4; // 36% weight in CPI
     const carDiff = (usedCarTrend + 1.0) * 0.05; // 3.5% weight in CPI
     const wageDiff = (wageGrowth - 3.8) * 0.1;
 
-    const predictedHeadlineYoY = +(2.60 + oilDiff + shelterDiff + carDiff + wageDiff).toFixed(2);
-    const predictedCoreYoY = +(3.02 + shelterDiff * 0.8 + wageDiff * 0.9).toFixed(2);
+    const predictedHeadlineYoY = +(base + oilDiff + shelterDiff + carDiff + wageDiff).toFixed(2);
+    const predictedCoreYoY = +(nextCpiEvent.coreForecastYoY + shelterDiff * 0.8 + wageDiff * 0.9).toFixed(2);
     const predictedMoM = +((predictedHeadlineYoY / 12) * 0.7).toFixed(2);
 
     let scenario: "COOLING" | "IN_LINE" | "HOT";
@@ -386,12 +235,12 @@ export default function CPIMacroAIPredictor() {
     let btcPriceTarget: string;
     let fedCutProb50bps: number;
 
-    if (predictedHeadlineYoY < 2.60) {
+    if (predictedHeadlineYoY < base) {
       scenario = "COOLING";
       cryptoReaction = "MEGA BULLISH (+6% to +10% Surge)";
       btcPriceTarget = "$84,000 - $88,500";
       fedCutProb50bps = 91.5;
-    } else if (predictedHeadlineYoY <= 2.70) {
+    } else if (predictedHeadlineYoY <= base + 0.15) {
       scenario = "IN_LINE";
       cryptoReaction = "BULLISH EXPANSION (+2% to +4%)";
       btcPriceTarget = "$79,500 - $82,000";
@@ -415,7 +264,7 @@ export default function CPIMacroAIPredictor() {
       fedCutProb50bps,
       confidenceScore: +confidenceScore.toFixed(1)
     };
-  }, [energyOilPrice, shelterTrend, usedCarTrend, wageGrowth]);
+  }, [energyOilPrice, shelterTrend, usedCarTrend, wageGrowth, nextCpiEvent]);
 
   // Filtered History
   const filteredHistory = useMemo(() => {
@@ -504,7 +353,7 @@ export default function CPIMacroAIPredictor() {
               </div>
 
               <div className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">
-                {NEXT_CPI_RELEASE.daysRemaining}d : 14h : 32m : 18s
+                {String(countdown.days).padStart(2, "0")}d : {String(countdown.hours).padStart(2, "0")}h : {String(countdown.minutes).padStart(2, "0")}m : {String(countdown.seconds).padStart(2, "0")}s
               </div>
               
               <div className="text-[11px] font-mono text-slate-300 flex items-center justify-center gap-1.5">
@@ -517,12 +366,12 @@ export default function CPIMacroAIPredictor() {
           {/* Institutional Macro KPI Grid (6 Badges) */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 text-xs font-mono">
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400">Latest Headline CPI</span>
+              <span className="text-[10px] uppercase font-bold text-slate-400">Latest CPI ({latestReleased.periodShort})</span>
               <div className="text-lg font-black text-emerald-400">
-                2.7% YoY
+                {latestReleased.actualYoY ?? latestReleased.consensusYoY}% YoY
               </div>
               <span className="text-[10px] text-emerald-300 flex items-center gap-0.5">
-                <TrendingDown className="w-3 h-3" /> -0.3% MoM Cool
+                <TrendingDown className="w-3 h-3" /> {latestReleased.actualMoM !== undefined ? `${latestReleased.actualMoM > 0 ? '+' : ''}${latestReleased.actualMoM}% MoM` : 'Cooling Pace'}
               </span>
             </div>
 
@@ -614,7 +463,7 @@ export default function CPIMacroAIPredictor() {
                 {aiForecast.headlineYoY}%
               </div>
               <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                vs 2.7% Previous
+                vs {latestReleased.actualYoY ?? latestReleased.consensusYoY}% Previous
               </span>
             </div>
 
@@ -626,7 +475,7 @@ export default function CPIMacroAIPredictor() {
                 {aiForecast.coreYoY}%
               </div>
               <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                vs 3.1% Previous
+                vs {latestReleased.coreActualYoY ?? latestReleased.coreForecastYoY}% Previous
               </span>
             </div>
 
@@ -1223,7 +1072,7 @@ export default function CPIMacroAIPredictor() {
                     : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
-                {mode === "ALL" ? "All (10)" : mode === "BEAT" ? "Beats (Cooling)" : mode === "IN_LINE" ? "In-Line" : "Misses (Hot)"}
+                {mode === "ALL" ? `All (${HISTORICAL_CPI_DATABASE.length})` : mode === "BEAT" ? "Beats (Cooling)" : mode === "IN_LINE" ? "In-Line" : "Misses (Hot)"}
               </button>
             ))}
           </div>

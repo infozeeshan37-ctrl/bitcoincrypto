@@ -28,14 +28,15 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
+import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 
 function ToolsContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
   const symbolParam = searchParams.get("symbol");
 
-  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "liquidation">(
-    tabParam === "terminal" || tabParam === "dca" || tabParam === "sizer" || tabParam === "converter" || tabParam === "liquidation"
+  const [activeTab, setActiveTab] = useState<"bot" | "terminal" | "dca" | "sizer" | "converter" | "liquidation" | "predictions">(
+    tabParam === "terminal" || tabParam === "dca" || tabParam === "sizer" || tabParam === "converter" || tabParam === "liquidation" || tabParam === "predictions"
       ? tabParam
       : "bot"
   );
@@ -56,7 +57,7 @@ function ToolsContent() {
   });
 
   // Tab change handler that updates the browser URL bar synchronously
-  const handleTabChange = (tab: "bot" | "terminal" | "dca" | "sizer" | "converter" | "liquidation") => {
+  const handleTabChange = (tab: "bot" | "terminal" | "dca" | "sizer" | "converter" | "liquidation" | "predictions") => {
     setActiveTab(tab);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
@@ -67,7 +68,7 @@ function ToolsContent() {
 
   // Sync tab/symbol when search params change
   useEffect(() => {
-    if (tabParam && ["bot", "terminal", "dca", "sizer", "converter", "liquidation"].includes(tabParam)) {
+    if (tabParam && ["bot", "terminal", "dca", "sizer", "converter", "liquidation", "predictions"].includes(tabParam)) {
       setActiveTab(tabParam as any);
     }
     if (symbolParam) {
@@ -255,6 +256,12 @@ function ToolsContent() {
             }`}
           >
             <Flame className="w-4 h-4 text-rose-500" /> CoinGlass Liquidation
+          </a>
+          <a
+            href="/predictions"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500/15 dark:bg-amber-400/15 text-amber-900 dark:text-amber-200 hover:bg-amber-500/25 dark:hover:bg-amber-400/25 border border-amber-400/40 dark:border-amber-400/40 transition shadow-xs"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" /> 🔮 AI Price Prediction
           </a>
           <a
             href="/cpi"
@@ -698,6 +705,9 @@ function ToolsContent() {
 
         {/* TAB 6: COINGLASS LIQUIDATION INTELLIGENCE SUITE */}
         {activeTab === "liquidation" && <CoinGlassLiquidationTool />}
+
+        {/* TAB 7: AI CRYPTO PRICE PREDICTION ENGINE */}
+        {activeTab === "predictions" && <AIPredictionSuite />}
 
       </div>
     </div>

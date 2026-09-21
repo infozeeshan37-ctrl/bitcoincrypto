@@ -19,6 +19,7 @@ import {
   ChevronRight,
   Filter
 } from "lucide-react";
+import { getNextCPIRelease } from "@/lib/cpiSchedule";
 
 interface CryptoCoin {
   id: string;
@@ -52,6 +53,7 @@ interface GlobalData {
 }
 
 export default function CoinMarketCapDashboard() {
+  const [nextCpiEvent, setNextCpiEvent] = useState(() => getNextCPIRelease());
   const [coins, setCoins] = useState<CryptoCoin[]>([]);
   const [global, setGlobal] = useState<GlobalData | null>(null);
   const [topGainers, setTopGainers] = useState<CryptoCoin[]>([]);
@@ -271,7 +273,7 @@ export default function CoinMarketCapDashboard() {
             <div className="p-3.5 rounded-2xl bg-slate-800/50 border border-slate-700/60 space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400">Next CPI Release</span>
               <div className="text-base font-extrabold text-amber-300 font-mono">
-                Sep 11, 2026
+                {nextCpiEvent.releaseDate}
               </div>
               <Link href="/news" className="text-[10px] text-amber-400 hover:underline flex items-center gap-0.5">
                 View Forecast <ChevronRight className="w-3 h-3" />

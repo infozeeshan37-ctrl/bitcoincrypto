@@ -18,7 +18,9 @@ import {
   LineChart,
   Activity,
   Search,
-  Fish
+  Fish,
+  Brain,
+  TrendingUp
 } from "lucide-react";
 import LiveTickerBar from "./LiveTickerBar";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -254,6 +256,29 @@ export default function Navbar() {
                   Signals & Macro Analytics
                 </div>
                 
+                <Link
+                  href="/predictions"
+                  onClick={() => setActiveDropdown(null)}
+                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-purple-50/80 dark:hover:bg-purple-950/30 transition group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-purple-500 group-hover:text-white transition">
+                    <Brain className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition">
+                        AI Price Prediction
+                      </span>
+                      <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300">
+                        98.6% CONF
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
+                      BTC, ETH & Altcoin 24h/7d/30d multi-horizon quantitative forecasts.
+                    </p>
+                  </div>
+                </Link>
+
                 <Link
                   href="/tools"
                   onClick={() => setActiveDropdown(null)}
@@ -566,6 +591,25 @@ export default function Navbar() {
             <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 pb-1">
               Intelligence & Macro
             </div>
+
+            <Link
+              href="/predictions"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-purple-50/70 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-700/60 transition"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300 flex items-center justify-center">
+                  <Brain className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-900 dark:text-white block text-xs">AI Price Prediction Engine</span>
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400">BTC, ETH & Altcoins 24h/7d/30d Forecast</span>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300">
+                98.6% CONF
+              </span>
+            </Link>
 
             <Link
               href="/tools"

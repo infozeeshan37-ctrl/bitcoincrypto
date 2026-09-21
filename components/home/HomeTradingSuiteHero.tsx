@@ -57,6 +57,7 @@ import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetail
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
+import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 
 // Top primary coins shown by default (Dense institutional terminal layout)
 const BINANCE_TOP_PAIRS: CoinConfig[] = [
@@ -138,7 +139,7 @@ const SEARCHABLE_COINS_DIRECTORY: CoinConfig[] = [
 
 const ALL_SEARCHABLE_COINS: CoinConfig[] = [...BINANCE_TOP_PAIRS, ...SEARCHABLE_COINS_DIRECTORY];
 
-type HeroTab = "bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi" | "liquidation";
+type HeroTab = "bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi" | "liquidation" | "predictions";
 
 export default function HomeTradingSuiteHero() {
   const [activeTab, setActiveTab] = useState<HeroTab>("bot");
@@ -181,6 +182,8 @@ export default function HomeTradingSuiteHero() {
           setActiveTab("cpi");
         } else if (tab === "liquidation" || tab === "liquidations" || tab === "coinglass") {
           setActiveTab("liquidation");
+        } else if (tab === "predictions" || tab === "prediction" || tab === "forecast") {
+          setActiveTab("predictions");
         } else if (tab === "bot" || tab === "signals") {
           setActiveTab("bot");
         }
@@ -735,6 +738,16 @@ export default function HomeTradingSuiteHero() {
             <Flame className="w-4 h-4 text-rose-500" />
             <span>CoinGlass Liquidation</span>
             <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-rose-500 transition-colors" />
+          </Link>
+
+          <Link
+            href="/predictions"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-amber-500/15 dark:bg-amber-400/15 text-amber-900 dark:text-amber-200 hover:bg-amber-500/25 dark:hover:bg-amber-400/25 border border-amber-500/40 dark:border-amber-400/40 transition group shadow-xs"
+            title="Open 98.6% AI Crypto Price Prediction Engine (BTC & ETH)"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500 group-hover:rotate-12 transition-transform" />
+            <span className="font-black">🔮 AI Price Prediction</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </Link>
 
           <Link
@@ -2035,6 +2048,11 @@ export default function HomeTradingSuiteHero() {
         {/* 9. TAB 7: COINGLASS LIQUIDATION INTELLIGENCE SUITE */}
         {activeTab === "liquidation" && (
           <CoinGlassLiquidationTool />
+        )}
+
+        {/* 10. TAB 8: AI MULTI-HORIZON PRICE PREDICTION ENGINE */}
+        {activeTab === "predictions" && (
+          <AIPredictionSuite />
         )}
 
       </div>

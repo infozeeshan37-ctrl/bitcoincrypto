@@ -32,6 +32,11 @@ export default function Footer() {
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Market Analytics</h4>
             <ul className="space-y-2 text-slate-400">
               <li>
+                <Link href="/predictions" className="hover:text-purple-400 transition flex items-center gap-1.5 text-purple-300 font-semibold">
+                  <Activity className="w-3.5 h-3.5 text-purple-400" /> 🔮 AI Price Predictor (98.6%)
+                </Link>
+              </li>
+              <li>
                 <Link href="/markets" className="hover:text-amber-400 transition flex items-center gap-1.5">
                   <Coins className="w-3.5 h-3.5 text-amber-400" /> CoinMarketCap Rankings
                 </Link>
