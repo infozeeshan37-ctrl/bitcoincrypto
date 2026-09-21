@@ -1,24 +1,40 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Algorithmic Trading Signals, Chart Terminal & DCA Simulator | BitcoinCrypto.tech",
+  title: "Coinglass Liquidation Heatmap, AI Trading Signals & DCA Simulator | BitcoinCrypto.tech",
   description:
-    "Institutional algorithmic trading suite: real-time quantitative signal scanner, TradingView advanced chart terminal, DCA compound return simulator, and exact position size risk calculator.",
+    "Real-time Coinglass liquidation heatmaps, multi-exchange crypto liquidation tracker, AI algorithmic trading signals, TradingView charts, and DCA compound profit simulators on BitcoinCrypto.tech.",
+  keywords: [
+    "coinglass",
+    "coinglass liquidation",
+    "coinglass liquidation heatmap",
+    "coinglass crypto liquidation tracker",
+    "coinglass bitcoin liquidation map",
+    "coinglass open interest",
+    "coinglass long short ratio",
+    "coinglass funding rates",
+    "crypto liquidation calculator",
+    "binance liquidation heatmap",
+    "bybit liquidation map",
+    "short squeeze tracker",
+    "ai crypto trading bot",
+    "dca simulator"
+  ],
   alternates: {
     canonical: "/tools",
   },
   openGraph: {
-    title: "Algorithmic Trading Signals & Terminal Suite | BitcoinCrypto.tech",
+    title: "Coinglass Liquidation Heatmap & AI Trading Suite | BitcoinCrypto.tech",
     description:
-      "Algorithmic crypto trading signals, TradingView charts, DCA simulators, and exact position sizing calculators.",
+      "Track real-time Coinglass liquidation heatmaps, $68B+ derivatives open interest, algorithmic AI signals, and exact bankruptcy price calculations.",
     url: "https://www.bitcoincrypto.tech/tools",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cryptocurrency Algorithmic Signals & Trading Suite | BitcoinCrypto.tech",
+    title: "Coinglass Liquidation Heatmap & Crypto Trading Suite | BitcoinCrypto.tech",
     description:
-      "Real-time algorithmic trading signals, TradingView charting, DCA simulators, and risk execution tools.",
+      "Live Coinglass crypto liquidation tracker, 2D heatmaps, algorithmic trading signals, and position sizing tools.",
   },
 };
 

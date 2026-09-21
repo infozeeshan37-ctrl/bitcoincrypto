@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { TrendingUp, TrendingDown, Flame, Sparkles, Calendar, Zap, Activity } from "lucide-react";
+import { getNextCPIRelease } from "@/lib/cpiSchedule";
 
 interface TickerPrice {
   symbol: string;
@@ -40,14 +41,17 @@ export default function LiveTickerBar() {
   const [lastTickDirection, setLastTickDirection] = useState<Record<string, "up" | "down" | null>>({});
   const [latencyMs, setLatencyMs] = useState(12);
 
-  const [globalStats, setGlobalStats] = useState({
-    mcap: "$2.68T",
-    vol24h: "$98.4B",
-    btcDom: "56.4%",
-    fng: "74 Greed",
-    fngValue: 74,
-    gas: "14 Gwei",
-    nextCpi: "Sep 11 (2.6% Est)",
+  const [globalStats, setGlobalStats] = useState(() => {
+    const nextCpiEvent = getNextCPIRelease();
+    return {
+      mcap: "$2.68T",
+      vol24h: "$98.4B",
+      btcDom: "56.4%",
+      fng: "74 Greed",
+      fngValue: 74,
+      gas: "14 Gwei",
+      nextCpi: nextCpiEvent.tickerString,
+    };
   });
 
   const [isLive, setIsLive] = useState(true);
@@ -186,12 +190,14 @@ export default function LiveTickerBar() {
         if (totalVol < 1e9) totalVol = 98400000000;
 
         const btcDominance = ((btcMcap / estimatedGlobalMcap) * 100).toFixed(1);
+        const currentNextCpi = getNextCPIRelease().tickerString;
 
         setGlobalStats((prev) => ({
           ...prev,
           mcap: `$${(estimatedGlobalMcap / 1e12).toFixed(2)}T`,
           vol24h: `$${(totalVol / 1e9).toFixed(1)}B`,
           btcDom: `${btcDominance}%`,
+          nextCpi: currentNextCpi,
         }));
 
         setIsLive(true);

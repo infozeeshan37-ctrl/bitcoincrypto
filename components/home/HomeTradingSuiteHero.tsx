@@ -37,6 +37,7 @@ import {
   Landmark
 } from "lucide-react";
 import Link from "next/link";
+import { getNextCPIRelease } from "@/lib/cpiSchedule";
 import {
   SignalTimeframe,
   CoinConfig,
@@ -141,6 +142,16 @@ type HeroTab = "bot" | "terminal" | "dca" | "sizer" | "converter" | "cpi" | "liq
 
 export default function HomeTradingSuiteHero() {
   const [activeTab, setActiveTab] = useState<HeroTab>("bot");
+  const [nextCpiEvent, setNextCpiEvent] = useState(() => getNextCPIRelease());
+
+  // Periodically refresh CPI event to handle midnight rollovers
+  useEffect(() => {
+    setNextCpiEvent(getNextCPIRelease());
+    const interval = setInterval(() => {
+      setNextCpiEvent(getNextCPIRelease());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Tab change handler that updates the browser URL bar synchronously
   const handleTabChange = (tab: HeroTab) => {

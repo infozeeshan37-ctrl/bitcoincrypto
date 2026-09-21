@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { HISTORICAL_NEWS_ARCHIVE, HistoricalNewsItem } from "@/lib/newsArchive";
+import { getNextCPIRelease, getLatestReleasedCPI, getHistoricalCPIDatabase } from "@/lib/cpiSchedule";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
@@ -602,30 +603,52 @@ export async function GET() {
       liveCount: Math.max(0, persistentNewsList.length - HISTORICAL_NEWS_ARCHIVE.length),
       macroBattles: MACRO_BATTLES,
       centralBankPolicies: CENTRAL_BANK_POLICIES,
-      cpi: {
-        latest: {
-          period: "July 2026",
-          actualYoY: 2.7,
-          forecastYoY: 2.9,
-          previousYoY: 3.0,
-          actualMoM: 0.15,
-          coreActualYoY: 3.1,
-          coreForecastYoY: 3.2,
-          releaseDate: "August 13, 2026",
-          status: "Cooling (2.7% vs 2.9% Est) - Bullish Macro Tailwind",
-          inflationStatusText: "Headline CPI cooled to 2.7% YoY, confirming the disinflationary trajectory and reinforcing market conviction for Federal Reserve rate cuts.",
-        },
-        upcoming: {
-          event: "August 2026 US CPI Release",
-          releaseDate: "September 11, 2026 (08:30 AM EST)",
-          daysRemaining: 11,
-          consensusForecastYoY: "2.6%",
-          previousYoY: "2.7%",
-          criticalLevel: "2.8%",
-          impactOutlook: "A print below 2.6% YoY will cement expectations for aggressive monetary easing, providing strong tailwinds for Bitcoin and altcoins.",
-        },
-        historicalReleases: HISTORICAL_CPI_RELEASES,
-      },
+      cpi: (() => {
+        const nextCpiEvent = getNextCPIRelease();
+        const latestCpiEvent = getLatestReleasedCPI();
+        const historicalCpiRecords = getHistoricalCPIDatabase();
+
+        const historicalReleasesFormatted: CPIDataRelease[] = historicalCpiRecords.map((r) => ({
+          id: r.id,
+          period: r.period,
+          releaseDate: r.releaseDate,
+          actualYoY: r.actualYoY,
+          forecastYoY: r.forecastYoY,
+          previousYoY: r.previousYoY,
+          actualMoM: r.actualMoM,
+          coreActualYoY: r.coreActualYoY,
+          coreForecastYoY: r.coreForecastYoY,
+          btcImpact1h: r.btcImpact1h,
+          btcImpact24h: r.btcImpact24h,
+          marketReaction: r.outcome.includes("BEAT") ? "BULLISH" : r.outcome.includes("MISS") ? "BEARISH" : "NEUTRAL",
+          summary: r.summary,
+        }));
+
+        return {
+          latest: {
+            period: latestCpiEvent.period,
+            actualYoY: latestCpiEvent.actualYoY ?? 2.6,
+            forecastYoY: latestCpiEvent.consensusYoY,
+            previousYoY: latestCpiEvent.previousYoY,
+            actualMoM: latestCpiEvent.actualMoM ?? 0.15,
+            coreActualYoY: latestCpiEvent.coreActualYoY ?? 2.9,
+            coreForecastYoY: latestCpiEvent.coreForecastYoY,
+            releaseDate: latestCpiEvent.releaseDate,
+            status: `Cooling (${(latestCpiEvent.actualYoY ?? 2.6).toFixed(1)}% vs ${latestCpiEvent.consensusYoY.toFixed(1)}% Est) - Bullish Macro Tailwind`,
+            inflationStatusText: `Headline CPI cooled to ${(latestCpiEvent.actualYoY ?? 2.6).toFixed(1)}% YoY, confirming the disinflationary trajectory and reinforcing market conviction for Federal Reserve rate cuts.`,
+          },
+          upcoming: {
+            event: `${nextCpiEvent.period} US CPI Release`,
+            releaseDate: nextCpiEvent.releaseDateFull,
+            daysRemaining: nextCpiEvent.daysRemaining,
+            consensusForecastYoY: `${nextCpiEvent.consensusYoY.toFixed(1)}%`,
+            previousYoY: `${nextCpiEvent.previousYoY.toFixed(1)}%`,
+            criticalLevel: nextCpiEvent.criticalLevel,
+            impactOutlook: nextCpiEvent.impactOutlook,
+          },
+          historicalReleases: historicalReleasesFormatted,
+        };
+      })(),
       macroFed: {
         currentFedFundsRate: "4.25% - 4.50%",
         fomcMeetingDate: "September 17, 2026",
