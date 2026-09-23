@@ -651,7 +651,7 @@ const DEFAULT_PREDICTION_ASSETS: PredictionAsset[] = [
   }
 ];
 
-export default function AIPredictionSuite() {
+function AIPredictionSuiteInner() {
   const searchParams = useSearchParams();
   const tabParam = searchParams?.get("tab");
   const [activePredictionTab, setActivePredictionTab] = useState<"5min" | "multi">(
@@ -1534,5 +1534,20 @@ function Share2(props: React.SVGProps<SVGSVGElement>) {
       <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
     </svg>
+  );
+}
+
+export default function AIPredictionSuite() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">
+          <div className="w-8 h-8 border-4 border-amber-400 border-t-transparent rounded-full animate-spin" />
+          <p className="text-xs font-mono font-bold text-slate-500">Loading AI Prediction Engine...</p>
+        </div>
+      }
+    >
+      <AIPredictionSuiteInner />
+    </React.Suspense>
   );
 }
