@@ -34,7 +34,12 @@ import {
   ShieldCheck,
   Fuel,
   Coins,
-  RefreshCw
+  RefreshCw,
+  ChevronDown,
+  HelpCircle,
+  Hash,
+  Eye,
+  Award
 } from "lucide-react";
 import { CPIDataRelease, NewsItem, MacroBattle, CentralBankPolicy } from "@/app/api/news/route";
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
@@ -76,6 +81,48 @@ interface MacroFedData {
   macroRegime: string;
 }
 
+const TRENDING_KEYWORDS = [
+  { tag: "#BitcoinETF", query: "Bitcoin ETF" },
+  { tag: "#FedRateCut", query: "Fed" },
+  { tag: "#CPIInflation", query: "CPI" },
+  { tag: "#SolanaBreakout", query: "Solana" },
+  { tag: "#XRPSettlement", query: "XRP" },
+  { tag: "#WhaleAlert", query: "Whale" },
+  { tag: "#EthereumPectra", query: "Ethereum" },
+  { tag: "#StrategicBTCReserve", query: "Strategic Bitcoin Reserve" },
+  { tag: "#USDTMinting", query: "Tether" },
+  { tag: "#AltcoinSeason", query: "Altcoin Season" },
+  { tag: "#DeFiRWA", query: "DeFi" },
+  { tag: "#ProofOfReserves", query: "Proof of Reserves" }
+];
+
+const SEO_NEWS_FAQS = [
+  {
+    q: "How do Federal Reserve interest rate cuts affect Bitcoin and cryptocurrency prices?",
+    a: "When the Federal Reserve cuts interest rates, the yield on risk-free cash equivalents (like US Treasury bills and money market funds) declines. This incentivizes institutional hedge funds and retail investors to seek higher returns in scarce, asymmetric assets like Bitcoin, Ethereum, and decentralized finance protocols. Lower interest rates also increase global M2 money supply, which historically exhibits an 85%+ positive correlation with cryptocurrency bull market expansions."
+  },
+  {
+    q: "Why does US CPI inflation data cause instant volatility in crypto markets?",
+    a: "The US Consumer Price Index (CPI) is the primary metric used by the Federal Reserve to calibrate monetary policy. A cooling CPI print (lower than expected inflation) gives the Fed leeway to cut interest rates and inject liquidity, triggering sharp upside rallies in crypto derivatives. Conversely, a hotter-than-expected CPI print raises fears of restrictive monetary policy, strengthening the US Dollar Index (DXY) and putting temporary downward pressure on risk assets."
+  },
+  {
+    q: "What are Bitcoin Spot ETF inflows and why do they cause supply squeezes?",
+    a: "Spot Bitcoin ETFs (such as BlackRock's IBIT and Fidelity's FBTC) are backed by physical Bitcoin held in institutional custody. When institutional investors buy ETF shares, the fund's authorized participants must purchase actual Bitcoin from spot markets and OTC trading desks. Following the 2024 halving, miners only produce 450 BTC per day; when daily ETF inflows exceed 4,000 to 8,000 BTC, the resulting structural supply deficit forces spot orderbooks into parabolic price discovery."
+  },
+  {
+    q: "How do crypto traders track large whale transactions before market moves?",
+    a: "Traders monitor on-chain blockchain telemetry for large transfers between private cold storage wallets and centralized exchange hot wallets. When whales transfer thousands of Bitcoin or stablecoins (like USDT) onto exchanges, it signals imminent spot buying power or potential sell-side liquidity. Tracking UTXO age bands, dormant Satoshi-era wallet awakenings, and miner wallet outflows provides essential early signals."
+  },
+  {
+    q: "What is Altcoin Season and when does capital rotate from Bitcoin to altcoins?",
+    a: "Altcoin Season occurs when 75% or more of the top 50 cryptocurrencies outperform Bitcoin over a rolling 90-day window. It typically begins after Bitcoin completes an aggressive price discovery rally and consolidates near all-time highs. Profits generated from Bitcoin trades then rotate into large-cap Layer-1s (Ethereum, Solana), Layer-2 rollups, and high-beta decentralized finance tokens, causing rapid market-wide rallies."
+  },
+  {
+    q: "What is the Bitcoin Halving supply shock cycle?",
+    a: "Every 210,000 blocks (roughly every 4 years), Bitcoin's algorithmic block reward is cut in half, reducing the rate of new coin issuance by 50%. Historically, the market takes approximately 180 to 500 days to fully price in the structural supply reduction. As existing liquid inventories on exchanges are exhausted by steady demand, prices experience exponential post-halving bull market expansions."
+  }
+];
+
 export default function CryptoNewsCPIDashboard() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [macroBattles, setMacroBattles] = useState<MacroBattle[]>([]);
@@ -91,6 +138,7 @@ export default function CryptoNewsCPIDashboard() {
   const [selectedBattle, setSelectedBattle] = useState<MacroBattle | null>(null);
   const [copiedArticle, setCopiedArticle] = useState(false);
   const [activeTab, setActiveTab] = useState<"news" | "battles" | "interest-rates" | "cpi">("news");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const fetchNewsAndMacro = useCallback(async () => {
     try {
@@ -157,6 +205,7 @@ export default function CryptoNewsCPIDashboard() {
     return matchSearch && matchCat && matchTime;
   });
 
+  const featuredStory = filteredNews.length > 0 ? filteredNews[0] : null;
   const displayedNews = filteredNews.slice(0, visibleCount);
 
   const handleCopyStory = () => {
@@ -173,9 +222,32 @@ export default function CryptoNewsCPIDashboard() {
   return (
     <div className="space-y-10 pb-20">
       
-      {/* 1. HERO BANNER WITH LIVE MACRO TICKER */}
-      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white rounded-3xl p-6 sm:p-8 border border-blue-900/40 shadow-xl relative overflow-hidden">
-        {/* Glow Effects */}
+      {/* 1. REAL-TIME BREAKING NEWS TICKER / MARQUEE BAR */}
+      <div className="bg-slate-900 text-white rounded-2xl p-3 border border-slate-800 shadow-md flex items-center gap-3 overflow-hidden">
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-500/20 text-rose-400 font-mono font-black text-xs shrink-0 border border-rose-500/30">
+          <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+          <span>BREAKING WIRE</span>
+        </div>
+        <div className="overflow-x-auto no-scrollbar flex items-center gap-6 text-xs whitespace-nowrap">
+          {news.slice(0, 6).map((nItem, nIdx) => (
+            <button
+              key={nIdx}
+              onClick={() => setSelectedArticle(nItem)}
+              className="flex items-center gap-2 hover:text-amber-400 transition cursor-pointer text-slate-300"
+            >
+              <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-amber-400">
+                {nItem.category}
+              </span>
+              <span className="font-semibold">{nItem.title}</span>
+              <span className="text-[10px] text-slate-400">• {nItem.timeAgo}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 2. HERO BANNER WITH LIVE MACRO KEY STATS */}
+      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white rounded-3xl p-6 sm:p-8 border border-blue-900/40 shadow-2xl relative overflow-hidden">
+        {/* Glow Background Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -185,36 +257,43 @@ export default function CryptoNewsCPIDashboard() {
               <div className="flex flex-wrap items-center gap-2 mb-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-blue-500/20 text-blue-300 border border-blue-500/30">
                   <Newspaper className="w-3.5 h-3.5 text-blue-400" />
-                  Real-Time Crypto &amp; Macroeconomic Wire
+                  Real-Time Crypto News &amp; Macro Intelligence
                 </span>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   <Swords className="w-3 h-3 text-amber-400" />
-                  Macro Battles &amp; Interest Rate Matrix
+                  Live FOMC Rate Cuts &amp; CPI Tracker
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
-                Crypto Market Battles, <br className="hidden sm:inline" />
+                Breaking Crypto News, <br className="hidden sm:inline" />
                 <span className="bg-gradient-to-r from-blue-400 via-amber-300 to-yellow-400 bg-clip-text text-transparent">
-                  Interest Rates &amp; Macro Intelligence
+                  Bitcoin ETF Flows &amp; Macro Intelligence
                 </span>
               </h1>
-              <p className="text-slate-400 text-xs sm:text-sm max-w-3xl mt-2 leading-relaxed">
-                Understand every economic force moving cryptocurrency: Central Bank interest rate cuts, global de-dollarization battles, SEC regulatory clashes, institutional spot ETF flows, and US CPI inflation releases with verified primary sources.
+              <p className="text-slate-300 text-xs sm:text-sm max-w-3xl mt-2 leading-relaxed">
+                Track real-time breaking cryptocurrency news, Federal Reserve FOMC rate cuts, US CPI inflation releases, institutional Spot ETF capital flows, whale wallet transactions, and sovereign Bitcoin reserve legislation with verified primary sources.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
               <Link
-                href="/tools"
+                href="/predictions"
                 className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-md hover:scale-105"
               >
-                <span>AI Trading Terminal</span>
+                <span>AI Price Predictions</span>
                 <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/coinglass?tab=liquidations"
+                className="px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition flex items-center gap-1.5 border border-slate-700"
+              >
+                <span>Liquidation Heatmap</span>
+                <ExternalLink className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
 
-          {/* Real-Time Macro Key Stats */}
+          {/* Real-Time Macro Key Stats Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-800 text-xs">
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
@@ -267,7 +346,51 @@ export default function CryptoNewsCPIDashboard() {
         </div>
       </div>
 
-      {/* NAVIGATION PILLS FOR SECTIONS */}
+      {/* 3. TRENDING SEO TOPICS & HIGH-SEARCH-INTENT KEYWORD CLOUD */}
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+            <Hash className="w-4 h-4 text-amber-500" />
+            <span>Trending Crypto Search Topics (1-Click Filter):</span>
+          </span>
+          <span className="text-[10px] font-mono font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+            HIGH SEARCH VOLUME
+          </span>
+        </div>
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+          {TRENDING_KEYWORDS.map((item, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setSearchQuery(item.query);
+                setSelectedCategory("All");
+                setSelectedTimeframe("all");
+                setVisibleCount(12);
+              }}
+              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition border ${
+                searchQuery === item.query
+                  ? "bg-amber-400 text-slate-950 border-amber-400 font-black shadow-sm"
+                  : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750"
+              }`}
+            >
+              {item.tag}
+            </button>
+          ))}
+          {searchQuery && (
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setVisibleCount(12);
+              }}
+              className="px-3 py-1.5 rounded-xl font-bold text-rose-500 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 whitespace-nowrap"
+            >
+              ✕ Clear Search
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* 4. NAVIGATION TABS FOR SECTIONS */}
       <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700">
         <button
           onClick={() => setActiveTab("news")}
@@ -318,6 +441,47 @@ export default function CryptoNewsCPIDashboard() {
       {/* TAB 1: REAL-TIME NEWS WIRE & HISTORICAL ARCHIVE */}
       {activeTab === "news" && (
         <div className="space-y-6">
+          
+          {/* FEATURED BREAKING STORY / HERO CARD (if available) */}
+          {featuredStory && !searchQuery && selectedCategory === "All" && selectedTimeframe === "all" && (
+            <div
+              onClick={() => setSelectedArticle(featuredStory)}
+              className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 border border-indigo-500/30 shadow-xl cursor-pointer group hover:border-amber-400/60 transition"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 flex items-center gap-1.5 shadow-sm">
+                    <Award className="w-3.5 h-3.5" />
+                    🔥 TOP TRENDING STORY #1
+                  </span>
+                  <span className="text-xs font-mono font-bold text-purple-300 bg-purple-500/20 px-2.5 py-0.5 rounded-full border border-purple-500/30">
+                    {featuredStory.category}
+                  </span>
+                </div>
+                <span className="text-xs font-mono text-slate-400">{featuredStory.timeAgo}</span>
+              </div>
+
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white group-hover:text-amber-300 transition-colors leading-tight">
+                {featuredStory.title}
+              </h2>
+
+              <p className="text-slate-300 text-xs sm:text-sm mt-3 leading-relaxed max-w-4xl line-clamp-2">
+                {featuredStory.summary}
+              </p>
+
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-4 mt-4 border-t border-slate-800 text-xs">
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-400">Source: <strong className="text-white">{featuredStory.source}</strong></span>
+                  <span className="text-emerald-400 font-mono font-bold">Market Impact: HIGH</span>
+                </div>
+                <span className="text-amber-400 font-bold flex items-center gap-1 group-hover:underline">
+                  <span>Read Full In-Depth Analysis</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </div>
+          )}
+
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
             {/* Header & Controls */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
@@ -325,7 +489,7 @@ export default function CryptoNewsCPIDashboard() {
                 <div className="flex items-center gap-2">
                   <Flame className="w-4 h-4 text-amber-500" />
                   <h3 className="text-base font-black text-slate-900 dark:text-white">
-                    Live Crypto News Wire &amp; Historical Archive ({filteredNews.length} Stories Available)
+                    Live Crypto News Wire &amp; Market Intelligence ({filteredNews.length} Stories Indexed)
                   </h3>
                   <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
@@ -333,7 +497,7 @@ export default function CryptoNewsCPIDashboard() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Browse real-time breaking news alongside a searchable historical archive of past macroeconomic catalysts and crypto events.
+                  High-velocity cryptocurrency news wire, macroeconomic inflation data, regulatory developments, and on-chain whale activity.
                 </p>
               </div>
 
@@ -343,7 +507,7 @@ export default function CryptoNewsCPIDashboard() {
                   <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    placeholder="Search past news, CPI, coin, event..."
+                    placeholder="Search Bitcoin, ETF, CPI, Fed, Whale..."
                     value={searchQuery}
                     onChange={(e) => {
                       setSearchQuery(e.target.value);
@@ -380,14 +544,14 @@ export default function CryptoNewsCPIDashboard() {
             </div>
 
             {/* Timeframe Filter Navigation Bar */}
-            <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+            <div className="flex flex-wrap items-center gap-2 p-2 bg-slate-50 dark:bg-slate-850/50 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
               <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase px-2">Timeline:</span>
               {[
-                { id: "all", label: `🔥 All News & Archive (${news.length})` },
+                { id: "all", label: `🔥 All Indexed Stories (${news.length})` },
                 { id: "live", label: "⚡ Live Stream (Last 24h)" },
                 { id: "week", label: "🗓️ Past 7 Days" },
                 { id: "month", label: "📅 Past 30 Days" },
-                { id: "historical", label: "🏛️ Historical Archive" },
+                { id: "historical", label: "🏛️ Permanent Archive" },
               ].map((tf) => (
                 <button
                   key={tf.id}
@@ -402,40 +566,6 @@ export default function CryptoNewsCPIDashboard() {
                   }`}
                 >
                   {tf.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Historical Milestone Quick Jump Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-              <span className="text-[10px] font-mono font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider shrink-0 mr-1">
-                ⭐ Major Catalysts:
-              </span>
-              {[
-                { label: "⚡ $50B YCC Buyback", query: "Yield Curve Control" },
-                { label: "🚀 $150K Hate Rally", query: "Hate Rally" },
-                { label: "💎 Ethena $4B Basis", query: "Ethena" },
-                { label: "📊 July CPI (2.7%)", query: "CPI" },
-                { label: "🏛️ FIT21 Bill", query: "FIT21" },
-                { label: "🌍 BRICS Reserve", query: "BRICS" },
-                { label: "💳 Visa Solana", query: "Visa" },
-                { label: "⛏️ 700 EH/s Hashrate", query: "Hashrate" },
-              ].map((m, mIdx) => (
-                <button
-                  key={mIdx}
-                  onClick={() => {
-                    setSearchQuery(m.query);
-                    setSelectedCategory("All");
-                    setSelectedTimeframe("all");
-                    setVisibleCount(12);
-                  }}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition border ${
-                    searchQuery === m.query
-                      ? "bg-amber-400 text-slate-950 border-amber-400 font-black shadow-xs"
-                      : "bg-amber-50/60 dark:bg-amber-950/30 text-amber-900 dark:text-amber-300 border-amber-200/60 dark:border-amber-800/60 hover:bg-amber-100"
-                  }`}
-                >
-                  {m.label}
                 </button>
               ))}
             </div>
@@ -595,210 +725,170 @@ export default function CryptoNewsCPIDashboard() {
                   key={battle.id}
                   className="p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-800/60 border-2 border-slate-200/90 dark:border-slate-700 space-y-5 hover:border-amber-400 transition"
                 >
-                  {/* Top Bar */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      <span className="px-2.5 py-1 rounded-xl bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 font-mono text-[10px] font-black uppercase">
                         {battle.category}
                       </span>
-                      <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300">
-                        {battle.status}
+                      <span className="text-xs font-mono font-bold text-slate-400">
+                        Status: <strong className="text-slate-900 dark:text-white">{battle.status}</strong>
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
-                        Crypto Bias:
-                      </span>
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-black ${
-                        battle.cryptoImpact === "BULLISH"
-                          ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700"
-                          : "bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700"
-                      }`}>
-                        {battle.cryptoImpact}
-                      </span>
-                    </div>
+                    <span className="px-2.5 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 text-xs font-mono font-bold">
+                      Impact: {battle.cryptoImpact}
+                    </span>
                   </div>
 
-                  {/* Title & Subtitle */}
                   <div>
-                    <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
                       {battle.title}
                     </h3>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                       {battle.subtitle}
                     </p>
                   </div>
 
-                  {/* Visual Face-Off Box */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs">
-                    <div className="p-3 rounded-xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40">
-                      <span className="text-[10px] uppercase font-bold text-blue-600 dark:text-blue-400 block mb-1">Forces on Side A:</span>
-                      <div className="font-extrabold text-slate-900 dark:text-white">{battle.parties.sideA}</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 space-y-1">
+                      <span className="font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider text-[10px]">Opposing Side A:</span>
+                      <p className="text-slate-800 dark:text-slate-200 font-bold">{battle.parties.sideA}</p>
                     </div>
-                    <div className="p-3 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900/40">
-                      <span className="text-[10px] uppercase font-bold text-amber-600 dark:text-amber-400 block mb-1">Forces on Side B:</span>
-                      <div className="font-extrabold text-slate-900 dark:text-white">{battle.parties.sideB}</div>
+
+                    <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 space-y-1">
+                      <span className="font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider text-[10px]">Opposing Side B:</span>
+                      <p className="text-slate-800 dark:text-slate-200 font-bold">{battle.parties.sideB}</p>
                     </div>
                   </div>
 
-                  {/* Consumer Plain English Explanation */}
-                  <div className="space-y-2">
-                    <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs text-amber-950 dark:text-amber-200 leading-relaxed">
-                      <div className="flex items-center gap-1.5 font-black text-amber-900 dark:text-amber-400 mb-1">
-                        <BookOpen className="w-4 h-4" />
-                        <span>Easy Plain-English Consumer Explanation:</span>
-                      </div>
-                      <p>{battle.consumerExplanation}</p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-xs text-blue-950 dark:text-blue-200 leading-relaxed">
-                      <div className="flex items-center gap-1.5 font-black text-blue-900 dark:text-blue-400 mb-1">
-                        <Coins className="w-4 h-4" />
-                        <span>Stakes for Cryptocurrency Investors:</span>
-                      </div>
-                      <p>{battle.stakesForCrypto}</p>
-                    </div>
+                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs text-slate-700 dark:text-slate-300 space-y-1 leading-relaxed">
+                    <strong className="text-amber-600 dark:text-amber-400 font-black block">💡 Simplified Macro Explanation:</strong>
+                    <p>{battle.consumerExplanation}</p>
                   </div>
 
-                  {/* Outbound Link & Primary Sources */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
-                    <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-[11px]">
-                      <span>Key Protagonists: <strong className="text-slate-900 dark:text-white">{battle.keyProtagonists.join(" • ")}</strong></span>
-                    </div>
-
+                  <div className="pt-2 flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-mono text-[11px]">Primary Source: {battle.primarySourceName}</span>
                     <a
                       href={battle.primarySourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold hover:bg-slate-800 dark:hover:bg-slate-100 transition shadow-sm"
+                      className="text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1 hover:underline"
                     >
-                      <span>Verified Source: {battle.primarySourceName}</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB 3: CENTRAL BANK INTEREST RATES */}
-      {activeTab === "interest-rates" && (
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
-            <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-9 h-9 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-black">
-                  <Landmark className="w-5 h-5" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white">
-                    Global Central Bank Interest Rates &amp; Liquidity Monitor
-                  </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Why interest rates are the master steering wheel of Bitcoin, Ethereum, and crypto liquidity cycles.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Central Bank Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {centralBankPolicies.map((bank, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3 flex flex-col justify-between"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 font-mono">
-                        {bank.country}
-                      </span>
-                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
-                        {bank.bias}
-                      </span>
-                    </div>
-
-                    <h4 className="text-base font-black text-slate-900 dark:text-white">
-                      {bank.bank}
-                    </h4>
-
-                    <div className="text-2xl font-black text-slate-900 dark:text-white font-mono">
-                      {bank.currentRate}
-                    </div>
-
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                      {bank.notes}
-                    </p>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px]">
-                    <span className="text-slate-500 dark:text-slate-400">Next: {bank.nextMeeting}</span>
-                    <a
-                      href={bank.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 font-bold hover:underline flex items-center gap-1"
-                    >
-                      <span>Official Portal</span>
+                      <span>Verify Government / Macro Records</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
 
-            {/* Consumer Guide: How Interest Rates Control Crypto */}
-            <div className="p-6 rounded-3xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 space-y-4">
-              <h3 className="text-base font-black text-blue-950 dark:text-blue-200 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <span>Consumer Masterclass: Why Central Bank Interest Rates Dictate Crypto Bull Markets</span>
-              </h3>
+      {/* TAB 3: CENTRAL BANK INTEREST RATES MATRIX */}
+      {activeTab === "interest-rates" && (
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+            <div className="space-y-1 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <h2 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <Landmark className="w-5 h-5 text-emerald-500" />
+                <span>Global Central Bank Policy &amp; Benchmark Rates Matrix</span>
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Tracking monetary policies across the Federal Reserve, ECB, Bank of Japan, and People&apos;s Bank of China
+              </p>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700 dark:text-slate-300">
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-900/60 space-y-2">
-                  <div className="font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">1</span>
-                    <span>The Cost of Borrowing (Fiat Liquidity)</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    When interest rates are high (5%+), businesses and hedge funds pay high interest on loans. When rates drop, cheap money floods into global banks, seeking higher returns in digital assets.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-900/60 space-y-2">
-                  <div className="font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">2</span>
-                    <span>Bond Yields vs Bitcoin HODLing</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    If government bonds pay 5% risk-free yield, institutional capital parks in Treasuries. When bond yields drop below inflation, institutions MUST allocate to Bitcoin to beat purchasing power erosion.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-900/60 space-y-2">
-                  <div className="font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">3</span>
-                    <span>Global M2 Money Supply Expansion</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    Bitcoin has a 94% historical correlation with the expansion of global M2 money supply. As central banks cut rates simultaneously, global liquidity expands, fueling multi-year crypto uptrends.
-                  </p>
-                </div>
-              </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs font-mono">
+                <thead>
+                  <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
+                    <th className="pb-3 font-black uppercase">Central Bank</th>
+                    <th className="pb-3 font-black uppercase">Country / Zone</th>
+                    <th className="pb-3 font-black uppercase">Benchmark Rate</th>
+                    <th className="pb-3 font-black uppercase">Monetary Bias</th>
+                    <th className="pb-3 font-black uppercase">Crypto Impact</th>
+                    <th className="pb-3 font-black uppercase">Policy Notes</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {centralBankPolicies.map((cb, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-850/50 transition">
+                      <td className="py-4 font-bold text-slate-900 dark:text-white font-sans text-sm">{cb.bank}</td>
+                      <td className="py-4 text-slate-600 dark:text-slate-300">{cb.country}</td>
+                      <td className="py-4 text-emerald-600 dark:text-emerald-400 font-bold text-sm">{cb.currentRate}</td>
+                      <td className="py-4">
+                        <span className="px-2 py-0.5 rounded-md bg-blue-500/15 text-blue-600 dark:text-blue-400 font-bold">
+                          {cb.bias}
+                        </span>
+                      </td>
+                      <td className="py-4">
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold">
+                          {cb.impactOnCrypto}
+                        </span>
+                      </td>
+                      <td className="py-4 text-slate-500 dark:text-slate-400 font-sans max-w-xs">{cb.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       )}
 
-      {/* TAB 4: US CPI INFLATION TERMINAL & AI PREDICTOR */}
+      {/* TAB 4: US CPI INFLATION TERMINAL */}
       {activeTab === "cpi" && (
-        <CPIMacroAIPredictor />
+        <div className="space-y-6">
+          <CPIMacroAIPredictor />
+        </div>
       )}
 
-      {/* 5. INTERACTIVE ARTICLE DEEP-DIVE MODAL */}
+      {/* 5. SEO RICH KNOWLEDGE BASE & FREQUENTLY ASKED QUESTIONS */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        <div className="space-y-1">
+          <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-blue-500" />
+            <span>Cryptocurrency News, Macro Liquidity &amp; Inflation FAQ</span>
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+            Clear, authoritative answers to the most common search queries regarding crypto news catalysts, ETF flows, and macroeconomic trends
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {SEO_NEWS_FAQS.map((faq, idx) => {
+            const isOpen = openFaq === idx;
+            return (
+              <div
+                key={idx}
+                className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition"
+              >
+                <button
+                  onClick={() => setOpenFaq(isOpen ? null : idx)}
+                  className="w-full p-4 text-left flex items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-850/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                >
+                  <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
+                    {faq.q}
+                  </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-blue-500" : ""
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="p-4 bg-white dark:bg-slate-900 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 6. INTERACTIVE ARTICLE DEEP-DIVE MODAL */}
       {selectedArticle && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
           <div
