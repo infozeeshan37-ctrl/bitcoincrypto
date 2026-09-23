@@ -4,16 +4,27 @@ import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "AI Bitcoin & Crypto Price Prediction Engine (24h, 7d, 30d) | BitcoinCrypto.tech",
+  title: "5-Minute Bitcoin & Crypto Price Prediction (UP or DOWN) | BitcoinCrypto.tech",
   description:
-    "Institutional AI crypto price prediction engine for Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and top altcoins. Multi-horizon 24-hour, 7-day, and 30-day forecast targets with 98.6% quantitative confluence across technicals, on-chain valuation, derivatives liquidity, and Fed macro monetary cycle.",
+    "Real-time 5-minute Binance-style crypto price prediction arena. Predict whether Bitcoin (BTC), Ethereum (ETH), and Solana (SOL) will close UP or DOWN against the previous round lock price. Featuring live 24/7 countdowns, AI micro-momentum signals, payout multipliers, and multi-horizon price forecasting.",
+  keywords: [
+    "5 minute bitcoin prediction",
+    "binance prediction btc",
+    "crypto price prediction up or down",
+    "pancakeswap crypto prediction",
+    "5 min btc price forecast",
+    "binary crypto prediction game",
+    "real time bitcoin prediction",
+    "ai crypto price predictor",
+    "bitcoin up down next 5 minutes"
+  ],
   alternates: {
     canonical: "/predictions",
   },
   openGraph: {
-    title: "AI Bitcoin & Crypto Price Prediction Engine | 98.6% Confluence",
+    title: "5-Minute Bitcoin & Crypto Price Prediction (UP or DOWN) | Real-Time Rounds",
     description:
-      "Predict upcoming Bitcoin and Ethereum price moves using quantitative multi-pillar machine learning models, on-chain MVRV, derivatives liquidity heatmaps, and macro inflation cycle forecasting.",
+      "Predict whether Bitcoin will close UP or DOWN in the next 5 minutes against the lock price. Live rounds, real-time Binance feeds, AI momentum indicators, and demo wallet.",
     url: "https://www.bitcoincrypto.tech/predictions",
   },
 };

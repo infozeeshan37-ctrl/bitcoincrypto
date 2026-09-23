@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
@@ -562,7 +563,9 @@ export default async function CoinPredictionPage({ params }: PageProps) {
             </div>
           </div>
 
-          <AIPredictionSuite />
+          <Suspense fallback={<div className="min-h-[250px] flex items-center justify-center font-mono text-xs text-slate-400">Loading AI Prediction Suite...</div>}>
+            <AIPredictionSuite />
+          </Suspense>
         </section>
 
         {/* FAQ Section for Google Rich Snippets */}

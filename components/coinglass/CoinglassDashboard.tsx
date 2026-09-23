@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import LiquidationHeatmapRadar from "./LiquidationHeatmapRadar";
+import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 import {
   Flame,
   TrendingUp,
@@ -156,12 +157,13 @@ export default function CoinglassDashboard() {
     return `$${n.toFixed(4)}`;
   };
 
-  const btcRatio = longShortRatios.find((r) => r.base === "BTC") || {
-    longRatio: 53.4,
-    shortRatio: 46.6,
-    ratio: 1.15,
-    topTradersLong: 58.2,
-    topTradersShort: 41.8,
+  const handleTabChange = (tab: "oi" | "liquidations" | "funding" | "longshort") => {
+    setSelectedTab(tab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.pushState({}, "", url.toString());
+    }
   };
 
   return (
@@ -237,10 +239,10 @@ export default function CoinglassDashboard() {
             <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
               <span className="text-[10px] uppercase font-bold text-slate-400">BTC Long / Short Ratio</span>
               <div className="text-lg font-black text-white font-mono">
-                {btcRatio.longRatio}% / {btcRatio.shortRatio}%
+                {longShortRatios[0]?.longRatio || 52.4}% / {longShortRatios[0]?.shortRatio || 47.6}%
               </div>
               <span className="text-[10px] text-emerald-400 font-bold">
-                Top Traders: {btcRatio.topTradersLong}% Long
+                Top Traders: {longShortRatios[0]?.topTradersLong || 61.2}% Long
               </span>
             </div>
 
@@ -261,7 +263,7 @@ export default function CoinglassDashboard() {
       {/* 2. NAVIGATION TABS */}
       <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 overflow-x-auto no-scrollbar">
         <button
-          onClick={() => setSelectedTab("oi")}
+          onClick={() => handleTabChange("oi")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "oi"
               ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-black"
@@ -273,7 +275,7 @@ export default function CoinglassDashboard() {
         </button>
 
         <button
-          onClick={() => setSelectedTab("liquidations")}
+          onClick={() => handleTabChange("liquidations")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "liquidations"
               ? "bg-slate-900 dark:bg-rose-500 text-white shadow-sm font-black"
@@ -281,11 +283,11 @@ export default function CoinglassDashboard() {
           }`}
         >
           <Skull className="w-3.5 h-3.5 text-rose-500" />
-          <span>24h Liquidations & Heatmaps</span>
+          <span>24h Liquidations &amp; Heatmaps</span>
         </button>
 
         <button
-          onClick={() => setSelectedTab("funding")}
+          onClick={() => handleTabChange("funding")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "funding"
               ? "bg-slate-900 dark:bg-blue-500 text-white shadow-sm font-black"
@@ -297,7 +299,7 @@ export default function CoinglassDashboard() {
         </button>
 
         <button
-          onClick={() => setSelectedTab("longshort")}
+          onClick={() => handleTabChange("longshort")}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
             selectedTab === "longshort"
               ? "bg-slate-900 dark:bg-emerald-500 text-white shadow-sm font-black"
@@ -399,11 +401,10 @@ export default function CoinglassDashboard() {
         </div>
       )}
 
-      {/* 4. TAB 2: LIQUIDATIONS & HEATMAP */}
+      {/* 4. TAB 2: COMPREHENSIVE PRO LIQUIDATIONS & HEATMAPS SUITE */}
       {selectedTab === "liquidations" && (
-        <div className="space-y-8">
-          {/* Main Comprehensive Liquidation Heatmap Radar Component */}
-          <LiquidationHeatmapRadar initialSymbol={searchParams.get("symbol") || "BTCUSDT"} />
+        <div className="space-y-8 animate-in fade-in duration-200">
+          <CoinGlassLiquidationTool />
         </div>
       )}
 

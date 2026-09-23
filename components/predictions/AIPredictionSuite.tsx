@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import FiveMinutePredictionArena from "./FiveMinutePredictionArena";
 import {
   Sparkles,
   TrendingUp,
@@ -650,6 +652,18 @@ const DEFAULT_PREDICTION_ASSETS: PredictionAsset[] = [
 ];
 
 export default function AIPredictionSuite() {
+  const searchParams = useSearchParams();
+  const tabParam = searchParams?.get("tab");
+  const [activePredictionTab, setActivePredictionTab] = useState<"5min" | "multi">(
+    tabParam === "multi" ? "multi" : "5min"
+  );
+
+  useEffect(() => {
+    if (tabParam === "multi" || tabParam === "5min") {
+      setActivePredictionTab(tabParam);
+    }
+  }, [tabParam]);
+
   const [assets, setAssets] = useState<PredictionAsset[]>(DEFAULT_PREDICTION_ASSETS);
   const [selectedAssetSymbol, setSelectedAssetSymbol] = useState<string>("BTCUSDT");
   const [selectedHorizon, setSelectedHorizon] = useState<"24h" | "7d" | "30d">("24h");
@@ -822,8 +836,42 @@ Horizon: ${selectedHorizon.toUpperCase()} Target: $${currentHorizonData.targetPr
 
   return (
     <div className="space-y-8">
-      {/* 1. TOP HEADER & TELEMETRY BAR */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+      {/* PREDICTION ARENA MODE TABS */}
+      <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <button
+          onClick={() => setActivePredictionTab("5min")}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer ${
+            activePredictionTab === "5min"
+              ? "bg-amber-400 text-slate-950 shadow-md font-black scale-102"
+              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <Clock className="w-4 h-4 text-rose-500 animate-pulse" />
+          <span>⚡ 5-Minute Binary Prediction (Binance Style)</span>
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+            LIVE
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActivePredictionTab("multi")}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+            activePredictionTab === "multi"
+              ? "bg-slate-950 dark:bg-amber-400 text-white dark:text-slate-950 shadow-md font-black scale-102"
+              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <Sparkles className="w-4 h-4 text-amber-500" />
+          <span>🔮 AI Multi-Horizon Valuation (24h / 7d / 30d)</span>
+        </button>
+      </div>
+
+      {activePredictionTab === "5min" && <FiveMinutePredictionArena />}
+
+      {activePredictionTab === "multi" && (
+        <div className="space-y-8">
+          {/* 1. TOP HEADER & TELEMETRY BAR */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 pb-6 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-400 text-slate-950 flex items-center justify-center font-black shadow-md shadow-amber-500/20">
@@ -1460,8 +1508,10 @@ Horizon: ${selectedHorizon.toUpperCase()} Target: $${currentHorizonData.targetPr
           </div>
         </div>
       </div>
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
 }
 
 function Share2(props: React.SVGProps<SVGSVGElement>) {
