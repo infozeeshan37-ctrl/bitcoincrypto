@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
+import FiveMinutePredictionArena from "./FiveMinutePredictionArena";
 import {
   Bot,
   Sparkles,
@@ -956,6 +957,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
 ];
 
 export default function AIPredictionSuite() {
+  const [mainTab, setMainTab] = useState<"5min" | "quant-blueprint">("5min");
   const [assets, setAssets] = useState<PredictionAsset[]>(INITIAL_PREDICTION_ASSETS);
   const [selectedAssetSymbol, setSelectedAssetSymbol] = useState<string>("BTCUSDT");
   const [activeViewMode, setActiveViewMode] = useState<
@@ -1157,8 +1159,44 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
 
   return (
     <div className="space-y-8">
-      {/* 1. TOP HEADER & TELEMETRY BAR */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+      {/* 0. ARENA MODE SWITCHER TABS */}
+      <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <button
+          onClick={() => setMainTab("5min")}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer ${
+            mainTab === "5min"
+              ? "bg-amber-400 text-slate-950 shadow-md scale-102 font-black"
+              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <Zap className="w-4 h-4 text-rose-500 animate-pulse" />
+          <span>⚡ Live 5-Minute Binance Prediction Arena</span>
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+            100% REAL LIVE EPOCHS
+          </span>
+        </button>
+
+        <button
+          onClick={() => setMainTab("quant-blueprint")}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+            mainTab === "quant-blueprint"
+              ? "bg-slate-950 dark:bg-amber-400 text-white dark:text-slate-950 shadow-md font-black scale-102"
+              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+          }`}
+        >
+          <Target className="w-4 h-4 text-amber-500" />
+          <span>🎯 AI Quantitative Trade Blueprint &amp; Risk Sizing (4H/1D Swing)</span>
+        </button>
+      </div>
+
+      {/* 5-MINUTE LIVE BINANCE ARENA */}
+      {mainTab === "5min" && <FiveMinutePredictionArena />}
+
+      {/* 4-PILLAR QUANTITATIVE BLUEPRINT */}
+      {mainTab === "quant-blueprint" && (
+        <div className="space-y-8">
+          {/* 1. TOP HEADER & TELEMETRY BAR */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 pb-6 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-400 text-slate-950 flex items-center justify-center font-black shadow-md shadow-amber-500/20">
@@ -1923,6 +1961,8 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
           </div>
         </div>
       </div>
+        </div>
+      )}
     </div>
   );
 }
