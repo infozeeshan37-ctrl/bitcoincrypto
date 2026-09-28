@@ -92,10 +92,17 @@ export interface Round5m {
   };
 }
 
+export function formatCoinPrice(val: number, decimals: number = 2): string {
+  if (val === undefined || val === null || isNaN(val)) return "0.00";
+  if (val >= 1000) return val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (val >= 1) return val.toFixed(2);
+  return val.toFixed(decimals || 4);
+}
+
 export default function FiveMinutePredictionArena() {
+  const [mounted, setMounted] = useState<boolean>(false);
   const [selectedCoin, setSelectedCoin] = useState<PredictionCoin>(SUPPORTED_5M_COINS[0]);
   const [livePrice, setLivePrice] = useState<number>(selectedCoin.defaultPrice);
-  const [livePriceFormatted, setLivePriceFormatted] = useState<string>("");
   const [priceChange24h, setPriceChange24h] = useState<number>(2.45);
   const [priceTickPulse, setPriceTickPulse] = useState<"up" | "down" | null>(null);
   const prevPriceRef = useRef<number>(selectedCoin.defaultPrice);
@@ -118,8 +125,9 @@ export default function FiveMinutePredictionArena() {
   // Past Verified 5-Minute Rounds History Ledger
   const [settledRounds, setSettledRounds] = useState<Round5m[]>([]);
 
-  // Sound Toggle
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Calculate 5-Minute UTC Epoch
   const calculateCurrentEpoch = useCallback(() => {
@@ -288,11 +296,11 @@ export default function FiveMinutePredictionArena() {
     if (priceDiffFromLock >= 0 && rsi5m >= 48 && isBullishCross) {
       aiVerdict = "BULL CALL (PREDICT UP)";
       aiConfidence = Math.min(96, Math.max(82, 85 + (takerBuyRatio - 50) * 0.4));
-      aiReason = `5M RSI at ${rsi5m} + EMA9/21 bullish alignment with ${takerBuyRatio}% taker buy dominance. High probability of closing ABOVE $${formatPrice(lockPrice)}.`;
+      aiReason = `5M RSI at ${rsi5m} + EMA9/21 bullish alignment with ${takerBuyRatio}% taker buy dominance. High probability of closing ABOVE $${formatCoinPrice(lockPrice, selectedCoin.decimals)}.`;
     } else if (priceDiffFromLock < 0 && (rsi5m <= 52 || !isBullishCross)) {
       aiVerdict = "BEAR PUT (PREDICT DOWN)";
       aiConfidence = Math.min(96, Math.max(82, 85 + (50 - takerBuyRatio) * 0.4));
-      aiReason = `5M RSI at ${rsi5m} showing rejection + EMA9 dipping below EMA21. High probability of closing BELOW $${formatPrice(lockPrice)}.`;
+      aiReason = `5M RSI at ${rsi5m} showing rejection + EMA9 dipping below EMA21. High probability of closing BELOW $${formatCoinPrice(lockPrice, selectedCoin.decimals)}.`;
     } else {
       aiVerdict = priceDiffFromLock >= 0 ? "BULL CALL (PREDICT UP)" : "BEAR PUT (PREDICT DOWN)";
       aiConfidence = 84.5;
@@ -310,7 +318,7 @@ export default function FiveMinutePredictionArena() {
       aiConfidence: parseFloat(aiConfidence.toFixed(1)),
       aiReason
     };
-  }, [candles, livePrice, lockPrice]);
+  }, [candles, livePrice, lockPrice, selectedCoin.decimals]);
 
   // Live Round Price Spread Calculations
   const priceDelta = useMemo(() => {
@@ -346,13 +354,6 @@ export default function FiveMinutePredictionArena() {
     setTimeout(() => setPredictionFeedback(null), 4000);
   };
 
-  const formatPrice = (val: number) => {
-    if (val === undefined || isNaN(val)) return "0.00";
-    if (val >= 1000) return val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (val >= 1) return val.toFixed(2);
-    return val.toFixed(selectedCoin.decimals || 4);
-  };
-
   // Minutes & Seconds timer format
   const timerDisplay = useMemo(() => {
     const m = Math.floor(secondsRemaining / 60);
@@ -363,6 +364,15 @@ export default function FiveMinutePredictionArena() {
   const progressBarPercent = useMemo(() => {
     return Math.max(0, Math.min(100, ((300 - secondsRemaining) / 300) * 100));
   }, [secondsRemaining]);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-[400px] flex flex-col items-center justify-center space-y-4 bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800">
+        <div className="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs font-mono font-bold text-slate-500">Connecting to Binance 5-Minute Live Epoch Stream...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -422,7 +432,7 @@ export default function FiveMinutePredictionArena() {
                 }`}
               >
                 <span className="font-mono">{c.base}</span>
-                <span className="font-mono opacity-80">${formatPrice(c.symbol === selectedCoin.symbol ? livePrice : c.defaultPrice)}</span>
+                <span className="font-mono opacity-80">${formatCoinPrice(c.symbol === selectedCoin.symbol ? livePrice : c.defaultPrice, c.decimals)}</span>
               </button>
             );
           })}
@@ -489,7 +499,7 @@ export default function FiveMinutePredictionArena() {
                   <span>Official Lock Price (Open)</span>
                 </span>
                 <div className="text-xl font-black text-slate-900 dark:text-white">
-                  ${formatPrice(lockPrice)}
+                  ${formatCoinPrice(lockPrice, selectedCoin.decimals)}
                 </div>
                 <span className="text-[10px] text-slate-400 block">
                   Captured at 00:00 UTC epoch start
@@ -509,7 +519,7 @@ export default function FiveMinutePredictionArena() {
                   <span>Real-Time Live Price</span>
                 </span>
                 <div className="text-xl font-black">
-                  ${formatPrice(livePrice)}
+                  ${formatCoinPrice(livePrice, selectedCoin.decimals)}
                 </div>
                 <span className="text-[10px] font-bold block">
                   {priceDelta.isWinningBull ? "🟢 Trading ABOVE Lock" : "🔴 Trading BELOW Lock"}
@@ -526,7 +536,7 @@ export default function FiveMinutePredictionArena() {
                     priceDelta.isWinningBull ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"
                   }`}
                 >
-                  {priceDelta.diff >= 0 ? "+" : ""}${formatPrice(priceDelta.diff)} ({priceDelta.pct >= 0 ? "+" : ""}{priceDelta.pct}%)
+                  {priceDelta.diff >= 0 ? "+" : ""}${formatCoinPrice(priceDelta.diff, selectedCoin.decimals)} ({priceDelta.pct >= 0 ? "+" : ""}{priceDelta.pct}%)
                 </div>
                 <span className="text-[10px] text-slate-400 block">
                   Current Round Settle Margin
@@ -620,7 +630,7 @@ export default function FiveMinutePredictionArena() {
                     <span>PREDICT UP (BULL)</span>
                   </div>
                   <div className="text-xs font-mono font-normal opacity-90">
-                    Settle ABOVE ${formatPrice(lockPrice)} • 1.95x Payout
+                    Settle ABOVE ${formatCoinPrice(lockPrice, selectedCoin.decimals)} • 1.95x Payout
                   </div>
                 </button>
 
@@ -634,7 +644,7 @@ export default function FiveMinutePredictionArena() {
                     <span>PREDICT DOWN (BEAR)</span>
                   </div>
                   <div className="text-xs font-mono font-normal opacity-90">
-                    Settle BELOW ${formatPrice(lockPrice)} • 1.98x Payout
+                    Settle BELOW ${formatCoinPrice(lockPrice, selectedCoin.decimals)} • 1.98x Payout
                   </div>
                 </button>
               </div>
@@ -691,8 +701,8 @@ export default function FiveMinutePredictionArena() {
                     </div>
 
                     <div className="flex justify-between text-[11px] text-slate-400">
-                      <span>Lock: ${formatPrice(round.lockPrice)}</span>
-                      <span>Close: ${formatPrice(round.closePrice || round.lockPrice)}</span>
+                      <span>Lock: ${formatCoinPrice(round.lockPrice, selectedCoin.decimals)}</span>
+                      <span>Close: ${formatCoinPrice(round.closePrice || round.lockPrice, selectedCoin.decimals)}</span>
                     </div>
 
                     <div className="flex justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-200 dark:border-slate-700">
