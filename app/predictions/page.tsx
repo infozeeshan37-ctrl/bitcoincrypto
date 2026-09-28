@@ -4,27 +4,28 @@ import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "5-Minute Bitcoin & Crypto Price Prediction (UP or DOWN) | BitcoinCrypto.tech",
+  title: "AI Crypto Trading Bot & Institutional Price Prediction Engine | BitcoinCrypto.tech",
   description:
-    "Real-time 5-minute Binance-style crypto price prediction arena. Predict whether Bitcoin (BTC), Ethereum (ETH), and Solana (SOL) will close UP or DOWN against the previous round lock price. Featuring live 24/7 countdowns, AI micro-momentum signals, payout multipliers, and multi-horizon price forecasting.",
+    "100% authentic, high-conviction AI crypto trading signals and multi-horizon price prediction engine. Powered by real-time Order Book Depth & CVD analysis, technical momentum (EMA, RSI, MACD), Coinglass liquidation clusters, and macroeconomic Fed & CPI intelligence. Simplified trade blueprints with exact entry zones, take-profits, and strict capital-preservation stop losses.",
   keywords: [
-    "5 minute bitcoin prediction",
-    "binance prediction btc",
-    "crypto price prediction up or down",
-    "pancakeswap crypto prediction",
-    "5 min btc price forecast",
-    "binary crypto prediction game",
-    "real time bitcoin prediction",
-    "ai crypto price predictor",
-    "bitcoin up down next 5 minutes"
+    "ai crypto trading bot",
+    "bitcoin price prediction",
+    "crypto trading signals",
+    "orderbook depth analysis",
+    "btc liquidation heatmap",
+    "crypto technical analysis",
+    "ai trading signals btc eth sol",
+    "coinglass liquidation bot",
+    "crypto stop loss calculator",
+    "authentic bitcoin price prediction"
   ],
   alternates: {
     canonical: "/predictions",
   },
   openGraph: {
-    title: "5-Minute Bitcoin & Crypto Price Prediction (UP or DOWN) | Real-Time Rounds",
+    title: "AI Crypto Trading Bot & Institutional Price Prediction Engine | Real-Time Confluence",
     description:
-      "Predict whether Bitcoin will close UP or DOWN in the next 5 minutes against the lock price. Live rounds, real-time Binance feeds, AI momentum indicators, and demo wallet.",
+      "Authentic, high-probability AI crypto trading blueprints backed by Level-2 Order Book Depth, Technicals, Coinglass Liquidations, and Macro Analysis. Precise entry zones, targets, and risk calculators.",
     url: "https://www.bitcoincrypto.tech/predictions",
   },
 };
