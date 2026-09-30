@@ -1162,7 +1162,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
     <div className="space-y-8">
       {/* 0. ARENA MODE SWITCHER TABS (3 POWER MODES) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        {/* Tab 1: 5-Minute Binance Arena */}
+        {/* Tab 1: AI Next-Candle Predictive Bot */}
         <button
           onClick={() => setMainTab("5min")}
           className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs sm:text-sm transition cursor-pointer ${
@@ -1172,9 +1172,9 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
           }`}
         >
           <Zap className="w-4 h-4 text-rose-500 animate-pulse" />
-          <span>⚡ Live 5-Minute Arena</span>
+          <span>⚡ AI Next-Candle Predictor</span>
           <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-rose-500 text-white animate-pulse">
-            LIVE 5M
+            5M / 15M / 1H
           </span>
         </button>
 
