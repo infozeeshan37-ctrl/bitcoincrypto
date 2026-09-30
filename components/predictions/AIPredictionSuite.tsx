@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import FiveMinutePredictionArena from "./FiveMinutePredictionArena";
+import AITradingBotTerminal from "@/components/tools/AITradingBotTerminal";
 import {
   Bot,
   Sparkles,
@@ -957,7 +958,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
 ];
 
 export default function AIPredictionSuite() {
-  const [mainTab, setMainTab] = useState<"5min" | "quant-blueprint">("5min");
+  const [mainTab, setMainTab] = useState<"5min" | "ai-trading-bot" | "quant-blueprint">("5min");
   const [assets, setAssets] = useState<PredictionAsset[]>(INITIAL_PREDICTION_ASSETS);
   const [selectedAssetSymbol, setSelectedAssetSymbol] = useState<string>("BTCUSDT");
   const [activeViewMode, setActiveViewMode] = useState<
@@ -1159,40 +1160,64 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
 
   return (
     <div className="space-y-8">
-      {/* 0. ARENA MODE SWITCHER TABS */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      {/* 0. ARENA MODE SWITCHER TABS (3 POWER MODES) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        {/* Tab 1: 5-Minute Binance Arena */}
         <button
           onClick={() => setMainTab("5min")}
-          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer ${
+          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs sm:text-sm transition cursor-pointer ${
             mainTab === "5min"
-              ? "bg-amber-400 text-slate-950 shadow-md scale-102 font-black"
-              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+              ? "bg-amber-400 text-slate-950 shadow-md font-black scale-101"
+              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold"
           }`}
         >
           <Zap className="w-4 h-4 text-rose-500 animate-pulse" />
-          <span>⚡ Live 5-Minute Binance Prediction Arena</span>
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
-            100% REAL LIVE EPOCHS
+          <span>⚡ Live 5-Minute Arena</span>
+          <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-rose-500 text-white animate-pulse">
+            LIVE 5M
           </span>
         </button>
 
+        {/* Tab 2: AI Quant Trading Bot & Live Signal Terminal */}
+        <button
+          onClick={() => setMainTab("ai-trading-bot")}
+          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs sm:text-sm transition cursor-pointer ${
+            mainTab === "ai-trading-bot"
+              ? "bg-slate-950 dark:bg-amber-400 text-white dark:text-slate-950 shadow-md font-black scale-101"
+              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold"
+          }`}
+        >
+          <Bot className="w-4 h-4 text-amber-500" />
+          <span>🤖 AI Quant Trading Bot</span>
+          <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-500 text-white">
+            90%+ SNIPER
+          </span>
+        </button>
+
+        {/* Tab 3: 4-Pillar Quantitative Trade Blueprint */}
         <button
           onClick={() => setMainTab("quant-blueprint")}
-          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer ${
+          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs sm:text-sm transition cursor-pointer ${
             mainTab === "quant-blueprint"
-              ? "bg-slate-950 dark:bg-amber-400 text-white dark:text-slate-950 shadow-md font-black scale-102"
-              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+              ? "bg-slate-950 dark:bg-amber-400 text-white dark:text-slate-950 shadow-md font-black scale-101"
+              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-bold"
           }`}
         >
           <Target className="w-4 h-4 text-amber-500" />
-          <span>🎯 AI Quantitative Trade Blueprint &amp; Risk Sizing (4H/1D Swing)</span>
+          <span>🎯 4-Pillar Quant Blueprint</span>
+          <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-blue-500 text-white">
+            4H/1D SWING
+          </span>
         </button>
       </div>
 
-      {/* 5-MINUTE LIVE BINANCE ARENA */}
+      {/* 1. 5-MINUTE LIVE BINANCE ARENA */}
       {mainTab === "5min" && <FiveMinutePredictionArena />}
 
-      {/* 4-PILLAR QUANTITATIVE BLUEPRINT */}
+      {/* 2. REAL-TIME AI QUANT TRADING BOT & MULTI-TIMEFRAME EXECUTION TERMINAL */}
+      {mainTab === "ai-trading-bot" && <AITradingBotTerminal />}
+
+      {/* 3. 4-PILLAR QUANTITATIVE BLUEPRINT & RISK SIZING */}
       {mainTab === "quant-blueprint" && (
         <div className="space-y-8">
           {/* 1. TOP HEADER & TELEMETRY BAR */}

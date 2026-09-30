@@ -490,18 +490,18 @@ export default function AITradingBotTerminal() {
     <div className="space-y-8">
 
       {/* TOP HEADER: Multi-Factor Confluence & Real-Time Engine Indicator */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6 transition-colors">
         <div className="space-y-2 max-w-3xl">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span>Real-Time Multi-Factor Signals Engine</span>
             </span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
             AI Trading Signals &amp; Multi-Timeframe Execution Terminal
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
             Real-time market analysis calculating <strong>real-time candlestick momentum, Wilder&apos;s RSI, EMA ribbons, MACD histograms, and taker volume flow</strong>. Delivers mathematically verified <strong>LONG</strong> and <strong>SHORT</strong> blueprints with exact Stop Loss invalidations and multi-tier targets.
           </p>
         </div>
@@ -510,7 +510,7 @@ export default function AITradingBotTerminal() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={fetchBinanceData}
-            className="px-4 py-2.5 rounded-2xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition flex items-center gap-2 shadow-sm"
+            className="px-4 py-2.5 rounded-2xl bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 text-xs font-bold hover:bg-slate-800 dark:hover:bg-amber-300 transition flex items-center gap-2 shadow-sm cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
             <span>Sync Market Data</span>
@@ -519,15 +519,15 @@ export default function AITradingBotTerminal() {
       </div>
 
       {/* TIMEFRAME & DIRECTION CONTROL BAR */}
-      <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors">
         
         {/* Small Timeframe Switcher (5M Scalp / 15M Intraday / 1H / 4H / 1D) */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-1 font-mono">
+          <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide flex items-center gap-1 font-mono">
             <Clock className="w-3.5 h-3.5 text-amber-500" />
             <span>Execution Timeframe:</span>
           </span>
-          <div className="flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
+          <div className="flex flex-wrap items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700">
             {(["5M", "15M", "1H", "4H", "1D"] as SignalTimeframe[]).map((tf) => {
               const isSelected = selectedTimeframe === tf;
               const profile = TIMEFRAME_PROFILES[tf];
@@ -535,16 +535,16 @@ export default function AITradingBotTerminal() {
                 <button
                   key={tf}
                   onClick={() => setSelectedTimeframe(tf)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                     isSelected
-                      ? "bg-slate-900 text-white shadow-sm font-extrabold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-white/80"
+                      ? "bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 shadow-sm font-extrabold"
+                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-slate-700"
                   }`}
                   title={`${profile.name} - ${profile.recommendedFor}`}
                 >
                   <span>{tf}</span>
-                  {tf === "5M" && <span className="text-[10px] text-amber-400 font-mono">⚡ Scalp</span>}
-                  {tf === "15M" && <span className="text-[10px] text-emerald-400 font-mono">🎯 Day</span>}
+                  {tf === "5M" && <span className="text-[10px] text-amber-400 dark:text-amber-900 font-mono">⚡ Scalp</span>}
+                  {tf === "15M" && <span className="text-[10px] text-emerald-400 dark:text-emerald-900 font-mono">🎯 Day</span>}
                 </button>
               );
             })}
@@ -553,10 +553,10 @@ export default function AITradingBotTerminal() {
 
         {/* Real-Time Live Status */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-50 border border-amber-200/80 text-amber-900 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800 text-amber-900 dark:text-amber-300 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 animate-pulse" />
             <span className="text-xs font-black">AI Multi-Pillar Engine:</span>
-            <span className="text-[11px] font-mono text-amber-800 font-bold">60% Technical Action • 20% Derivatives • 20% Macro Flow</span>
+            <span className="text-[11px] font-mono text-amber-800 dark:text-amber-200 font-bold">60% Technical Action • 20% Derivatives • 20% Macro Flow</span>
           </div>
         </div>
 
