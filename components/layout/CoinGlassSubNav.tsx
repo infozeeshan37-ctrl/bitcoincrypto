@@ -154,29 +154,11 @@ function CoinGlassSubNavInner() {
 
   return (
     <div className="bg-[#0B0F19]/95 backdrop-blur-xl border-b border-slate-800 text-slate-200 select-none text-xs sticky top-20 z-40 shadow-lg shadow-black/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-13 flex items-center justify-between gap-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 h-13 flex items-center justify-between gap-2 sm:gap-3">
         
-        {/* Left Side: Brand Text + Stylish Category Tabs */}
-        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1.5">
+        {/* Left Side: Bold & Stylish Category Tabs (Full Width Space) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1.5 flex-1 min-w-0">
           
-          {/* Brand Wordmark (matching 'coinglass' in screenshot with bold styling) */}
-          <Link
-            href="/"
-            className="flex items-center gap-2 pr-3 mr-1.5 border-r border-slate-800/90 shrink-0 group"
-          >
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center font-black text-xs shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
-              ₿
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="font-black text-sm tracking-tight text-white group-hover:text-amber-400 transition-colors">
-                bitcoincrypto
-              </span>
-              <span className="text-[9px] font-mono font-extrabold px-1 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
-                .tech
-              </span>
-            </div>
-          </Link>
-
           {/* Bold & Stylish Navigation Tabs */}
           {navLinks.map((item) => {
             const Icon = item.icon;
@@ -212,7 +194,7 @@ function CoinGlassSubNavInner() {
           <div className="relative shrink-0" ref={moreDropdownRef}>
             <button
               onClick={() => setMoreOpen(!moreOpen)}
-              className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all flex items-center gap-1.5 text-[12.5px] font-extrabold tracking-tight ${
+              className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all flex items-center gap-1.5 text-[12.5px] font-extrabold tracking-tight cursor-pointer ${
                 moreOpen
                   ? "bg-slate-800 text-white border border-slate-700 shadow-sm"
                   : "text-slate-300 hover:text-white hover:bg-slate-800/80 border border-transparent hover:border-slate-700/80 font-bold"
@@ -249,7 +231,7 @@ function CoinGlassSubNavInner() {
         <div className="shrink-0 flex items-center">
           <button
             onClick={openSearch}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/95 hover:bg-slate-850 text-slate-300 hover:text-white border border-slate-750 hover:border-amber-400/60 transition-all text-xs font-mono shadow-md shadow-black/30 group"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/95 hover:bg-slate-850 text-slate-300 hover:text-white border border-slate-750 hover:border-amber-400/60 transition-all text-xs font-mono shadow-md shadow-black/30 group cursor-pointer"
             title="Search Cryptocurrencies, Tools, Concepts & Articles"
           >
             <Search className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
@@ -268,9 +250,7 @@ function CoinGlassSubNavInner() {
 export default function CoinGlassSubNav() {
   return (
     <Suspense fallback={
-      <div className="bg-[#0B0F19] border-b border-slate-800 text-slate-300 text-xs h-13 flex items-center px-4 max-w-7xl mx-auto">
-        <span className="font-extrabold text-sm text-white">bitcoincrypto</span>
-      </div>
+      <div className="bg-[#0B0F19] border-b border-slate-800 text-slate-300 text-xs h-13 flex items-center px-4 max-w-7xl mx-auto" />
     }>
       <CoinGlassSubNavInner />
     </Suspense>
