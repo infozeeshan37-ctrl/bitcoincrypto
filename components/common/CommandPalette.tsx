@@ -74,19 +74,35 @@ export default function CommandPalette() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Keyboard shortcut listener
+  // Keyboard shortcut & custom event listener
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setIsOpen((prev) => !prev);
+      } else if (
+        e.key === "/" &&
+        !isOpen &&
+        !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)
+      ) {
+        e.preventDefault();
+        setIsOpen(true);
       }
       if (e.key === "Escape" && isOpen) {
         setIsOpen(false);
       }
     }
+
+    function handleCustomOpen() {
+      setIsOpen(true);
+    }
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("open-command-palette", handleCustomOpen);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("open-command-palette", handleCustomOpen);
+    };
   }, [isOpen]);
 
   // Focus input on open

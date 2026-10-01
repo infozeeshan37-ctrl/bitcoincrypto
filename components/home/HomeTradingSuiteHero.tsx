@@ -653,132 +653,29 @@ export default function HomeTradingSuiteHero() {
   const convertedResult = toAsset === "USD" ? fromValueInUSD : fromValueInUSD / (rates[toAsset] || 1);
 
   return (
-    <section className="relative pt-6 pb-10 sm:pt-8 sm:pb-12 bg-gradient-to-b from-slate-100 via-slate-50 to-white dark:from-slate-950 dark:via-slate-900/70 dark:to-slate-950 border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
+    <section className="relative pt-3 pb-8 sm:pt-4 sm:pb-10 bg-slate-50/50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
 
-        {/* 1. COMPACT & PROFESSIONAL HERO HEADER */}
-        <div className="text-center max-w-2xl mx-auto space-y-2.5">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/30 text-amber-700 dark:text-amber-300 shadow-xs">
-            <Cpu className="w-3.5 h-3.5 text-amber-500" />
-            <span>Quantitative Trading &amp; Algorithmic Intelligence</span>
+        {/* COMPACT INSTITUTIONAL TELEMETRY STRIP */}
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs text-xs font-mono">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <Cpu className="w-3.5 h-3.5 text-amber-500" />
+              <span>DeepQuant AI Neural Terminal</span>
+            </span>
+            <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 font-extrabold">
+              v4.5 LIVE
+            </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            Cryptocurrency Trading Suite &amp;{" "}
-            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-              Signals Engine
-            </span>
-          </h1>
-
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
-            Real-time algorithmic trading signals, multi-coin market scanner, live TradingView charts, and risk execution calculators.
-          </p>
-        </div>
-
-        {/* 2. CENTERED TAB NAVIGATION BAR (LINKED TO DEDICATED TOOL PAGES & URLS) */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm max-w-4xl mx-auto">
-          <Link
-            href="/?tab=bot"
-            onClick={() => handleTabChange("bot")}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-black transition cursor-pointer ${
-              activeTab === "bot"
-                ? "bg-amber-400 text-slate-950 shadow-md font-black ring-2 ring-amber-400/30"
-                : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 font-bold"
-            }`}
-          >
-            <Activity className="w-4 h-4 text-amber-950 dark:text-amber-300" />
-            <span>Algorithmic Signals &amp; Scanner</span>
-          </Link>
-
-          <Link
-            href="/tools?tab=terminal"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open Live Chart Terminal"
-          >
-            <BarChart2 className="w-4 h-4" />
-            <span>Chart Terminal</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
-          </Link>
-
-          <Link
-            href="/tools?tab=dca"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open DCA Simulator"
-          >
-            <Calculator className="w-4 h-4" />
-            <span>DCA Simulator</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
-          </Link>
-
-          <Link
-            href="/tools?tab=sizer"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open Position Sizer"
-          >
-            <Sliders className="w-4 h-4" />
-            <span>Position Sizer</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
-          </Link>
-
-          <Link
-            href="/tools?tab=converter"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open Spot Converter"
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>Spot Converter</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
-          </Link>
-
-          <Link
-            href="/coinglass?tab=liquidations"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open CoinGlass Liquidation Radar"
-          >
-            <Flame className="w-4 h-4 text-rose-500" />
-            <span>CoinGlass Liquidation</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-rose-500 transition-colors" />
-          </Link>
-
-          <Link
-            href="/predictions"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-amber-500/15 dark:bg-amber-400/15 text-amber-900 dark:text-amber-200 hover:bg-amber-500/25 dark:hover:bg-amber-400/25 border border-amber-500/40 dark:border-amber-400/40 transition group shadow-xs"
-            title="Open 98.6% AI Crypto Price Prediction Engine (BTC & ETH)"
-          >
-            <Sparkles className="w-4 h-4 text-amber-500 group-hover:rotate-12 transition-transform" />
-            <span className="font-black">🔮 AI Price Prediction</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </Link>
-
-          <Link
-            href="/cpi"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open US CPI AI Predictor & Macro Radar"
-          >
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <span>US CPI AI Predictor</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
-          </Link>
-
-          <Link
-            href="/whale-orders"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-800 transition group shadow-xs"
-            title="Open Whale Orders & Institutional Liquidity Radar (CoinGlass Style)"
-          >
-            <Fish className="w-4 h-4 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
-            <span className="font-black">Whale Orders</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </Link>
-
-          <Link
-            href="/news"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition group"
-            title="Open 24/7 Macro News Wire & US CPI Tracker"
-          >
-            <Newspaper className="w-4 h-4 text-amber-500 group-hover:rotate-6 transition-transform" />
-            <span>Latest News &amp; Macro Radar</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
-          </Link>
+          <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400">
+            <span className="hidden sm:inline">Binance Zero-Latency WebSocket</span>
+            <span>•</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold">● {latencyMs}ms Latency</span>
+            <span>•</span>
+            <span className="text-amber-600 dark:text-amber-400 font-bold">Block #{blockHeight}</span>
+          </div>
         </div>
 
         {/* 3. ACTIVE SUITE CARD: TAB 1 (ALGORITHMIC SIGNALS & SCANNER) */}
