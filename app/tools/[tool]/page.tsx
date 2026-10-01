@@ -25,6 +25,12 @@ import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
 import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
+import FundingRateScreenerTool from "@/components/tools/details/FundingRateScreenerTool";
+import FearGreedIndexTool from "@/components/tools/details/FearGreedIndexTool";
+import ProfitLossCalculatorTool from "@/components/tools/details/ProfitLossCalculatorTool";
+import WhaleTrackerTool from "@/components/tools/details/WhaleTrackerTool";
+import CryptoConverterTool from "@/components/tools/details/CryptoConverterTool";
+import PositionSizerTool from "@/components/tools/details/PositionSizerTool";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 
 interface ToolConfig {
@@ -373,38 +379,19 @@ export default async function DedicatedToolPage({ params }: PageProps) {
             </div>
           )}
 
-          {tool.slug === "position-sizer" && (
-            <div className="space-y-6">
-              <AITradingBotTerminal />
-            </div>
-          )}
+          {tool.slug === "position-sizer" && <PositionSizerTool />}
 
-          {tool.slug === "crypto-converter" && (
-            <div className="space-y-6">
-              <div className="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm max-w-2xl mx-auto space-y-6 text-center">
-                <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center mx-auto">
-                  <RefreshCw className="w-6 h-6" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-                    Live Crypto Converter Engine
-                  </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Convert BTC, ETH, SOL and 50+ cryptocurrencies into USD, EUR, and GBP with real-time liquidity feeds.
-                  </p>
-                </div>
-                <Link
-                  href="/tools?tab=converter"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-sm shadow-md transition"
-                >
-                  <span>Open Full Interactive Converter in Trading Suite</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          )}
+          {tool.slug === "crypto-converter" && <CryptoConverterTool />}
 
           {tool.slug === "liquidation-heatmap" && <CoinGlassLiquidationTool />}
+
+          {tool.slug === "fear-greed-index" && <FearGreedIndexTool />}
+
+          {tool.slug === "profit-calculator" && <ProfitLossCalculatorTool />}
+
+          {tool.slug === "funding-rate-screener" && <FundingRateScreenerTool />}
+
+          {tool.slug === "whale-tracker" && <WhaleTrackerTool />}
         </section>
 
         {/* Other Trading Suite Tools Grid */}
