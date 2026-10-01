@@ -656,28 +656,6 @@ export default function HomeTradingSuiteHero() {
     <section className="relative pt-3 pb-8 sm:pt-4 sm:pb-10 bg-slate-50/50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
 
-        {/* COMPACT INSTITUTIONAL TELEMETRY STRIP */}
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs text-xs font-mono">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-            <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-amber-500" />
-              <span>DeepQuant AI Neural Terminal</span>
-            </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 font-extrabold">
-              v4.5 LIVE
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400">
-            <span className="hidden sm:inline">Binance Zero-Latency WebSocket</span>
-            <span>•</span>
-            <span className="text-emerald-600 dark:text-emerald-400 font-bold">● {latencyMs}ms Latency</span>
-            <span>•</span>
-            <span className="text-amber-600 dark:text-amber-400 font-bold">Block #{blockHeight}</span>
-          </div>
-        </div>
-
         {/* 3. ACTIVE SUITE CARD: TAB 1 (ALGORITHMIC SIGNALS & SCANNER) */}
         {activeTab === "bot" && (
           <div className="space-y-6">
@@ -1253,13 +1231,6 @@ export default function HomeTradingSuiteHero() {
                       <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
                         US CPI &amp; Macro Intelligence Forecaster
                       </h3>
-                      <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                        LIVE INTELLIGENCE
-                      </span>
-                      <span className="text-xs font-mono font-bold text-slate-400">
-                        AlphaMacro Engine v4.2
-                      </span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                       Neural Network BLS Inflation Forecasting Engine &amp; Bitcoin Liquidity Volatility Matrix

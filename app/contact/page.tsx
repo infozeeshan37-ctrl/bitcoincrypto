@@ -114,7 +114,7 @@ export default function ContactPage() {
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
                   <span>SSL 256-bit Encrypted</span>
                 </span>
-                <span className="font-mono text-[10px]">v4.5 Live</span>
+                <span className="font-mono text-[10px]">Institutional Support</span>
               </div>
             </div>
 

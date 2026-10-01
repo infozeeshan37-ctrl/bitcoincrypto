@@ -509,14 +509,6 @@ export default function AITradingBotTerminal() {
 
         {/* Global Live Controls */}
         <div className="flex flex-wrap items-center gap-3">
-          <div className="px-3.5 py-2 rounded-2xl bg-slate-900 border border-slate-800 text-slate-200 text-xs font-mono font-bold flex items-center gap-2 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
-            <Cpu className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-white font-semibold">DeepQuant AI Neural Terminal</span>
-            <span className="px-2 py-0.5 rounded-md bg-amber-950/80 text-amber-400 border border-amber-800/60 text-[10px] font-mono font-black tracking-wider">
-              v4.5 LIVE
-            </span>
-          </div>
           <button
             onClick={fetchBinanceData}
             className="px-4 py-2.5 rounded-2xl bg-slate-900 dark:bg-amber-400 text-white dark:text-slate-950 text-xs font-bold hover:bg-slate-800 dark:hover:bg-amber-300 transition flex items-center gap-2 shadow-sm cursor-pointer"
@@ -1019,13 +1011,6 @@ export default function AITradingBotTerminal() {
                 <h3 className="text-lg sm:text-xl font-black text-slate-900">
                   US CPI &amp; Macro Intelligence Forecaster
                 </h3>
-                <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                  LIVE INTELLIGENCE
-                </span>
-                <span className="text-xs font-mono font-bold text-slate-400">
-                  AlphaMacro Engine v4.2
-                </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
                 Neural Network BLS Inflation Forecasting Engine &amp; Bitcoin Liquidity Volatility Matrix
