@@ -122,6 +122,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <ChatWidget />
+          <CommandPalette />
           <CookieConsentBanner />
         </ThemeProvider>
       </body>

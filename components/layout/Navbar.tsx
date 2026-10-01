@@ -474,9 +474,6 @@ export default function Navbar() {
             <span>Concepts</span>
           </Link>
 
-          {/* Command Palette Trigger */}
-          <CommandPalette />
-
         </div>
 
         {/* Right: Desktop Theme Switcher */}

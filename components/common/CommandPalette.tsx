@@ -142,24 +142,10 @@ export default function CommandPalette() {
     }
   };
 
-  return (
-    <>
-      {/* Search trigger pill for desktop navbar */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700/80 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700/80 transition text-xs font-medium"
-        title="Search platform (Ctrl+K / Cmd+K)"
-      >
-        <Search className="w-3.5 h-3.5" />
-        <span>Search anything...</span>
-        <kbd className="font-mono text-[10px] bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 text-slate-400">
-          ⌘K
-        </kbd>
-      </button>
+  if (!isOpen) return null;
 
-      {/* Modal Backdrop */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-150">
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-150">
           <div
             className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[80vh] animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
@@ -270,11 +256,8 @@ export default function CommandPalette() {
               <span className="font-mono text-[10px] text-amber-600 dark:text-amber-400 font-bold">
                 BitcoinCrypto Intelligence
               </span>
-            </div>
-
           </div>
         </div>
-      )}
-    </>
+    </div>
   );
 }
