@@ -58,6 +58,11 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Googlebot-Image",
         allow: "/",
       },
+      // Google AdSense Crawler
+      {
+        userAgent: "Mediapartners-Google",
+        allow: "/",
+      },
       // Apple & Microsoft / Bing AI crawlers
       {
         userAgent: "Applebot-Extended",

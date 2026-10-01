@@ -1,19 +1,37 @@
 import Link from "next/link";
-import { ShieldCheck, ExternalLink, Activity, Flame, Coins, Newspaper, Brain, Calculator, Compass, Layers, Sparkles } from "lucide-react";
+import {
+  ShieldCheck,
+  ExternalLink,
+  Activity,
+  Flame,
+  Coins,
+  Newspaper,
+  Brain,
+  Calculator,
+  Compass,
+  Layers,
+  Sparkles,
+  Lock,
+  FileText,
+  AlertTriangle,
+  Cookie,
+  Mail,
+  Info
+} from "lucide-react";
 import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 text-slate-400 text-xs">
+    <footer className="bg-slate-950 border-t border-slate-800 text-slate-400 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 space-y-12">
         
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        {/* Main Grid (5 Columns) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-850">
           
-          {/* Brand Info */}
-          <div className="md:col-span-2 space-y-4">
-            <div className="flex items-center gap-3">
+          {/* Col 1: Brand Info */}
+          <div className="sm:col-span-2 lg:col-span-1 space-y-4">
+            <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-md shadow-amber-500/20">
                 ₿
               </div>
@@ -21,16 +39,16 @@ export default function Footer() {
                 BitcoinCrypto<span className="text-amber-400">.tech</span>
               </span>
             </div>
-            <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
-              An institutional cryptocurrency intelligence hub combining real-time CoinMarketCap metrics, Coinglass derivatives analytics, macroeconomic CPI releases, and verifiable AI price predictions with 98.6% confluence.
+            <p className="text-slate-400 text-xs leading-relaxed">
+              An institutional cryptocurrency intelligence hub combining real-time CoinMarketCap metrics, Coinglass derivatives analytics, macroeconomic CPI releases, and verifiable AI price predictions.
             </p>
             <div className="flex items-center gap-2 text-slate-400 text-xs pt-1">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Independent Real-Time Data &amp; Algorithmic Models</span>
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>Independent Real-Time Data &amp; Neural Models</span>
             </div>
           </div>
 
-          {/* Markets & Intelligence */}
+          {/* Col 2: Market Intelligence */}
           <div className="space-y-3">
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Market Intelligence</h4>
             <ul className="space-y-2 text-slate-400">
@@ -72,7 +90,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Dedicated Tools */}
+          {/* Col 3: Dedicated Trading Tools */}
           <div className="space-y-3">
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Trading Tools</h4>
             <ul className="space-y-2 text-slate-400">
@@ -84,12 +102,12 @@ export default function Footer() {
               <li><Link href="/tools/liquidation-heatmap" className="hover:text-white transition">Liquidation Radar &amp; Heatmap</Link></li>
               <li><Link href="/tools/fear-greed-index" className="hover:text-white transition">Crypto Fear &amp; Greed Index</Link></li>
               <li><Link href="/tools/profit-calculator" className="hover:text-white transition">Profit &amp; ROI Calculator</Link></li>
-              <li><Link href="/tools/funding-rate-screener" className="hover:text-white transition">Funding Rate Arbitrage Screener</Link></li>
+              <li><Link href="/tools/funding-rate-screener" className="hover:text-white transition">Funding Rate Arbitrage</Link></li>
               <li><Link href="/tools/whale-tracker" className="hover:text-white transition">Whale Orders Radar</Link></li>
             </ul>
           </div>
 
-          {/* Research & Education */}
+          {/* Col 4: Research & Education */}
           <div className="space-y-3">
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Research Desk</h4>
             <ul className="space-y-2 text-slate-400">
@@ -109,10 +127,47 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Col 5: Legal & Compliance (AdSense Required) */}
+          <div className="space-y-3">
+            <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Legal &amp; Trust</h4>
+            <ul className="space-y-2 text-slate-400">
+              <li>
+                <Link href="/privacy" className="hover:text-amber-400 transition flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-amber-400" /> Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-white transition flex items-center gap-1.5">
+                  <FileText className="w-3.5 h-3.5 text-slate-400" /> Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/disclaimer" className="hover:text-rose-400 transition flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-rose-400" /> Financial Disclaimer
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookie-policy" className="hover:text-white transition flex items-center gap-1.5">
+                  <Cookie className="w-3.5 h-3.5 text-slate-400" /> Cookie Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-emerald-400 transition flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-emerald-400" /> Contact &amp; Support
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-blue-400 transition flex items-center gap-1.5">
+                  <Info className="w-3.5 h-3.5 text-blue-400" /> About Us
+                </Link>
+              </li>
+            </ul>
+          </div>
+
         </div>
 
         {/* SEO Cross-Linking Directory Section: Coin AI Predictions */}
-        <div className="space-y-3 pt-4 border-b border-slate-800 pb-8">
+        <div className="space-y-3 pt-2 border-b border-slate-800 pb-8">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
               <Brain className="w-3.5 h-3.5 text-purple-400" />
@@ -124,7 +179,7 @@ export default function Footer() {
               <Link
                 key={c.slug}
                 href={`/predictions/${c.slug}`}
-                className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-purple-950/80 hover:text-purple-300 text-slate-400 border border-slate-700/60 transition font-mono"
+                className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-purple-950/80 hover:text-purple-300 text-slate-400 border border-slate-800 transition font-mono"
               >
                 {c.name} ({c.symbol}) &rarr;
               </Link>
@@ -143,7 +198,7 @@ export default function Footer() {
               <Link
                 key={g.slug}
                 href={`/concepts/${g.slug}`}
-                className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-amber-950/80 hover:text-amber-300 text-slate-400 border border-slate-700/60 transition"
+                className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-amber-950/80 hover:text-amber-300 text-slate-400 border border-slate-800 transition"
               >
                 {g.title.split(":")[0]} &rarr;
               </Link>
@@ -151,11 +206,29 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Disclaimer & Copyright */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-          <p>&copy; {new Date().getFullYear()} <strong>BitcoinCrypto.tech</strong>. All rights reserved.</p>
-          <p className="max-w-xl text-center md:text-right">
-            <strong>Disclaimer:</strong> Real-time cryptocurrency metrics, derivatives open interest, CPI estimates, and algorithmic trading signals are published strictly for educational and analytical purposes and do not constitute financial advice.
+        {/* Legal Links Bar & Copyright & YMYL Disclaimer */}
+        <div className="space-y-4 pt-2 text-[11px] text-slate-500 font-mono">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-850 pb-4">
+            <div className="flex flex-wrap gap-4 text-slate-400">
+              <Link href="/privacy" className="hover:text-white transition">Privacy Policy</Link>
+              <span>•</span>
+              <Link href="/terms" className="hover:text-white transition">Terms of Service</Link>
+              <span>•</span>
+              <Link href="/disclaimer" className="hover:text-white transition">Financial Disclaimer</Link>
+              <span>•</span>
+              <Link href="/cookie-policy" className="hover:text-white transition">Cookie Policy</Link>
+              <span>•</span>
+              <Link href="/contact" className="hover:text-white transition">Contact Us</Link>
+              <span>•</span>
+              <Link href="/about" className="hover:text-white transition">About Us</Link>
+            </div>
+            <div>
+              &copy; {new Date().getFullYear()} <strong>BitcoinCrypto.tech</strong>. All rights reserved.
+            </div>
+          </div>
+
+          <p className="text-slate-500 leading-relaxed text-[10px]">
+            <strong>Regulatory &amp; Financial Disclaimer:</strong> BitcoinCrypto.tech is an informational, educational, and mathematical modeling software platform. Real-time cryptocurrency metrics, derivatives open interest, CPI predictive estimates, and algorithmic trading signals are published strictly for educational and analytical purposes and do not constitute financial, investment, trading, or tax advice. Cryptocurrency trading carries substantial risk of loss.
           </p>
         </div>
 

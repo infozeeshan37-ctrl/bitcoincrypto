@@ -20,7 +20,8 @@ import {
   Search,
   Fish,
   Brain,
-  TrendingUp
+  TrendingUp,
+  Mail
 } from "lucide-react";
 import LiveTickerBar from "./LiveTickerBar";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -426,10 +427,28 @@ export default function Navbar() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                      About Architecture
+                      About Platform
                     </span>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
                       Methodology, data sources, and platform mission.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/contact"
+                  onClick={() => setActiveDropdown(null)}
+                  className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
+                      Contact &amp; Support
+                    </span>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
+                      Direct inquiries, partnership, and assistance.
                     </p>
                   </div>
                 </Link>
@@ -695,7 +714,16 @@ export default function Navbar() {
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold transition text-xs"
             >
               <Info className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-              <span>About Platform & Architecture</span>
+              <span>About Platform &amp; Methodology</span>
+            </Link>
+
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold transition text-xs"
+            >
+              <Mail className="w-4 h-4 text-emerald-500" />
+              <span>Contact Us &amp; Support Desk</span>
             </Link>
           </div>
 

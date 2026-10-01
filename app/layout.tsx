@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import CommandPalette from "@/components/common/CommandPalette";
 import ChatWidget from "@/components/chat/ChatWidget";
+import CookieConsentBanner from "@/components/common/CookieConsentBanner";
 import { WebSiteJsonLd, OrganizationJsonLd, SoftwareAppJsonLd } from "@/components/seo/JsonLd";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -119,6 +120,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <ChatWidget />
+          <CookieConsentBanner />
         </ThemeProvider>
       </body>
     </html>
