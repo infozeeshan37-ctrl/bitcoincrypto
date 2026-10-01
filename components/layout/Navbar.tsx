@@ -101,360 +101,82 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Center: Desktop Navigation - Consolidated in One Unified Master Tab */}
-        <div className="hidden lg:flex items-center gap-2 xl:gap-3 text-sm font-medium">
+        {/* Center: Desktop Navigation - Primary Tool & Terminal Tabs at the Top */}
+        <div className="hidden lg:flex items-center gap-1.5 xl:gap-2 text-sm font-medium">
           
-          {/* Master Unified Dropdown: Explore Ecosystem */}
-          <div
-            className="relative"
-            onMouseEnter={() => handleMouseEnter("ecosystem")}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              onClick={() => toggleDropdown("ecosystem")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/90 dark:hover:bg-slate-800/90 transition font-black tracking-tight border border-slate-200/80 dark:border-slate-800 shadow-xs ${
-                activeDropdown === "ecosystem"
-                  ? "bg-slate-100 dark:bg-slate-800 text-slate-950 dark:text-white ring-2 ring-amber-400/40"
-                  : "bg-white/80 dark:bg-slate-900/80"
-              }`}
-              aria-expanded={activeDropdown === "ecosystem"}
-            >
-              <div className="w-5 h-5 rounded-lg bg-amber-400/20 text-amber-500 flex items-center justify-center">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              </div>
-              <span className="text-xs sm:text-sm font-black">Explore Ecosystem</span>
-              <ChevronDown
-                className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
-                  activeDropdown === "ecosystem" ? "rotate-180 text-amber-500" : ""
-                }`}
-              />
-            </button>
-
-            {/* Comprehensive 3-Column Mega Menu Flyout */}
-            {activeDropdown === "ecosystem" && (
-              <div className="absolute top-full left-0 xl:-left-20 mt-2.5 w-[840px] xl:w-[880px] rounded-3xl bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-900/20 dark:shadow-slate-950/80 p-5 space-y-4 z-50 animate-in fade-in zoom-in-95 duration-150">
-                
-                {/* 3 Structured Pillars */}
-                <div className="grid grid-cols-3 gap-4">
-                  
-                  {/* Column 1: Markets & Real-Time Liquidity */}
-                  <div className="space-y-1.5 p-3 rounded-2xl bg-slate-50/80 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono font-black uppercase tracking-wider text-amber-700 dark:text-amber-400 border-b border-slate-200/60 dark:border-slate-800/80 pb-2">
-                      <Coins className="w-3.5 h-3.5" />
-                      <span>Markets &amp; Liquidity</span>
-                    </div>
-
-                    <Link
-                      href="/markets"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-amber-50/80 dark:hover:bg-amber-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
-                        <Coins className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition">
-                            Spot Rankings
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">
-                            Top 50+
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Prices, volumes &amp; caps
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/coinglass"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-rose-50/80 dark:hover:bg-rose-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-rose-500 group-hover:text-white transition">
-                        <Flame className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-300 transition">
-                            Coinglass Radar
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-900/40 text-rose-800 dark:text-rose-300">
-                            OI &amp; Liq
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Futures &amp; liquidations
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/orderbook"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-amber-50/80 dark:hover:bg-amber-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
-                        <Activity className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition">
-                            L2 Order Book
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-400 text-slate-950">
-                            DEPTH
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          CLOB depth &amp; resting walls
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/whale-orders"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-indigo-50/80 dark:hover:bg-indigo-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-indigo-600 group-hover:text-white transition">
-                        <Fish className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition">
-                            Whale Orders
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">
-                            WHALES
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Block tape &amp; heatmaps
-                        </p>
-                      </div>
-                    </Link>
-                  </div>
-
-                  {/* Column 2: AI Intelligence & Quantitative Tools */}
-                  <div className="space-y-1.5 p-3 rounded-2xl bg-slate-50/80 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono font-black uppercase tracking-wider text-purple-700 dark:text-purple-400 border-b border-slate-200/60 dark:border-slate-800/80 pb-2">
-                      <Zap className="w-3.5 h-3.5" />
-                      <span>AI &amp; Quantitative</span>
-                    </div>
-
-                    <Link
-                      href="/predictions"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-purple-50/80 dark:hover:bg-purple-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-purple-500 group-hover:text-white transition">
-                        <Brain className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition">
-                            AI Price Predictions
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-300">
-                            98.6%
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Multi-horizon forecasts
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/tools"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-amber-50/80 dark:hover:bg-amber-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
-                        <Bot className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition">
-                            AI Signals &amp; Bots
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-400 text-slate-950">
-                            BOTS
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Algorithmic execution copilot
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/cpi"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-amber-50/80 dark:hover:bg-amber-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-amber-500 group-hover:text-slate-950 transition">
-                        <Sparkles className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition">
-                            US CPI Predictor
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">
-                            NEURAL
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Inflation volatility model
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/news"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-blue-50/80 dark:hover:bg-blue-950/30 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-blue-500 group-hover:text-white transition">
-                        <Newspaper className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">
-                            Macro &amp; Rate Battles
-                          </span>
-                          <span className="text-[8px] font-mono font-bold px-1.5 py-0.2 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">
-                            MACRO
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Fed rates &amp; global battles
-                        </p>
-                      </div>
-                    </Link>
-                  </div>
-
-                  {/* Column 3: Research, Masterclasses & Desk */}
-                  <div className="space-y-1.5 p-3 rounded-2xl bg-slate-50/80 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400 border-b border-slate-200/60 dark:border-slate-800/80 pb-2">
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span>Research &amp; Learn</span>
-                    </div>
-
-                    <Link
-                      href="/blog"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
-                        <LineChart className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                          Research Desk &amp; Blog
-                        </span>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Institutional deep dives
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/concepts"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
-                        <Compass className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                          Trading Masterclasses
-                        </span>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Market microstructure &amp; DCA
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/about"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
-                        <Info className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                          About Platform
-                        </span>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Methodology &amp; sources
-                        </p>
-                      </div>
-                    </Link>
-
-                    <Link
-                      href="/contact"
-                      onClick={() => setActiveDropdown(null)}
-                      className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-slate-900 dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 group-hover:text-white transition">
-                        <Mail className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-300 transition block">
-                          Contact Support
-                        </span>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                          Inquiries &amp; assistance
-                        </p>
-                      </div>
-                    </Link>
-                  </div>
-
-                </div>
-
-                {/* Bottom Flyout HUD Telemetry */}
-                <div className="pt-3 border-t border-slate-200/80 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                    <span className="font-mono text-[11px]">Live WebSocket Stream • Institutional CLOB Depth • AI Neural Copilot</span>
-                  </div>
-                  <Link
-                    href="/tools"
-                    onClick={() => setActiveDropdown(null)}
-                    className="font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 text-[11px]"
-                  >
-                    <span>Launch AI Terminal</span>
-                    <span>→</span>
-                  </Link>
-                </div>
-
-              </div>
-            )}
-          </div>
-
-          {/* Quick Direct Shortcuts */}
+          {/* 1. Signals */}
           <Link
-            href="/tools"
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs"
+            href="/?tab=bot"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
           >
-            <Bot className="w-4 h-4 text-amber-500" />
-            <span>AI Signals</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-xs shadow-emerald-500/60" />
+            <Activity className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
+            <span>Signals</span>
           </Link>
 
+          {/* 2. AI Predictions */}
+          <Link
+            href="/predictions"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+          >
+            <Brain className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
+            <span>Predictions</span>
+            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
+              AI 98%
+            </span>
+          </Link>
+
+          {/* 3. Whale Orders */}
           <Link
             href="/whale-orders"
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
           >
-            <Fish className="w-4 h-4 text-indigo-500" />
+            <Fish className="w-4 h-4 text-indigo-500 group-hover:scale-110 transition-transform" />
             <span>Whale Orders</span>
+            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
+              LIVE
+            </span>
           </Link>
+
+          {/* 4. Markets */}
+          <Link
+            href="/markets"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+          >
+            <Coins className="w-4 h-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+            <span>Markets</span>
+          </Link>
+
+          {/* 5. Derivatives */}
+          <Link
+            href="/coinglass"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+          >
+            <Flame className="w-4 h-4 text-rose-500 group-hover:scale-110 transition-transform" />
+            <span>Derivatives</span>
+            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60">
+              OI &amp; Liq
+            </span>
+          </Link>
+
+          {/* 6. Order Book */}
+          <Link
+            href="/orderbook"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+          >
+            <Activity className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
+            <span>Order Book</span>
+          </Link>
+
+          {/* 7. Research Desk */}
+          <Link
+            href="/blog"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+          >
+            <LineChart className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
+            <span>Research</span>
+          </Link>
+
         </div>
 
         {/* Right: Desktop Theme Switcher */}
