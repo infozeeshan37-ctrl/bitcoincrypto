@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import CommandPalette from "@/components/common/CommandPalette";
 import ChatWidget from "@/components/chat/ChatWidget";
-import { WebSiteJsonLd, OrganizationJsonLd } from "@/components/seo/JsonLd";
+import { WebSiteJsonLd, OrganizationJsonLd, SoftwareAppJsonLd } from "@/components/seo/JsonLd";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -25,25 +25,28 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "BitcoinCrypto.tech | Cryptocurrency Market Intelligence & Trading Tech",
+    default: "BitcoinCrypto.tech | AI Crypto Prediction Tools & Derivatives Market Intelligence",
     template: "%s | BitcoinCrypto.tech",
   },
-  description: "Modern, transparent cryptocurrency market intelligence, order flow mechanics, Coinglass derivatives, DCA models, AI trading signals, and macroeconomic CPI analysis on BitcoinCrypto.tech.",
+  description: "Top-ranked cryptocurrency market intelligence platform & AI trading suite. Features Binance-synchronized 5-minute binary price predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, L2 order book depth, and DCA simulators.",
   keywords: [
-    "bitcoin intelligence",
-    "crypto trading concepts",
-    "market structure",
-    "coinglass derivatives",
-    "futures open interest",
-    "liquidation heatmaps",
-    "algorithmic trading signals",
-    "crypto market scanner",
-    "dca calculator",
-    "bitcoin halving",
-    "order flow mechanics",
-    "us cpi tracker",
+    "ai crypto tools",
+    "best ai crypto prediction tool",
+    "binance 5 minute price prediction",
+    "ai crypto trading bot",
+    "coinglass liquidation heatmap",
+    "crypto order book depth",
+    "cvd crypto scanner",
+    "deepquant neural bot",
+    "bitcoin dca simulator ai",
+    "crypto binary prediction demo wallet",
+    "real time crypto market intelligence",
+    "free crypto trading signals btc eth sol",
+    "crypto market scanner live",
+    "us cpi bitcoin correlation tracker",
+    "bitcoin halving liquidity cycle",
   ],
-  authors: [{ name: "BitcoinCrypto Tech Quantitative Research Desk" }],
+  authors: [{ name: "BitcoinCrypto Quantitative Research Desk" }],
   creator: "BitcoinCrypto.tech",
   publisher: "BitcoinCrypto.tech",
   metadataBase: new URL("https://www.bitcoincrypto.tech"),
@@ -62,8 +65,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "BitcoinCrypto.tech | Cryptocurrency Intelligence Platform",
-    description: "Data-driven research, order flow mechanics, and financial models for modern digital asset traders.",
+    title: "BitcoinCrypto.tech | Best AI Crypto Prediction & Market Intelligence Suite",
+    description: "Institutional-grade digital asset terminal with Binance 5-minute price predictions, DeepQuant AI signals, Coinglass liquidation heatmaps, and order book depth.",
     url: "https://www.bitcoincrypto.tech",
     siteName: "BitcoinCrypto.tech",
     locale: "en_US",
@@ -71,8 +74,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BitcoinCrypto.tech | Crypto Market Intelligence",
-    description: "Transparent market structure and digital asset research.",
+    title: "BitcoinCrypto.tech | AI Crypto Market Intelligence & Prediction Tools",
+    description: "Binance 5-minute binary price predictions, DeepQuant neural AI, Coinglass liquidation heatmaps, and L2 order book depth.",
     creator: "@bitcoincrypto",
   },
   verification: {
@@ -102,6 +105,7 @@ export default function RootLayout({
       <body className="font-sans min-h-screen flex flex-col bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased transition-colors duration-150 selection:bg-amber-500/30 selection:text-amber-300">
         <WebSiteJsonLd />
         <OrganizationJsonLd />
+        <SoftwareAppJsonLd />
         <ThemeProvider>
           <Navbar />
           <main className="flex-1">

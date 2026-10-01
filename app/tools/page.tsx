@@ -29,6 +29,7 @@ import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetail
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
+import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 
 function ToolsContent() {
   const searchParams = useSearchParams();
@@ -348,7 +349,7 @@ function ToolsContent() {
                     }`}
                   >
                     <BarChart2 className="w-3.5 h-3.5" />
-                    <span>Advanced Chart & Drawing Suite</span>
+                    <span>Advanced Chart &amp; Drawing Suite</span>
                   </button>
                   <button
                     onClick={() => setChartTerminalMode("analysis")}
@@ -359,7 +360,7 @@ function ToolsContent() {
                     }`}
                   >
                     <Gauge className="w-3.5 h-3.5" />
-                    <span>Technical Gauge & Pivots</span>
+                    <span>Technical Gauge &amp; Pivots</span>
                   </button>
                   <button
                     onClick={() => setChartTerminalMode("split")}
@@ -529,7 +530,7 @@ function ToolsContent() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               <div className="lg:col-span-6 bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Risk & Position Sizing Calculator</h3>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Risk &amp; Position Sizing Calculator</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Calculate exact trade lot sizes and prevent account ruin before submitting orders.
                   </p>
@@ -708,6 +709,13 @@ function ToolsContent() {
 
         {/* TAB 7: AI CRYPTO PRICE PREDICTION ENGINE */}
         {activeTab === "predictions" && <AIPredictionSuite />}
+
+        {/* CITATION & EMBED WIDGET */}
+        <ToolCitationWidget
+          toolName="BitcoinCrypto Quantitative AI Trading Suite & Scanner"
+          toolUrl="https://www.bitcoincrypto.tech/tools"
+          description="Algorithmic trading signals, live TradingView charts, Coinglass liquidation tool, and DCA simulator."
+        />
 
       </div>
     </div>

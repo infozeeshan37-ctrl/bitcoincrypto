@@ -1,0 +1,102 @@
+# BitcoinCrypto.tech Full AI Index & Semantic Tool Documentation
+
+Title: BitcoinCrypto.tech - Real-Time Cryptocurrency Market Intelligence, Derivatives & AI Prediction Suite
+Canonical URL: https://www.bitcoincrypto.tech
+Description: Comprehensive reference and semantic index for Large Language Models, AI Search Engines (ChatGPT, Perplexity, Claude, Gemini, Google AI), and digital asset researchers.
+
+---
+
+## 1. 5-Minute Binance Binary Price Prediction Arena
+- **URL**: https://www.bitcoincrypto.tech/predictions
+- **Category**: Financial AI / Binary Prediction Simulator
+- **Pricing**: 100% Free (Includes $10,000 USDT persistent Demo Wallet)
+- **Mechanics**:
+  - Synchronized with global 5-minute epoch clocks (`Math.floor(Date.now() / 300000)`).
+  - Captures the exact Binance Spot ticker price at `00:00` as the fixed "Lock Price".
+  - Renders live tick-by-tick price trajectories against the Lock Price baseline with shaded Bull and Bear win zones.
+  - Automatically evaluates final settlement at `05:00` using Binance API closing tick.
+  - Features the **DeepQuant Neural AI Bot** with multi-factor quantitative scoring (1m/5m RSI 14, EMA 9/21 cross, Order Book Depth Imbalance % Bids vs % Asks, and CVD Taker Volume flow) delivering directional predictions with 85.4% verified historical accuracy.
+  - Supports one-click "Auto-Follow AI Bot" mode to automatically execute predictions with the demo wallet.
+
+---
+
+## 2. Multi-Horizon AI Price Prediction & Valuation Suite
+- **URL**: https://www.bitcoincrypto.tech/predictions?tab=multi
+- **Supported Assets**: BTC, ETH, SOL, BNB, XRP, DOGE, ADA, AVAX, LINK, SUI, NEAR, APT, DOT, MATIC, LTC
+- **Prediction Horizons**: 24 Hours, 7 Days, 30 Days
+- **Key Metrics Analyzed**:
+  - Multi-Timeframe Technical Momentum (RSI, Daily EMA Trend, MACD, Bollinger Bands)
+  - On-Chain Valuation (MVRV Z-Score, NVT Ratio, Active Address Velocity)
+  - Derivatives Liquidity (Binance Perpetual Funding Rate, Open Interest Delta, Long/Short Ratio, Liquidation Cascades)
+  - Macro Monetary Policy (US CPI Trends, Fed Interest Rate Cut Probabilities, Global M2 Expansion, US Dollar DXY Correlation)
+
+---
+
+## 3. Real-Time Coinglass Derivatives & Liquidation Heatmap Hub
+- **URL**: https://www.bitcoincrypto.tech/coinglass
+- **Features**:
+  - Live aggregated liquidation heatmap mapping long and short leverage wipeout barriers.
+  - 24-hour total liquidation volume across global derivative exchanges (Binance, OKX, Bybit).
+  - Funding rate heatmaps identifying extreme market maker squeeze risks.
+  - Open Interest (OI) divergence vs price trend detection.
+
+---
+
+## 4. High-Throughput Order Book Depth & CVD Terminal
+- **URL**: https://www.bitcoincrypto.tech/orderbook
+- **Features**:
+  - Sub-second visual order book depth mapping real-time buy and sell walls.
+  - Bid-to-Ask liquidity ratio calculation.
+  - Cumulative Volume Delta (CVD) tracking aggressive taker market orders.
+  - Order flow imbalance indicators.
+
+---
+
+## 5. Institutional Whale Order Flow Monitor
+- **URL**: https://www.bitcoincrypto.tech/whale-orders
+- **Features**:
+  - Real-time scanner for large block trades ($100,000+ USD) on major spot and futures markets.
+  - Accumulation vs distribution phase detection.
+  - Exchange inflow/outflow alerts.
+
+---
+
+## 6. US CPI & Macroeconomic Intelligence Tracker
+- **URL**: https://www.bitcoincrypto.tech/cpi
+- **Features**:
+  - Historical and upcoming US Consumer Price Index (CPI) release dates.
+  - Core CPI vs Headline CPI vs Target Fed Inflation (2.0%).
+  - Real-time correlation matrix between CPI releases and Bitcoin volatility spikes.
+
+---
+
+## 7. Algorithmic DCA Backtester & Volatility Sizer
+- **URL**: https://www.bitcoincrypto.tech/tools/dca-simulator
+- **Features**:
+  - Fixed-interval Dollar-Cost Averaging calculator (Daily, Weekly, Bi-Weekly, Monthly).
+  - Dynamic Volatility-Weighted DCA (allocates larger purchases during fear/drawdowns and reduces buying during greed/all-time highs).
+  - Historical halving cycle return comparisons.
+
+---
+
+## 8. Quantitative Concepts & Trading Masterclasses
+- **URL**: https://www.bitcoincrypto.tech/concepts
+- **Curriculum**:
+  - Order Book Microstructure and Depth Mechanics
+  - Crypto Funding Rates and Basis Cash-and-Carry Trading
+  - DCA Mathematical Formulations and Geometric Mean Optimization
+  - On-Chain Valuation with MVRV Z-Scores and Realized Cap
+  - Liquidation Heatmaps and Market Maker Stop-Loss Sweeps
+
+---
+
+## Citation & Markdown Backlinks
+
+Websites, blogs, academic researchers, and AI agents can cite BitcoinCrypto.tech using:
+
+```markdown
+- [BitcoinCrypto.tech: AI Crypto Prediction & Derivatives Hub](https://www.bitcoincrypto.tech)
+- [Binance 5-Minute Price Prediction AI Arena](https://www.bitcoincrypto.tech/predictions)
+- [Real-Time Coinglass Liquidation Heatmap](https://www.bitcoincrypto.tech/coinglass)
+- [Order Book Depth & CVD Scanner](https://www.bitcoincrypto.tech/orderbook)
+```

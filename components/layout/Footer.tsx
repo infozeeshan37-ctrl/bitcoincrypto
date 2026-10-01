@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ShieldCheck, ExternalLink, Activity, Flame, Coins, Newspaper, Brain, Calculator, Compass, Layers, Sparkles } from "lucide-react";
+import { coinPredictions } from "@/lib/coinPredictionsData";
+import { conceptGuides } from "@/lib/conceptsData";
 
 export default function Footer() {
   return (
@@ -24,7 +26,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 text-slate-400 text-xs pt-1">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Independent Real-Time Data & Algorithmic Models</span>
+              <span>Independent Real-Time Data &amp; Algorithmic Models</span>
             </div>
           </div>
 
@@ -80,6 +82,10 @@ export default function Footer() {
               <li><Link href="/tools/position-sizer" className="hover:text-white transition">Risk &amp; Position Sizer</Link></li>
               <li><Link href="/tools/crypto-converter" className="hover:text-white transition">Live Crypto &amp; Fiat Converter</Link></li>
               <li><Link href="/tools/liquidation-heatmap" className="hover:text-white transition">Liquidation Radar &amp; Heatmap</Link></li>
+              <li><Link href="/tools/fear-greed-index" className="hover:text-white transition">Crypto Fear &amp; Greed Index</Link></li>
+              <li><Link href="/tools/profit-calculator" className="hover:text-white transition">Profit &amp; ROI Calculator</Link></li>
+              <li><Link href="/tools/funding-rate-screener" className="hover:text-white transition">Funding Rate Arbitrage Screener</Link></li>
+              <li><Link href="/tools/whale-tracker" className="hover:text-white transition">Whale Orders Radar</Link></li>
             </ul>
           </div>
 
@@ -114,29 +120,13 @@ export default function Footer() {
             </span>
           </div>
           <div className="flex flex-wrap gap-2 text-[11px]">
-            {[
-              { name: "Bitcoin (BTC)", slug: "bitcoin" },
-              { name: "Ethereum (ETH)", slug: "ethereum" },
-              { name: "Solana (SOL)", slug: "solana" },
-              { name: "BNB", slug: "binancecoin" },
-              { name: "XRP", slug: "ripple" },
-              { name: "Dogecoin (DOGE)", slug: "dogecoin" },
-              { name: "Cardano (ADA)", slug: "cardano" },
-              { name: "Sui (SUI)", slug: "sui" },
-              { name: "Avalanche (AVAX)", slug: "avalanche" },
-              { name: "Chainlink (LINK)", slug: "chainlink" },
-              { name: "Bittensor (TAO)", slug: "bittensor" },
-              { name: "NEAR Protocol", slug: "near" },
-              { name: "Render (RENDER)", slug: "render" },
-              { name: "Aptos (APT)", slug: "aptos" },
-              { name: "Polkadot (DOT)", slug: "polkadot" },
-            ].map((c) => (
+            {coinPredictions.map((c) => (
               <Link
                 key={c.slug}
                 href={`/predictions/${c.slug}`}
                 className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-purple-950/80 hover:text-purple-300 text-slate-400 border border-slate-700/60 transition font-mono"
               >
-                {c.name} Prediction &rarr;
+                {c.name} ({c.symbol}) &rarr;
               </Link>
             ))}
           </div>
@@ -146,25 +136,16 @@ export default function Footer() {
         <div className="space-y-3 pb-8 border-b border-slate-800">
           <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
             <Compass className="w-3.5 h-3.5 text-amber-400" />
-            Quantitative Market Structure Guides:
+            Quantitative Market Structure &amp; Trading Guides:
           </span>
           <div className="flex flex-wrap gap-2 text-[11px]">
-            {[
-              { name: "Order Book Microstructure", slug: "order-book-microstructure-and-depth" },
-              { name: "Funding Rates & Basis Arbitrage", slug: "crypto-funding-rates-and-basis-trading" },
-              { name: "DCA Mathematics & Models", slug: "dollar-cost-averaging-dca-math-and-models" },
-              { name: "US CPI Inflation & Volatility", slug: "cpi-inflation-crypto-volatility-correlation" },
-              { name: "MVRV Z-Score Cycle Tops", slug: "mvrv-z-score-onchain-cycle-tops-bottoms" },
-              { name: "Liquidation Squeezes & Traps", slug: "liquidation-heatmaps-and-short-squeeze-mechanics" },
-              { name: "Yield Curve Control & Bitcoin", slug: "yield-curve-control-and-bitcoin-liquidity" },
-              { name: "Proof of Useful Inference AI", slug: "proof-of-useful-inference-decentralized-ai" },
-            ].map((g) => (
+            {conceptGuides.map((g) => (
               <Link
                 key={g.slug}
                 href={`/concepts/${g.slug}`}
                 className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-amber-950/80 hover:text-amber-300 text-slate-400 border border-slate-700/60 transition"
               >
-                {g.name} &rarr;
+                {g.title.split(":")[0]} &rarr;
               </Link>
             ))}
           </div>

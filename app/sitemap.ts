@@ -99,6 +99,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "position-sizer",
     "crypto-converter",
     "liquidation-heatmap",
+    "fear-greed-index",
+    "profit-calculator",
+    "funding-rate-screener",
+    "whale-tracker",
   ];
   const toolRoutes: MetadataRoute.Sitemap = dedicatedToolSlugs.map((slug) => ({
     url: `${baseUrl}/tools/${slug}`,

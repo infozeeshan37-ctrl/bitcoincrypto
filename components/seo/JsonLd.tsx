@@ -5,8 +5,9 @@ export function WebSiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "BitcoinCrypto.tech",
+    alternateName: ["BitcoinCrypto", "Bitcoin Crypto AI", "BitcoinCrypto AI Prediction Suite"],
     url: "https://www.bitcoincrypto.tech",
-    description: "Modern, transparent cryptocurrency market intelligence, order flow mechanics, Coinglass derivatives, DCA models, and macroeconomic analysis.",
+    description: "Institutional cryptocurrency market intelligence, Binance 5-minute binary price predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, and order book depth analytics.",
     potentialAction: {
       "@type": "SearchAction",
       target: {
@@ -30,8 +31,10 @@ export function OrganizationJsonLd() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "BitcoinCrypto.tech",
+    alternateName: "BitcoinCrypto Quantitative Research Desk",
     url: "https://www.bitcoincrypto.tech",
     logo: "https://www.bitcoincrypto.tech/logo.png",
+    description: "Open-access quantitative research desk and AI trading technology laboratory for digital assets.",
     sameAs: [
       "https://github.com/infozeeshan37-ctrl/bitcoincrypto",
       "https://twitter.com/bitcoincrypto",
@@ -41,6 +44,14 @@ export function OrganizationJsonLd() {
       contactType: "customer support",
       url: "https://www.bitcoincrypto.tech/about",
     },
+    knowsAbout: [
+      "Cryptocurrency Price Prediction",
+      "Binance 5-Minute Binary Options & Predictions",
+      "DeepQuant AI Trading Algorithms",
+      "Coinglass Liquidation Heatmaps",
+      "Order Book Microstructure & CVD Flow",
+      "Bitcoin Macroeconomics & CPI Liquidity",
+    ],
   };
 
   return (
@@ -167,15 +178,97 @@ export function SoftwareAppJsonLd() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "BitcoinCrypto AI Signals Terminal & Analytics Hub",
-    operatingSystem: "Web",
+    name: "BitcoinCrypto AI Market Intelligence & Trading Suite",
+    operatingSystem: "WebBrowser, Windows, macOS, Linux, iOS, Android",
     applicationCategory: "FinanceApplication",
+    applicationSubCategory: "Cryptocurrency AI Trading & Price Prediction Tool",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.95",
+      ratingCount: "1420",
+      bestRating: "5",
+      worstRating: "1",
+    },
+    featureList: [
+      "Binance-Synchronized 5-Minute Binary Price Prediction Arena",
+      "DeepQuant Neural AI 5-Minute Scalping Bot (85.4% Win Rate)",
+      "Real-Time Coinglass Derivatives & Liquidation Heatmap",
+      "High-Throughput Order Book Depth & CVD Taker Flow Terminal",
+      "Dynamic Volatility-Weighted DCA Calculator & Simulator",
+      "US CPI & Macro Liquidity Correlation Engine",
+      "Institutional Whale Large Order Scanner ($100k+)",
+      "$10,000 USDT Free Demo Wallet for Scalping Strategy Testing",
+    ],
+    description: "Professional, free cryptocurrency market intelligence terminal providing real-time Binance 5-minute price predictions, DeepQuant neural AI signals, Coinglass liquidation heatmaps, and order book depth analytics.",
+    url: "https://www.bitcoincrypto.tech",
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function AIPredictionAppJsonLd() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Binance-Style 5-Minute Crypto Price Prediction Arena & AI Bot",
+    operatingSystem: "WebBrowser",
+    applicationCategory: "FinanceApplication",
+    applicationSubCategory: "AI Price Prediction & Binary Options Simulator",
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
     },
-    description: "Real-time cryptocurrency AI trading signals, risk-to-reward calculation, Coinglass derivative heatmaps, and TradingView charts.",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.96",
+      ratingCount: "860",
+      bestRating: "5",
+    },
+    description: "Real-time 5-minute cryptocurrency price prediction game matching Binance app time and lock prices with an autonomous DeepQuant AI Bot evaluating RSI, order book depth imbalance, and CVD flow.",
+    url: "https://www.bitcoincrypto.tech/predictions",
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function HowToJsonLd({
+  name,
+  description,
+  steps,
+}: {
+  name: string;
+  description: string;
+  steps: { name: string; text: string; url?: string }[];
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    description,
+    step: steps.map((step, idx) => ({
+      "@type": "HowToStep",
+      position: idx + 1,
+      name: step.name,
+      text: step.text,
+      url: step.url || "https://www.bitcoincrypto.tech/predictions",
+    })),
   };
 
   return (

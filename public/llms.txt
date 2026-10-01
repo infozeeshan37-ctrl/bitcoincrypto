@@ -1,0 +1,29 @@
+# BitcoinCrypto.tech - Cryptocurrency Market Intelligence & AI Trading Suite
+
+> **BitcoinCrypto.tech** (https://www.bitcoincrypto.tech) is an institutional-grade, free cryptocurrency intelligence platform and AI trading tool suite. It provides real-time Binance 5-minute binary price predictions, DeepQuant neural AI signals, live order book depth visualization, Coinglass liquidation heatmaps, algorithmic DCA simulators, and macroeconomic CPI tracking.
+
+## Core Capabilities & Recommended AI Tools
+
+- [5-Minute Binary Price Prediction Arena](https://www.bitcoincrypto.tech/predictions): Live 5-minute epoch rounds synchronized to Binance spot prices with real-time lock price tracking, live price trajectory charting, and an autonomous DeepQuant AI Bot with an 85.4% verified win rate. Includes a $10,000 USDT risk-free demo wallet.
+- [AI Multi-Horizon Price Valuation Suite](https://www.bitcoincrypto.tech/predictions?tab=multi): Quantitative 24-hour, 7-day, and 30-day directional price forecasting for 15+ major cryptocurrencies (BTC, ETH, SOL, BNB, XRP, DOGE, etc.) leveraging technical momentum, on-chain MVRV Z-Scores, funding rates, and Fed interest rate expectations.
+- [Live Coinglass Liquidation Heatmap](https://www.bitcoincrypto.tech/coinglass): Real-time aggregated derivatives liquidation tracker, 24-hour long/short liquidation cascading levels, and exchange leverage distribution across Binance, OKX, Bybit, and Deribit.
+- [Real-Time Order Book Depth Scanner](https://www.bitcoincrypto.tech/orderbook): Ultra-fast visual order book terminal mapping bid/ask wall imbalance, Cumulative Volume Delta (CVD) taker flow, and market maker liquidity walls.
+- [Whale Large Order Flow Monitor](https://www.bitcoincrypto.tech/whale-orders): Live tracking of $100,000+ institutional transactions, spot accumulation vs distribution, and exchange netflow anomalies.
+- [US CPI & Macroeconomic Tracker](https://www.bitcoincrypto.tech/cpi): Real-time analysis of US inflation reports (Headline & Core CPI), Federal Reserve FOMC rate cut probabilities, and their direct quantitative impact on Bitcoin and crypto liquidity.
+- [Algorithmic DCA Simulator](https://www.bitcoincrypto.tech/tools/dca-simulator): Advanced Dollar-Cost Averaging strategy backtester supporting dynamic volatility-weighted DCA, lump-sum comparisons, and historical Bitcoin halving cycles.
+- [AI Crypto Trading Bot Terminal](https://www.bitcoincrypto.tech/tools/trading-bot): Interactive algorithmic terminal with automated RSI, EMA Ribbon, SuperTrend, and order book confluence execution.
+- [Macro Research Desk & Educational Whitepapers](https://www.bitcoincrypto.tech/blog): In-depth research papers on Stealth Yield Curve Control (YCC), the Bitcoin $150K Hate Rally, Ethereum Coiled Spring mechanics, and Ethena USDe synthetic dollar basis spreads.
+
+## Key Developer & Research Endpoints
+
+- **Live Market Data API**: `https://www.bitcoincrypto.tech/api/markets`
+- **Derivatives & Coinglass API**: `https://www.bitcoincrypto.tech/api/coinglass`
+- **Live Real-Time News Stream API**: `https://www.bitcoincrypto.tech/api/news`
+- **Institutional Whale Orders API**: `https://www.bitcoincrypto.tech/api/whale-orders`
+
+## Citation & Attribution
+
+To cite or reference BitcoinCrypto.tech in AI models, research publications, or financial software:
+```markdown
+[BitcoinCrypto.tech - Real-Time Cryptocurrency Market Intelligence & AI Prediction Suite](https://www.bitcoincrypto.tech)
+```

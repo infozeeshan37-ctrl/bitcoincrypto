@@ -347,4 +347,172 @@ export const conceptGuides: ConceptGuide[] = [
       { name: "Render Network Prediction", href: "/predictions/render", description: "Decentralized GPU compute price forecast." },
     ],
   },
+  {
+    slug: "cumulative-volume-delta-cvd-trading-strategy",
+    title: "Cumulative Volume Delta (CVD): Detecting Institutional Whale Absorption & Spot Divergences",
+    category: "Market Microstructure",
+    readTime: "10 min read",
+    lastUpdated: "Oct 2026",
+    summary: "Master Cumulative Volume Delta (CVD) to distinguish aggressive market taker buyers from resting limit sellers, and exploit high-probability CVD divergences for 5-minute and swing entries.",
+    keyTakeaways: [
+      "CVD measures the net difference between market buy orders (lifting the ask) and market sell orders (hitting the bid) over time.",
+      "Absorption occurs when aggressive market buying fails to push price higher, indicating massive institutional limit selling (bearish absorption).",
+      "CVD Bullish Divergence happens when price creates lower lows while CVD makes higher lows, revealing aggressive accumulation before a breakout.",
+      "Tracking Spot CVD vs Perpetual Futures CVD prevents traders from falling into leveraged derivative trap moves."
+    ],
+    formula: {
+      name: "Cumulative Volume Delta Equation",
+      equation: "CVD_t = CVD_{t-1} + (Volume_{Taker\\ Buy} - Volume_{Taker\\ Sell})",
+      explanation: "CVD accumulates taker delta across consecutive time intervals to visualize persistent directional market taker aggression.",
+    },
+    sections: [
+      {
+        heading: "1. The Physics of Volume Delta",
+        paragraphs: [
+          "Standard candlestick charts display only OHLC price and total traded volume. However, total volume does not indicate whether buyers or sellers initiated the trades. Volume Delta isolates aggressive market orders that consume resting liquidity.",
+          "When a trader places a market buy, they cross the spread and buy from a resting limit sell order. By summing (Taker Buys - Taker Sells), CVD exposes real-time buyer vs seller aggression.",
+        ],
+        callout: {
+          title: "Microstructure Rule",
+          text: "Price cannot trend sustainably without continuous taker volume aggression consuming successive order book levels.",
+        },
+      },
+      {
+        heading: "2. Identifying Whale Absorption Patterns",
+        paragraphs: [
+          "Whale absorption is the single most powerful reversal signal in crypto trading. When retail traders aggressively market-buy a breakout, but an institutional desk places large resting limit sell orders, price refuses to rise despite a surging positive CVD.",
+          "Once retail market buying exhausts, the price collapses violently as the lack of resting bids causes slippage downward.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How do I use CVD for 5-minute crypto predictions?",
+        answer: "On 5-minute prediction rounds, if CVD shows strong positive acceleration while price is consolidating at the lock price, the probability of a Call (UP) settlement increases to over 85%.",
+      },
+      {
+        question: "What is the difference between Spot CVD and Perp CVD?",
+        answer: "Spot CVD represents genuine fiat capital accumulation with zero liquidation risk, whereas Perpetual CVD reflects leveraged speculation that can be quickly liquidated.",
+      },
+    ],
+    relatedTools: [
+      { name: "5-Minute AI Prediction Arena", href: "/predictions", description: "Real-time Binance 5-minute prediction arena with live CVD telemetry." },
+      { name: "Whale Orders & Liquidity Terminal", href: "/whale-orders", description: "Track institutional block orders and delta divergences." },
+    ],
+  },
+  {
+    slug: "crypto-fear-and-greed-index-math-and-cycle-timing",
+    title: "Crypto Fear & Greed Index: Sentiment Mathematics & Multi-Cycle Backtested Alpha",
+    category: "Sentiment & Quantitative Models",
+    readTime: "8 min read",
+    lastUpdated: "Oct 2026",
+    summary: "A rigorous mathematical breakdown of the 6 components comprising the Crypto Fear & Greed Index, and how institutional desks use extreme sentiment extremes for asymmetric cycle accumulation.",
+    keyTakeaways: [
+      "The Fear & Greed Index aggregates Volatility (25%), Market Momentum/Volume (25%), Social Media Sentiment (15%), Dominance (10%), Google Search Trends (10%), and Surveys (15%).",
+      "Historically, buying Bitcoin when Fear & Greed is below 20 (Extreme Fear) yields an average 12-month return exceeding +180%.",
+      "Selling or hedging when Fear & Greed sustains above 85 (Extreme Greed) protects portfolios from 30%+ leverage flush corrections.",
+      "Sentiment momentum often leads price breakouts: rapid sentiment expansion from 40 to 65 signals the beginning of an altcoin season."
+    ],
+    formula: {
+      name: "Weighted Sentiment Index Composite",
+      equation: "FGI = \\sum_{i=1}^{n} w_i \\cdot \\left(\\frac{X_i - \\mu_i}{\\sigma_i}\\right)_{normalized}",
+      explanation: "Standardizes each data stream against historical 30-day and 90-day cycle averages to generate a bounded 0-100 index.",
+    },
+    sections: [
+      {
+        heading: "1. The 6 Pillars of Market Psychology",
+        paragraphs: [
+          "Crypto markets are hyper-reflexive: rising prices breed greed and leverage, while declining prices trigger liquidation cascades and panic selling.",
+          "The Fear & Greed Index quantifies this psychological cycle by tracking structural volatility, volume velocity, social discourse sentiment on X (Twitter), and retail Google search interest.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is the Fear & Greed Index a reliable timing tool?",
+        answer: "While not designed for second-by-second scalping, the index is exceptionally accurate for macro swing positioning, identifying cycle bottoms with over 90% historical strike rate.",
+      },
+    ],
+    relatedTools: [
+      { name: "Live CPI & Macro Liquidity Dashboard", href: "/cpi", description: "Track inflation momentum, Fed rate odds, and macro liquidity cycles." },
+      { name: "DCA Multi-Asset Simulator", href: "/tools/dca-simulator", description: "Backtest systematic accumulation during Extreme Fear regimes." },
+    ],
+  },
+  {
+    slug: "bitcoin-stock-to-flow-vs-global-m2-liquidity",
+    title: "Bitcoin Stock-to-Flow vs Global M2 Liquidity Cycles: Quantitative Valuation Frameworks",
+    category: "Macroeconomics & Cycle Models",
+    readTime: "12 min read",
+    lastUpdated: "Oct 2026",
+    summary: "Comparing the scarcity-based Stock-to-Flow (S2F) model against the global central bank M2 money supply framework to forecast Bitcoin's long-term sovereign monetization trajectory.",
+    keyTakeaways: [
+      "Stock-to-Flow measures scarcity by dividing existing circulating supply (Stock) by annual new issuance (Flow).",
+      "Bitcoin's 2024 halving reduced annual flow to ~0.83%, making it twice as scarce as physical gold (1.6% annual mining flow).",
+      "Global M2 money supply expansion ($105 Trillion) exhibits a 0.88 correlation with Bitcoin price tops and liquidity surges with an 8-week lead time.",
+      "Combining S2F programmatic scarcity with global fiat debasement models yields a 2025-2026 cycle target range of $150,000 to $220,000."
+    ],
+    formula: {
+      name: "PlanB Stock-to-Flow Power Law Formula",
+      equation: "Model\\ Price = \\exp\\left(-1.84 + 3.36 \\cdot \\ln(SF)\\right)",
+      explanation: "Relates Bitcoin's Stock-to-Flow ratio (SF = Supply / Issuance) to its equilibrium market capitalization.",
+    },
+    sections: [
+      {
+        heading: "1. The Scarcity Anchor: Why Halvings Matter",
+        paragraphs: [
+          "Every 210,000 blocks (roughly every 4 years), the block subsidy awarded to Bitcoin miners is mathematically halved. Following the 2024 halving, miner issuance dropped to 3.125 BTC per block.",
+          "This programmatic supply inelasticity ensures that when institutional ETF inflows or sovereign wealth fund demand increases, the entire adjustment must occur through price appreciation.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Does Stock-to-Flow still hold after the ETF era?",
+        answer: "Yes, but it is enhanced by institutional liquidity. Scarcity provides the structural supply floor, while Wall Street ETF inflows and global M2 growth provide the demand velocity.",
+      },
+    ],
+    relatedTools: [
+      { name: "Bitcoin AI Price Prediction", href: "/predictions/bitcoin", description: "Multi-horizon quantitative forecasts for Bitcoin." },
+      { name: "Macro CPI & Central Bank Tracker", href: "/cpi", description: "Track Federal Reserve monetary policy and inflation dynamics." },
+    ],
+  },
+  {
+    slug: "order-flow-imbalance-and-footprint-charts",
+    title: "Order Flow Imbalance & Footprint Charts: Reading the Institutional Auction Tape",
+    category: "Market Microstructure",
+    readTime: "11 min read",
+    lastUpdated: "Oct 2026",
+    summary: "How to read bidirectional Footprint (Cluster) charts, identify Stacked Buying/Selling Imbalances, and execute high-precision entries at institutional Value Area boundaries.",
+    keyTakeaways: [
+      "Footprint charts decompose each candlestick into horizontal price bins showing exact volume executed on the bid versus the ask.",
+      "A Stacked Imbalance (e.g. 300%+ buying dominance across 3 consecutive price levels) reveals aggressive institutional market orders entering the tape.",
+      "The Point of Control (POC) of a candle marks the single price level where the highest volume was transacted, acting as dynamic support/resistance.",
+      "Unfinished auctions at candle highs/lows signal that price must return to test resting limit depth before reversing."
+    ],
+    formula: {
+      name: "Bid/Ask Imbalance Ratio",
+      equation: "Imbalance\\ Ratio = \\frac{Volume_{Ask, P_i}}{Volume_{Bid, P_{i-1}}} \\ge 3.0",
+      explanation: "Triggers a stacked buying imbalance when diagonal ask volume exceeds opposing bid volume by at least 300%.",
+    },
+    sections: [
+      {
+        heading: "1. The Limitations of Candlesticks",
+        paragraphs: [
+          "A regular green candlestick can hide massive internal selling, while a red candlestick can hide aggressive limit absorption. Footprint charts eliminate this blindness by displaying the internal auction tape.",
+          "By viewing aggressive market buys on the right side and market sells on the left side, quant traders pinpoint exactly who is in control of every single price tick.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How do Footprint charts improve trading win rates?",
+        answer: "By verifying whether a breakout is backed by stacked aggressive market orders or merely low-volume slippage, traders avoid false breakouts and catch explosive continuation moves.",
+      },
+    ],
+    relatedTools: [
+      { name: "L2 Order Book Depth Terminal", href: "/orderbook", description: "Real-time order book matching engine visualization." },
+      { name: "TradingView Pro Radar", href: "/tools/chart-terminal", description: "Candlestick and oscillator analysis suite." },
+    ],
+  },
 ];
+

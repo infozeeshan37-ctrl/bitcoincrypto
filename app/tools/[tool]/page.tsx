@@ -122,6 +122,62 @@ const toolConfigs: Record<string, ToolConfig> = {
       "Real-Time Major Exchange Open Interest Totals"
     ],
   },
+  "fear-greed-index": {
+    slug: "fear-greed-index",
+    name: "Crypto Fear & Greed Index Live Multi-Asset Sentiment Radar",
+    shortName: "Fear & Greed Index",
+    tagline: "Track real-time market sentiment, social volume momentum, and multi-cycle psychological extremes.",
+    description: "Analyze market psychology with the live Crypto Fear and Greed Index. Evaluates volatility, trading volume velocity, social discourse sentiment, and Google search trends to spot macro cycle bottoms and overleveraged market tops.",
+    keywords: ["crypto fear and greed index live", "bitcoin market sentiment tracker", "crypto extreme fear indicator", "crypto sentiment index today", "bitcoin market psychology meter"],
+    features: [
+      "Real-Time 0-100 Sentiment Score & Historical Gauges",
+      "6-Factor Weighted Mathematical Composite",
+      "Historical Cycle Top/Bottom Correlation Markers",
+      "Integrated Fed Interest Rate & CPI Macro Context"
+    ],
+  },
+  "profit-calculator": {
+    slug: "profit-calculator",
+    name: "Crypto Profit / Loss & Leverage ROI Calculator",
+    shortName: "Profit Calculator",
+    tagline: "Calculate net return on investment, liquidation buffer, and exit targets with fee modeling.",
+    description: "Plan and backtest crypto trades with institutional precision. Calculate exact dollar profit, percentage ROI, exchange maker/taker fees, funding costs, and liquidation prices across spot and perpetual futures.",
+    keywords: ["crypto profit calculator", "bitcoin roi calculator", "crypto leverage profit calculator", "crypto liquidation price calculator", "crypto fee calculator"],
+    features: [
+      "Leverage Modeling from 1x Spot to 100x Margin",
+      "Maker & Taker Fee Deduction Adjustments",
+      "Target Price Break-Even & Take-Profit Matrix",
+      "Dynamic Multi-Asset Support (BTC, ETH, SOL, XRP)"
+    ],
+  },
+  "funding-rate-screener": {
+    slug: "funding-rate-screener",
+    name: "Perpetual Funding Rate Arbitrage & Basis Screener",
+    shortName: "Funding Rate Screener",
+    tagline: "Scan real-time 8-hour funding rates and basis spreads across major derivatives exchanges.",
+    description: "Screen live funding rates across Binance, Bybit, OKX, and Deribit. Spot high-yield delta-neutral cash-and-carry basis arbitrage opportunities and detect impending long/short liquidation squeezes.",
+    keywords: ["crypto funding rates live", "perpetual funding rate screener", "binance funding rate btc", "crypto basis arbitrage calculator", "funding rate heat map"],
+    features: [
+      "Cross-Exchange 8-Hour Funding Rate Comparison",
+      "Annualized Percentage Yield (APY) Calculations",
+      "Extreme Leverage Overheat Alert Thresholds",
+      "Delta-Neutral Basis Spread Arbitrage Identifier"
+    ],
+  },
+  "whale-tracker": {
+    slug: "whale-tracker",
+    name: "Crypto Whale Orders & Smart Money Flow Radar",
+    shortName: "Whale Radar",
+    tagline: "Real-time institutional block trade monitoring and dark pool resting liquidity alerts.",
+    description: "Track massive institutional crypto transactions in real time. Detect Satoshi-era dormant wallet activations, multi-million dollar exchange deposits/withdrawals, and resting iceberg limit orders on top exchanges.",
+    keywords: ["crypto whale tracker live", "bitcoin whale alert real time", "large crypto transactions radar", "whale wallet tracker crypto", "crypto order flow whale orders"],
+    features: [
+      "Real-Time Sub-Second Whale Trade Feed (>$100K to >$10M)",
+      "Exchange Inflow vs Outflow Net Volume Delta",
+      "Cluster Analysis for Institutional Iceberg Orders",
+      "Direct Linkage to L2 Order Book Depth Walls"
+    ],
+  },
 };
 
 interface PageProps {

@@ -10,6 +10,45 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/api/"],
       },
+      // OpenAI ChatGPT & SearchGPT crawlers
+      {
+        userAgent: "GPTBot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "ChatGPT-User",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "OAI-SearchBot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      // Anthropic Claude crawlers
+      {
+        userAgent: "ClaudeBot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "anthropic-ai",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      // Perplexity AI search crawler
+      {
+        userAgent: "PerplexityBot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      // Google Gemini & Search crawlers
+      {
+        userAgent: "Google-Extended",
+        allow: "/",
+        disallow: ["/api/"],
+      },
       {
         userAgent: "Googlebot",
         allow: "/",
@@ -19,12 +58,25 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Googlebot-Image",
         allow: "/",
       },
+      // Apple & Microsoft / Bing AI crawlers
       {
-        userAgent: "Mediapartners-Google",
+        userAgent: "Applebot-Extended",
         allow: "/",
+        disallow: ["/api/"],
       },
       {
         userAgent: "Bingbot",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      // Meta & Cohere AI crawlers
+      {
+        userAgent: "Meta-ExternalAgent",
+        allow: "/",
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "Cohere-ai",
         allow: "/",
         disallow: ["/api/"],
       },
