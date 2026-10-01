@@ -20,7 +20,11 @@ import {
   BookOpen,
   Info,
   TrendingUp,
-  Fish
+  Fish,
+  Zap,
+  Percent,
+  LineChart,
+  Radio
 } from "lucide-react";
 
 function CoinGlassSubNavInner() {
@@ -49,18 +53,93 @@ function CoinGlassSubNavInner() {
   };
 
   const navLinks = [
-    { label: "Market", href: "/markets", isActive: pathname === "/markets" },
-    { label: "Signals", href: "/?tab=bot", isActive: pathname === "/" && (!activeTab || activeTab === "bot") },
-    { label: "Predictions", href: "/predictions", isActive: pathname.startsWith("/predictions"), isBadge: "🔮" },
-    { label: "Open Interest", href: "/coinglass", isActive: pathname === "/coinglass" && !activeTab },
-    { label: "Funding Rate", href: "/tools/funding-rate-screener", isActive: pathname === "/tools/funding-rate-screener" },
-    { label: "Liquidation", href: "/tools/liquidation-heatmap", isActive: pathname === "/tools/liquidation-heatmap" || (pathname === "/coinglass" && activeTab === "liquidations") },
-    { label: "Order Book", href: "/orderbook", isActive: pathname === "/orderbook" },
-    { label: "Whale Orders", href: "/whale-orders", isActive: pathname === "/whale-orders" },
-    { label: "Supercharts", href: "/tools/chart-terminal", isActive: pathname === "/tools/chart-terminal" || activeTab === "terminal" },
-    { label: "US CPI", href: "/cpi", isActive: pathname === "/cpi" },
-    { label: "DCA Models", href: "/tools/dca-simulator", isActive: pathname === "/tools/dca-simulator" || activeTab === "dca" },
-    { label: "News", href: "/news", isActive: pathname === "/news" },
+    {
+      label: "Market",
+      href: "/markets",
+      isActive: pathname === "/markets",
+      icon: Coins,
+      iconColor: "text-emerald-400"
+    },
+    {
+      label: "Signals",
+      href: "/?tab=bot",
+      isActive: pathname === "/" && (!activeTab || activeTab === "bot"),
+      icon: Activity,
+      iconColor: "text-amber-400",
+      isLive: true
+    },
+    {
+      label: "Predictions",
+      href: "/predictions",
+      isActive: pathname.startsWith("/predictions"),
+      icon: Brain,
+      iconColor: "text-purple-400",
+      badge: "AI 98%"
+    },
+    {
+      label: "Open Interest",
+      href: "/coinglass",
+      isActive: pathname === "/coinglass" && !activeTab,
+      icon: BarChart2,
+      iconColor: "text-rose-400"
+    },
+    {
+      label: "Funding Rate",
+      href: "/tools/funding-rate-screener",
+      isActive: pathname === "/tools/funding-rate-screener",
+      icon: Percent,
+      iconColor: "text-cyan-400"
+    },
+    {
+      label: "Liquidation",
+      href: "/tools/liquidation-heatmap",
+      isActive: pathname === "/tools/liquidation-heatmap" || (pathname === "/coinglass" && activeTab === "liquidations"),
+      icon: Flame,
+      iconColor: "text-orange-400"
+    },
+    {
+      label: "Order Book",
+      href: "/orderbook",
+      isActive: pathname === "/orderbook",
+      icon: Layers,
+      iconColor: "text-amber-400"
+    },
+    {
+      label: "Whale Orders",
+      href: "/whale-orders",
+      isActive: pathname === "/whale-orders",
+      icon: Fish,
+      iconColor: "text-indigo-400"
+    },
+    {
+      label: "Supercharts",
+      href: "/tools/chart-terminal",
+      isActive: pathname === "/tools/chart-terminal" || activeTab === "terminal",
+      icon: LineChart,
+      iconColor: "text-blue-400"
+    },
+    {
+      label: "US CPI",
+      href: "/cpi",
+      isActive: pathname === "/cpi",
+      icon: Sparkles,
+      iconColor: "text-amber-400",
+      badge: "BLS"
+    },
+    {
+      label: "DCA Models",
+      href: "/tools/dca-simulator",
+      isActive: pathname === "/tools/dca-simulator" || activeTab === "dca",
+      icon: Sliders,
+      iconColor: "text-emerald-400"
+    },
+    {
+      label: "News",
+      href: "/news",
+      isActive: pathname === "/news",
+      icon: Radio,
+      iconColor: "text-sky-400"
+    },
   ];
 
   const moreItems = [
@@ -74,47 +153,69 @@ function CoinGlassSubNavInner() {
   ];
 
   return (
-    <div className="bg-[#0B0F19] border-b border-slate-800 text-slate-300 select-none text-xs font-medium sticky top-20 z-40 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center justify-between gap-3">
+    <div className="bg-[#0B0F19]/95 backdrop-blur-xl border-b border-slate-800 text-slate-200 select-none text-xs sticky top-20 z-40 shadow-lg shadow-black/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-13 flex items-center justify-between gap-3">
         
-        {/* Left Side: Brand Text + Horizontal Categories (CoinGlass Style) */}
-        <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-1">
+        {/* Left Side: Brand Text + Stylish Category Tabs */}
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1.5">
           
-          {/* Brand Wordmark (matching 'coinglass' in screenshot) */}
+          {/* Brand Wordmark (matching 'coinglass' in screenshot with bold styling) */}
           <Link
             href="/"
-            className="flex items-center gap-1.5 pr-2 sm:pr-3 mr-1 border-r border-slate-800 shrink-0 group"
+            className="flex items-center gap-2 pr-3 mr-1.5 border-r border-slate-800/90 shrink-0 group"
           >
-            <div className="w-5 h-5 rounded-md bg-amber-400 text-slate-950 flex items-center justify-center font-black text-xs shadow-xs">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center font-black text-xs shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
               ₿
             </div>
-            <span className="font-extrabold text-sm tracking-tight text-white group-hover:text-amber-400 transition">
-              bitcoincrypto
-            </span>
+            <div className="flex items-center gap-1">
+              <span className="font-black text-sm tracking-tight text-white group-hover:text-amber-400 transition-colors">
+                bitcoincrypto
+              </span>
+              <span className="text-[9px] font-mono font-extrabold px-1 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                .tech
+              </span>
+            </div>
           </Link>
 
-          {/* Navigation Items (Single horizontal line, compact & clean) */}
-          {navLinks.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1 text-[12px] shrink-0 font-semibold ${
-                item.isActive
-                  ? "text-amber-400 font-bold bg-slate-900"
-                  : "text-slate-300 hover:text-white hover:bg-slate-900/60"
-              }`}
-            >
-              {item.isBadge && <span className="text-[11px]">{item.isBadge}</span>}
-              <span>{item.label}</span>
-            </Link>
-          ))}
+          {/* Bold & Stylish Navigation Tabs */}
+          {navLinks.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all duration-150 flex items-center gap-1.5 text-[12.5px] shrink-0 font-extrabold tracking-tight ${
+                  item.isActive
+                    ? "bg-gradient-to-r from-amber-500/20 via-amber-400/25 to-yellow-500/20 text-amber-300 border border-amber-400/60 shadow-sm shadow-amber-500/20 font-black ring-1 ring-amber-400/30"
+                    : "text-slate-300 hover:text-white hover:bg-slate-800/80 border border-transparent hover:border-slate-700/80 font-bold"
+                }`}
+              >
+                {item.isLive && (
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/60" />
+                )}
+                <Icon className={`w-3.5 h-3.5 ${item.isActive ? "text-amber-400" : item.iconColor} shrink-0`} />
+                <span>{item.label}</span>
+                {item.badge && (
+                  <span className={`text-[9px] font-mono font-black px-1.5 py-0.2 rounded-md ${
+                    item.badge.includes("AI")
+                      ? "bg-purple-500/30 text-purple-300 border border-purple-400/40"
+                      : "bg-amber-400/20 text-amber-300 border border-amber-400/40"
+                  }`}>
+                    {item.badge}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
 
-          {/* More Dropdown */}
+          {/* More Dropdown (Bold & Stylish) */}
           <div className="relative shrink-0" ref={moreDropdownRef}>
             <button
               onClick={() => setMoreOpen(!moreOpen)}
-              className={`px-2.5 py-1.5 rounded-lg whitespace-nowrap transition-colors flex items-center gap-1 text-[12px] font-semibold ${
-                moreOpen ? "text-white bg-slate-900" : "text-slate-300 hover:text-white hover:bg-slate-900/60"
+              className={`px-3 py-1.5 rounded-xl whitespace-nowrap transition-all flex items-center gap-1.5 text-[12.5px] font-extrabold tracking-tight ${
+                moreOpen
+                  ? "bg-slate-800 text-white border border-slate-700 shadow-sm"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/80 border border-transparent hover:border-slate-700/80 font-bold"
               }`}
             >
               <span>More</span>
@@ -122,16 +223,17 @@ function CoinGlassSubNavInner() {
             </button>
 
             {moreOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 rounded-2xl bg-slate-900/98 backdrop-blur-xl border border-slate-800 shadow-2xl p-2 z-50 space-y-0.5 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="px-2.5 py-1 text-[10px] font-mono uppercase font-bold text-slate-500 border-b border-slate-800/80 mb-1">
-                  Additional Tools &amp; Desk
+              <div className="absolute top-full left-0 mt-2 w-64 rounded-2xl bg-slate-900/98 backdrop-blur-xl border border-slate-800 shadow-2xl p-2 z-50 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="px-2.5 py-1 text-[10px] font-mono uppercase font-black text-slate-400 border-b border-slate-800/80 mb-1 flex items-center justify-between">
+                  <span>Additional Tools</span>
+                  <span className="text-amber-400 font-mono">v4.5</span>
                 </div>
                 {moreItems.map((m) => (
                   <Link
                     key={m.label}
                     href={m.href}
                     onClick={() => setMoreOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition text-xs font-bold"
                   >
                     <m.icon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                     <span className="truncate">{m.label}</span>
@@ -143,16 +245,16 @@ function CoinGlassSubNavInner() {
 
         </div>
 
-        {/* Right Side: CoinGlass-Style Search Input Trigger with '/' badge */}
+        {/* Right Side: Bold & Stylish CoinGlass Search Button */}
         <div className="shrink-0 flex items-center">
           <button
             onClick={openSearch}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-850 text-slate-400 hover:text-slate-200 border border-slate-800 transition text-xs font-mono shadow-inner group"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/95 hover:bg-slate-850 text-slate-300 hover:text-white border border-slate-750 hover:border-amber-400/60 transition-all text-xs font-mono shadow-md shadow-black/30 group"
             title="Search Cryptocurrencies, Tools, Concepts & Articles"
           >
-            <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-400 transition-colors" />
-            <span className="hidden sm:inline font-sans text-[11px] text-slate-400">Search</span>
-            <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-300 leading-none shadow-xs">
+            <Search className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
+            <span className="hidden sm:inline font-sans text-[11px] font-bold text-slate-300">Search</span>
+            <kbd className="px-1.5 py-0.5 rounded-md bg-slate-800 border border-slate-650 text-[10px] font-black text-amber-400 leading-none shadow-xs">
               /
             </kbd>
           </button>
@@ -166,7 +268,7 @@ function CoinGlassSubNavInner() {
 export default function CoinGlassSubNav() {
   return (
     <Suspense fallback={
-      <div className="bg-[#0B0F19] border-b border-slate-800 text-slate-300 text-xs h-12 flex items-center px-4 max-w-7xl mx-auto">
+      <div className="bg-[#0B0F19] border-b border-slate-800 text-slate-300 text-xs h-13 flex items-center px-4 max-w-7xl mx-auto">
         <span className="font-extrabold text-sm text-white">bitcoincrypto</span>
       </div>
     }>
