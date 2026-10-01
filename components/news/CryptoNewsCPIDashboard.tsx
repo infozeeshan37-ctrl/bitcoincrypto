@@ -535,10 +535,10 @@ export default function CryptoNewsCPIDashboard() {
                   }}
                   disabled={loading}
                   className="px-3.5 py-2 rounded-xl text-xs font-black bg-blue-600 hover:bg-blue-500 text-white transition flex items-center gap-1.5 shrink-0 shadow-sm disabled:opacity-50"
-                  title="Force re-sync with all live crypto news wires"
+                  title="Refresh real-time institutional intelligence"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-                  <span>{loading ? "Syncing..." : "Sync Live News"}</span>
+                  <span>{loading ? "Updating..." : "Refresh Intelligence"}</span>
                 </button>
               </div>
             </div>

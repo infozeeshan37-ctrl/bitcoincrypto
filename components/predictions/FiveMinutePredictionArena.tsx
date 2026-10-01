@@ -658,14 +658,18 @@ export default function FiveMinutePredictionArena() {
       <div className="bg-slate-950 text-white rounded-2xl p-4 border border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-emerald-400 font-bold">Binance API Synchronized</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]" />
+            <Cpu className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-white font-bold">DeepQuant AI Engine</span>
+            <span className="px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-400 border border-amber-800/60 text-[10px] font-mono font-bold">
+              v4.5 LIVE
+            </span>
           </div>
           <span className="text-slate-500">•</span>
           <div className="flex items-center gap-1.5 text-slate-300">
             <Clock className="w-3.5 h-3.5 text-amber-400" />
             <span>Server Time:</span>
-            <strong className="text-amber-400">{binanceClockUtc || "Syncing..."}</strong>
+            <strong className="text-amber-400">{binanceClockUtc || "Connecting..."}</strong>
           </div>
           <span className="text-slate-500 hidden sm:inline">•</span>
           <div className="text-slate-400 hidden sm:block">
@@ -1177,7 +1181,7 @@ export default function FiveMinutePredictionArena() {
                 <span>Binance Public Market API: Connected</span>
               </div>
               <p className="text-[11px] text-emerald-700 dark:text-emerald-400">
-                Synchronized with official Binance endpoints (`api.binance.com`) with sub-second latency.
+                Direct real-time telemetry with official Binance endpoints (`api.binance.com`) with sub-second latency.
               </p>
             </div>
 

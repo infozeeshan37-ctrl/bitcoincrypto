@@ -554,7 +554,7 @@ export default function WhaleOrdersChartTerminal() {
             <div className="flex items-center gap-2 text-xs text-slate-400 font-mono mt-0.5">
               <span>Binance CLOB Spot/Futures</span>
               <span>•</span>
-              <span className="text-amber-400 font-bold">1s Synchronized Tape</span>
+              <span className="text-amber-400 font-bold">Real-Time Depth Tape</span>
             </div>
           </div>
         </div>

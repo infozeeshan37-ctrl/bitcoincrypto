@@ -24,7 +24,7 @@ interface ToolCitationWidgetProps {
 export default function ToolCitationWidget({
   toolName = "BitcoinCrypto AI Prediction & Market Suite",
   toolUrl = "https://www.bitcoincrypto.tech/predictions",
-  description = "Real-time Binance-synchronized 5-minute binary price predictions, DeepQuant neural AI bot, Coinglass liquidation heatmaps, and order book depth analytics."
+  description = "Real-time institutional Binance 5-minute binary price predictions, DeepQuant neural AI bot, Coinglass liquidation heatmaps, and order book depth analytics."
 }: ToolCitationWidgetProps) {
   const [activeTab, setActiveTab] = useState<"MARKDOWN" | "HTML" | "BIBTEX" | "BADGE">("MARKDOWN");
   const [copied, setCopied] = useState(false);

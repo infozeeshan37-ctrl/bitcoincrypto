@@ -217,7 +217,7 @@ export default function HomeLatestNewsRadar() {
             onClick={fetchNews}
             disabled={isLoading}
             className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-xs disabled:opacity-50"
-            title="Sync latest live news feeds"
+            title="Refresh real-time intelligence feeds"
           >
             <RefreshCw size={14} className={isLoading ? 'animate-spin text-amber-500' : ''} />
           </button>
@@ -272,7 +272,7 @@ export default function HomeLatestNewsRadar() {
               <Activity size={12} className="text-emerald-500 animate-pulse" />
               <span>{filteredNews.length} Stories In Feed</span>
             </span>
-            <span>Sync: {lastRefreshed}</span>
+            <span>Telemetry: {lastRefreshed}</span>
           </div>
 
           {/* Scrollable Story Cards Container */}
@@ -505,7 +505,7 @@ export default function HomeLatestNewsRadar() {
                       <Zap size={13} className="text-amber-500" />
                       <span>Affected Trading Pairs &amp; Projections</span>
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400">TradingView Sync</span>
+                    <span className="text-[10px] font-mono text-slate-400">TradingView Direct Feed</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">

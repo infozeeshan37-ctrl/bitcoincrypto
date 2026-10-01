@@ -357,10 +357,10 @@ export default function HomeAISignalsBots() {
             <button
               onClick={fetchBinancePrices}
               className="px-3.5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition flex items-center gap-1.5 shadow-sm"
-              title="Force sync Binance market prices"
+              title="Refresh quantitative market telemetry"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-              <span>Sync Prices</span>
+              <span>Refresh Feed</span>
             </button>
             <Link
               href="/tools"

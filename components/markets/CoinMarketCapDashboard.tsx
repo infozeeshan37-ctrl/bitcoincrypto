@@ -211,7 +211,7 @@ export default function CoinMarketCapDashboard() {
                 className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition flex items-center gap-2 border border-slate-700"
               >
                 <RefreshCw className={`w-3.5 h-3.5 text-amber-400 ${loading ? "animate-spin" : ""}`} />
-                <span>Sync Now</span>
+                <span>Refresh Feed</span>
               </button>
               <Link
                 href="/coinglass"

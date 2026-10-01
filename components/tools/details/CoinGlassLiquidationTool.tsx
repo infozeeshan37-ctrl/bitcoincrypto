@@ -584,7 +584,7 @@ export default function CoinGlassLiquidationTool() {
       netDelta: "-$122.05M",
       bias: "Asymmetric Bear Capitulation",
       divergence: "Macro Trend Expansion",
-      cvdStatus: "Synchronized Spot & Perp Inflows",
+      cvdStatus: "Institutional Spot & Perp Inflows",
       airPocketZone: "$89,500 - $95,000 (Multi-Tier Clearance)"
     },
     "7D": {

@@ -390,7 +390,7 @@ export default function LiquidationHeatmapRadar({ initialSymbol = "BTCUSDT" }: L
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
-                <span>Binance &amp; Bybit Futures Sync</span>
+                <span>Binance &amp; Bybit Liquidity Feed</span>
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">

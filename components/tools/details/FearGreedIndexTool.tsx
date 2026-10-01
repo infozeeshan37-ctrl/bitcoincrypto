@@ -254,7 +254,7 @@ export default function FearGreedIndexTool() {
               </span>
             </div>
             <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
-              Synced: {lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : "Live"}
+              Telemetry Active: {lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : "Live"}
             </span>
           </div>
 

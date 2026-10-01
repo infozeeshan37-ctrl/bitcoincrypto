@@ -69,7 +69,7 @@ export default function AboutPage() {
             Empowering Traders with Verifiable Crypto Intelligence &amp; AI Tools
           </h1>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            BitcoinCrypto.tech is an institutional-grade digital asset terminal delivering Binance-synchronized 5-minute binary predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, and macroeconomic research.
+            BitcoinCrypto.tech is an institutional-grade digital asset terminal delivering real-time Binance 5-minute binary predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, and macroeconomic research.
           </p>
         </div>
 
@@ -99,7 +99,7 @@ export default function AboutPage() {
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
               <Zap className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Sub-Second Binance Synchronization</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Sub-Second Binance CLOB Telemetry</h3>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               Sub-second tick updates, live 5-minute epoch rounds, and instant WebGL/Canvas candlestick and area trajectory charting.
             </p>
@@ -192,7 +192,7 @@ export default function AboutPage() {
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 space-y-2">
               <div className="text-sm font-bold text-slate-900 dark:text-white">Binance WebSocket Oracle Stream</div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Zero-latency sub-second tick streaming synchronized to global 5-minute epoch rounds.</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Zero-latency sub-second tick streaming calibrated to global 5-minute epoch rounds.</p>
             </div>
           </div>
         </div>
