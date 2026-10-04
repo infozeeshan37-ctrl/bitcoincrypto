@@ -102,26 +102,26 @@ export default function Navbar() {
         </Link>
 
         {/* Center: Desktop Navigation - Primary Tool & Terminal Tabs at the Top */}
-        <div className="hidden lg:flex items-center gap-1.5 xl:gap-2 text-sm font-medium">
+        <div className="hidden lg:flex items-center gap-1 xl:gap-1.5 text-sm font-medium">
           
           {/* 1. Signals */}
           <Link
             href="/?tab=bot"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-xs shadow-emerald-500/60" />
-            <Activity className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-xs shadow-emerald-400/80" />
+            <Activity className="w-4 h-4 text-amber-500 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Signals</span>
           </Link>
 
           {/* 2. AI Predictions */}
           <Link
             href="/predictions"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
-            <Brain className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
+            <Brain className="w-4 h-4 text-purple-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Predictions</span>
-            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
+            <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded-md bg-purple-500/15 text-purple-600 dark:text-purple-300 border border-purple-500/30 shadow-xs">
               AI 98%
             </span>
           </Link>
@@ -129,11 +129,11 @@ export default function Navbar() {
           {/* 3. Whale Orders */}
           <Link
             href="/whale-orders"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
-            <Fish className="w-4 h-4 text-indigo-500 group-hover:scale-110 transition-transform" />
+            <Fish className="w-4 h-4 text-indigo-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Whale Orders</span>
-            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
+            <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded-md bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30 shadow-xs">
               LIVE
             </span>
           </Link>
@@ -141,20 +141,20 @@ export default function Navbar() {
           {/* 4. Markets */}
           <Link
             href="/markets"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
-            <Coins className="w-4 h-4 text-emerald-500 group-hover:scale-110 transition-transform" />
+            <Coins className="w-4 h-4 text-emerald-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Markets</span>
           </Link>
 
           {/* 5. Derivatives */}
           <Link
             href="/coinglass"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
-            <Flame className="w-4 h-4 text-rose-500 group-hover:scale-110 transition-transform" />
+            <Flame className="w-4 h-4 text-rose-500 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Derivatives</span>
-            <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60">
+            <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded-md bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30 shadow-xs">
               OI &amp; Liq
             </span>
           </Link>
@@ -162,18 +162,18 @@ export default function Navbar() {
           {/* 6. Order Book */}
           <Link
             href="/orderbook"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
-            <Activity className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
+            <Activity className="w-4 h-4 text-amber-500 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Order Book</span>
           </Link>
 
           {/* 7. Research Desk */}
           <Link
             href="/blog"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition font-bold text-xs group"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
-            <LineChart className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
+            <LineChart className="w-4 h-4 text-blue-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Research</span>
           </Link>
 
