@@ -195,12 +195,12 @@ function CoinGlassSubNavInner() {
   ];
 
   return (
-    <div className="relative bg-[#070A12]/98 backdrop-blur-2xl border-b border-slate-800/90 text-slate-200 select-none text-xs sticky top-20 z-40 shadow-xl shadow-black/40">
+    <div className="relative bg-[#070A12] border-b border-slate-800 text-slate-200 select-none text-xs sticky top-20 z-40 shadow-xl shadow-black/40">
       
-      {/* Dimmed backdrop when mega dropdown is open */}
+      {/* 100% Solid Dimmed Backdrop Overlay (Ensures ZERO background bleed-through) */}
       {(ecosystemOpen || moreOpen) && (
         <div
-          className="fixed inset-0 top-[116px] bg-black/60 backdrop-blur-xs z-40 transition-opacity duration-200"
+          className="fixed inset-0 bg-black/85 backdrop-blur-md z-40 transition-opacity duration-200"
           onClick={() => {
             setEcosystemOpen(false);
             setMoreOpen(false);
@@ -221,7 +221,7 @@ function CoinGlassSubNavInner() {
             className={`px-3.5 py-2 rounded-xl whitespace-nowrap transition-all duration-200 flex items-center gap-2 text-[13px] font-black tracking-tight border cursor-pointer group ${
               ecosystemOpen
                 ? "bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 border-amber-300 shadow-lg shadow-amber-500/30 scale-[1.02]"
-                : "bg-slate-900/90 text-slate-100 hover:text-white hover:bg-slate-800 border-slate-700/90 hover:border-amber-400/80 shadow-sm"
+                : "bg-slate-900 text-slate-100 hover:text-white hover:bg-slate-800 border-slate-700 hover:border-amber-400/80 shadow-sm"
             }`}
           >
             <Sparkles className={`w-4 h-4 transition-transform duration-200 group-hover:rotate-12 ${ecosystemOpen ? "text-slate-950" : "text-amber-400"}`} />
@@ -271,20 +271,20 @@ function CoinGlassSubNavInner() {
               }}
               className={`px-3 py-2 rounded-xl whitespace-nowrap transition-all duration-150 flex items-center gap-1.5 text-[12.5px] font-black tracking-tight border cursor-pointer ${
                 moreOpen
-                  ? "bg-slate-800 text-white border-amber-400/70 shadow-md ring-1 ring-amber-400/30"
-                  : "bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 border-slate-750 hover:border-slate-650"
+                  ? "bg-slate-800 text-white border-amber-400 shadow-md ring-1 ring-amber-400/30"
+                  : "bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 border-slate-700 hover:border-slate-600"
               }`}
             >
               <span>More</span>
               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${moreOpen ? "rotate-180 text-amber-400" : "text-slate-400"}`} />
             </button>
 
-            {/* More Menu Dropdown Popup */}
+            {/* More Menu Dropdown Popup (100% Solid Opaque Background) */}
             {moreOpen && (
-              <div className="absolute top-full right-0 mt-2 w-80 rounded-3xl bg-slate-900/98 backdrop-blur-2xl border border-slate-750 shadow-2xl p-3 z-50 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-150 ring-1 ring-black/40">
-                <div className="px-3 py-1.5 text-[10px] font-mono uppercase font-black text-slate-400 border-b border-slate-800 flex items-center justify-between">
+              <div className="absolute top-full right-0 mt-2 w-80 rounded-3xl bg-[#0B0F19] border-2 border-slate-700 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] p-3.5 z-50 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-150 ring-1 ring-amber-400/20">
+                <div className="px-3 py-1.5 text-[10px] font-mono uppercase font-black text-amber-400 border-b border-slate-800 flex items-center justify-between">
                   <span>Additional Quant Tools</span>
-                  <span className="text-amber-400 font-bold">10 Pro Utilities</span>
+                  <span className="text-slate-400 font-bold">10 Pro Utilities</span>
                 </div>
 
                 <div className="space-y-1 pt-1">
@@ -293,10 +293,10 @@ function CoinGlassSubNavInner() {
                       key={m.label}
                       href={m.href}
                       onClick={() => setMoreOpen(false)}
-                      className="flex items-center justify-between p-2.5 rounded-2xl text-slate-200 hover:text-white hover:bg-slate-800/90 border border-transparent hover:border-slate-700/80 transition group"
+                      className="flex items-center justify-between p-2.5 rounded-2xl bg-[#131826] hover:bg-[#1D243A] text-slate-200 hover:text-white border border-slate-800/90 hover:border-amber-400/60 transition group shadow-sm"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-8 h-8 rounded-xl bg-slate-800/80 group-hover:bg-amber-400/20 text-amber-400 flex items-center justify-center shrink-0 transition-colors">
+                        <div className="w-8 h-8 rounded-xl bg-slate-800 group-hover:bg-amber-400/20 text-amber-400 flex items-center justify-center shrink-0 transition-colors">
                           <m.icon className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
@@ -316,7 +316,7 @@ function CoinGlassSubNavInner() {
                   ))}
                 </div>
 
-                <div className="pt-2 border-t border-slate-800/80 px-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="pt-2 border-t border-slate-800 px-2 flex items-center justify-between text-[11px] font-mono text-slate-400">
                   <span>Need help?</span>
                   <Link
                     href="/contact"
@@ -334,7 +334,7 @@ function CoinGlassSubNavInner() {
           <button
             type="button"
             onClick={openSearch}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-750 hover:border-amber-400/70 transition-all text-xs font-mono shadow-md shadow-black/30 group cursor-pointer"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 hover:border-amber-400/70 transition-all text-xs font-mono shadow-md shadow-black/30 group cursor-pointer"
             title="Search Cryptocurrencies, Tools, Concepts & Articles (Press /)"
           >
             <Search className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform" />
@@ -348,35 +348,38 @@ function CoinGlassSubNavInner() {
 
       </div>
 
-      {/* 4. MEGA-MENU: 'Explore Ecosystem' Full Panel (Positioned cleanly at subnav root without overflow clipping) */}
+      {/* 4. MEGA-MENU: 'Explore Ecosystem' Full Panel (100% Solid Opaque Obsidian Background) */}
       {ecosystemOpen && (
         <div className="absolute top-full left-0 right-0 max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 pt-2 z-50 pointer-events-auto">
-          <div className="rounded-3xl bg-slate-900/98 backdrop-blur-2xl border border-slate-750 shadow-2xl p-5 sm:p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-black/50">
+          <div className="rounded-3xl bg-[#0B0F19] border-2 border-slate-700 shadow-[0_30px_90px_rgba(0,0,0,0.98)] p-5 sm:p-6 space-y-4 animate-in fade-in zoom-in-95 duration-150 ring-1 ring-amber-400/20 max-h-[85vh] overflow-y-auto no-scrollbar">
             
+            {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-400 to-yellow-400 text-slate-950 flex items-center justify-center font-black text-sm">
+                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-400 text-slate-950 flex items-center justify-center font-black text-base shadow-md shadow-amber-500/25">
                   ₿
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-white">BitcoinCrypto Intelligence Ecosystem</h3>
-                  <p className="text-[11px] text-slate-400">Institutional derivatives, AI prediction engines & algorithmic suites</p>
+                  <h3 className="text-sm font-black text-white tracking-tight">BitcoinCrypto Intelligence Ecosystem</h3>
+                  <p className="text-[11px] text-slate-400">Institutional derivatives, AI prediction engines &amp; algorithmic trading suites</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setEcosystemOpen(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent hover:border-slate-700 transition"
+                className="p-2 rounded-xl text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 transition cursor-pointer"
+                title="Close Menu (Esc)"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
+            {/* 4 Solid Opaque Columns */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               
               {/* Column 1: Derivatives & Live Flow */}
-              <div className="space-y-2 p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80">
-                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-rose-400 border-b border-slate-800/80">
+              <div className="space-y-2 p-3.5 rounded-2xl bg-[#131826] border border-slate-850 shadow-md">
+                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-rose-400 border-b border-slate-800">
                   <Flame className="w-3.5 h-3.5" />
                   <span>Derivatives &amp; Tape</span>
                 </div>
@@ -385,11 +388,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/coinglass"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <BarChart2 className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-rose-300 transition block">Open Interest Table</span>
+                      <span className="font-black text-xs text-white group-hover:text-rose-300 transition block">Open Interest Table</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Perpetual OI &amp; 24h token drift</span>
                     </div>
                   </Link>
@@ -397,11 +400,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/funding-rate-screener"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Percent className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-cyan-300 transition block">Funding Screener</span>
+                      <span className="font-black text-xs text-white group-hover:text-cyan-300 transition block">Funding Screener</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">8h rates &amp; basis arbitrage APY</span>
                     </div>
                   </Link>
@@ -409,11 +412,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/liquidation-heatmap"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Flame className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-orange-300 transition block">Liquidation Heatmap</span>
+                      <span className="font-black text-xs text-white group-hover:text-orange-300 transition block">Liquidation Heatmap</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Resting squeeze liquidity walls</span>
                     </div>
                   </Link>
@@ -421,11 +424,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/orderbook"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Activity className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-amber-300 transition block">L2 Order Book</span>
+                      <span className="font-black text-xs text-white group-hover:text-amber-300 transition block">L2 Order Book</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Aggregated market depth &amp; walls</span>
                     </div>
                   </Link>
@@ -433,11 +436,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/whale-orders"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Fish className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-indigo-300 transition block">Whale Radar</span>
+                      <span className="font-black text-xs text-white group-hover:text-indigo-300 transition block">Whale Radar</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Sub-second block tape (&gt;$10M)</span>
                     </div>
                   </Link>
@@ -445,8 +448,8 @@ function CoinGlassSubNavInner() {
               </div>
 
               {/* Column 2: AI & Quantitative Intelligence */}
-              <div className="space-y-2 p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80">
-                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-purple-400 border-b border-slate-800/80">
+              <div className="space-y-2 p-3.5 rounded-2xl bg-[#131826] border border-slate-850 shadow-md">
+                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-purple-400 border-b border-slate-800">
                   <Brain className="w-3.5 h-3.5" />
                   <span>AI &amp; Predictions</span>
                 </div>
@@ -455,11 +458,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/predictions"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Brain className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-purple-300 transition block">AI Price Predictions</span>
+                      <span className="font-black text-xs text-white group-hover:text-purple-300 transition block">AI Price Predictions</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">36 coins 5m/24h/7d forecast</span>
                     </div>
                   </Link>
@@ -467,11 +470,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/trading-bot"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Zap className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-amber-300 transition block">AI Signals Copilot</span>
+                      <span className="font-black text-xs text-white group-hover:text-amber-300 transition block">AI Signals Copilot</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Algorithmic execution signals</span>
                     </div>
                   </Link>
@@ -479,11 +482,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/cpi"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-amber-300 transition block">US CPI Neural AI</span>
+                      <span className="font-black text-xs text-white group-hover:text-amber-300 transition block">US CPI Neural AI</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Inflation forecast &amp; Fed odds</span>
                     </div>
                   </Link>
@@ -491,11 +494,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/dca-simulator"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Sliders className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-yellow-300 transition block">DCA Cycle Simulator</span>
+                      <span className="font-black text-xs text-white group-hover:text-yellow-300 transition block">DCA Cycle Simulator</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Multi-cycle backtest (2017-2026)</span>
                     </div>
                   </Link>
@@ -503,8 +506,8 @@ function CoinGlassSubNavInner() {
               </div>
 
               {/* Column 3: Calculators & Risk Management */}
-              <div className="space-y-2 p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80">
-                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-emerald-400 border-b border-slate-800/80">
+              <div className="space-y-2 p-3.5 rounded-2xl bg-[#131826] border border-slate-850 shadow-md">
+                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-emerald-400 border-b border-slate-800">
                   <Calculator className="w-3.5 h-3.5" />
                   <span>Calculators &amp; Risk</span>
                 </div>
@@ -513,11 +516,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/position-sizer"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Target className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-emerald-300 transition block">Risk &amp; Position Sizer</span>
+                      <span className="font-black text-xs text-white group-hover:text-emerald-300 transition block">Risk &amp; Position Sizer</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Kelly Criterion &amp; ATR stops</span>
                     </div>
                   </Link>
@@ -525,11 +528,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/profit-calculator"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Calculator className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-emerald-300 transition block">Profit &amp; Leverage ROI</span>
+                      <span className="font-black text-xs text-white group-hover:text-emerald-300 transition block">Profit &amp; Leverage ROI</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">1x-100x P&amp;L &amp; liquidation math</span>
                     </div>
                   </Link>
@@ -537,11 +540,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/fear-greed-index"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Gauge className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-yellow-300 transition block">Fear &amp; Greed Radar</span>
+                      <span className="font-black text-xs text-white group-hover:text-yellow-300 transition block">Fear &amp; Greed Radar</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Live 0-100 sentiment gauge</span>
                     </div>
                   </Link>
@@ -549,11 +552,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/tools/crypto-converter"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <RefreshCw className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-cyan-300 transition block">Crypto-Fiat Converter</span>
+                      <span className="font-black text-xs text-white group-hover:text-cyan-300 transition block">Crypto-Fiat Converter</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Real-time forex exchange rates</span>
                     </div>
                   </Link>
@@ -561,8 +564,8 @@ function CoinGlassSubNavInner() {
               </div>
 
               {/* Column 4: Masterclasses & Research */}
-              <div className="space-y-2 p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800/80">
-                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-sky-400 border-b border-slate-800/80">
+              <div className="space-y-2 p-3.5 rounded-2xl bg-[#131826] border border-slate-850 shadow-md">
+                <div className="flex items-center gap-1.5 px-1 pb-2 text-[11px] font-mono font-black uppercase tracking-wider text-sky-400 border-b border-slate-800">
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>Research &amp; Learn</span>
                 </div>
@@ -571,11 +574,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/concepts"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Compass className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-sky-300 transition block">12 Masterclasses</span>
+                      <span className="font-black text-xs text-white group-hover:text-sky-300 transition block">12 Masterclasses</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Order book, CVD &amp; funding guides</span>
                     </div>
                   </Link>
@@ -583,11 +586,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/blog"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <LineChart className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-sky-300 transition block">Research Desk</span>
+                      <span className="font-black text-xs text-white group-hover:text-sky-300 transition block">Research Desk</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Quantitative macro analysis</span>
                     </div>
                   </Link>
@@ -595,11 +598,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/news"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Radio className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-sky-300 transition block">Macro News Wire</span>
+                      <span className="font-black text-xs text-white group-hover:text-sky-300 transition block">Macro News Wire</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Fed rate odds &amp; market drivers</span>
                     </div>
                   </Link>
@@ -607,11 +610,11 @@ function CoinGlassSubNavInner() {
                   <Link
                     href="/markets"
                     onClick={() => setEcosystemOpen(false)}
-                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/80 transition group"
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-[#1D243A] transition group"
                   >
                     <Coins className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold text-xs text-white group-hover:text-amber-300 transition block">Top 50+ Spot Markets</span>
+                      <span className="font-black text-xs text-white group-hover:text-amber-300 transition block">Top 50+ Spot Markets</span>
                       <span className="text-[10px] text-slate-400 leading-snug block">Volume, dominance &amp; depth</span>
                     </div>
                   </Link>
@@ -627,7 +630,7 @@ function CoinGlassSubNavInner() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span>Sub-Second Telemetry Connected (Binance &amp; CoinGlass Nodes)</span>
+                <span className="text-slate-300">Sub-Second Telemetry Connected (Binance &amp; CoinGlass Nodes)</span>
               </div>
               <div className="flex items-center gap-3">
                 <Link
