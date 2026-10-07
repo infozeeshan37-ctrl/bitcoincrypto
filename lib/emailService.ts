@@ -174,28 +174,43 @@ export async function sendWelcomeEmail({ recipientEmail, selectedTopics, frequen
   // 1. Try Resend API if RESEND_API_KEY is available
   const resendApiKey = process.env.RESEND_API_KEY;
   if (resendApiKey) {
-    try {
-      const res = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: process.env.NEWSLETTER_FROM_EMAIL || "BitcoinCrypto Research <research@bitcoincrypto.tech>",
-          to: [recipientEmail],
-          subject: "Welcome to BitcoinCrypto Research Desk (VIP Access Pass + Issue #142)",
-          html: htmlContent,
-          text: textContent,
-        }),
-      });
+    const fromCandidates = [
+      process.env.RESEND_FROM_EMAIL || process.env.NEWSLETTER_FROM_EMAIL,
+      "BitcoinCrypto Research <onboarding@resend.dev>",
+      "BitcoinCrypto Research <research@bitcoincrypto.tech>",
+    ].filter(Boolean) as string[];
 
-      if (res.ok) {
-        const json = await res.json();
-        return { success: true, delivered: true, transport: `resend:${json.id}` };
+    // Remove duplicates
+    const uniqueFromList = Array.from(new Set(fromCandidates));
+
+    for (const fromAddress of uniqueFromList) {
+      try {
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: fromAddress,
+            to: [recipientEmail],
+            subject: "Welcome to BitcoinCrypto Research Desk (VIP Access Pass + Issue #142)",
+            html: htmlContent,
+            text: textContent,
+          }),
+        });
+
+        if (res.ok) {
+          const json = await res.json();
+          console.log(`[RESEND SUCCESS] Email successfully dispatched to ${recipientEmail} (ID: ${json.id}, From: ${fromAddress})`);
+          return { success: true, delivered: true, transport: `resend:${json.id}` };
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          console.warn(`[RESEND ATTEMPT FAILED with from="${fromAddress}"]:`, errData);
+        }
+      } catch (e: any) {
+        console.warn("Resend email dispatch error:", e);
       }
-    } catch (e: any) {
-      console.warn("Resend email dispatch warning:", e);
     }
   }
 
