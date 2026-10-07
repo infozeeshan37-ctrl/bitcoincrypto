@@ -106,7 +106,7 @@ function CoinGlassSubNavInner() {
       activeColor: "from-orange-500/25 via-orange-500/15 to-transparent border-orange-500/60 text-orange-300"
     },
     {
-      label: "Supercharts",
+      label: "TradingView",
       href: "/tools/chart-terminal",
       isActive: pathname === "/tools/chart-terminal" || activeTab === "terminal",
       icon: LineChart,
