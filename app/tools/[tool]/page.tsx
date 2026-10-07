@@ -20,9 +20,7 @@ import {
 } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AITradingBotTerminal from "@/components/tools/AITradingBotTerminal";
-import TradingViewAdvancedChart from "@/components/tools/TradingViewAdvancedChart";
-import TechnicalAnalysisPanel from "@/components/tools/TechnicalAnalysisPanel";
-import ChartTerminalDetails from "@/components/tools/details/ChartTerminalDetails";
+import ChartTerminalTool from "@/components/tools/details/ChartTerminalTool";
 import DCASimulatorDetails from "@/components/tools/details/DCASimulatorDetails";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 import FundingRateScreenerTool from "@/components/tools/details/FundingRateScreenerTool";
@@ -377,26 +375,7 @@ export default async function DedicatedToolPage({ params }: PageProps) {
         <section className="space-y-6">
           {tool.slug === "trading-bot" && <AITradingBotTerminal />}
 
-          {tool.slug === "chart-terminal" && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <TradingViewAdvancedChart symbol="BINANCE:BTCUSDT" />
-                </div>
-                <div>
-                  <TechnicalAnalysisPanel
-                    symbol="BINANCE:BTCUSDT"
-                    price={88450}
-                    high24h={90200}
-                    low24h={86400}
-                    change24h={2.4}
-                    defaultInterval="1D"
-                  />
-                </div>
-              </div>
-              <ChartTerminalDetails />
-            </div>
-          )}
+          {tool.slug === "chart-terminal" && <ChartTerminalTool />}
 
           {tool.slug === "dca-simulator" && (
             <div className="space-y-6">
