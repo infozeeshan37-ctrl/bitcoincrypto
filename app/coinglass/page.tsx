@@ -4,6 +4,7 @@ import CoinglassDashboard from "@/components/coinglass/CoinglassDashboard";
 import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquidationTool";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import { CoinglassPageJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
@@ -62,6 +63,14 @@ export default function CoinglassPage() {
         <section className="pt-6 border-t border-slate-200 dark:border-slate-800">
           <CoinGlassLiquidationTool />
         </section>
+
+        {/* Verified Primary Sources & Authority Citation Grid */}
+        <AuthoritativeCitations
+          title="Official Derivatives & Liquidation Primary Data Sources"
+          description="Aggregated multi-exchange liquidation pools, 8-hour funding rates, and resting open interest contracts are synchronized via official WebSocket endpoints."
+          pageUrl="https://www.bitcoincrypto.tech/coinglass"
+          pageTitle="CoinGlass Liquidation Heatmap & Multi-Exchange Derivatives Radar"
+        />
 
         <ToolCitationWidget
           toolName="BitcoinCrypto CoinGlass Liquidation & Derivatives Heatmap"

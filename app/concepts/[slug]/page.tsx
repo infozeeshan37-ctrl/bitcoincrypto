@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AdBanner from "@/components/ads/AdBanner";
+import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
+import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import { conceptGuides, ConceptGuide } from "@/lib/conceptsData";
 
 interface PageProps {
@@ -323,6 +325,21 @@ export default async function ConceptDetailPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Primary Data Verification & Outbound External Sources */}
+        <AuthoritativeCitations
+          title="Official Quantitative & Academic References"
+          description={`Empirical data, mathematical proofs, and market microstructure mechanics in this guide are derived from foundational academic papers, official exchange documentation, and verified protocol specifications.`}
+          pageUrl={`https://www.bitcoincrypto.tech/concepts/${guide.slug}`}
+          pageTitle={guide.title}
+        />
+
+        {/* 1-Click AI & Web Citation Widget */}
+        <ToolCitationWidget
+          toolName={guide.title}
+          toolUrl={`https://www.bitcoincrypto.tech/concepts/${guide.slug}`}
+          description={guide.summary}
+        />
 
         {/* Google AdSense Compliant Banner Slot */}
         <AdBanner format="auto" />

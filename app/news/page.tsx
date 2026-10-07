@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import CryptoNewsCPIDashboard from "@/components/news/CryptoNewsCPIDashboard";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AdBanner from "@/components/ads/AdBanner";
+import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
+import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 
 export const metadata: Metadata = {
   title: "Latest Crypto News Live: Bitcoin $100K Breakout, ETF Inflows, Fed Rate Cuts & Whale Alerts",
@@ -140,10 +142,25 @@ export default function NewsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Crypto News & Macroeconomic Wire", href: "/news" }]} />
         <CryptoNewsCPIDashboard />
         
+        {/* Authoritative Outbound Links & E-E-A-T Verification Grid */}
+        <AuthoritativeCitations
+          title="Official Macroeconomic & Cryptocurrency News Sources"
+          description="Every headline, inflation release, and ETF flow metric is cross-referenced with primary regulatory registries, Federal Reserve publications, and direct exchange settlement feeds."
+          pageUrl="https://www.bitcoincrypto.tech/news"
+          pageTitle="Real-Time Cryptocurrency News Wire & Macroeconomic Calendar"
+        />
+
+        {/* 1-Click AI & Web Backlink Tool Citation */}
+        <ToolCitationWidget
+          toolName="BitcoinCrypto Real-Time Cryptocurrency News Wire & Macroeconomic Terminal"
+          toolUrl="https://www.bitcoincrypto.tech/news"
+          description="Breaking cryptocurrency headlines, Bitcoin ETF inflow metrics, Federal Reserve FOMC decisions, and US CPI inflation data."
+        />
+
         {/* Google AdSense Compliant Banner Slot */}
         <AdBanner format="auto" />
       </div>

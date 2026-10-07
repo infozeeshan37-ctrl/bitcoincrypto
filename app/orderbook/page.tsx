@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import OrderbookTerminal from "@/components/orderbook/OrderbookTerminal";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
+import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
   title: "Real-Time Crypto Order Book Depth & CVD Scanner | BitcoinCrypto.tech",
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
     "level 2 crypto data free"
   ],
   alternates: {
-    canonical: "/orderbook",
+    canonical: "https://www.bitcoincrypto.tech/orderbook",
   },
   openGraph: {
     title: "Real-Time Crypto Order Book Depth & CVD Scanner | BitcoinCrypto.tech",
@@ -52,11 +54,22 @@ export default function OrderbookPage() {
           <OrderbookTerminal />
         </Suspense>
 
+        {/* Primary Data Verification & Outbound Links */}
+        <AuthoritativeCitations
+          title="Official Level-2 Market Depth & Order Flow Standards"
+          description="High-frequency order book snapshots and sub-second taker executions are benchmarked against official direct exchange WebSocket feeds and market microstructure standards."
+          pageUrl="https://www.bitcoincrypto.tech/orderbook"
+          pageTitle="Real-Time Level-2 Order Book Depth & CVD Terminal"
+        />
+
         <ToolCitationWidget
           toolName="BitcoinCrypto L2 Order Book & CVD Scanner"
           toolUrl="https://www.bitcoincrypto.tech/orderbook"
           description="Real-time Level-2 order book depth visualization, bid/ask wall imbalance detector, and CVD taker flow tracker."
         />
+
+        {/* Google AdSense Compliant Banner Slot */}
+        <AdBanner format="auto" />
       </div>
     </main>
   );

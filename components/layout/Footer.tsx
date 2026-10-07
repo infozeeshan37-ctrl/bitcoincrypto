@@ -16,7 +16,15 @@ import {
   AlertTriangle,
   Cookie,
   Mail,
-  Info
+  Info,
+  Database,
+  Globe2,
+  Share2,
+  Send,
+  MessageSquare,
+  BookOpen,
+  Landmark,
+  Radio
 } from "lucide-react";
 import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
@@ -29,7 +37,7 @@ export default function Footer() {
         {/* Main Grid (5 Columns) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-850">
           
-          {/* Col 1: Brand Info */}
+          {/* Col 1: Brand Info & Social Reach */}
           <div className="sm:col-span-2 lg:col-span-1 space-y-4">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-md shadow-amber-500/20">
@@ -45,6 +53,51 @@ export default function Footer() {
             <div className="flex items-center gap-2 text-slate-400 text-xs pt-1">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>Independent Real-Time Data &amp; Neural Models</span>
+            </div>
+
+            {/* Social Reach & Community Buttons */}
+            <div className="pt-2 space-y-2">
+              <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                Community &amp; Reach:
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href="https://twitter.com/bitcoincrypto"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition"
+                  title="Follow on X (Twitter)"
+                >
+                  <span className="font-bold text-xs">𝕏</span>
+                </a>
+                <a
+                  href="https://t.me/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-xl bg-slate-900 hover:bg-sky-950/80 text-slate-300 hover:text-sky-300 border border-slate-800 transition"
+                  title="Join Telegram Channel"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href="https://www.reddit.com/r/CryptoCurrency/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-xl bg-slate-900 hover:bg-orange-950/80 text-slate-300 hover:text-orange-300 border border-slate-800 transition"
+                  title="Reddit Community"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href="https://github.com/infozeeshan37-ctrl/bitcoincrypto"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition"
+                  title="GitHub Repository"
+                >
+                  <span className="font-mono text-xs font-bold">&lt;/&gt;</span>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -124,6 +177,15 @@ export default function Footer() {
                   GitHub Repository <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
+              <li>
+                <a
+                  href="/llms.txt"
+                  target="_blank"
+                  className="text-amber-400 hover:underline flex items-center gap-1 font-mono"
+                >
+                  LLMs.txt Standard <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -164,6 +226,43 @@ export default function Footer() {
             </ul>
           </div>
 
+        </div>
+
+        {/* External Authoritative Primary Sources & Regulatory Directory */}
+        <div className="space-y-3 pt-2 border-b border-slate-800 pb-8">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <Landmark className="w-3.5 h-3.5 text-amber-400" />
+              Official External Data Sources &amp; Regulatory References (E-E-A-T Verified):
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-[11px]">
+            {[
+              { label: "US BLS (CPI Inflation)", url: "https://www.bls.gov/cpi/" },
+              { label: "St. Louis Fed (FRED)", url: "https://fred.stlouisfed.org/" },
+              { label: "US SEC (EDGAR Filings)", url: "https://www.sec.gov/edgar/searchedgar/companysearch" },
+              { label: "Federal Reserve FOMC", url: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" },
+              { label: "Binance API Docs", url: "https://developers.binance.com/" },
+              { label: "TradingView Charts", url: "https://www.tradingview.com/" },
+              { label: "CoinGlass Portal", url: "https://www.coinglass.com/" },
+              { label: "CoinMarketCap", url: "https://coinmarketcap.com/" },
+              { label: "CoinGecko API", url: "https://www.coingecko.com/" },
+              { label: "DefiLlama TVL", url: "https://defillama.com/" },
+              { label: "Bitcoin Whitepaper", url: "https://bitcoin.org/bitcoin.pdf" },
+              { label: "Ethereum.org Specs", url: "https://ethereum.org/" },
+            ].map((ext) => (
+              <a
+                key={ext.label}
+                href={ext.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-850 hover:text-amber-300 text-slate-400 border border-slate-800 transition font-mono flex items-center justify-between"
+              >
+                <span>{ext.label}</span>
+                <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* SEO Cross-Linking Directory Section: CoinGlass Liquidation & Derivatives */}

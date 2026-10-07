@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import WhaleOrdersTerminal from "@/components/whales/WhaleOrdersTerminal";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
+import AdBanner from "@/components/ads/AdBanner";
 import { WhaleOrdersPageJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
   description:
     "Real-time cryptocurrency whale order tracking, multi-million dollar institutional block trades, resting limit buy/sell walls, and CoinGlass-style liquidity heatmaps on BitcoinCrypto.tech.",
   alternates: {
-    canonical: "/whale-orders",
+    canonical: "https://www.bitcoincrypto.tech/whale-orders",
   },
   openGraph: {
     title: "Whale Orders & Institutional Liquidity Radar | BitcoinCrypto.tech",
@@ -51,11 +53,22 @@ export default function WhaleOrdersPage() {
           <WhaleOrdersTerminal />
         </Suspense>
 
+        {/* Primary Outbound Links & E-E-A-T Data Verification */}
+        <AuthoritativeCitations
+          title="Official On-Chain & Institutional Order Flow References"
+          description="Large block trades ($100K+), whale wallet balances, and iceberg execution detection are cross-verified against multi-exchange WebSocket feeds and transparent on-chain blockchain explorers."
+          pageUrl="https://www.bitcoincrypto.tech/whale-orders"
+          pageTitle="Real-Time Cryptocurrency Whale Orders & Institutional Liquidity Radar"
+        />
+
         <ToolCitationWidget
           toolName="BitcoinCrypto Institutional Whale Orders & Liquidity Wall Radar"
           toolUrl="https://www.bitcoincrypto.tech/whale-orders"
           description="Real-time institutional block trade monitoring ($100K+ to $10M+) and CoinGlass-style liquidity wall ladder."
         />
+
+        {/* Google AdSense Compliant Banner Slot */}
+        <AdBanner format="auto" />
       </div>
     </main>
   );

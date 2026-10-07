@@ -2,14 +2,16 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
+import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
   title: "US CPI Inflation Intelligence & AI Crypto Price Predictor | BitcoinCrypto.tech",
   description:
     "Examine real-time macroeconomic indicators, historical CPI release history vs Bitcoin price impact, and AI predictive scenario modeling for upcoming US Bureau of Labor Statistics (BLS) inflation prints.",
   alternates: {
-    canonical: "/cpi",
+    canonical: "https://www.bitcoincrypto.tech/cpi",
   },
   openGraph: {
     title: "US CPI Inflation Intelligence & AI Crypto Price Predictor | BitcoinCrypto.tech",
@@ -40,11 +42,22 @@ export default function CPIPage() {
           <CPIMacroAIPredictor />
         </Suspense>
 
+        {/* Primary External Sources & Institutional Citation */}
+        <AuthoritativeCitations
+          title="Official Macroeconomic & Inflation Primary Sources"
+          description="Benchmark predictive estimates against official publications from the US Bureau of Labor Statistics, Federal Reserve Economic Data (FRED), and Cleveland Fed Inflation Nowcasting models."
+          pageUrl="https://www.bitcoincrypto.tech/cpi"
+          pageTitle="US CPI Inflation AI Predictor & Crypto Volatility Radar"
+        />
+
         <ToolCitationWidget
           toolName="BitcoinCrypto US CPI Macro Inflation & Crypto Volatility Forecaster"
           toolUrl="https://www.bitcoincrypto.tech/cpi"
           description="BLS inflation forecast models, Fed interest rate decision probabilities, and historical Bitcoin price volatility impact."
         />
+
+        {/* Google AdSense Compliant Banner Slot */}
+        <AdBanner format="auto" />
       </div>
     </main>
   );
