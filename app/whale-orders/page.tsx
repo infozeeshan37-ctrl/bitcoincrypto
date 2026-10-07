@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import WhaleOrdersTerminal from "@/components/whales/WhaleOrdersTerminal";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import { WhaleOrdersPageJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
   title: "Whale Orders & Institutional Liquidity Heatmap Radar | BitcoinCrypto.tech",
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
 export default function WhaleOrdersPage() {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 sm:py-12 transition-colors">
+      <WhaleOrdersPageJsonLd />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <Breadcrumbs
           items={[

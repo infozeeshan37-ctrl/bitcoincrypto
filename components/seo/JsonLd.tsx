@@ -476,3 +476,80 @@ export function CoinglassPageJsonLd() {
     />
   );
 }
+
+export function WhaleOrdersPageJsonLd() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://www.bitcoincrypto.tech/whale-orders#webpage",
+        url: "https://www.bitcoincrypto.tech/whale-orders",
+        name: "Whale Orders & Institutional Liquidity Heatmap Radar | BitcoinCrypto.tech",
+        isPartOf: {
+          "@id": "https://www.bitcoincrypto.tech/#website",
+        },
+        description:
+          "Real-time cryptocurrency whale order tracking, multi-million dollar institutional block trades, resting limit buy/sell walls, Cumulative Volume Delta (CVD), and CoinGlass-style liquidity heatmaps on BitcoinCrypto.tech.",
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "BitcoinCrypto Institutional Whale Orders & Block Trade Radar",
+        applicationCategory: "FinanceApplication",
+        operatingSystem: "Web",
+        url: "https://www.bitcoincrypto.tech/whale-orders",
+        offers: {
+          "@type": "Offer",
+          price: "0.00",
+          priceCurrency: "USD",
+        },
+        featureList: [
+          "Real-Time Binance WebSocket Direct Spot Price Blinking Stream",
+          "Institutional Block Trade Detection ($100K+ to $10M+)",
+          "Cumulative Volume Delta (CVD) & Net Accumulation Timeline Chart",
+          "Whale Block Trade Spectrogram (Time vs Price vs Size Bubble Map)",
+          "CoinGlass-Style Resting Limit Orderbook Walls & Proximity Radar",
+          "Iceberg Execution and Spoofing Pattern Diagnostics"
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "What are crypto whale orders and how do institutional block trades work?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Whales are institutional market participants, hedge funds, and miners executing multi-million dollar trades. To avoid massive price slippage, they use Iceberg algorithms, TWAP (Time-Weighted Average Price) orders, and dark pool crosses to break large executions into smaller algorithmic slices across Binance, Coinbase Prime, and CME.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "How does Cumulative Volume Delta (CVD) indicate whale accumulation?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Cumulative Volume Delta (CVD) measures the cumulative net difference between aggressive market buying and selling volume. When price is moving sideways or falling while CVD is making higher highs, it signals Bullish CVD Absorption Divergence—institutions are silently absorbing retail selling pressure.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "How can retail traders trade alongside whale limit walls?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Traders can place limit buy orders immediately in front of verified whale support bid walls, position invalidation stop-losses behind the wall depth, and take profits into heavy overhead resistance ask clusters before price reverses.",
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+

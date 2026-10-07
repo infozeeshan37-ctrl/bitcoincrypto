@@ -548,13 +548,31 @@ export default function WhaleOrdersChartTerminal() {
             {activeCoinObj.icon}
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-              <span>{activeCoinObj.base} Whale Orders &amp; Large Trades</span>
-            </h2>
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+                <span>{activeCoinObj.base} Whale Orders &amp; Large Trades</span>
+              </h2>
+              <div
+                className={`px-2.5 py-0.5 rounded-lg text-xs font-mono font-black border transition-all duration-300 ${
+                  priceTick === "up"
+                    ? "bg-emerald-950/80 text-emerald-400 border-emerald-500 shadow-md shadow-emerald-500/20 flash-border-up"
+                    : priceTick === "down"
+                    ? "bg-rose-950/80 text-rose-400 border-rose-500 shadow-md shadow-rose-500/20 flash-border-down"
+                    : "bg-[#0d1117] text-white border-slate-700"
+                }`}
+              >
+                ${currentPrice >= 1 ? currentPrice.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : currentPrice.toFixed(4)}
+              </div>
+            </div>
             <div className="flex items-center gap-2 text-xs text-slate-400 font-mono mt-0.5">
               <span>Binance CLOB Spot/Futures</span>
               <span>•</span>
               <span className="text-amber-400 font-bold">Real-Time Depth Tape</span>
+              <span>•</span>
+              <span className="text-emerald-400 font-bold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                Live WS
+              </span>
             </div>
           </div>
         </div>
