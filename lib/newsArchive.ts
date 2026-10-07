@@ -32,6 +32,270 @@ export interface HistoricalNewsItem {
 
 export const HISTORICAL_NEWS_ARCHIVE: HistoricalNewsItem[] = [
   {
+    "id": "seo-news-2026-us-strategic-bitcoin-reserve-bill",
+    "slug": "us-strategic-bitcoin-reserve-bill-gains-bipartisan-momentum-target-1m-btc-treasury-reserve",
+    "title": "US Strategic Bitcoin Reserve Bill Advances in Senate: Target 1,000,000 BTC Sovereign Reserve",
+    "summary": "The landmark Boosting Innovation, Technology, and Competitiveness through Optimized Investment Nationally (BITCOIN) Act garners bipartisan Senate momentum, proposing a 5-year acquisition of 1,000,000 BTC to back the US balance sheet.",
+    "paragraphs": [
+      "Bipartisan momentum in the United States Senate has surged behind the historic Strategic Bitcoin Reserve legislation. The bill directs the US Department of the Treasury to establish a decentralized strategic reserve, acquiring up to 200,000 Bitcoin annually over a five-year period, establishing a permanent 1,000,000 BTC national reserve.",
+      "The reserve model is structured to mirror the Strategic Petroleum Reserve and gold reserves, treating Bitcoin as an apex digital commodity that strengthens the US national balance sheet against global sovereign debt expansion and currency debasement.",
+      "Sovereign wealth funds and macro hedge funds are closely tracking legislative committee hearings, with analysts estimating that government-level spot accumulation would absorb approximately 5% of Bitcoin's total 21 million supply cap."
+    ],
+    "whyItMatters": "Sovereign adoption of Bitcoin as a strategic reserve asset transforms crypto from a private investment class into a sovereign geopolitical imperative, establishing unprecedented nation-state demand.",
+    "keyTakeaways": [
+      "Senate Strategic Bitcoin Reserve bill proposes accumulating 1,000,000 BTC over 5 years.",
+      "Legislation treats Bitcoin as digital gold to back sovereign debt reserves.",
+      "Sovereign accumulation would remove nearly 5% of circulating supply from global spot markets.",
+      "Bipartisan co-sponsorship elevates digital assets to top-tier geopolitical priority."
+    ],
+    "affectedCoins": [
+      { "symbol": "BTCUSDT", "name": "Bitcoin", "impact": "BULLISH", "expectedRange": "$95,000 - $140,000" },
+      { "symbol": "ETHUSDT", "name": "Ethereum", "impact": "BULLISH", "expectedRange": "$3,500 - $4,800" }
+    ],
+    "author": { "name": "Alexander Vance", "role": "Senior Institutional Markets Analyst", "desk": "Macro Policy & Sovereign Reserves" },
+    "source": "US Senate Committee on Banking & Finance",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T22:30:00.000Z",
+    "timeAgo": "1h ago",
+    "category": "Macro & CPI",
+    "sentiment": "BULLISH",
+    "hotScore": 100,
+    "readTime": "4 min read",
+    "marketImpact": "HIGH",
+    "isHistorical": false
+  },
+  {
+    "id": "seo-news-2026-tether-125b-us-treasury-record",
+    "slug": "tether-market-cap-crosses-125b-us-treasury-holdings-surpass-major-sovereign-nations",
+    "title": "Tether Market Cap Hits All-Time High of $125 Billion: US Treasury Holdings Surpass Major Sovereign Nations",
+    "summary": "Tether (USDT) circulating supply reaches a record $125 billion, with official reserve attestations confirming over $100 billion held directly in short-duration US Treasury bills, generating record quarterly net interest yields.",
+    "paragraphs": [
+      "Tether Holdings has recorded a historic milestone as the circulating market capitalization of its flagship USDT stablecoin crossed $125 billion. Financial attestations conducted by independent accounting firms verify that Tether's reserve portfolio now holds over $100 billion in short-dated US Treasury bills.",
+      "This unprecedented sovereign debt allocation ranks Tether among the top 15 holders of US Treasury debt globally, surpassing the sovereign foreign reserve holdings of countries including Germany, South Korea, and Australia.",
+      "The massive growth in USDT circulating supply reflects surging worldwide demand for digital US dollars in emerging markets, cross-border remittances, and decentralized exchange liquidity pools."
+    ],
+    "whyItMatters": "Stablecoins act as the primary bridge between traditional sovereign fiat and cryptocurrency liquidity. Massive USDT expansion signals immense dry-powder capital ready to rotate into spot crypto markets.",
+    "keyTakeaways": [
+      "Tether USDT circulating supply hits record $125 Billion market capitalization.",
+      "Tether holds over $100 Billion in US Treasury bills, surpassing several sovereign nations.",
+      "Quarterly net interest yield provides Tether with multi-billion dollar strategic reinvestment capital.",
+      "Global emerging market demand reinforces the US dollar's dominance via digital stablecoin rails."
+    ],
+    "affectedCoins": [
+      { "symbol": "BTCUSDT", "name": "Bitcoin", "impact": "BULLISH", "expectedRange": "$88,000 - $96,000" },
+      { "symbol": "ETHUSDT", "name": "Ethereum", "impact": "BULLISH", "expectedRange": "$3,100 - $3,500" },
+      { "symbol": "SOLUSDT", "name": "Solana", "impact": "BULLISH", "expectedRange": "$190 - $230" }
+    ],
+    "author": { "name": "Elena Rostova", "role": "Macro Data Specialist", "desk": "Stablecoin Liquidity & Treasury Markets" },
+    "source": "Tether Quarterly Reserve Attestation",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T21:15:00.000Z",
+    "timeAgo": "2h ago",
+    "category": "Institutional",
+    "sentiment": "BULLISH",
+    "hotScore": 98,
+    "readTime": "3 min read",
+    "marketImpact": "HIGH",
+    "isHistorical": false
+  },
+  {
+    "id": "seo-news-2026-blackrock-buidl-rwa-tokenization-expansion",
+    "slug": "blackrock-buidl-tokenized-fund-tops-600m-as-institutional-rwa-adoption-accelerates",
+    "title": "BlackRock's BUIDL Tokenized Fund Surpasses $600M AUM as Wall Street RWA Adoption Accelerates",
+    "summary": "BlackRock's USD Institutional Digital Liquidity Fund (BUIDL) on Ethereum crosses $600 million in assets under management, driving institutional Real World Asset (RWA) tokenization to multi-billion dollar milestones.",
+    "paragraphs": [
+      "BlackRock's BUIDL fund, launched in partnership with Securitize on the Ethereum blockchain, has rapidly grown past $600 million in assets under management. The fund provides institutional investors with daily yield payouts backed 100% by cash, US Treasury bills, and repurchase agreements.",
+      "Decentralized finance (DeFi) protocols, including Ondo Finance and MakerDAO (Sky), have integrated BUIDL as collateral backing for yield-bearing stablecoins and tokenized treasuries, demonstrating the accelerating convergence of traditional asset management and public blockchain rails.",
+      "Institutional surveys indicate that asset managers manage over $12 billion in tokenized real-world assets, with market forecasts predicting RWA tokenization will expand into a multi-trillion dollar sector by 2030."
+    ],
+    "whyItMatters": "Wall Street's largest asset manager actively utilizing Ethereum for yield-bearing fund infrastructure validates public blockchain architecture for institutional capital markets.",
+    "keyTakeaways": [
+      "BlackRock BUIDL fund reaches $600M+ AUM on Ethereum blockchain.",
+      "Tokenized US Treasuries provide 24/7 peer-to-peer settlement and programmable yield.",
+      "DeFi protocols integrate BUIDL as institutional-grade collateral.",
+      "RWA sector emerges as the fastest-growing bridge between Wall Street and crypto."
+    ],
+    "affectedCoins": [
+      { "symbol": "ETHUSDT", "name": "Ethereum", "impact": "BULLISH", "expectedRange": "$3,200 - $3,800" },
+      { "symbol": "LINKUSDT", "name": "Chainlink", "impact": "BULLISH", "expectedRange": "$18 - $24" }
+    ],
+    "author": { "name": "Siddharth Mehta", "role": "Lead Blockchain Protocol Analyst", "desk": "Institutional RWA & DeFi Infrastructure" },
+    "source": "Securitize / BlackRock Digital Assets",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T20:00:00.000Z",
+    "timeAgo": "3h ago",
+    "category": "Ethereum",
+    "sentiment": "BULLISH",
+    "hotScore": 97,
+    "readTime": "4 min read",
+    "marketImpact": "HIGH",
+    "isHistorical": false
+  },
+  {
+    "id": "seo-news-2026-ripple-rlusd-stablecoin-sec-resolution",
+    "slug": "ripple-secures-regulatory-approval-for-rlusd-enterprise-stablecoin-on-xrp-ledger-and-ethereum",
+    "title": "Ripple Secures Regulatory Framework for RLUSD Enterprise Stablecoin on XRP Ledger and Ethereum",
+    "summary": "Ripple Labs confirms final testnet deployment of its US dollar-pegged stablecoin (Ripple USD / RLUSD) with institutional custody and global banking partners following favorable regulatory resolutions.",
+    "paragraphs": [
+      "Ripple Labs has officially revealed the operational architecture for RLUSD, an enterprise-grade stablecoin fully backed 1:1 by US dollar deposits, short-term government treasuries, and cash equivalents. RLUSD will operate concurrently across both the XRP Ledger (XRPL) and Ethereum mainnet.",
+      "The deployment follows the historic conclusion of the SEC vs Ripple litigation, which established legal precedent that programmatic exchange sales of XRP do not constitute investment contracts. Ripple aims to deploy RLUSD across cross-border payments, liquidity pools, and institutional settlement corridors.",
+      "Leading crypto exchanges and payment processors have confirmed day-one integration plans, anticipating substantial volume growth across XRP cross-currency liquidity bridges."
+    ],
+    "whyItMatters": "The launch of RLUSD positions Ripple to capture massive market share in the rapidly expanding enterprise stablecoin settlement sector while boosting XRP Ledger transaction throughput.",
+    "keyTakeaways": [
+      "Ripple launches 1:1 USD-backed RLUSD stablecoin on XRPL and Ethereum.",
+      "Independent monthly attestations to ensure institutional reserve transparency.",
+      "Cross-border payments integration with top-tier global financial institutions.",
+      "Legal clarity cements Ripple's compliance standing in global institutional markets."
+    ],
+    "affectedCoins": [
+      { "symbol": "XRPUSDT", "name": "XRP", "impact": "BULLISH", "expectedRange": "$2.35 - $3.10" },
+      { "symbol": "ETHUSDT", "name": "Ethereum", "impact": "BULLISH", "expectedRange": "Ecosystem Bridge" }
+    ],
+    "author": { "name": "Dr. Julian Weiss", "role": "Chief Macroeconomist", "desk": "Regulatory Compliance & Cross-Border Settlement" },
+    "source": "Ripple Corporate News Wire",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T18:45:00.000Z",
+    "timeAgo": "5h ago",
+    "category": "Regulation",
+    "sentiment": "BULLISH",
+    "hotScore": 96,
+    "readTime": "4 min read",
+    "marketImpact": "HIGH",
+    "isHistorical": false
+  },
+  {
+    "id": "seo-news-2026-solana-firedancer-breakpoint-1m-tps",
+    "slug": "solana-firedancer-validator-reaches-mainnet-readiness-demonstrating-1m-tps-in-stress-benchmarks",
+    "title": "Solana Firedancer Validator Client Reaches Final Mainnet Readiness: 1,000,000+ TPS Demonstrated",
+    "summary": "Jump Crypto's Firedancer independent C++ validator client for Solana completes full security audits, proving sub-millisecond execution and over 1,000,000 TPS under hardware-accelerated conditions.",
+    "paragraphs": [
+      "Jump Crypto and the Solana Foundation have announced the final validation phase for Firedancer, the revolutionary independent validator software built entirely from scratch in C++. Testnet stress testing demonstrated sustained throughput exceeding 1.2 million transactions per second.",
+      "Firedancer resolves historical single-client vulnerabilities on Solana by providing true client diversity, robust network redundancy, and multi-threaded parallel execution. The software drastically reduces hardware bottlenecks for validator nodes while optimizing block propagation times.",
+      "Decentralized exchange operators and quantitative market makers on Raydium and Orca project that Firedancer mainnet integration will cement Solana as the dominant global execution environment for high-frequency algorithmic finance."
+    ],
+    "whyItMatters": "Firedancer makes Solana the first decentralized blockchain capable of rivaling Nasdaq-level execution speed, opening the door for massive institutional trading desk integration.",
+    "keyTakeaways": [
+      "Firedancer validator achieves mainnet-ready milestone with 1M+ TPS capability.",
+      "Eliminates single-client software risk across the global Solana validator network.",
+      "Sub-millisecond finality empowers institutional algorithmic and derivatives protocols.",
+      "SOL on-chain volume and active monthly addresses reach all-time ecosystem highs."
+    ],
+    "affectedCoins": [
+      { "symbol": "SOLUSDT", "name": "Solana", "impact": "BULLISH", "expectedRange": "$195 - $250" },
+      { "symbol": "SUIUSDT", "name": "Sui", "impact": "BULLISH", "expectedRange": "$3.30 - $4.20" }
+    ],
+    "author": { "name": "Siddharth Mehta", "role": "Lead Blockchain Protocol Analyst", "desk": "High-Performance L1 Protocols" },
+    "source": "Solana Foundation / Jump Crypto Research",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T17:30:00.000Z",
+    "timeAgo": "6h ago",
+    "category": "DeFi",
+    "sentiment": "BULLISH",
+    "hotScore": 95,
+    "readTime": "4 min read",
+    "marketImpact": "HIGH",
+    "isHistorical": false
+  },
+  {
+    "id": "seo-news-2026-chainlink-ccip-dtcc-swift-cross-chain",
+    "slug": "chainlink-ccip-integrates-with-dtcc-and-swift-to-settle-traditional-securities-on-chain",
+    "title": "Chainlink CCIP Integrates with DTCC & SWIFT: Unlocking Trillions in Traditional Securities Settlement",
+    "summary": "Chainlink's Cross-Chain Interoperability Protocol (CCIP) achieves production milestones with the Depository Trust and Clearing Corporation (DTCC) and SWIFT, enabling tokenized asset transfers between private banking ledgers and public blockchains.",
+    "paragraphs": [
+      "Chainlink has expanded its enterprise interoperability framework to connect legacy banking infrastructure (including SWIFT and DTCC) directly with public blockchain networks like Ethereum, Avalanche, and Arbitrum.",
+      "The integration allows global custodians managing tens of trillions of dollars in traditional securities to settle tokenized equities, real-world bonds, and cross-currency instruments with automated compliance checks and cryptographic proofs.",
+      "Oracle network activity across Chainlink's Decentralized Oracle Networks (DONs) has surged, cementing LINK as the critical foundational infrastructure powering institutional DeFi and cross-chain messaging."
+    ],
+    "whyItMatters": "Connecting multi-trillion dollar traditional clearing houses (DTCC) to public blockchains creates the institutional liquidity rails required for mainstream asset tokenization.",
+    "keyTakeaways": [
+      "Chainlink CCIP connects DTCC clearing systems with public decentralized networks.",
+      "SWIFT banking messaging integrated for cross-border tokenized asset settlement.",
+      "Institutional demand for Chainlink verifiable randomness and data feeds expands.",
+      "LINK token accrues fee value from institutional cross-chain message execution."
+    ],
+    "affectedCoins": [
+      { "symbol": "LINKUSDT", "name": "Chainlink", "impact": "BULLISH", "expectedRange": "$18.50 - $26.00" },
+      { "symbol": "ETHUSDT", "name": "Ethereum", "impact": "BULLISH", "expectedRange": "$3,200 - $3,700" }
+    ],
+    "author": { "name": "Alexander Vance", "role": "Senior Institutional Markets Analyst", "desk": "Oracle Networks & Cross-Chain Infrastructure" },
+    "source": "DTCC Enterprise Research / Chainlink Labs",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T16:00:00.000Z",
+    "timeAgo": "8h ago",
+    "category": "DeFi",
+    "sentiment": "BULLISH",
+    "hotScore": 94,
+    "readTime": "5 min read",
+    "marketImpact": "HIGH",
+    "isHistorical": false
+  },
+  {
+    "id": "seo-news-2026-sui-1b-tvl-move-blockchain-inflows",
+    "slug": "sui-network-surpasses-1b-tvl-as-move-language-smart-contracts-capture-institutional-volume",
+    "title": "Sui Network Surpasses $1B TVL: Move Language Smart Contracts Capture Surging Institutional Capital",
+    "summary": "Sui blockchain total value locked (TVL) exceeds $1 billion following rapid decentralized exchange volume growth, zero-gas sponsored transactions, and institutional staking integrations from top European digital asset managers.",
+    "paragraphs": [
+      "The Sui blockchain, developed by Mysten Labs and powered by the object-centric Move programming language, has crossed $1 billion in total value locked. Decentralized financial volume on Sui protocols, including Navi, Cetus, and Scallop, has surged by over 120% month-over-month.",
+      "Institutional interest has been driven by Sui's native parallel transaction execution, native zkLogin for Web2-like onboarding, and object-based data model that eliminates common smart contract vulnerabilities like re-entrancy attacks.",
+      "Major venture capital allocators and digital asset custodians have expanded native staking support, highlighting Sui's capability to process sub-second financial settlements at scale."
+    ],
+    "whyItMatters": "Move-based smart contract blockchains are rapidly establishing themselves as top-tier alternatives to EVM networks, attracting billions in capital through superior performance and security architectures.",
+    "keyTakeaways": [
+      "Sui Network TVL crosses $1 Billion milestone with accelerating DEX activity.",
+      "Object-centric Move programming language prevents critical smart contract exploits.",
+      "zkLogin and programmable transaction blocks streamline non-custodial user adoption.",
+      "Institutional staking products launched by European regulated crypto custodians."
+    ],
+    "affectedCoins": [
+      { "symbol": "SUIUSDT", "name": "Sui", "impact": "BULLISH", "expectedRange": "$3.40 - $4.50" },
+      { "symbol": "SOLUSDT", "name": "Solana", "impact": "BULLISH", "expectedRange": "Ecosystem Benchmark" }
+    ],
+    "author": { "name": "Siddharth Mehta", "role": "Lead Blockchain Protocol Analyst", "desk": "Next-Gen L1 Architectures" },
+    "source": "DefiLlama / Mysten Labs Analytics",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T14:30:00.000Z",
+    "timeAgo": "9h ago",
+    "category": "DeFi",
+    "sentiment": "BULLISH",
+    "hotScore": 93,
+    "readTime": "4 min read",
+    "marketImpact": "HIGH",
+    "isHistorical": false
+  },
+  {
+    "id": "seo-news-2026-cardano-chang-hard-fork-governance",
+    "slug": "cardano-chang-hard-fork-activates-ushering-in-voltaire-era-decentralized-governance",
+    "title": "Cardano Chang Hard Fork Activates: Voltaire Era Decentralized Governance and Treasury Control",
+    "summary": "Cardano successfully executes the Chang hard fork, officially entering the Voltaire governance era where a $1.5B community treasury is managed directly by elected Delegate Representatives (DReps) via on-chain voting.",
+    "paragraphs": [
+      "The Cardano blockchain has achieved a major milestone in decentralized architecture with the successful completion of the Chang hard fork. The upgrade introduces on-chain governance specified under CIP-1694, marking the transition into the final Voltaire phase of Cardano's roadmap.",
+      "Under the new framework, constitutional committees, stake pool operators (SPOs), and elected Delegate Representatives (DReps) participate in binding on-chain voting to approve protocol parameter changes, hard forks, and treasury disbursements.",
+      "Cardano's community treasury, currently holding over 1.5 billion ADA, is now fully decentralized and accessible for ecosystem development proposals, funding decentralized applications and infrastructure builders."
+    ],
+    "whyItMatters": "Chang transforms Cardano into one of the most decentralized self-governing proof-of-stake blockchains, eliminating centralized founding entity control over protocol evolution.",
+    "keyTakeaways": [
+      "Cardano Chang hard fork successfully executed across global stake pool network.",
+      "CIP-1694 establishes tripartite on-chain governance with DReps, SPOs, and Constitutional Committee.",
+      "$1.5 Billion ADA decentralized treasury unlocked for ecosystem builder grants.",
+      "Ecosystem focus shifts to Layer-2 scaling solutions (Hydra) and zero-knowledge privacy protocols."
+    ],
+    "affectedCoins": [
+      { "symbol": "ADAUSDT", "name": "Cardano", "impact": "BULLISH", "expectedRange": "$0.85 - $1.20" }
+    ],
+    "author": { "name": "Elena Rostova", "role": "Macro Data Specialist", "desk": "Decentralized Governance & PoS Systems" },
+    "source": "Cardano Foundation / IOG Research",
+    "sourceUrl": "https://www.bitcoincrypto.tech/news",
+    "publishedAt": "2026-10-07T13:00:00.000Z",
+    "timeAgo": "11h ago",
+    "category": "Institutional",
+    "sentiment": "BULLISH",
+    "hotScore": 91,
+    "readTime": "4 min read",
+    "marketImpact": "MEDIUM",
+    "isHistorical": false
+  },
+  {
     "id": "seo-news-2026-btc-100k-etf-breakout",
     "slug": "bitcoin-100k-breakout-spot-etf-daily-inflows-top-850m-supply-squeeze-escalates",
     "title": "Bitcoin $100K Breakout: Spot ETF Daily Inflows Top $850M as Supply Squeeze Escalates",

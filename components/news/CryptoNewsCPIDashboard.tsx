@@ -132,8 +132,9 @@ export default function CryptoNewsCPIDashboard() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCoin, setSelectedCoin] = useState<string>("ALL");
   const [selectedTimeframe, setSelectedTimeframe] = useState<"all" | "live" | "week" | "month" | "historical">("all");
-  const [visibleCount, setVisibleCount] = useState<number>(12);
+  const [visibleCount, setVisibleCount] = useState<number>(18);
   const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
   const [selectedBattle, setSelectedBattle] = useState<MacroBattle | null>(null);
   const [copiedArticle, setCopiedArticle] = useState(false);
@@ -180,15 +181,39 @@ export default function CryptoNewsCPIDashboard() {
     "Mining & Energy"
   ];
 
+  const popularCoins = [
+    { id: "ALL", label: "All Assets", symbol: "ALL" },
+    { id: "BTC", label: "Bitcoin (BTC)", symbol: "BTC" },
+    { id: "ETH", label: "Ethereum (ETH)", symbol: "ETH" },
+    { id: "SOL", label: "Solana (SOL)", symbol: "SOL" },
+    { id: "XRP", label: "XRP (Ripple)", symbol: "XRP" },
+    { id: "SUI", label: "Sui (SUI)", symbol: "SUI" },
+    { id: "DOGE", label: "Dogecoin (DOGE)", symbol: "DOGE" },
+    { id: "PEPE", label: "Pepe (PEPE)", symbol: "PEPE" },
+    { id: "BNB", label: "BNB Chain", symbol: "BNB" },
+    { id: "ADA", label: "Cardano (ADA)", symbol: "ADA" },
+    { id: "AVAX", label: "Avalanche", symbol: "AVAX" },
+    { id: "LINK", label: "Chainlink", symbol: "LINK" }
+  ];
+
   const filteredNews = news.filter((item) => {
+    const queryLower = searchQuery.toLowerCase();
     const matchSearch =
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.whyItMatters && item.whyItMatters.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.affectedCoins && item.affectedCoins.some((c) => c.symbol.toLowerCase().includes(searchQuery.toLowerCase())));
+      !searchQuery ||
+      item.title.toLowerCase().includes(queryLower) ||
+      item.summary.toLowerCase().includes(queryLower) ||
+      item.source.toLowerCase().includes(queryLower) ||
+      (item.paragraphs && item.paragraphs.some((p) => p.toLowerCase().includes(queryLower))) ||
+      (item.whyItMatters && item.whyItMatters.toLowerCase().includes(queryLower)) ||
+      (item.affectedCoins && item.affectedCoins.some((c) => c.symbol.toLowerCase().includes(queryLower) || c.name.toLowerCase().includes(queryLower)));
     
     const matchCat = selectedCategory === "All" || item.category === selectedCategory;
+
+    const matchCoin =
+      selectedCoin === "ALL" ||
+      item.title.toUpperCase().includes(selectedCoin) ||
+      item.summary.toUpperCase().includes(selectedCoin) ||
+      (item.affectedCoins && item.affectedCoins.some((c) => c.symbol.toUpperCase().includes(selectedCoin)));
 
     const itemAgeMs = Date.now() - new Date(item.publishedAt).getTime();
     let matchTime = true;
@@ -202,7 +227,7 @@ export default function CryptoNewsCPIDashboard() {
       matchTime = item.isHistorical === true || itemAgeMs > 7 * 24 * 60 * 60 * 1000;
     }
 
-    return matchSearch && matchCat && matchTime;
+    return matchSearch && matchCat && matchCoin && matchTime;
   });
 
   const featuredStory = filteredNews.length > 0 ? filteredNews[0] : null;
@@ -577,7 +602,7 @@ export default function CryptoNewsCPIDashboard() {
                   key={cat}
                   onClick={() => {
                     setSelectedCategory(cat);
-                    setVisibleCount(12);
+                    setVisibleCount(18);
                   }}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
                     selectedCategory === cat
@@ -586,6 +611,27 @@ export default function CryptoNewsCPIDashboard() {
                   }`}
                 >
                   {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Asset / Coin Specific Quick Filter */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar border-t border-slate-100 dark:border-slate-800 pt-2">
+              <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider px-1">Coin:</span>
+              {popularCoins.map((coin) => (
+                <button
+                  key={coin.id}
+                  onClick={() => {
+                    setSelectedCoin(coin.id);
+                    setVisibleCount(18);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition whitespace-nowrap ${
+                    selectedCoin === coin.id
+                      ? "bg-amber-400 text-slate-950 font-black shadow-xs"
+                      : "bg-slate-50 dark:bg-slate-850 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-800"
+                  }`}
+                >
+                  {coin.label}
                 </button>
               ))}
             </div>
@@ -687,11 +733,11 @@ export default function CryptoNewsCPIDashboard() {
                 </div>
 
                 <button
-                  onClick={() => setVisibleCount((prev) => prev + 12)}
-                  className="px-6 py-3 rounded-2xl bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-500 text-white text-xs font-black transition flex items-center gap-2 shadow-md"
+                  onClick={() => setVisibleCount((prev) => prev + 18)}
+                  className="px-6 py-3 rounded-2xl bg-slate-900 dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-500 text-white text-xs font-black transition flex items-center gap-2 shadow-md cursor-pointer hover:scale-105 active:scale-95"
                 >
                   <BookOpen className="w-4 h-4" />
-                  <span>Load More News &amp; Past Stories (+12)</span>
+                  <span>Load More News &amp; Stories (+18)</span>
                 </button>
               </div>
             )}
