@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 1. Static Core Landing Pages
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}/`,
+      url: baseUrl,
       lastModified: currentDate,
       changeFrequency: "hourly",
       priority: 1.0,
@@ -31,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/coinglass`,
       lastModified: currentDate,
       changeFrequency: "always",
-      priority: 0.95,
+      priority: 1.0,
     },
     {
       url: `${baseUrl}/orderbook`,

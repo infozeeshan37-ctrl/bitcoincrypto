@@ -117,13 +117,27 @@ const toolConfigs: Record<string, ToolConfig> = {
   },
   "liquidation-heatmap": {
     slug: "liquidation-heatmap",
-    name: "Coinglass Perpetual Liquidation Intelligence Radar",
-    shortName: "Liquidation Heatmap",
-    tagline: "Track aggregated perpetual open interest, resting liquidity pools, and short squeeze clusters.",
-    description: "Real-time derivatives market intelligence tool tracking liquidation cascades, long/short trader positioning, funding rate heatmaps, and open interest across Binance, Bybit, and OKX.",
-    keywords: ["coinglass liquidation heatmap", "crypto open interest tracker", "bitcoin liquidation clusters", "crypto funding rate radar", "long short ratio live"],
+    name: "CoinGlass Liquidation Heatmap & Squeeze Radar",
+    shortName: "CoinGlass Heatmap",
+    tagline: "Track real-time CoinGlass liquidation heatmaps, multi-exchange open interest, and short squeeze clusters.",
+    description: "Free real-time CoinGlass liquidation heatmap and 2D spectrogram. Analyze resting leverage pools, liquidation cascades, long/short trader positioning, and market maker sweep targets across Binance, Bybit, OKX, and Deribit.",
+    keywords: [
+      "coinglass liquidation heatmap",
+      "coinglass crypto",
+      "coinglass bitcoin",
+      "coinglass liquidation map",
+      "free coinglass alternative",
+      "coinglass btc heatmap",
+      "crypto liquidation heatmap",
+      "crypto open interest tracker",
+      "bitcoin liquidation clusters",
+      "binance liquidation heatmap",
+      "bybit liquidation heatmap",
+      "short squeeze heatmap"
+    ],
     features: [
       "Live 24h Aggregated Liquidation Volumes & Wipeouts",
+      "2D Continuous Liquidation Heatmap Spectrogram",
       "Perpetual Funding Rate Bias & Basis Spreads",
       "Long vs. Short Trader Exposure Dominance",
       "Real-Time Major Exchange Open Interest Totals"
@@ -159,11 +173,20 @@ const toolConfigs: Record<string, ToolConfig> = {
   },
   "funding-rate-screener": {
     slug: "funding-rate-screener",
-    name: "Perpetual Funding Rate Arbitrage & Basis Screener",
+    name: "CoinGlass Perpetual Funding Rate Screener & Basis Arbitrage Radar",
     shortName: "Funding Rate Screener",
-    tagline: "Scan real-time 8-hour funding rates and basis spreads across major derivatives exchanges.",
-    description: "Screen live funding rates across Binance, Bybit, OKX, and Deribit. Spot high-yield delta-neutral cash-and-carry basis arbitrage opportunities and detect impending long/short liquidation squeezes.",
-    keywords: ["crypto funding rates live", "perpetual funding rate screener", "binance funding rate btc", "crypto basis arbitrage calculator", "funding rate heat map"],
+    tagline: "Scan real-time CoinGlass 8-hour funding rates and basis spreads across major derivatives exchanges.",
+    description: "Screen live CoinGlass perpetual funding rates across Binance, Bybit, OKX, and Deribit. Spot high-yield delta-neutral cash-and-carry basis arbitrage opportunities and detect impending long/short liquidation squeezes.",
+    keywords: [
+      "coinglass funding rates",
+      "crypto funding rates live",
+      "perpetual funding rate screener",
+      "binance funding rate btc",
+      "crypto basis arbitrage calculator",
+      "funding rate heat map",
+      "coinglass open interest",
+      "bybit funding rate live"
+    ],
     features: [
       "Cross-Exchange 8-Hour Funding Rate Comparison",
       "Annualized Percentage Yield (APY) Calculations",

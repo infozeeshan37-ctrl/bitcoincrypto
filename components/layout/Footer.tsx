@@ -63,8 +63,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/coinglass" className="hover:text-rose-400 transition flex items-center gap-1.5">
-                  <Flame className="w-3.5 h-3.5 text-rose-400" /> Coinglass Derivatives &amp; OI
+                <Link href="/coinglass" className="hover:text-rose-400 transition flex items-center gap-1.5 text-rose-300 font-semibold">
+                  <Flame className="w-3.5 h-3.5 text-rose-400" /> CoinGlass Liquidation Heatmap
                 </Link>
               </li>
               <li>
@@ -95,14 +95,14 @@ export default function Footer() {
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Trading Tools</h4>
             <ul className="space-y-2 text-slate-400">
               <li><Link href="/tools/trading-bot" className="hover:text-white transition">AI Trading Signals Copilot</Link></li>
+              <li><Link href="/tools/liquidation-heatmap" className="hover:text-rose-300 transition text-rose-300/90 font-medium">CoinGlass Liquidation Radar</Link></li>
+              <li><Link href="/tools/funding-rate-screener" className="hover:text-cyan-300 transition text-cyan-300/90 font-medium">CoinGlass Funding Rates</Link></li>
               <li><Link href="/tools/chart-terminal" className="hover:text-white transition">TradingView Chart Terminal</Link></li>
               <li><Link href="/tools/dca-simulator" className="hover:text-white transition">DCA Multi-Asset Simulator</Link></li>
               <li><Link href="/tools/position-sizer" className="hover:text-white transition">Risk &amp; Position Sizer</Link></li>
               <li><Link href="/tools/crypto-converter" className="hover:text-white transition">Live Crypto &amp; Fiat Converter</Link></li>
-              <li><Link href="/tools/liquidation-heatmap" className="hover:text-white transition">Liquidation Radar &amp; Heatmap</Link></li>
               <li><Link href="/tools/fear-greed-index" className="hover:text-white transition">Crypto Fear &amp; Greed Index</Link></li>
               <li><Link href="/tools/profit-calculator" className="hover:text-white transition">Profit &amp; ROI Calculator</Link></li>
-              <li><Link href="/tools/funding-rate-screener" className="hover:text-white transition">Funding Rate Arbitrage</Link></li>
               <li><Link href="/tools/whale-tracker" className="hover:text-white transition">Whale Orders Radar</Link></li>
             </ul>
           </div>
@@ -164,6 +164,38 @@ export default function Footer() {
             </ul>
           </div>
 
+        </div>
+
+        {/* SEO Cross-Linking Directory Section: CoinGlass Liquidation & Derivatives */}
+        <div className="space-y-3 pt-2 border-b border-slate-800 pb-8">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-rose-300 flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5 text-rose-400" />
+              CoinGlass Liquidation Heatmaps &amp; Derivatives Hub:
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2 text-[11px]">
+            {[
+              { label: "CoinGlass BTC Liquidation Heatmap", href: "/coinglass?coin=BTC" },
+              { label: "CoinGlass ETH Liquidation Map", href: "/coinglass?coin=ETH" },
+              { label: "CoinGlass SOL Liquidation Radar", href: "/coinglass?coin=SOL" },
+              { label: "CoinGlass Perpetual Open Interest", href: "/coinglass?tab=oi" },
+              { label: "CoinGlass 24h Liquidations & Cascades", href: "/coinglass?tab=liquidations" },
+              { label: "CoinGlass Funding Rate Screener", href: "/tools/funding-rate-screener" },
+              { label: "CoinGlass Long/Short Ratio", href: "/coinglass?tab=longshort" },
+              { label: "CoinGlass Liquidation Calculator", href: "/tools/liquidation-heatmap#calculator" },
+              { label: "CoinGlass Squeeze Simulator", href: "/tools/liquidation-heatmap#simulator" },
+              { label: "Free CoinGlass Alternative", href: "/coinglass" },
+            ].map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-rose-950/80 hover:text-rose-300 text-slate-400 border border-slate-800 transition font-mono"
+              >
+                {link.label} &rarr;
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* SEO Cross-Linking Directory Section: Coin AI Predictions */}

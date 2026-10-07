@@ -28,16 +28,24 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "BitcoinCrypto.tech | AI Crypto Prediction Tools & Derivatives Market Intelligence",
+    default: "BitcoinCrypto.tech | CoinGlass Liquidation Heatmap, AI Predictions & Crypto Derivatives Suite",
     template: "%s | BitcoinCrypto.tech",
   },
-  description: "Top-ranked cryptocurrency market intelligence platform & AI trading suite. Features real-time Binance 5-minute binary price predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, L2 order book depth, and DCA simulators.",
+  description: "Top-ranked cryptocurrency market intelligence suite featuring free real-time CoinGlass liquidation heatmaps, Binance 5-minute price predictions, DeepQuant neural AI signals, perpetual futures open interest, L2 order book depth, and DCA simulators.",
   keywords: [
+    "coinglass liquidation heatmap",
+    "coinglass crypto",
+    "coinglass bitcoin",
+    "free coinglass alternative",
+    "coinglass liquidation map",
     "ai crypto tools",
     "best ai crypto prediction tool",
     "binance 5 minute price prediction",
     "ai crypto trading bot",
-    "coinglass liquidation heatmap",
+    "crypto liquidation tracker",
+    "binance open interest coinglass",
+    "crypto funding rates live",
+    "long short ratio coinglass",
     "crypto order book depth",
     "cvd crypto scanner",
     "deepquant neural bot",
@@ -46,8 +54,7 @@ export const metadata: Metadata = {
     "real time crypto market intelligence",
     "free crypto trading signals btc eth sol",
     "crypto market scanner live",
-    "us cpi bitcoin correlation tracker",
-    "bitcoin halving liquidity cycle",
+    "short squeeze heatmap"
   ],
   authors: [{ name: "BitcoinCrypto Quantitative Research Desk" }],
   creator: "BitcoinCrypto.tech",

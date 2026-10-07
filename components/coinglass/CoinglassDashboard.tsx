@@ -181,17 +181,17 @@ export default function CoinglassDashboard() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-rose-500/20 text-rose-300 border border-rose-500/30">
                   <Flame className="w-3.5 h-3.5 text-rose-400" />
-                  Coinglass Derivatives Analytics
+                  CoinGlass Institutional Liquidation &amp; Derivatives Hub
                 </span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
-                Futures Open Interest, <br className="hidden sm:inline" />
+                CoinGlass Liquidation Heatmap, <br className="hidden sm:inline" />
                 <span className="bg-gradient-to-r from-rose-400 via-amber-300 to-yellow-400 bg-clip-text text-transparent">
-                  Liquidations & Funding Rates
+                  Futures Open Interest &amp; Funding Rates
                 </span>
               </h1>
               <p className="text-slate-400 text-xs sm:text-sm max-w-2xl mt-2 leading-relaxed">
-                Track real-time perpetual futures open interest, exchange liquidation cascades, multi-platform funding rates, and institutional Long/Short ratios across Binance, Bybit, OKX, and CME.
+                Free institutional-grade <strong>CoinGlass liquidation heatmap</strong> alternative. Track real-time perpetual futures open interest ($75B+), 24h long/short liquidation wipeouts, multi-exchange funding rates, and market maker squeeze targets across Binance, Bybit, OKX, and Deribit.
               </p>
             </div>
 

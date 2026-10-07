@@ -147,15 +147,15 @@ export default function Navbar() {
             <span>Markets</span>
           </Link>
 
-          {/* 5. Derivatives */}
+          {/* 5. CoinGlass */}
           <Link
             href="/coinglass"
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
           >
             <Flame className="w-4 h-4 text-rose-500 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
-            <span>Derivatives</span>
+            <span>CoinGlass</span>
             <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded-md bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30 shadow-xs">
-              OI &amp; Liq
+              Heatmap
             </span>
           </Link>
 
