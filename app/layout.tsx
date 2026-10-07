@@ -111,6 +111,12 @@ export default function RootLayout({
           title="BitcoinCrypto.tech RSS Feed"
           href="/feed.xml"
         />
+        <link
+          rel="alternate"
+          type="text/plain"
+          title="LLMs Text Summary"
+          href="/llms.txt"
+        />
         {/* Official Google AdSense Account Verification & Auto-Ads */}
         <meta name="google-adsense-account" content="ca-pub-5486114901283025" />
         <script

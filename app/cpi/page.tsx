@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
+import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 
 export const metadata: Metadata = {
   title: "US CPI Inflation Intelligence & AI Crypto Price Predictor | BitcoinCrypto.tech",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 export default function CPIPage() {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 sm:py-12 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <Breadcrumbs
           items={[
             { label: "Home", href: "/" },
@@ -38,6 +39,12 @@ export default function CPIPage() {
         >
           <CPIMacroAIPredictor />
         </Suspense>
+
+        <ToolCitationWidget
+          toolName="BitcoinCrypto US CPI Macro Inflation & Crypto Volatility Forecaster"
+          toolUrl="https://www.bitcoincrypto.tech/cpi"
+          description="BLS inflation forecast models, Fed interest rate decision probabilities, and historical Bitcoin price volatility impact."
+        />
       </div>
     </main>
   );

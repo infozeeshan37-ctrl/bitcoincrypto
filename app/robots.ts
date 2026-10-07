@@ -82,11 +82,11 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: "Cohere-ai",
-        allow: "/",
+        allow: ["/", "/llms.txt"],
         disallow: ["/api/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [`${baseUrl}/sitemap.xml`, `${baseUrl}/llms.txt`],
     host: "www.bitcoincrypto.tech",
   };
 }

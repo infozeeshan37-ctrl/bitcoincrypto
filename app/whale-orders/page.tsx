@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import WhaleOrdersTerminal from "@/components/whales/WhaleOrdersTerminal";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
+import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 
 export const metadata: Metadata = {
   title: "Whale Orders & Institutional Liquidity Heatmap Radar | BitcoinCrypto.tech",
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 export default function WhaleOrdersPage() {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 sm:py-12 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <Breadcrumbs
           items={[
             { label: "Home", href: "/" },
@@ -47,6 +48,12 @@ export default function WhaleOrdersPage() {
         >
           <WhaleOrdersTerminal />
         </Suspense>
+
+        <ToolCitationWidget
+          toolName="BitcoinCrypto Institutional Whale Orders & Liquidity Wall Radar"
+          toolUrl="https://www.bitcoincrypto.tech/whale-orders"
+          description="Real-time institutional block trade monitoring ($100K+ to $10M+) and CoinGlass-style liquidity wall ladder."
+        />
       </div>
     </main>
   );

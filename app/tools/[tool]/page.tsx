@@ -33,6 +33,7 @@ import CryptoConverterTool from "@/components/tools/details/CryptoConverterTool"
 import PositionSizerTool from "@/components/tools/details/PositionSizerTool";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 import AdBanner from "@/components/ads/AdBanner";
+import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 
 interface ToolConfig {
   slug: string;
@@ -462,6 +463,13 @@ export default async function DedicatedToolPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Backlink Citation & AI Reference Widget */}
+        <ToolCitationWidget
+          toolName={tool.name}
+          toolUrl={`https://www.bitcoincrypto.tech/tools/${tool.slug}`}
+          description={tool.description}
+        />
       </main>
     </div>
   );
