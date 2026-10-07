@@ -112,7 +112,7 @@ export default function HomePage() {
           {/* Core Terminals Directory Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {/* Terminal 1: AI Trading Signals */}
+              {/* Terminal 1: AI Trading Signals */}
             <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-amber-400/50 transition">
               <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 flex items-center justify-center mb-4">
                 <Activity className="w-5 h-5" />
@@ -123,7 +123,7 @@ export default function HomePage() {
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                 Tri-pillar quantitative engine evaluating Technical Momentum, Order Book CVD Imbalance, and Macro News sentiment to generate single-direction, high-confidence Long/Short trade signals with dynamic Entry, Take Profit (TP1/TP2/TP3), and Stop Loss.
               </p>
-              <Link href="/tools" className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1">
+              <Link href="/tools/trading-bot" className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline inline-flex items-center gap-1">
                 Launch AI Signals Bot <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -160,19 +160,19 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Terminal 4: Coinglass Derivatives & Liquidations */}
+            {/* Terminal 4: CoinGlass Liquidation Heatmap */}
             <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-rose-400/50 transition">
               <div className="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 flex items-center justify-center mb-4">
                 <Flame className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                Coinglass Liquidation &amp; OI Radar
+                CoinGlass Liquidation Heatmap &amp; Squeeze Radar
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                Multi-exchange aggregate perpetual open interest tracker, 24h hourly liquidation wipeout cascades, short/long squeeze magnetic levels, and funding rate arbitrage heatmaps across Binance, OKX, and Bybit.
+                Multi-exchange 2D spectrogram liquidation heatmap, resting leverage pools, 24h hourly wipeout cascades, and top 10 short squeeze hazard screener across Binance, Bybit, and OKX.
               </p>
-              <Link href="/coinglass" className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline inline-flex items-center gap-1">
-                Analyze Liquidations <ArrowRight className="w-3.5 h-3.5" />
+              <Link href="/tools/liquidation-heatmap" className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline inline-flex items-center gap-1">
+                Open Liquidation Heatmap <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
@@ -182,7 +182,7 @@ export default function HomePage() {
                 <Layers className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                L2 Central Limit Order Book Depth
+                Level-2 Central Limit Order Book Depth
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                 High-frequency aggregated CLOB visualizer rendering live bid/ask resting inventory, cumulative volume delta (CVD) absorption, and market microstructure imbalance metrics.
@@ -192,19 +192,19 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Terminal 6: US CPI & Macro Battles */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-blue-400/50 transition">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 flex items-center justify-center mb-4">
+            {/* Terminal 6: Perpetual Funding Rate Screener */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-cyan-400/50 transition">
+              <div className="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 flex items-center justify-center mb-4">
                 <Sparkles className="w-5 h-5" />
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                US CPI &amp; Global Macro Battles
+                Perpetual Funding Rate Screener &amp; Basis Arbitrage
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                Neural inflation predictor tracking upcoming Bureau of Labor Statistics (BLS) CPI releases, Federal Reserve FOMC interest rate matrices, and real-time geopolitical macroeconomic impact on crypto liquidity.
+                Cross-exchange 8-hour funding rates comparison, annualized percentage yield (APY) calculators, and delta-neutral cash-and-carry basis arbitrage opportunities across Binance, Bybit, and Deribit.
               </p>
-              <Link href="/news" className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1">
-                View Macro Radar <ArrowRight className="w-3.5 h-3.5" />
+              <Link href="/tools/funding-rate-screener" className="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline inline-flex items-center gap-1">
+                Launch Funding Screener <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 

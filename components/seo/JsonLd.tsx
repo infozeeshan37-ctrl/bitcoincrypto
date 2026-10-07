@@ -104,6 +104,55 @@ export function HomePageJsonLd() {
           "Level 2 Order Book Depth Imbalance",
           "US CPI AI Volatility Predictor"
         ],
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://www.bitcoincrypto.tech/#sitelinks",
+        "name": "BitcoinCrypto Core Terminals & Quantitative Tools",
+        "itemListElement": [
+          {
+            "@type": "SiteNavigationElement",
+            "position": 1,
+            "name": "CoinGlass Liquidation Heatmap",
+            "description": "Real-time 2D spectrogram liquidation heatmap, resting leverage pools, and short squeeze clusters across Binance, Bybit, and OKX.",
+            "url": "https://www.bitcoincrypto.tech/tools/liquidation-heatmap"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 2,
+            "name": "AI Price Predictions Hub",
+            "description": "Quantitative 24-hour, 7-day, and 30-day AI price prediction forecasts for Bitcoin, Ethereum, Solana, and 36+ digital assets.",
+            "url": "https://www.bitcoincrypto.tech/predictions"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 3,
+            "name": "Whale Orders & Smart Money",
+            "description": "Live sub-second whale block trade tracker, cumulative volume delta (CVD), and institutional limit order wall heatmap.",
+            "url": "https://www.bitcoincrypto.tech/whale-orders"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 4,
+            "name": "Perpetual Funding Rate Screener",
+            "description": "Scan cross-exchange 8-hour funding rates, basis spreads, and delta-neutral cash-and-carry arbitrage opportunities.",
+            "url": "https://www.bitcoincrypto.tech/tools/funding-rate-screener"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 5,
+            "name": "AI Trading Signals & Copilot",
+            "description": "Autonomous algorithmic momentum detection, dynamic trailing stops, and multi-timeframe quantitative trade setups.",
+            "url": "https://www.bitcoincrypto.tech/tools/trading-bot"
+          },
+          {
+            "@type": "SiteNavigationElement",
+            "position": 6,
+            "name": "Level-2 Order Book Depth",
+            "description": "Central Limit Order Book depth, live bid/ask matching engine flow, and resting liquidity walls across global exchanges.",
+            "url": "https://www.bitcoincrypto.tech/orderbook"
+          }
+        ]
       }
     ]
   };

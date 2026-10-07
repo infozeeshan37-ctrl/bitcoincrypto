@@ -91,6 +91,17 @@ export const metadata: Metadata = {
   verification: {
     google: "udO3ekn-GvP9ijsju7oeWcay_BGJN-TzI9V7Gt3IvtE",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -101,10 +112,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={plusJakarta.variable}>
       <head>
-        <link
-          rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>₿</text></svg>"
-        />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
         <link
           rel="alternate"
           type="application/rss+xml"
