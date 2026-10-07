@@ -5,7 +5,14 @@ export function WebSiteJsonLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "BitcoinCrypto.tech",
-    alternateName: ["BitcoinCrypto", "Bitcoin Crypto AI", "BitcoinCrypto AI Prediction Suite"],
+    alternateName: [
+      "BitcoinCrypto",
+      "bitcoincrypto.tech",
+      "bitcoincrypto",
+      "Bitcoin Crypto AI",
+      "BitcoinCrypto AI Prediction Suite",
+      "BitcoinCrypto Tech"
+    ],
     url: "https://www.bitcoincrypto.tech",
     description: "Institutional cryptocurrency market intelligence, Binance 5-minute binary price predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, and order book depth analytics.",
     potentialAction: {
@@ -16,6 +23,89 @@ export function WebSiteJsonLd() {
       },
       "query-input": "required name=search_term_string",
     },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function HomePageJsonLd() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.bitcoincrypto.tech/#website",
+        name: "BitcoinCrypto.tech",
+        alternateName: [
+          "BitcoinCrypto",
+          "bitcoincrypto.tech",
+          "bitcoincrypto",
+          "Bitcoin Crypto AI",
+          "BitcoinCrypto AI Prediction Suite",
+          "BitcoinCrypto Tech"
+        ],
+        url: "https://www.bitcoincrypto.tech",
+        description: "Institutional cryptocurrency market intelligence, AI trading signals, Binance 5-minute binary price predictions, real-time Coinglass liquidation heatmaps, whale orders, and order book depth analytics.",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: "https://www.bitcoincrypto.tech/markets?search={search_term_string}",
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.bitcoincrypto.tech/#webpage",
+        url: "https://www.bitcoincrypto.tech",
+        name: "BitcoinCrypto.tech | #1 AI Crypto Trading Signals, Market Intelligence & Whale Orders",
+        isPartOf: {
+          "@id": "https://www.bitcoincrypto.tech/#website",
+        },
+        about: {
+          "@id": "https://www.bitcoincrypto.tech/#organization",
+        },
+        description: "Official BitcoinCrypto.tech platform - Institutional cryptocurrency market intelligence suite featuring real-time AI trading signals, Binance 5-minute price predictions, Coinglass liquidation heatmaps, L2 order book depth, and institutional whale orders.",
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.bitcoincrypto.tech/#organization",
+        name: "BitcoinCrypto.tech",
+        alternateName: "BitcoinCrypto Quantitative Research Desk",
+        url: "https://www.bitcoincrypto.tech",
+        logo: "https://www.bitcoincrypto.tech/logo.png",
+        sameAs: [
+          "https://github.com/infozeeshan37-ctrl/bitcoincrypto",
+          "https://twitter.com/bitcoincrypto",
+        ],
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "BitcoinCrypto AI Trading & Market Intelligence Suite",
+        applicationCategory: "FinanceApplication",
+        operatingSystem: "Web",
+        offers: {
+          "@type": "Offer",
+          price: "0.00",
+          priceCurrency: "USD",
+        },
+        featureList: [
+          "Real-time AI Trading Signals (BTC, ETH, SOL)",
+          "Binance 5-Minute Binary Price Predictions",
+          "Coinglass Liquidation Heatmaps & Cascades",
+          "Institutional Whale Orders & Depth Walls",
+          "Level 2 Order Book Depth Imbalance",
+          "US CPI AI Volatility Predictor"
+        ],
+      }
+    ]
   };
 
   return (
