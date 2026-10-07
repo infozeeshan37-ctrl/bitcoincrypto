@@ -104,8 +104,13 @@ export default function RootLayout({
           title="BitcoinCrypto.tech RSS Feed"
           href="/feed.xml"
         />
-        {/* Google AdSense Verification & Auto-Ads Script */}
-        <AdSenseScript />
+        {/* Official Google AdSense Account Verification & Auto-Ads */}
+        <meta name="google-adsense-account" content="ca-pub-5486114901283025" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5486114901283025"
+          crossOrigin="anonymous"
+        />
 
         {/* Zero-Flash Theme Script */}
         <script
