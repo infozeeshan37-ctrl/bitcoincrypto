@@ -1,3 +1,3 @@
 # Google AdSense Authorized Digital Sellers (ads.txt) for BitcoinCrypto.tech
-# Replace pub-XXXXXXXXXXXXXXXX with your actual AdSense Publisher ID
+# Official IAB Tech Lab ads.txt standard record
 google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

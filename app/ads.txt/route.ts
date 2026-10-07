@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
+  // Extract pub-XXXXXXXXXXXXXXXX from NEXT_PUBLIC_ADSENSE_CLIENT_ID (e.g. ca-pub-1234567890 -> pub-1234567890)
+  const rawId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || process.env.NEXT_PUBLIC_ADSENSE_PUB_ID || "pub-XXXXXXXXXXXXXXXX";
+  const pubId = rawId.replace(/^ca-/, "");
+
   const adsTxtContent = `# Google AdSense Authorized Digital Sellers (ads.txt) for BitcoinCrypto.tech
-# Replace pub-XXXXXXXXXXXXXXXX with your actual AdSense Publisher ID
-google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+# Official IAB Tech Lab ads.txt standard record
+google.com, ${pubId}, DIRECT, f08c47fec0942fa0
 `;
 
   return new NextResponse(adsTxtContent, {

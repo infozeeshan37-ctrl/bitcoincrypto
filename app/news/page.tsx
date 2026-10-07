@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import CryptoNewsCPIDashboard from "@/components/news/CryptoNewsCPIDashboard";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
+import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
   title: "Latest Crypto News Live: Bitcoin $100K Breakout, ETF Inflows, Fed Rate Cuts & Whale Alerts",
@@ -142,6 +143,9 @@ export default function NewsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Crypto News & Macroeconomic Wire", href: "/news" }]} />
         <CryptoNewsCPIDashboard />
+        
+        {/* Google AdSense Compliant Banner Slot */}
+        <AdBanner format="auto" />
       </div>
     </main>
   );

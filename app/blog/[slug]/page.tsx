@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Clock, ArrowLeft, User, Share2, Sparkles, CheckCircle2, Bookmark, ExternalLink, Zap, ArrowRight, Table } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import { ArticleJsonLd } from "@/components/seo/JsonLd";
+import AdBanner from "@/components/ads/AdBanner";
 
 export async function generateStaticParams() {
   return articles.map((article) => ({
@@ -282,6 +283,9 @@ export default async function BlogPostPage({
             </span>
           ))}
         </div>
+
+        {/* Google AdSense Compliant Banner Slot */}
+        <AdBanner format="auto" />
 
         {/* Related Articles Footer */}
         <div className="pt-10 border-t border-slate-200 dark:border-slate-800 space-y-6">

@@ -16,6 +16,7 @@ import {
   Calculator
 } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
+import AdBanner from "@/components/ads/AdBanner";
 import { conceptGuides, ConceptGuide } from "@/lib/conceptsData";
 
 interface PageProps {
@@ -322,6 +323,9 @@ export default async function ConceptDetailPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Google AdSense Compliant Banner Slot */}
+        <AdBanner format="auto" />
 
         {/* Explore More Concepts */}
         <section className="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4">

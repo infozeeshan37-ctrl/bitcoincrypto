@@ -32,6 +32,7 @@ import WhaleTrackerTool from "@/components/tools/details/WhaleTrackerTool";
 import CryptoConverterTool from "@/components/tools/details/CryptoConverterTool";
 import PositionSizerTool from "@/components/tools/details/PositionSizerTool";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
+import AdBanner from "@/components/ads/AdBanner";
 
 interface ToolConfig {
   slug: string;
@@ -393,6 +394,9 @@ export default async function DedicatedToolPage({ params }: PageProps) {
 
           {tool.slug === "whale-tracker" && <WhaleTrackerTool />}
         </section>
+
+        {/* Google AdSense Compliant Banner Slot */}
+        <AdBanner format="auto" />
 
         {/* Other Trading Suite Tools Grid */}
         <section className="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4">

@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import CommandPalette from "@/components/common/CommandPalette";
 import ChatWidget from "@/components/chat/ChatWidget";
 import CookieConsentBanner from "@/components/common/CookieConsentBanner";
+import AdSenseScript from "@/components/ads/AdSenseScript";
 import { WebSiteJsonLd, OrganizationJsonLd, SoftwareAppJsonLd } from "@/components/seo/JsonLd";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -103,6 +104,9 @@ export default function RootLayout({
           title="BitcoinCrypto.tech RSS Feed"
           href="/feed.xml"
         />
+        {/* Google AdSense Verification & Auto-Ads Script */}
+        <AdSenseScript />
+
         {/* Zero-Flash Theme Script */}
         <script
           dangerouslySetInnerHTML={{
