@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { sendWelcomeEmail } from "@/lib/emailService";
 
 export const dynamic = "force-dynamic";
 
@@ -215,12 +216,20 @@ export async function POST(request: Request) {
       currentSubscribers[existingIndex].updatedAt = nowIso;
       saveSubscribers(currentSubscribers);
 
+      // Trigger asynchronous email dispatch
+      const emailResult = await sendWelcomeEmail({
+        recipientEmail: cleanEmail,
+        selectedTopics: finalTopics,
+        frequency,
+      });
+
       return NextResponse.json({
         success: true,
         isExisting: true,
         message: "Preferences updated! Your automatic dispatch streams are active.",
         subscriber: currentSubscribers[existingIndex],
         activeTopicsCount: finalTopics.length,
+        emailDelivery: emailResult,
         downloadReportUrl: "/blog/stealth-yield-curve-control-macro-mechanics-crypto",
         latestIssue: {
           title: "Stealth Yield Curve Control & Institutional Cycle Dynamics 2026",
@@ -244,12 +253,20 @@ export async function POST(request: Request) {
     saveSubscribers(currentSubscribers);
     inMemorySubscribers = currentSubscribers;
 
+    // Trigger asynchronous email dispatch
+    const emailResult = await sendWelcomeEmail({
+      recipientEmail: cleanEmail,
+      selectedTopics: finalTopics,
+      frequency,
+    });
+
     return NextResponse.json({
       success: true,
       isExisting: false,
       message: "Subscription confirmed! Automated dispatches for your selected topics are now active.",
       subscriber: newSubscriber,
       activeTopicsCount: finalTopics.length,
+      emailDelivery: emailResult,
       downloadReportUrl: "/blog/stealth-yield-curve-control-macro-mechanics-crypto",
       latestIssue: {
         title: "Stealth Yield Curve Control & Institutional Cycle Dynamics 2026",
