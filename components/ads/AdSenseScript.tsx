@@ -6,9 +6,8 @@ interface AdSenseScriptProps {
 }
 
 export default function AdSenseScript({
-  clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-XXXXXXXXXXXXXXXX"
+  clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-5486114901283025"
 }: AdSenseScriptProps) {
-  // If the placeholder is present or clientId is set, render the AdSense script tag and account verification meta tag
   return (
     <>
       {/* Google AdSense Site Verification Meta Tag */}
