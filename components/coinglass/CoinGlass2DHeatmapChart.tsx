@@ -17,6 +17,10 @@ import {
   Activity,
   Flame,
   HelpCircle,
+  Radio,
+  Wifi,
+  BarChart2,
+  Gauge
 } from "lucide-react";
 import { CoinLiquidationProfile } from "./LiquidationHeatmapRadar";
 
@@ -58,11 +62,14 @@ export default function CoinGlass2DHeatmapChart({
   const [timeframe, setTimeframe] = useState<"12h" | "24h" | "3d" | "7d" | "30d">(initialTimeframe);
   const [leverageFilter, setLeverageFilter] = useState<"ALL" | "100x" | "50x" | "25x" | "10x">(initialLeverage);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
+  const [showDepthLadder, setShowDepthLadder] = useState(true);
 
   // Live real-time price state
   const [currentPrice, setCurrentPrice] = useState<number>(activeCoin.price);
   const [lastTickDirection, setLastTickDirection] = useState<"UP" | "DOWN" | "SAME">("SAME");
+  const [wsPing, setWsPing] = useState<number>(14);
+  const [tickCount, setTickCount] = useState<number>(0);
 
   // Mouse hover state for CoinGlass floating tooltip & cursor reticle
   const [hoverData, setHoverData] = useState<{
@@ -74,6 +81,9 @@ export default function CoinGlass2DHeatmapChart({
     dateStr: string;
     leverageValue: number | string;
     volUsd?: number;
+    side?: "SHORT" | "LONG";
+    intensity?: number;
+    distancePct?: number;
     hasLiquidation: boolean;
   } | null>(null);
 
@@ -95,18 +105,21 @@ export default function CoinGlass2DHeatmapChart({
         setLastTickDirection(next > prev ? "UP" : next < prev ? "DOWN" : "SAME");
         return next;
       });
+      setWsPing(Math.floor(10 + Math.random() * 8));
+      setTickCount((t) => t + 1);
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   // SVG Chart ViewBox Geometry
-  const SVG_WIDTH = 1000;
-  const SVG_HEIGHT = 520;
+  const SVG_WIDTH = 1060;
+  const SVG_HEIGHT = 540;
   const PADDING_TOP = 25;
   const PADDING_BOTTOM = 30;
-  const PADDING_LEFT = 10;
-  const PADDING_RIGHT = 65;
+  const PADDING_LEFT = 12;
+  const DEPTH_LADDER_WIDTH = showDepthLadder ? 70 : 0;
+  const PADDING_RIGHT = 75 + DEPTH_LADDER_WIDTH;
   const CHART_WIDTH = SVG_WIDTH - PADDING_LEFT - PADDING_RIGHT;
   const CHART_HEIGHT = SVG_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
 
@@ -127,11 +140,12 @@ export default function CoinGlass2DHeatmapChart({
     const list: Candle[] = [];
     const p = currentPrice;
     
-    // Total price swing percentage based on timeframe
-    const spanPct = timeframe === "12h" ? 0.05 : timeframe === "24h" ? 0.08 : timeframe === "3d" ? 0.12 : timeframe === "7d" ? 0.18 : 0.25;
+    // Total price swing percentage based on timeframe & zoomLevel
+    const baseSpanPct = timeframe === "12h" ? 0.04 : timeframe === "24h" ? 0.07 : timeframe === "3d" ? 0.11 : timeframe === "7d" ? 0.16 : 0.24;
+    const spanPct = baseSpanPct / zoomLevel;
     
     const candleWidth = CHART_WIDTH / numCandles;
-    let currentOpen = p * (1 + (activeCoin.change24h < 0 ? 0.035 : -0.03));
+    let currentOpen = p * (1 + (activeCoin.change24h < 0 ? 0.03 : -0.025));
     
     let globalMin = Number.MAX_VALUE;
     let globalMax = Number.MIN_VALUE;
@@ -141,17 +155,17 @@ export default function CoinGlass2DHeatmapChart({
     for (let i = 0; i < numCandles; i++) {
       const progress = i / (numCandles - 1);
       
-      // Multi-frequency wave to produce realistic trend with pullbacks (similar to the Bitcoin dump & bounce in user's image)
+      // Multi-frequency wave to produce realistic trend with pullbacks
       const wave1 = Math.sin(progress * Math.PI * 2.2) * (spanPct * 0.45);
       const wave2 = Math.cos(progress * Math.PI * 4.5) * (spanPct * 0.22);
       const noise = (Math.sin(i * 1.3) * 0.5 + Math.cos(i * 2.1) * 0.5) * (spanPct * 0.15);
       
-      const targetMid = p * (1 - (1 - progress) * (activeCoin.change24h < 0 ? -0.025 : 0.025) + wave1 + wave2 + noise);
+      const targetMid = p * (1 - (1 - progress) * (activeCoin.change24h < 0 ? -0.02 : 0.02) + wave1 + wave2 + noise);
       
       const open = i === 0 ? currentOpen : list[i - 1].close;
       const close = i === numCandles - 1 ? p : targetMid;
-      const candleHigh = Math.max(open, close) * (1 + Math.abs(Math.sin(i * 3.7)) * 0.006 + 0.002);
-      const candleLow = Math.min(open, close) * (1 - Math.abs(Math.cos(i * 2.9)) * 0.006 - 0.002);
+      const candleHigh = Math.max(open, close) * (1 + Math.abs(Math.sin(i * 3.7)) * 0.005 + 0.002);
+      const candleLow = Math.min(open, close) * (1 - Math.abs(Math.cos(i * 2.9)) * 0.005 - 0.002);
 
       globalMin = Math.min(globalMin, candleLow);
       globalMax = Math.max(globalMax, candleHigh);
@@ -173,8 +187,8 @@ export default function CoinGlass2DHeatmapChart({
       });
     }
 
-    // Add 12% vertical padding above and below so liquidation clusters have plenty of headroom
-    const range = (globalMax - globalMin) * 1.35;
+    // Add vertical padding above and below so liquidation clusters have plenty of headroom
+    const range = (globalMax - globalMin) * (1.35 / zoomLevel);
     const mid = (globalMax + globalMin) / 2;
     const adjustedMin = Math.max(0.00001, mid - range / 2);
     const adjustedMax = mid + range / 2;
@@ -185,7 +199,7 @@ export default function CoinGlass2DHeatmapChart({
       maxPrice: adjustedMax,
       priceRange: adjustedMax - adjustedMin,
     };
-  }, [currentPrice, numCandles, timeframe, activeCoin.change24h]);
+  }, [currentPrice, numCandles, timeframe, activeCoin.change24h, zoomLevel, CHART_WIDTH]);
 
   // Coordinate helper: price to SVG Y
   const priceToY = useCallback(
@@ -213,33 +227,33 @@ export default function CoinGlass2DHeatmapChart({
     
     // Discrete leverage tier strata
     const tierConfigs = [
-      // Upper Short Liquidation Bands (Above Current Price)
-      { pct: 0.008, lev: "100x" as const, levNum: 100, intensity: 5 as const, xStart: 25, xEnd: 100, side: "SHORT" as const },
-      { pct: 0.015, lev: "100x" as const, levNum: 100, intensity: 4 as const, xStart: 45, xEnd: 100, side: "SHORT" as const },
-      { pct: 0.022, lev: "50x" as const, levNum: 50, intensity: 5 as const, xStart: 18, xEnd: 100, side: "SHORT" as const },
-      { pct: 0.031, lev: "50x" as const, levNum: 50, intensity: 3 as const, xStart: 35, xEnd: 88, side: "SHORT" as const },
-      { pct: 0.042, lev: "50x" as const, levNum: 50, intensity: 4 as const, xStart: 50, xEnd: 100, side: "SHORT" as const },
-      { pct: 0.055, lev: "25x" as const, levNum: 25, intensity: 3 as const, xStart: 0, xEnd: 100, side: "SHORT" as const },
-      { pct: 0.068, lev: "25x" as const, levNum: 25, intensity: 2 as const, xStart: 20, xEnd: 78, side: "SHORT" as const },
-      { pct: 0.082, lev: "25x" as const, levNum: 25, intensity: 4 as const, xStart: 60, xEnd: 100, side: "SHORT" as const },
-      { pct: 0.098, lev: "10x" as const, levNum: 10, intensity: 2 as const, xStart: 0, xEnd: 85, side: "SHORT" as const },
-      { pct: 0.115, lev: "10x" as const, levNum: 10, intensity: 1 as const, xStart: 30, xEnd: 95, side: "SHORT" as const },
-      { pct: 0.132, lev: "10x" as const, levNum: 10, intensity: 3 as const, xStart: 65, xEnd: 100, side: "SHORT" as const },
-      { pct: 0.150, lev: "10x" as const, levNum: 10, intensity: 2 as const, xStart: 0, xEnd: 100, side: "SHORT" as const },
+      // Upper Short Liquidation Bands (Above Current Price - Yellow/Lime/Teal)
+      { pct: 0.006, lev: "100x" as const, levNum: 100, intensity: 5 as const, xStart: 25, xEnd: 100, side: "SHORT" as const },
+      { pct: 0.012, lev: "100x" as const, levNum: 100, intensity: 4 as const, xStart: 45, xEnd: 100, side: "SHORT" as const },
+      { pct: 0.018, lev: "50x" as const, levNum: 50, intensity: 5 as const, xStart: 18, xEnd: 100, side: "SHORT" as const },
+      { pct: 0.026, lev: "50x" as const, levNum: 50, intensity: 3 as const, xStart: 35, xEnd: 88, side: "SHORT" as const },
+      { pct: 0.035, lev: "50x" as const, levNum: 50, intensity: 4 as const, xStart: 50, xEnd: 100, side: "SHORT" as const },
+      { pct: 0.046, lev: "25x" as const, levNum: 25, intensity: 5 as const, xStart: 0, xEnd: 100, side: "SHORT" as const },
+      { pct: 0.058, lev: "25x" as const, levNum: 25, intensity: 2 as const, xStart: 20, xEnd: 78, side: "SHORT" as const },
+      { pct: 0.072, lev: "25x" as const, levNum: 25, intensity: 4 as const, xStart: 60, xEnd: 100, side: "SHORT" as const },
+      { pct: 0.088, lev: "10x" as const, levNum: 10, intensity: 3 as const, xStart: 0, xEnd: 85, side: "SHORT" as const },
+      { pct: 0.105, lev: "10x" as const, levNum: 10, intensity: 1 as const, xStart: 30, xEnd: 95, side: "SHORT" as const },
+      { pct: 0.122, lev: "10x" as const, levNum: 10, intensity: 3 as const, xStart: 65, xEnd: 100, side: "SHORT" as const },
+      { pct: 0.140, lev: "10x" as const, levNum: 10, intensity: 2 as const, xStart: 0, xEnd: 100, side: "SHORT" as const },
 
-      // Lower Long Liquidation Bands (Below Current Price)
-      { pct: -0.009, lev: "100x" as const, levNum: 100, intensity: 5 as const, xStart: 32, xEnd: 100, side: "LONG" as const },
-      { pct: -0.016, lev: "100x" as const, levNum: 100, intensity: 4 as const, xStart: 50, xEnd: 100, side: "LONG" as const },
-      { pct: -0.024, lev: "50x" as const, levNum: 50, intensity: 5 as const, xStart: 0, xEnd: 100, side: "LONG" as const },
-      { pct: -0.035, lev: "50x" as const, levNum: 50, intensity: 4 as const, xStart: 42, xEnd: 100, side: "LONG" as const },
-      { pct: -0.048, lev: "50x" as const, levNum: 50, intensity: 3 as const, xStart: 20, xEnd: 82, side: "LONG" as const },
-      { pct: -0.062, lev: "25x" as const, levNum: 25, intensity: 4 as const, xStart: 0, xEnd: 100, side: "LONG" as const },
-      { pct: -0.078, lev: "25x" as const, levNum: 25, intensity: 2 as const, xStart: 28, xEnd: 92, side: "LONG" as const },
-      { pct: -0.095, lev: "25x" as const, levNum: 25, intensity: 3 as const, xStart: 55, xEnd: 100, side: "LONG" as const },
-      { pct: -0.112, lev: "10x" as const, levNum: 10, intensity: 2 as const, xStart: 0, xEnd: 90, side: "LONG" as const },
-      { pct: -0.130, lev: "10x" as const, levNum: 10, intensity: 1 as const, xStart: 35, xEnd: 100, side: "LONG" as const },
-      { pct: -0.148, lev: "10x" as const, levNum: 10, intensity: 3 as const, xStart: 10, xEnd: 80, side: "LONG" as const },
-      { pct: -0.165, lev: "10x" as const, levNum: 10, intensity: 2 as const, xStart: 0, xEnd: 100, side: "LONG" as const },
+      // Lower Long Liquidation Bands (Below Current Price - Yellow/Lime/Teal)
+      { pct: -0.007, lev: "100x" as const, levNum: 100, intensity: 5 as const, xStart: 32, xEnd: 100, side: "LONG" as const },
+      { pct: -0.014, lev: "100x" as const, levNum: 100, intensity: 4 as const, xStart: 50, xEnd: 100, side: "LONG" as const },
+      { pct: -0.021, lev: "50x" as const, levNum: 50, intensity: 5 as const, xStart: 0, xEnd: 100, side: "LONG" as const },
+      { pct: -0.030, lev: "50x" as const, levNum: 50, intensity: 4 as const, xStart: 42, xEnd: 100, side: "LONG" as const },
+      { pct: -0.042, lev: "50x" as const, levNum: 50, intensity: 3 as const, xStart: 20, xEnd: 82, side: "LONG" as const },
+      { pct: -0.055, lev: "25x" as const, levNum: 25, intensity: 5 as const, xStart: 0, xEnd: 100, side: "LONG" as const },
+      { pct: -0.070, lev: "25x" as const, levNum: 25, intensity: 2 as const, xStart: 28, xEnd: 92, side: "LONG" as const },
+      { pct: -0.086, lev: "25x" as const, levNum: 25, intensity: 4 as const, xStart: 55, xEnd: 100, side: "LONG" as const },
+      { pct: -0.102, lev: "10x" as const, levNum: 10, intensity: 2 as const, xStart: 0, xEnd: 90, side: "LONG" as const },
+      { pct: -0.120, lev: "10x" as const, levNum: 10, intensity: 1 as const, xStart: 35, xEnd: 100, side: "LONG" as const },
+      { pct: -0.138, lev: "10x" as const, levNum: 10, intensity: 3 as const, xStart: 10, xEnd: 80, side: "LONG" as const },
+      { pct: -0.155, lev: "10x" as const, levNum: 10, intensity: 2 as const, xStart: 0, xEnd: 100, side: "LONG" as const },
     ];
 
     tierConfigs.forEach((cfg, idx) => {
@@ -316,8 +330,10 @@ export default function CoinGlass2DHeatmapChart({
     // Check if hovering directly on or near a liquidation band
     const matchingBand = liquidationBands.find((b) => {
       const bandY = priceToY(b.price);
-      return Math.abs(bandY - svgY) < 7;
+      return Math.abs(bandY - svgY) < 8;
     });
+
+    const distPct = ((hoverPrice - currentPrice) / currentPrice) * 100;
 
     setHoverData({
       x: clientX,
@@ -328,6 +344,9 @@ export default function CoinGlass2DHeatmapChart({
       dateStr: targetCandle.timestamp,
       leverageValue: matchingBand ? matchingBand.leverageNum : 0,
       volUsd: matchingBand?.volUsd,
+      side: matchingBand?.side,
+      intensity: matchingBand?.intensity,
+      distancePct: distPct,
       hasLiquidation: Boolean(matchingBand),
     });
   };
@@ -343,6 +362,11 @@ export default function CoinGlass2DHeatmapChart({
     return n.toFixed(6);
   };
 
+  // Find max volume across liquidation bands for Depth Ladder normalization
+  const maxBandVol = useMemo(() => {
+    return Math.max(...liquidationBands.map((b) => b.volUsd), 1);
+  }, [liquidationBands]);
+
   return (
     <div
       ref={containerRef}
@@ -355,19 +379,23 @@ export default function CoinGlass2DHeatmapChart({
       {/* 1. TOP COINGLASS HEATMAP TOOLBAR */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-purple-950/80">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-purple-900/40 text-amber-400 flex items-center justify-center font-bold border border-purple-700/50 shadow-inner">
-            <Flame className="w-4 h-4 text-amber-400" />
+          <div className="w-9 h-9 rounded-2xl bg-purple-900/40 text-amber-400 flex items-center justify-center font-bold border border-purple-700/50 shadow-inner">
+            <Flame className="w-5 h-5 text-amber-400 animate-pulse" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm sm:text-base font-black text-white tracking-tight flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-1.5">
                 <span>{activeCoin.name}</span>
                 <span className="text-amber-400 font-mono">({activeCoin.base}/USDT)</span>
-                <span className="text-xs text-purple-300 font-normal">Liquidation Heatmap</span>
+                <span className="text-xs text-purple-300 font-medium">Liquidation Spectrogram</span>
               </h3>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <Radio className="w-2.5 h-2.5 text-emerald-400 animate-pulse" />
+                Live WS ({wsPing}ms)
+              </span>
             </div>
             <p className="text-[11px] text-purple-300/70">
-              Multi-tiered leveraged stop liquidation clusters modeled across global exchanges
+              Continuous 2D density heatmap • Multi-exchange stop liquidity pools &amp; depth ladder
             </p>
           </div>
         </div>
@@ -408,6 +436,47 @@ export default function CoinGlass2DHeatmapChart({
             ))}
           </div>
 
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-0.5 bg-purple-950/70 p-1 rounded-xl border border-purple-800/60">
+            <button
+              onClick={() => setZoomLevel((z) => Math.min(2.5, +(z + 0.25).toFixed(2)))}
+              className="p-1 rounded-lg hover:bg-purple-900 text-purple-300 hover:text-white transition"
+              title="Zoom In (+)"
+            >
+              <ZoomIn className="w-3.5 h-3.5" />
+            </button>
+            <span className="text-[10px] text-purple-300 px-1 font-bold">{zoomLevel}x</span>
+            <button
+              onClick={() => setZoomLevel((z) => Math.max(0.75, +(z - 0.25).toFixed(2)))}
+              className="p-1 rounded-lg hover:bg-purple-900 text-purple-300 hover:text-white transition"
+              title="Zoom Out (-)"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+            {zoomLevel !== 1 && (
+              <button
+                onClick={() => setZoomLevel(1)}
+                className="p-1 rounded-lg hover:bg-purple-900 text-amber-400 transition"
+                title="Reset Zoom"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Depth Ladder Toggle */}
+          <button
+            onClick={() => setShowDepthLadder(!showDepthLadder)}
+            className={`p-1.5 rounded-xl border transition ${
+              showDepthLadder
+                ? "bg-purple-600 text-white border-purple-500"
+                : "bg-purple-950/70 text-purple-300 border-purple-800/60 hover:text-white"
+            }`}
+            title="Toggle Resting Depth Ladder"
+          >
+            <BarChart2 className="w-4 h-4" />
+          </button>
+
           {/* Fullscreen Toggle */}
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
@@ -419,7 +488,7 @@ export default function CoinGlass2DHeatmapChart({
         </div>
       </div>
 
-      {/* 2. THE MAIN 2D HEATMAP SVG CANVAS (EXACT MATCH TO USER SCREENSHOT) */}
+      {/* 2. THE MAIN 2D HEATMAP SVG CANVAS WITH DEPTH PROFILE LADDER */}
       <div className="relative w-full rounded-2xl overflow-hidden select-none border border-purple-900/50 shadow-inner bg-[#1e0333]">
         
         {/* Deep Purple Radial Atmosphere */}
@@ -431,7 +500,7 @@ export default function CoinGlass2DHeatmapChart({
           className="w-full h-auto cursor-crosshair block relative z-10"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          style={{ minHeight: isFullscreen ? "70vh" : "440px" }}
+          style={{ minHeight: isFullscreen ? "70vh" : "460px" }}
         >
           <defs>
             {/* Subtle Grid Pattern */}
@@ -447,24 +516,46 @@ export default function CoinGlass2DHeatmapChart({
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+
+            {/* Gaussian Blur for Continuous Liquid Density Cloud Simulation */}
+            <filter id="heatGlow" x="-10%" y="-30%" width="120%" height="160%">
+              <feGaussianBlur stdDeviation="3.5" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
 
           {/* Dark Background */}
           <rect width={SVG_WIDTH} height={SVG_HEIGHT} fill="transparent" />
           <rect width={SVG_WIDTH} height={SVG_HEIGHT} fill="url(#coinglassGrid)" />
 
-          {/* 1. HORIZONTAL STEPPED LIQUIDATION STRATA BANDS (COINGLASS AUTHENTIC HEATMAP) */}
+          {/* 1. HORIZONTAL STEPPED LIQUIDATION STRATA BANDS (AUTHENTIC HEATMAP SPECTROGRAM) */}
           {liquidationBands.map((band) => {
             const y = priceToY(band.price);
             const x1 = PADDING_LEFT + (band.xStartPercent / 100) * CHART_WIDTH;
             const x2 = PADDING_LEFT + (band.xEndPercent / 100) * CHART_WIDTH;
             const barWidth = Math.max(10, x2 - x1);
-            const barHeight = band.intensity >= 4 ? 6 : band.intensity === 3 ? 4.5 : 3.5;
+            const barHeight = band.intensity >= 4 ? 6.5 : band.intensity === 3 ? 5 : 3.8;
             const fill = getBandFill(band.intensity);
             const opacity = getBandOpacity(band.intensity);
 
             return (
               <g key={band.id} className="transition-opacity duration-200">
+                {/* Outer Glow Halo for High Intensity Clusters */}
+                {band.intensity >= 4 && (
+                  <rect
+                    x={x1}
+                    y={y - barHeight}
+                    width={barWidth}
+                    height={barHeight * 2}
+                    fill={fill}
+                    opacity={0.25}
+                    filter="url(#heatGlow)"
+                  />
+                )}
+
                 {/* Colored Liquidation Bar */}
                 <rect
                   x={x1}
@@ -473,7 +564,7 @@ export default function CoinGlass2DHeatmapChart({
                   height={barHeight}
                   fill={fill}
                   opacity={opacity}
-                  rx="1"
+                  rx="1.5"
                 />
 
                 {/* Intense Core Glow for 5-Star / Top Clusters */}
@@ -484,7 +575,7 @@ export default function CoinGlass2DHeatmapChart({
                     width={barWidth}
                     height={barHeight / 2}
                     fill="#ffffff"
-                    opacity={0.4}
+                    opacity={0.5}
                   />
                 )}
               </g>
@@ -542,25 +633,34 @@ export default function CoinGlass2DHeatmapChart({
                   x2={SVG_WIDTH - PADDING_RIGHT}
                   y2={currentY}
                   stroke={lastTickDirection === "UP" ? "#22c55e" : lastTickDirection === "DOWN" ? "#f43f5e" : "#eab308"}
-                  strokeWidth="1"
+                  strokeWidth="1.2"
                   strokeDasharray="4,3"
-                  opacity={0.7}
+                  opacity={0.85}
+                />
+
+                {/* Live Pulse Beacon Marker */}
+                <circle
+                  cx={SVG_WIDTH - PADDING_RIGHT}
+                  cy={currentY}
+                  r="3.5"
+                  fill="#eab308"
+                  filter="url(#beaconGlow)"
                 />
 
                 {/* Live Price Tag on Right Axis */}
                 <rect
-                  x={SVG_WIDTH - PADDING_RIGHT + 2}
-                  y={currentY - 9}
-                  width={PADDING_RIGHT - 4}
-                  height={18}
+                  x={SVG_WIDTH - 68}
+                  y={currentY - 10}
+                  width={64}
+                  height={20}
                   fill="#eab308"
-                  rx="3"
+                  rx="4"
                 />
                 <text
-                  x={SVG_WIDTH - PADDING_RIGHT + (PADDING_RIGHT - 4) / 2 + 2}
-                  y={currentY + 3.5}
+                  x={SVG_WIDTH - 36}
+                  y={currentY + 4}
                   fill="#020617"
-                  fontSize="9.5"
+                  fontSize="10"
                   fontFamily="monospace"
                   fontWeight="900"
                   textAnchor="middle"
@@ -571,22 +671,84 @@ export default function CoinGlass2DHeatmapChart({
             );
           })()}
 
-          {/* 4. Y-AXIS RIGHT PRICE LABELS */}
-          {[0.1, 0.25, 0.4, 0.55, 0.7, 0.85].map((fraction, idx) => {
+          {/* 4. RESTING LIQUIDATION DEPTH PROFILE LADDER (RIGHT-SIDE INTEGRATED WALLS) */}
+          {showDepthLadder && (
+            <g>
+              {/* Depth Ladder Background Column */}
+              <rect
+                x={SVG_WIDTH - PADDING_RIGHT}
+                y={PADDING_TOP}
+                width={DEPTH_LADDER_WIDTH}
+                height={CHART_HEIGHT}
+                fill="rgba(20, 0, 35, 0.4)"
+                stroke="rgba(255,255,255,0.06)"
+                strokeWidth="1"
+              />
+
+              {/* Depth Ladder Title */}
+              <text
+                x={SVG_WIDTH - PADDING_RIGHT + DEPTH_LADDER_WIDTH / 2}
+                y={PADDING_TOP - 8}
+                fill="rgba(255,255,255,0.4)"
+                fontSize="8"
+                fontFamily="monospace"
+                fontWeight="bold"
+                textAnchor="middle"
+              >
+                DEPTH LADDER
+              </text>
+
+              {/* Horizontal Depth Bars */}
+              {liquidationBands.map((band) => {
+                const y = priceToY(band.price);
+                const barLen = Math.max(4, (band.volUsd / maxBandVol) * (DEPTH_LADDER_WIDTH - 6));
+                const barColor = band.side === "SHORT" ? "#f43f5e" : "#10b981";
+
+                return (
+                  <g key={`ladder-${band.id}`}>
+                    <rect
+                      x={SVG_WIDTH - PADDING_RIGHT + 2}
+                      y={y - 2.5}
+                      width={barLen}
+                      height={5}
+                      fill={barColor}
+                      opacity={0.8}
+                      rx="1"
+                    />
+                    {band.intensity === 5 && (
+                      <text
+                        x={SVG_WIDTH - PADDING_RIGHT + barLen + 4}
+                        y={y + 2.5}
+                        fill="#facc15"
+                        fontSize="7.5"
+                        fontFamily="monospace"
+                        fontWeight="bold"
+                      >
+                        ${(band.volUsd / 1e6).toFixed(1)}M
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
+            </g>
+          )}
+
+          {/* 5. Y-AXIS RIGHT PRICE LABELS */}
+          {[0.08, 0.22, 0.36, 0.50, 0.64, 0.78, 0.92].map((fraction, idx) => {
             const pVal = minPrice + fraction * priceRange;
             const yPos = priceToY(pVal);
             return (
               <g key={`y-axis-${idx}`}>
                 <line
-                  x1={SVG_WIDTH - PADDING_RIGHT}
+                  x1={SVG_WIDTH - 70}
                   y1={yPos}
-                  x2={SVG_WIDTH - PADDING_RIGHT + 4}
+                  x2={SVG_WIDTH - 66}
                   y2={yPos}
                   stroke="rgba(255,255,255,0.15)"
                   strokeWidth="1"
                 />
                 <text
-                  x={SVG_WIDTH - PADDING_RIGHT + 6}
+                  x={SVG_WIDTH - 64}
                   y={yPos + 3}
                   fill="rgba(255,255,255,0.4)"
                   fontSize="8.5"
@@ -599,14 +761,14 @@ export default function CoinGlass2DHeatmapChart({
             );
           })}
 
-          {/* 5. INTERACTIVE RETICLE CURSOR (EXACT MATCH TO THE SQUARE '□' IN USER SCREENSHOT) */}
+          {/* 6. INTERACTIVE RETICLE CURSOR (EXACT MATCH TO COINGLASS SQUARE '□') */}
           {hoverData && (
             <g>
               {/* Subtle Crosshair Guide Lines */}
               <line
                 x1={PADDING_LEFT}
                 y1={hoverData.svgY}
-                x2={SVG_WIDTH - PADDING_RIGHT}
+                x2={SVG_WIDTH - 70}
                 y2={hoverData.svgY}
                 stroke="rgba(255,255,255,0.25)"
                 strokeWidth="0.75"
@@ -622,12 +784,12 @@ export default function CoinGlass2DHeatmapChart({
                 strokeDasharray="3,3"
               />
 
-              {/* Exact Small White Square Reticle '□' as shown in the uploaded image */}
+              {/* Exact Small White Square Reticle '□' as shown in the uploaded screenshot */}
               <rect
-                x={hoverData.svgX - 3}
-                y={hoverData.svgY - 3}
-                width="6"
-                height="6"
+                x={hoverData.svgX - 3.5}
+                y={hoverData.svgY - 3.5}
+                width="7"
+                height="7"
                 fill="none"
                 stroke="#ffffff"
                 strokeWidth="1.2"
@@ -636,8 +798,8 @@ export default function CoinGlass2DHeatmapChart({
           )}
         </svg>
 
-        {/* 6. COINGLASS BRANDING WATERMARK IN BOTTOM RIGHT (EXACT MATCH TO USER SCREENSHOT) */}
-        <div className="absolute bottom-3 right-5 flex items-center gap-1.5 opacity-60 hover:opacity-100 transition select-none z-20 pointer-events-none">
+        {/* 7. COINGLASS BRANDING WATERMARK IN BOTTOM RIGHT */}
+        <div className="absolute bottom-3 right-4 flex items-center gap-1.5 opacity-60 hover:opacity-100 transition select-none z-20 pointer-events-none">
           <div className="w-4 h-4 rounded-md bg-purple-600/80 flex items-center justify-center text-[10px] font-black text-white shadow-xs">
             ⚡
           </div>
@@ -646,25 +808,30 @@ export default function CoinGlass2DHeatmapChart({
           </span>
         </div>
 
-        {/* 7. AUTHENTIC COINGLASS FLOATING TOOLTIP CARD (EXACT 1:1 REPLICA OF USER SCREENSHOT) */}
+        {/* 8. AUTHENTIC COINGLASS FLOATING TOOLTIP CARD */}
         {hoverData && (
           <div
-            className="absolute pointer-events-none z-40 p-3.5 rounded-2xl bg-black/95 text-white font-mono text-xs border border-slate-700/80 shadow-2xl space-y-2.5 backdrop-blur-md animate-in fade-in duration-75"
+            className="absolute pointer-events-none z-40 p-3.5 rounded-2xl bg-black/95 text-white font-mono text-xs border border-slate-700/80 shadow-2xl space-y-2 backdrop-blur-md animate-in fade-in duration-75"
             style={{
               left: Math.min(
-                (containerRef.current?.clientWidth || 800) - 240,
+                (containerRef.current?.clientWidth || 800) - 250,
                 Math.max(15, hoverData.x + 18)
               ),
               top: Math.min(
-                (containerRef.current?.clientHeight || 500) - 140,
+                (containerRef.current?.clientHeight || 500) - 150,
                 Math.max(15, hoverData.y - 45)
               ),
-              minWidth: "210px",
+              minWidth: "220px",
             }}
           >
             {/* Timestamp Header */}
-            <div className="text-slate-200 font-bold text-xs">
-              {hoverData.dateStr}
+            <div className="text-slate-200 font-bold text-xs flex items-center justify-between border-b border-slate-800 pb-1.5">
+              <span>{hoverData.dateStr}</span>
+              {hoverData.distancePct !== undefined && (
+                <span className={`text-[10px] ${hoverData.distancePct >= 0 ? "text-amber-400" : "text-purple-400"}`}>
+                  {hoverData.distancePct >= 0 ? `+${hoverData.distancePct.toFixed(2)}%` : `${hoverData.distancePct.toFixed(2)}%`}
+                </span>
+              )}
             </div>
 
             {/* Price Line with Circle Marker */}
@@ -676,7 +843,7 @@ export default function CoinGlass2DHeatmapChart({
                 <span>Price</span>
               </div>
               <span className="font-mono font-bold text-white text-xs tracking-tight">
-                {formatPriceLabel(hoverData.price)}
+                ${formatPriceLabel(hoverData.price)}
               </span>
             </div>
 
@@ -689,15 +856,19 @@ export default function CoinGlass2DHeatmapChart({
                 <span>Liquidation Leverage</span>
               </div>
               <span className="font-mono font-bold text-white text-xs">
-                {hoverData.leverageValue}
+                {hoverData.leverageValue ? `${hoverData.leverageValue}x` : "None"}
               </span>
             </div>
 
-            {/* Optional Volume Pill if Hovering Band */}
+            {/* Cluster Volume & Side Pill */}
             {hoverData.volUsd && (
-              <div className="pt-1.5 border-t border-slate-800 flex items-center justify-between text-[10px] text-amber-300 font-bold">
-                <span>Cluster Volume:</span>
-                <span>${(hoverData.volUsd / 1e6).toFixed(2)}M</span>
+              <div className="pt-1.5 border-t border-slate-800 flex items-center justify-between text-[10px] font-bold">
+                <span className={hoverData.side === "SHORT" ? "text-rose-400" : "text-emerald-400"}>
+                  {hoverData.side === "SHORT" ? "🔴 Short Pool" : "🟢 Long Pool"}:
+                </span>
+                <span className="text-amber-300 font-mono">
+                  ${(hoverData.volUsd / 1e6).toFixed(2)}M
+                </span>
               </div>
             )}
           </div>
@@ -712,13 +883,13 @@ export default function CoinGlass2DHeatmapChart({
           <div className="flex items-center gap-1.5 text-[10px]">
             <span className="text-slate-400">Low</span>
             <div className="flex items-center gap-0.5">
-              <span className="w-3.5 h-2 rounded-xs bg-[#0284c7]" />
-              <span className="w-3.5 h-2 rounded-xs bg-[#0d9488]" />
-              <span className="w-3.5 h-2 rounded-xs bg-[#10b981]" />
-              <span className="w-3.5 h-2 rounded-xs bg-[#84cc16]" />
-              <span className="w-3.5 h-2 rounded-xs bg-[#facc15]" />
+              <span className="w-3.5 h-2 rounded-xs bg-[#0284c7]" title="Low Density (10x-25x)" />
+              <span className="w-3.5 h-2 rounded-xs bg-[#0d9488]" title="Medium-Low Density" />
+              <span className="w-3.5 h-2 rounded-xs bg-[#10b981]" title="Medium Density" />
+              <span className="w-3.5 h-2 rounded-xs bg-[#84cc16]" title="High Density (50x)" />
+              <span className="w-3.5 h-2 rounded-xs bg-[#facc15]" title="Critical Density (100x Magnet)" />
             </div>
-            <span className="text-amber-400 font-black">High</span>
+            <span className="text-amber-400 font-black">High (Squeeze Wall)</span>
           </div>
         </div>
 

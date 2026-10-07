@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import {
   Fish,
@@ -32,10 +32,18 @@ import {
   ChevronRight,
   BookOpen,
   Anchor,
-  HelpCircle
+  HelpCircle,
+  Volume2,
+  VolumeX,
+  SlidersHorizontal,
+  Compass,
+  ArrowUpRight,
+  ArrowDownRight
 } from "lucide-react";
 import { WhaleOrder, WhaleLiquidityWall, WhaleSentimentSummary } from "@/app/api/whale-orders/route";
 import WhaleOrdersChartTerminal from "./WhaleOrdersChartTerminal";
+import WhaleCvdVolumeChart from "./WhaleCvdVolumeChart";
+import WhaleScatterBubbleMap from "./WhaleScatterBubbleMap";
 
 const SUPPORTED_COINS = [
   { symbol: "BTCUSDT", base: "BTC", name: "Bitcoin", icon: "₿" },
@@ -54,86 +62,67 @@ export default function WhaleOrdersTerminal() {
   const [sentiment, setSentiment] = useState<WhaleSentimentSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<string>("");
-  
+
+  // Live WebSocket state & Price Tick Flash
+  const [liveSpotPrice, setLiveSpotPrice] = useState<number>(88450);
+  const [livePriceChange24h, setLivePriceChange24h] = useState<number>(2.4);
+  const [priceTick, setPriceTick] = useState<"up" | "down" | "same">("same");
+  const [priceTickKey, setPriceTickKey] = useState<number>(0);
+  const [audioAlerts, setAudioAlerts] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<"all" | "cvd" | "scatter" | "walls" | "terminal">("all");
+
   // Filter controls
   const [thresholdFilter, setThresholdFilter] = useState<number>(100000); // 100K, 500K, 1M, 5M
   const [sideFilter, setSideFilter] = useState<"ALL" | "BUY" | "SELL">("ALL");
   const [exchangeFilter, setExchangeFilter] = useState<string>("ALL");
   const [copiedTrade, setCopiedTrade] = useState<string | null>(null);
   const [orderbookStepOffset, setOrderbookStepOffset] = useState(0);
+
+  // Dynamic live streaming whale trades tape
   const [dynamicWhaleTrades, setDynamicWhaleTrades] = useState<
-    Array<{ id: string; time: string; type: "BUY" | "SELL"; amount: string; value: string; badge: string }>
-  >([
-    { id: "w-1", time: "Just now", type: "BUY", amount: "5.21 BTC", value: "$478,320", badge: "TWAP Smart Flow" },
-    { id: "w-2", time: "3s ago", type: "BUY", amount: "1.52 BTC", value: "$139,840", badge: "Aggressive Market Taker" },
-    { id: "w-3", time: "7s ago", type: "BUY", amount: "2.38 BTC", value: "$218,960", badge: "Limit Wall Absorption" },
-  ]);
+    Array<{
+      id: string;
+      time: string;
+      type: "BUY" | "SELL";
+      amount: string;
+      value: string;
+      badge: string;
+      isNew?: boolean;
+      price: number;
+      exchange: string;
+    }>
+  >([]);
 
   const activeCoin = SUPPORTED_COINS.find((c) => c.symbol === selectedSymbol) || SUPPORTED_COINS[0];
 
-  // Dynamic 1-second continuous tick for orderbook & radar
-  useEffect(() => {
-    let tickCount = 0;
-    const interval = setInterval(() => {
-      tickCount++;
-      setOrderbookStepOffset((prev) => (prev + 1) % 100);
+  // Web Audio Synth Chime for Whale Orders
+  const playWhaleChime = useCallback((isBuy: boolean) => {
+    if (!audioAlerts) return;
+    try {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContextClass) return;
+      const ctx = new AudioContextClass();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-      if (tickCount % 3 === 0) {
-        const isBuy = Math.random() > 0.4;
-        const curPrice = sentiment?.currentPrice || (selectedSymbol === "BTCUSDT" ? 88450 : selectedSymbol === "ETHUSDT" ? 3120 : 180);
-        const sizeMult = 0.5 + Math.random() * 4;
-        const amt = `${sizeMult.toFixed(2)} ${activeCoin.base}`;
-        const val = `$${Math.round(curPrice * sizeMult).toLocaleString()}`;
-        const badges = [
-          "TWAP Smart Flow",
-          "Aggressive Market Taker",
-          "Limit Wall Absorption",
-          "Institutional Iceberg Fill",
-          "Dark Pool Cross",
-          "CEX-DEX Arb Sweep",
-        ];
-        const randomBadge = badges[Math.floor(Math.random() * badges.length)];
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(isBuy ? 587.33 : 440, ctx.currentTime); // D5 or A4
+      osc.frequency.exponentialRampToValueAtTime(isBuy ? 880 : 329.63, ctx.currentTime + 0.15);
 
-        setDynamicWhaleTrades((prev) => [
-          {
-            id: `w-${Date.now()}`,
-            time: "Just now",
-            type: isBuy ? "BUY" : "SELL",
-            amount: amt,
-            value: val,
-            badge: randomBadge,
-          },
-          ...prev.slice(0, 3).map((item, idx) => ({
-            ...item,
-            time: `${(idx + 1) * 3}s ago`,
-          })),
-        ]);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [sentiment?.currentPrice, selectedSymbol, activeCoin.base]);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
 
-  const formatPrice = (p: number) => {
-    if (p >= 1000) return p.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (p >= 1) return p.toFixed(2);
-    return p.toFixed(4);
-  };
+      osc.connect(gain);
+      gain.connect(ctx.destination);
 
-  const currentMidPrice = sentiment?.currentPrice || (selectedSymbol === "BTCUSDT" ? 78517.68 : selectedSymbol === "ETHUSDT" ? 3120 : 180);
-  const depthPriceStep = currentMidPrice * 0.0006;
-  const oOffset = (orderbookStepOffset % 5) * 0.08;
-  const mockAskLevels = [
-    { price: currentMidPrice + depthPriceStep * 3, size: (0.86 + oOffset).toFixed(3), total: `$${(1.47 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(85 + (orderbookStepOffset % 7) * 2)) },
-    { price: currentMidPrice + depthPriceStep * 2, size: (0.584 + oOffset * 0.8).toFixed(3), total: `$${(0.90 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(60 + (orderbookStepOffset % 9) * 3)) },
-    { price: currentMidPrice + depthPriceStep * 1, size: (0.380 + oOffset * 0.5).toFixed(3), total: `$${(0.47 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(35 + (orderbookStepOffset % 11) * 2)) },
-  ];
+      osc.start();
+      osc.stop(ctx.currentTime + 0.26);
+    } catch (e) {
+      // AudioContext policy
+    }
+  }, [audioAlerts]);
 
-  const mockBidLevels = [
-    { price: currentMidPrice - depthPriceStep * 1, size: (0.508 + oOffset * 0.6).toFixed(3), total: `$${(0.63 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(42 + (orderbookStepOffset % 8) * 3)) },
-    { price: currentMidPrice - depthPriceStep * 2, size: (1.028 + oOffset * 1.1).toFixed(3), total: `$${(1.74 + oOffset * 0.3).toFixed(2)}M`, depth: Math.min(95, Math.round(92 - (orderbookStepOffset % 6) * 2)) },
-    { price: currentMidPrice - depthPriceStep * 3, size: (0.736 + oOffset * 0.7).toFixed(3), total: `$${(1.00 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(72 + (orderbookStepOffset % 7) * 2)) },
-  ];
-
+  // 1. Fetch comprehensive whale data from API
   const fetchWhaleData = useCallback(async (sym: string) => {
     try {
       setLoading(true);
@@ -144,6 +133,12 @@ export default function WhaleOrdersTerminal() {
           setWhaleOrders(json.data.whaleOrders || []);
           setLiquidityWalls(json.data.liquidityWalls || []);
           setSentiment(json.data.sentiment || null);
+          if (json.data.currentPrice) {
+            setLiveSpotPrice(json.data.currentPrice);
+          }
+          if (json.data.change24h !== undefined) {
+            setLivePriceChange24h(json.data.change24h);
+          }
           setLastUpdated(new Date().toLocaleTimeString());
         }
       }
@@ -158,17 +153,109 @@ export default function WhaleOrdersTerminal() {
     fetchWhaleData(selectedSymbol);
     const interval = setInterval(() => {
       fetchWhaleData(selectedSymbol);
-    }, 6000); // 6s live polling
+    }, 8000); // 8s polling
     return () => clearInterval(interval);
   }, [selectedSymbol, fetchWhaleData]);
 
-  // Filter whale orders based on threshold, side, and exchange
-  const filteredOrders = whaleOrders.filter((o) => {
-    const matchThreshold = o.usdValue >= thresholdFilter;
-    const matchSide = sideFilter === "ALL" || o.side === sideFilter;
-    const matchEx = exchangeFilter === "ALL" || o.exchange === exchangeFilter;
-    return matchThreshold && matchSide && matchEx;
-  });
+  // 2. Real-Time Binance WebSocket Direct Stream for Instant Blinking Price Ticks & Live Trades
+  useEffect(() => {
+    let ws: WebSocket | null = null;
+    try {
+      const streamSymbol = selectedSymbol.toLowerCase();
+      ws = new WebSocket(`wss://stream.binance.com:9443/ws/${streamSymbol}@ticker`);
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data && data.c) {
+            const p = parseFloat(data.c);
+            const chg = parseFloat(data.P);
+            if (!isNaN(p) && p > 0) {
+              setLiveSpotPrice((old) => {
+                if (p > old) {
+                  setPriceTick("up");
+                  setPriceTickKey((k) => k + 1);
+                } else if (p < old) {
+                  setPriceTick("down");
+                  setPriceTickKey((k) => k + 1);
+                }
+                return p;
+              });
+            }
+            if (!isNaN(chg)) setLivePriceChange24h(chg);
+          }
+        } catch (err) {
+          // ignore
+        }
+      };
+    } catch (e) {
+      // WS error
+    }
+
+    return () => {
+      if (ws) ws.close();
+    };
+  }, [selectedSymbol]);
+
+  // 3. Dynamic Continuous Whale Trades & Orderbook Shift Simulator
+  useEffect(() => {
+    let tickCount = 0;
+    const interval = setInterval(() => {
+      tickCount++;
+      setOrderbookStepOffset((prev) => (prev + 1) % 100);
+
+      if (tickCount % 3 === 0) {
+        const isBuy = Math.random() > 0.42;
+        const curPrice = liveSpotPrice;
+        const sizeMult = 0.8 + Math.random() * 5.2;
+        const amt = `${sizeMult.toFixed(2)} ${activeCoin.base}`;
+        const valNum = Math.round(curPrice * sizeMult);
+        const val = `$${valNum.toLocaleString()}`;
+        const badges = [
+          "TWAP Smart Flow",
+          "Aggressive Market Taker",
+          "Limit Wall Absorption",
+          "Institutional Iceberg Fill",
+          "Dark Pool Block Cross",
+          "CEX-DEX Arb Sweep",
+        ];
+        const venues = ["Binance", "Coinbase Prime", "OKX", "Bybit", "CME Institutional"];
+        const randomBadge = badges[Math.floor(Math.random() * badges.length)];
+        const randomVenue = venues[Math.floor(Math.random() * venues.length)];
+
+        if (valNum >= 300000) {
+          playWhaleChime(isBuy);
+        }
+
+        setDynamicWhaleTrades((prev) => [
+          {
+            id: `w-${Date.now()}`,
+            time: "Just now",
+            type: isBuy ? "BUY" : "SELL",
+            amount: amt,
+            value: val,
+            badge: randomBadge,
+            isNew: true,
+            price: curPrice,
+            exchange: randomVenue,
+          },
+          ...prev.slice(0, 5).map((item, idx) => ({
+            ...item,
+            isNew: false,
+            time: `${(idx + 1) * 3}s ago`,
+          })),
+        ]);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [liveSpotPrice, activeCoin.base, playWhaleChime]);
+
+  const formatPrice = (p: number) => {
+    if (p >= 1000) return p.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (p >= 1) return p.toFixed(2);
+    return p.toFixed(4);
+  };
 
   const formatUsd = (n: number) => {
     if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
@@ -176,6 +263,28 @@ export default function WhaleOrdersTerminal() {
     if (n >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
     return `$${n.toLocaleString()}`;
   };
+
+  // Orderbook Depth Levels
+  const depthPriceStep = liveSpotPrice * 0.0006;
+  const oOffset = (orderbookStepOffset % 5) * 0.08;
+  const mockAskLevels = [
+    { price: liveSpotPrice + depthPriceStep * 3, size: (0.86 + oOffset).toFixed(3), total: `$${(1.47 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(85 + (orderbookStepOffset % 7) * 2)) },
+    { price: liveSpotPrice + depthPriceStep * 2, size: (0.584 + oOffset * 0.8).toFixed(3), total: `$${(0.90 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(60 + (orderbookStepOffset % 9) * 3)) },
+    { price: liveSpotPrice + depthPriceStep * 1, size: (0.380 + oOffset * 0.5).toFixed(3), total: `$${(0.47 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(35 + (orderbookStepOffset % 11) * 2)) },
+  ];
+
+  const mockBidLevels = [
+    { price: liveSpotPrice - depthPriceStep * 1, size: (0.508 + oOffset * 0.6).toFixed(3), total: `$${(0.63 + oOffset * 0.1).toFixed(2)}M`, depth: Math.min(95, Math.round(42 + (orderbookStepOffset % 8) * 3)) },
+    { price: liveSpotPrice - depthPriceStep * 2, size: (1.028 + oOffset * 1.1).toFixed(3), total: `$${(1.74 + oOffset * 0.3).toFixed(2)}M`, depth: Math.min(95, Math.round(92 - (orderbookStepOffset % 6) * 2)) },
+    { price: liveSpotPrice - depthPriceStep * 3, size: (0.736 + oOffset * 0.7).toFixed(3), total: `$${(1.00 + oOffset * 0.2).toFixed(2)}M`, depth: Math.min(95, Math.round(72 + (orderbookStepOffset % 7) * 2)) },
+  ];
+
+  const filteredOrders = whaleOrders.filter((o) => {
+    const matchThreshold = o.usdValue >= thresholdFilter;
+    const matchSide = sideFilter === "ALL" || o.side === sideFilter;
+    const matchEx = exchangeFilter === "ALL" || o.exchange === exchangeFilter;
+    return matchThreshold && matchSide && matchEx;
+  });
 
   const handleCopyTrade = (order: WhaleOrder) => {
     const text = `🐋 Whale Order Detected: ${order.side} ${formatUsd(order.usdValue)} ${order.base} @ $${order.price.toLocaleString()} on ${order.exchange} (${order.orderType})`;
@@ -185,11 +294,11 @@ export default function WhaleOrdersTerminal() {
   };
 
   return (
-    <div className="space-y-10 pb-20">
+    <div className="space-y-8 pb-20 font-sans">
       
-      {/* 1. HERO BANNER WITH LIVE WHALE HUD */}
-      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 border border-indigo-900/40 shadow-xl relative overflow-hidden">
-        {/* Glow Effects */}
+      {/* 1. HERO BANNER WITH REAL-TIME BLINKING PRICE & WHALE HUD */}
+      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 border border-indigo-900/40 shadow-2xl relative overflow-hidden">
+        {/* Ambient Glows */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -201,7 +310,13 @@ export default function WhaleOrdersTerminal() {
                   <Fish className="w-4 h-4 text-indigo-400" />
                   Institutional Whale Orderflow &amp; Block Tape
                 </span>
+
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-800">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  Binance Direct Stream
+                </span>
               </div>
+
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
                 Whale Orders &amp; <br className="hidden sm:inline" />
                 <span className="bg-gradient-to-r from-indigo-400 via-amber-300 to-yellow-400 bg-clip-text text-transparent">
@@ -209,21 +324,36 @@ export default function WhaleOrdersTerminal() {
                 </span>
               </h1>
               <p className="text-slate-400 text-xs sm:text-sm max-w-3xl mt-2 leading-relaxed">
-                Track where crypto whales and institutional desks are placing multi-million dollar limit walls, aggressive taker sweeps, iceberg orders, and dark pool executions across major global exchanges in real time.
+                Track where crypto whales and institutional desks are placing multi-million dollar limit walls, aggressive taker sweeps, iceberg orders, and dark pool executions with millisecond price blinking and Cumulative Volume Delta.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            {/* Header Right Action Buttons */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              <button
+                onClick={() => setAudioAlerts(!audioAlerts)}
+                className={`px-3 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-1.5 border shadow-sm ${
+                  audioAlerts
+                    ? "bg-amber-400 text-slate-950 border-amber-300 shadow-amber-400/20"
+                    : "bg-slate-900 border-slate-700 text-slate-300 hover:text-white"
+                }`}
+                title="Toggle Web Audio Synth Alert on >$300K Whale Block"
+              >
+                {audioAlerts ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                <span className="hidden sm:inline">{audioAlerts ? "Audio Alerts ON" : "Audio Alerts OFF"}</span>
+              </button>
+
               <button
                 onClick={() => fetchWhaleData(selectedSymbol)}
-                className="px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm"
+                className="px-3.5 py-2 rounded-2xl bg-slate-900 border border-slate-700 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-                <span>Refresh Radar</span>
+                <span>Refresh</span>
               </button>
+
               <Link
                 href="/orderbook"
-                className="px-5 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-md hover:scale-105"
+                className="px-4 py-2 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black transition flex items-center gap-1.5 shadow-md hover:scale-105"
               >
                 <span>L2 Order Book</span>
                 <ArrowRight className="w-4 h-4" />
@@ -231,12 +361,44 @@ export default function WhaleOrdersTerminal() {
             </div>
           </div>
 
-          {/* Real-Time Whale HUD Metrics */}
-          {sentiment && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-800 text-xs">
-              <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+          {/* Real-Time Whale HUD Metrics with Live Blinking Spot Price */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 border-t border-slate-800 text-xs">
+            {/* 1. Live Spot Price with Blink Feedback */}
+            <div
+              key={`spot-hud-${priceTickKey}`}
+              className={`p-3.5 rounded-2xl bg-slate-900/90 border transition-all duration-500 space-y-1 ${
+                priceTick === "up"
+                  ? "border-emerald-500 shadow-lg shadow-emerald-500/20 flash-border-up"
+                  : priceTick === "down"
+                  ? "border-rose-500 shadow-lg shadow-rose-500/20 flash-border-down"
+                  : "border-slate-800"
+              }`}
+            >
+              <div className="flex items-center justify-between text-[10px] uppercase font-bold text-slate-400">
+                <span className="flex items-center gap-1">
+                  <Radio className="w-3 h-3 text-amber-400 animate-pulse" /> Live Benchmark
+                </span>
+                <span className={`font-mono font-black ${livePriceChange24h >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                  {livePriceChange24h >= 0 ? "+" : ""}{livePriceChange24h.toFixed(2)}%
+                </span>
+              </div>
+              <div
+                className={`text-lg sm:text-xl font-black font-mono tracking-tight transition-colors duration-300 ${
+                  priceTick === "up" ? "text-emerald-400" : priceTick === "down" ? "text-rose-400" : "text-white"
+                }`}
+              >
+                ${formatPrice(liveSpotPrice)}
+              </div>
+              <span className="text-[10px] text-slate-400 block truncate">
+                {activeCoin.base}/USDT Real-Time Tick
+              </span>
+            </div>
+
+            {/* 2. Whale Net Bias */}
+            {sentiment && (
+              <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
                 <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
-                  <Activity className="w-3 h-3 text-indigo-400" /> Whale Net Bias
+                  <Activity className="w-3 h-3 text-indigo-400" /> Whale Flow Bias
                 </span>
                 <div className="text-sm sm:text-base font-black text-emerald-400 font-mono truncate">
                   {sentiment.whaleNetBias}
@@ -245,48 +407,42 @@ export default function WhaleOrdersTerminal() {
                   {sentiment.whaleBuyPercent}% Buy vs {sentiment.whaleSellPercent}% Sell
                 </span>
               </div>
+            )}
 
-              <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+            {/* 3. 24h Whale Volume & Cumulative CVD */}
+            {sentiment && (
+              <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
                 <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
                   <BarChart2 className="w-3 h-3 text-blue-400" /> 24h Whale Volume
                 </span>
-                <div className="text-lg font-black text-white font-mono">
+                <div className="text-base sm:text-lg font-black text-white font-mono">
                   {formatUsd(sentiment.totalWhaleVolume24hUsd)}
                 </div>
                 <span className="text-[10px] text-indigo-300 font-mono">
-                  CVD Delta: {sentiment.whaleCvdDeltaUsd >= 0 ? "+" : ""}{formatUsd(sentiment.whaleCvdDeltaUsd)}
+                  CVD: {sentiment.whaleCvdDeltaUsd >= 0 ? "+" : ""}{formatUsd(sentiment.whaleCvdDeltaUsd)}
                 </span>
               </div>
+            )}
 
-              <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
-                  <Flame className="w-3 h-3 text-amber-400" /> Largest Single Order
-                </span>
-                <div className="text-lg font-black text-amber-400 font-mono">
-                  {formatUsd(sentiment.largestSingleOrderUsd)}
-                </div>
-                <span className="text-[10px] text-slate-400 truncate block">
-                  {sentiment.largestOrderDetails || "Institutional Block"}
-                </span>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+            {/* 4. Resting Limit Wall Ratio */}
+            {sentiment && (
+              <div className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1">
                 <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
                   <Layers className="w-3 h-3 text-emerald-400" /> Resting Wall Depth
                 </span>
-                <div className="text-base font-black text-white font-mono">
+                <div className="text-sm sm:text-base font-black text-white font-mono">
                   {sentiment.wallRatio}
                 </div>
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[10px] text-slate-400 truncate block">
                   Bids: {formatUsd(sentiment.activeBidWallsUsd)} • Asks: {formatUsd(sentiment.activeAskWallsUsd)}
                 </span>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
-      {/* 2. SYMBOL SELECTOR & LIVE PRICE BAR */}
+      {/* 2. SYMBOL SELECTOR & REAL-TIME BLINKING PRICE BAR */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
           <span className="text-xs font-bold text-slate-400 uppercase font-mono mr-1 shrink-0">
@@ -311,25 +467,58 @@ export default function WhaleOrdersTerminal() {
           })}
         </div>
 
-        {sentiment && (
-          <div className="flex items-center gap-4 border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-slate-800 pt-3 sm:pt-0 sm:pl-4">
-            <div>
-              <div className="text-[10px] text-slate-400 uppercase font-mono font-bold">Spot Price</div>
-              <div className="text-base sm:text-lg font-black text-slate-900 dark:text-white font-mono">
-                ${sentiment.currentPrice >= 1 ? sentiment.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2 }) : sentiment.currentPrice.toFixed(4)}
-              </div>
+        {/* Live Blinking Benchmark Box */}
+        <div className="flex items-center gap-4 border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-slate-800 pt-3 sm:pt-0 sm:pl-4">
+          <div>
+            <div className="text-[10px] text-slate-400 uppercase font-mono font-bold flex items-center gap-1">
+              <span className={`w-2 h-2 rounded-full ${priceTick === "up" ? "bg-emerald-400 animate-ping" : priceTick === "down" ? "bg-rose-400 animate-ping" : "bg-amber-400"}`} />
+              <span>Live Price</span>
             </div>
-            <div>
-              <div className="text-[10px] text-slate-400 uppercase font-mono font-bold">24h Change</div>
-              <div className={`text-xs sm:text-sm font-black font-mono ${sentiment.change24h >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
-                {sentiment.change24h >= 0 ? "+" : ""}{sentiment.change24h.toFixed(2)}%
-              </div>
+            <div
+              key={`price-bar-${priceTickKey}`}
+              className={`text-base sm:text-lg font-black font-mono transition-all duration-300 ${
+                priceTick === "up"
+                  ? "text-emerald-500 flash-up"
+                  : priceTick === "down"
+                  ? "text-rose-500 flash-down"
+                  : "text-slate-900 dark:text-white"
+              }`}
+            >
+              ${formatPrice(liveSpotPrice)}
             </div>
           </div>
-        )}
+          <div>
+            <div className="text-[10px] text-slate-400 uppercase font-mono font-bold">24h Change</div>
+            <div className={`text-xs sm:text-sm font-black font-mono ${livePriceChange24h >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
+              {livePriceChange24h >= 0 ? "+" : ""}{livePriceChange24h.toFixed(2)}%
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* 3. MAIN 2-COLUMN SECTION: COINGLASS-STYLE WHALE HEATMAP LADDER & LIVE LARGE ORDER FEED */}
+      {/* 3. REALISTIC VISUAL ANALYTICAL GRAPHS (CVD + BUBBLE SPECTROGRAM) */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {/* Graph 1: Real-Time Cumulative Volume Delta (CVD) */}
+        <WhaleCvdVolumeChart
+          symbol={selectedSymbol}
+          base={activeCoin.base}
+          currentPrice={liveSpotPrice}
+          whaleBuyVolUsd={sentiment?.whaleBuyVolumeUsd || 42000000}
+          whaleSellVolUsd={sentiment?.whaleSellVolumeUsd || 28000000}
+          whaleCvdDeltaUsd={sentiment?.whaleCvdDeltaUsd || 14000000}
+          isPriceTickUp={priceTick === "up"}
+        />
+
+        {/* Graph 2: Whale Block Trade Spectrogram (Time vs Price vs Size Bubble Map) */}
+        <WhaleScatterBubbleMap
+          symbol={selectedSymbol}
+          base={activeCoin.base}
+          currentPrice={liveSpotPrice}
+          whaleOrders={whaleOrders}
+        />
+      </div>
+
+      {/* 4. MAIN 2-COLUMN SECTION: COINGLASS-STYLE WHALE HEATMAP LADDER & LIVE LARGE ORDER FEED */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* LEFT COLUMN: COINGLASS-STYLE WHALE LIQUIDITY HEATMAP & WALL LADDER (Col 7) */}
@@ -373,14 +562,20 @@ export default function WhaleOrdersTerminal() {
                     .map((wall, idx) => {
                       const maxWall = 80000000;
                       const barWidth = Math.min(100, Math.max(15, Math.round((wall.totalUsd / maxWall) * 100)));
+                      const isNear = Math.abs(wall.priceLevel - liveSpotPrice) / liveSpotPrice < 0.015;
+
                       return (
                         <div
                           key={`ask-${idx}`}
-                          className="p-3 rounded-2xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 relative overflow-hidden space-y-1"
+                          className={`p-3 rounded-2xl border relative overflow-hidden space-y-1 transition-all ${
+                            isNear
+                              ? "bg-rose-100/70 dark:bg-rose-950/40 border-rose-400 dark:border-rose-700 ring-1 ring-rose-400"
+                              : "bg-rose-50/60 dark:bg-rose-950/20 border-rose-200/80 dark:border-rose-900/40"
+                          }`}
                         >
                           {/* Background depth fill */}
                           <div
-                            className="absolute top-0 bottom-0 left-0 bg-rose-500/15 dark:bg-rose-500/20 rounded-2xl transition-all duration-500"
+                            className="absolute top-0 bottom-0 left-0 bg-rose-500/15 dark:bg-rose-500/25 rounded-2xl transition-all duration-500"
                             style={{ width: `${barWidth}%` }}
                           />
 
@@ -392,6 +587,11 @@ export default function WhaleOrdersTerminal() {
                               <span className="text-[10px] text-rose-600 dark:text-rose-400 font-mono font-bold">
                                 +{wall.distancePercent}%
                               </span>
+                              {isNear && (
+                                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-rose-500 text-white animate-pulse">
+                                  PROXIMITY ALERT
+                                </span>
+                              )}
                             </div>
 
                             <div className="flex items-center gap-2 font-mono">
@@ -414,20 +614,31 @@ export default function WhaleOrdersTerminal() {
                 </div>
               </div>
 
-              {/* CURRENT SPOT PRICE DIVIDER */}
-              {sentiment && (
-                <div className="p-3.5 rounded-2xl bg-slate-950 text-white flex items-center justify-between border-2 border-amber-400 shadow-md">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-                    <span className="text-xs font-black uppercase tracking-wider text-amber-400">
-                      CURRENT SPOT BENCHMARK
-                    </span>
-                  </div>
-                  <div className="text-base sm:text-lg font-black font-mono text-white">
-                    ${sentiment.currentPrice >= 1 ? sentiment.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2 }) : sentiment.currentPrice.toFixed(4)}
-                  </div>
+              {/* CURRENT SPOT PRICE DIVIDER WITH LIVE FLASH */}
+              <div
+                key={`spot-divider-${priceTickKey}`}
+                className={`p-3.5 rounded-2xl bg-slate-950 text-white flex items-center justify-between border-2 transition-all duration-300 shadow-md ${
+                  priceTick === "up"
+                    ? "border-emerald-400 shadow-emerald-500/30"
+                    : priceTick === "down"
+                    ? "border-rose-400 shadow-rose-500/30"
+                    : "border-amber-400"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className={`w-2.5 h-2.5 rounded-full ${priceTick === "up" ? "bg-emerald-400 animate-ping" : priceTick === "down" ? "bg-rose-400 animate-ping" : "bg-emerald-400 animate-ping"}`} />
+                  <span className="text-xs font-black uppercase tracking-wider text-amber-400">
+                    CURRENT SPOT BENCHMARK
+                  </span>
                 </div>
-              )}
+                <div
+                  className={`text-base sm:text-lg font-black font-mono transition-colors ${
+                    priceTick === "up" ? "text-emerald-400" : priceTick === "down" ? "text-rose-400" : "text-white"
+                  }`}
+                >
+                  ${formatPrice(liveSpotPrice)}
+                </div>
+              </div>
 
               {/* Support Bid Walls (Below Price) */}
               <div className="space-y-2">
@@ -442,14 +653,20 @@ export default function WhaleOrdersTerminal() {
                     .map((wall, idx) => {
                       const maxWall = 80000000;
                       const barWidth = Math.min(100, Math.max(15, Math.round((wall.totalUsd / maxWall) * 100)));
+                      const isNear = Math.abs(wall.priceLevel - liveSpotPrice) / liveSpotPrice < 0.015;
+
                       return (
                         <div
                           key={`bid-${idx}`}
-                          className="p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 relative overflow-hidden space-y-1"
+                          className={`p-3 rounded-2xl border relative overflow-hidden space-y-1 transition-all ${
+                            isNear
+                              ? "bg-emerald-100/70 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-700 ring-1 ring-emerald-400"
+                              : "bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-200/80 dark:border-emerald-900/40"
+                          }`}
                         >
                           {/* Background depth fill */}
                           <div
-                            className="absolute top-0 bottom-0 left-0 bg-emerald-500/15 dark:bg-emerald-500/20 rounded-2xl transition-all duration-500"
+                            className="absolute top-0 bottom-0 left-0 bg-emerald-500/15 dark:bg-emerald-500/25 rounded-2xl transition-all duration-500"
                             style={{ width: `${barWidth}%` }}
                           />
 
@@ -461,6 +678,11 @@ export default function WhaleOrdersTerminal() {
                               <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">
                                 -{wall.distancePercent}%
                               </span>
+                              {isNear && (
+                                <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500 text-white animate-pulse">
+                                  PROXIMITY ALERT
+                                </span>
+                              )}
                             </div>
 
                             <div className="flex items-center gap-2 font-mono">
@@ -555,12 +777,23 @@ export default function WhaleOrdersTerminal() {
                   ))}
                 </div>
 
-                {/* Mid Price Separator */}
-                <div className="py-1 px-2 rounded-lg bg-slate-900 dark:bg-slate-950 text-white flex justify-between items-center text-[11px] font-mono border border-slate-800">
+                {/* Mid Price Separator with Live Blink */}
+                <div
+                  key={`mid-price-${priceTickKey}`}
+                  className={`py-1 px-2 rounded-lg bg-slate-900 dark:bg-slate-950 text-white flex justify-between items-center text-[11px] font-mono border transition-all duration-300 ${
+                    priceTick === "up" ? "border-emerald-500 bg-emerald-950/40" : priceTick === "down" ? "border-rose-500 bg-rose-950/40" : "border-slate-800"
+                  }`}
+                >
                   <span className="text-[9px] text-amber-400 font-bold uppercase flex items-center gap-1">
                     <Radio className="w-2.5 h-2.5 text-amber-400 animate-pulse" /> Mid Spot:
                   </span>
-                  <span className="font-black text-amber-400">${formatPrice(currentMidPrice)}</span>
+                  <span
+                    className={`font-black transition-colors ${
+                      priceTick === "up" ? "text-emerald-400" : priceTick === "down" ? "text-rose-400" : "text-amber-400"
+                    }`}
+                  >
+                    ${formatPrice(liveSpotPrice)}
+                  </span>
                   <span className="text-[9px] text-slate-400 font-bold">Spread 0.01%</span>
                 </div>
 
@@ -581,12 +814,12 @@ export default function WhaleOrdersTerminal() {
               </div>
             </div>
 
-            {/* Institutional Whale Block Activity Stream */}
+            {/* Institutional Whale Block Activity Stream with Live Row Flash */}
             <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
               <div className="flex justify-between items-center text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>Whale Prints</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                  <span>Real-Time Prints</span>
                 </span>
                 <span className="text-amber-600 dark:text-amber-400 font-bold text-[9px]">&gt;$50K Block Trades</span>
               </div>
@@ -594,14 +827,20 @@ export default function WhaleOrdersTerminal() {
                 {dynamicWhaleTrades.map((tr) => (
                   <div
                     key={tr.id}
-                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs font-mono transition-all duration-300 gap-2"
+                    className={`p-2.5 rounded-xl border flex items-center justify-between text-xs font-mono transition-all duration-500 gap-2 ${
+                      tr.isNew
+                        ? tr.type === "BUY"
+                          ? "bg-emerald-100 dark:bg-emerald-950/60 border-emerald-400 ring-1 ring-emerald-400 flash-border-up"
+                          : "bg-rose-100 dark:bg-rose-950/60 border-rose-400 ring-1 ring-rose-400 flash-border-down"
+                        : "bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700"
+                    }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span
                         className={`px-1.5 py-0.5 rounded text-[10px] font-black shrink-0 ${
                           tr.type === "BUY"
-                            ? "bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
-                            : "bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800"
+                            ? "bg-emerald-500 text-white"
+                            : "bg-rose-500 text-white"
                         }`}
                       >
                         {tr.type}
@@ -612,6 +851,11 @@ export default function WhaleOrdersTerminal() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0 text-right">
+                      {tr.isNew && (
+                        <span className="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 animate-bounce">
+                          NEW
+                        </span>
+                      )}
                       <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold truncate max-w-[120px] hidden sm:inline">
                         {tr.badge}
                       </span>
@@ -637,6 +881,7 @@ export default function WhaleOrdersTerminal() {
             </div>
           </div>
 
+          {/* Whale Block Trade Tape Feed with Thresholds */}
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2">
@@ -654,7 +899,7 @@ export default function WhaleOrdersTerminal() {
               </div>
 
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
-                Active
+                {filteredOrders.length} Executions
               </span>
             </div>
 
@@ -703,7 +948,7 @@ export default function WhaleOrdersTerminal() {
             </div>
 
             {/* Streaming Whale Orders Feed */}
-            <div className="space-y-2.5 max-h-[580px] overflow-y-auto pr-1">
+            <div className="space-y-2.5 max-h-[520px] overflow-y-auto pr-1">
               {filteredOrders.map((order) => {
                 const isBuy = order.side === "BUY";
                 return (
@@ -773,12 +1018,12 @@ export default function WhaleOrdersTerminal() {
 
       </div>
 
-      {/* 3. PROFESSIONAL REAL-TIME WHALE ORDERS & LARGE TRADES GRAPH */}
+      {/* 5. PROFESSIONAL CANDLESTICK + RESTING ORDER DEPTH CHART TERMINAL */}
       <section id="whale-chart-terminal">
         <WhaleOrdersChartTerminal />
       </section>
 
-      {/* 4. COMPREHENSIVE IN-DEPTH PLAIN-ENGLISH EDUCATIONAL GUIDE (COINGLASS MASTERCLASS) */}
+      {/* 6. COMPREHENSIVE IN-DEPTH PLAIN-ENGLISH EDUCATIONAL GUIDE (COINGLASS MASTERCLASS) */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
         
         <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
