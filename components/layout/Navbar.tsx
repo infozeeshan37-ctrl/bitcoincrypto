@@ -179,13 +179,39 @@ export default function Navbar() {
 
         </div>
 
-        {/* Right: Desktop Theme Switcher */}
-        <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+        {/* Right: Desktop Search & Theme Switcher */}
+        <div className="hidden sm:flex items-center gap-2.5 flex-shrink-0">
+          <button
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(new CustomEvent("open-command-palette"));
+              }
+            }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-bold transition shadow-xs group"
+            title="Search entire platform (Press / or Ctrl+K)"
+          >
+            <Search className="w-3.5 h-3.5 text-amber-500 group-hover:scale-110 transition-transform" />
+            <span className="text-slate-800 dark:text-slate-200 font-extrabold">Search</span>
+            <kbd className="px-1.5 py-0.2 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-[10px] font-mono text-slate-500 dark:text-slate-400 font-black">
+              /
+            </kbd>
+          </button>
           <ThemeToggle />
         </div>
 
         {/* Mobile menu trigger */}
         <div className="flex items-center gap-2 lg:hidden">
+          <button
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(new CustomEvent("open-command-palette"));
+              }
+            }}
+            className="p-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition"
+            title="Search"
+          >
+            <Search className="w-4 h-4 text-amber-500" />
+          </button>
           <ThemeToggle variant="dropdown" />
           
           <button
@@ -202,6 +228,25 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl border-b border-slate-200 dark:border-slate-800 px-5 py-6 space-y-5 text-sm font-medium text-slate-700 dark:text-slate-200 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto">
           
+          {/* Quick Search Button in Mobile Drawer */}
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(new CustomEvent("open-command-palette"));
+              }
+            }}
+            className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold text-xs border border-slate-200 dark:border-slate-700 shadow-sm"
+          >
+            <div className="flex items-center gap-2.5">
+              <Search className="w-4 h-4 text-amber-500" />
+              <span>Search entire website &amp; tools...</span>
+            </div>
+            <kbd className="px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 font-mono text-[10px] text-slate-400">
+              /
+            </kbd>
+          </button>
+
           {/* Quick Actions */}
           <div className="grid grid-cols-2 gap-2 pb-2">
             <Link
