@@ -40,15 +40,40 @@ async function handleTweetTrigger(request: NextRequest) {
       });
     }
 
+    let reqBody: any = null;
+    if (request.method === "POST") {
+      try {
+        reqBody = await request.json();
+      } catch {
+        // empty body is acceptable
+      }
+    }
+
+    const credentials = reqBody?.apiKey
+      ? {
+          apiKey: reqBody.apiKey,
+          apiSecret: reqBody.apiSecret,
+          accessToken: reqBody.accessToken,
+          accessSecret: reqBody.accessSecret,
+        }
+      : undefined;
+
     // 4. Publish tweet via Twitter API v2
-    const publishResult = await publishTweet(generated.text);
+    const publishResult = await publishTweet(generated.text, credentials);
 
     const mask = (v?: string) => (v ? `${v.slice(0, 3)}...${v.slice(-3)} (${v.length} chars)` : "NOT_SET");
+    const activeApiKey = credentials?.apiKey || process.env.TWITTER_API_KEY || process.env.TWITTER_CONSUMER_KEY || process.env.X_API_KEY;
+    const activeApiSecret = credentials?.apiSecret || process.env.TWITTER_API_SECRET || process.env.TWITTER_API_KEY_SECRET || process.env.TWITTER_CONSUMER_SECRET || process.env.TWITTER_SECRET_KEY || process.env.X_API_SECRET;
+    const activeAccessToken = credentials?.accessToken || process.env.TWITTER_ACCESS_TOKEN || process.env.TWITTER_TOKEN || process.env.X_ACCESS_TOKEN;
+    const activeAccessSecret = credentials?.accessSecret || process.env.TWITTER_ACCESS_SECRET || process.env.TWITTER_ACCESS_TOKEN_SECRET || process.env.TWITTER_TOKEN_SECRET || process.env.X_ACCESS_SECRET || process.env.X_ACCESS_TOKEN_SECRET;
+
     const keyDiagnostics = {
-      apiKey: mask(process.env.TWITTER_API_KEY || process.env.TWITTER_CONSUMER_KEY || process.env.X_API_KEY),
-      apiSecret: mask(process.env.TWITTER_API_SECRET || process.env.TWITTER_API_KEY_SECRET || process.env.TWITTER_CONSUMER_SECRET || process.env.TWITTER_SECRET_KEY || process.env.X_API_SECRET),
-      accessToken: mask(process.env.TWITTER_ACCESS_TOKEN || process.env.TWITTER_TOKEN || process.env.X_ACCESS_TOKEN),
-      accessSecret: mask(process.env.TWITTER_ACCESS_SECRET || process.env.TWITTER_ACCESS_TOKEN_SECRET || process.env.TWITTER_TOKEN_SECRET || process.env.X_ACCESS_SECRET || process.env.X_ACCESS_TOKEN_SECRET),
+      apiKey: mask(activeApiKey),
+      apiSecret: mask(activeApiSecret),
+      accessToken: mask(activeAccessToken),
+      accessSecret: mask(activeAccessSecret),
+      usingCustomCredentials: !!credentials,
+      buildVersion: "v1.0.4-live-debug",
     };
 
     if (!publishResult.success) {
@@ -71,6 +96,7 @@ async function handleTweetTrigger(request: NextRequest) {
       text: generated.text,
       url: generated.url,
       timestamp: new Date().toISOString(),
+      keyDiagnostics,
     });
   } catch (error: any) {
     console.error("API Cron Tweet Error:", error);
