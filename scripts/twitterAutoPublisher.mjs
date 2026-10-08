@@ -149,10 +149,29 @@ async function main() {
     return;
   }
 
-  const apiKey = process.env.TWITTER_API_KEY;
-  const apiSecret = process.env.TWITTER_API_SECRET;
-  const accessToken = process.env.TWITTER_ACCESS_TOKEN;
-  const accessSecret = process.env.TWITTER_ACCESS_SECRET;
+  const apiKey =
+    process.env.TWITTER_API_KEY ||
+    process.env.TWITTER_CONSUMER_KEY ||
+    process.env.X_API_KEY;
+
+  const apiSecret =
+    process.env.TWITTER_API_SECRET ||
+    process.env.TWITTER_API_KEY_SECRET ||
+    process.env.TWITTER_CONSUMER_SECRET ||
+    process.env.TWITTER_SECRET_KEY ||
+    process.env.X_API_SECRET;
+
+  const accessToken =
+    process.env.TWITTER_ACCESS_TOKEN ||
+    process.env.TWITTER_TOKEN ||
+    process.env.X_ACCESS_TOKEN;
+
+  const accessSecret =
+    process.env.TWITTER_ACCESS_SECRET ||
+    process.env.TWITTER_ACCESS_TOKEN_SECRET ||
+    process.env.TWITTER_TOKEN_SECRET ||
+    process.env.X_ACCESS_SECRET ||
+    process.env.X_ACCESS_TOKEN_SECRET;
 
   if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
     console.warn("⚠️  Twitter API keys not found in environment variables.");

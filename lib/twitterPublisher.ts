@@ -261,15 +261,48 @@ export async function publishTweet(
   tweetText: string,
   credentials?: TwitterCredentials
 ): Promise<{ success: boolean; tweetId?: string; error?: string }> {
-  const apiKey = credentials?.apiKey || process.env.TWITTER_API_KEY || "";
-  const apiSecret = credentials?.apiSecret || process.env.TWITTER_API_SECRET || "";
-  const accessToken = credentials?.accessToken || process.env.TWITTER_ACCESS_TOKEN || "";
-  const accessSecret = credentials?.accessSecret || process.env.TWITTER_ACCESS_SECRET || "";
+  const apiKey =
+    credentials?.apiKey ||
+    process.env.TWITTER_API_KEY ||
+    process.env.TWITTER_CONSUMER_KEY ||
+    process.env.X_API_KEY ||
+    "";
+
+  const apiSecret =
+    credentials?.apiSecret ||
+    process.env.TWITTER_API_SECRET ||
+    process.env.TWITTER_API_KEY_SECRET ||
+    process.env.TWITTER_CONSUMER_SECRET ||
+    process.env.TWITTER_SECRET_KEY ||
+    process.env.X_API_SECRET ||
+    "";
+
+  const accessToken =
+    credentials?.accessToken ||
+    process.env.TWITTER_ACCESS_TOKEN ||
+    process.env.TWITTER_TOKEN ||
+    process.env.X_ACCESS_TOKEN ||
+    "";
+
+  const accessSecret =
+    credentials?.accessSecret ||
+    process.env.TWITTER_ACCESS_SECRET ||
+    process.env.TWITTER_ACCESS_TOKEN_SECRET ||
+    process.env.TWITTER_TOKEN_SECRET ||
+    process.env.X_ACCESS_SECRET ||
+    process.env.X_ACCESS_TOKEN_SECRET ||
+    "";
 
   if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
+    const missing: string[] = [];
+    if (!apiKey) missing.push("TWITTER_API_KEY");
+    if (!apiSecret) missing.push("TWITTER_API_SECRET");
+    if (!accessToken) missing.push("TWITTER_ACCESS_TOKEN");
+    if (!accessSecret) missing.push("TWITTER_ACCESS_SECRET");
+
     return {
       success: false,
-      error: "Missing Twitter API credentials (TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET).",
+      error: `Missing Twitter API credentials in server runtime: ${missing.join(", ")}. If you just added them in Vercel, a new deployment/redeploy is required to inject them.`,
     };
   }
 
