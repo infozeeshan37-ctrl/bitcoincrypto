@@ -323,9 +323,18 @@ export async function publishTweet(
     };
   } catch (err: any) {
     console.error("Twitter publishing error:", err);
+    const detail =
+      err?.data?.detail ||
+      err?.data?.title ||
+      err?.data?.error ||
+      err?.errors?.[0]?.message ||
+      err?.message ||
+      String(err);
+
     return {
       success: false,
-      error: err?.message || String(err),
+      error: detail,
+      rawError: err?.data || undefined,
     };
   }
 }
