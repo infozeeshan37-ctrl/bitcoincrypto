@@ -43,12 +43,22 @@ async function handleTweetTrigger(request: NextRequest) {
     // 4. Publish tweet via Twitter API v2
     const publishResult = await publishTweet(generated.text);
 
+    const mask = (v?: string) => (v ? `${v.slice(0, 3)}...${v.slice(-3)} (${v.length} chars)` : "NOT_SET");
+    const keyDiagnostics = {
+      apiKey: mask(process.env.TWITTER_API_KEY || process.env.TWITTER_CONSUMER_KEY || process.env.X_API_KEY),
+      apiSecret: mask(process.env.TWITTER_API_SECRET || process.env.TWITTER_API_KEY_SECRET || process.env.TWITTER_CONSUMER_SECRET || process.env.TWITTER_SECRET_KEY || process.env.X_API_SECRET),
+      accessToken: mask(process.env.TWITTER_ACCESS_TOKEN || process.env.TWITTER_TOKEN || process.env.X_ACCESS_TOKEN),
+      accessSecret: mask(process.env.TWITTER_ACCESS_SECRET || process.env.TWITTER_ACCESS_TOKEN_SECRET || process.env.TWITTER_TOKEN_SECRET || process.env.X_ACCESS_SECRET || process.env.X_ACCESS_TOKEN_SECRET),
+    };
+
     if (!publishResult.success) {
       return NextResponse.json(
         {
           success: false,
           generated,
           error: publishResult.error,
+          keyDiagnostics,
+          hint: "If you receive 401, check that (1) App permissions are set to 'Read and write' in developer.x.com, (2) Access Token was Regenerated AFTER changing permissions to Read and write, and (3) Consumer Key & Secret match Access Token & Secret.",
         },
         { status: 500 }
       );
