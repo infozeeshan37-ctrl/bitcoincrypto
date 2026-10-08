@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "tweet": "node scripts/twitterAutoPublisher.mjs",
+    "tweet:dry-run": "node scripts/twitterAutoPublisher.mjs --dry-run"
   },
   "dependencies": {
     "@types/three": "^0.185.4",
@@ -15,7 +17,8 @@
     "nodemailer": "^10.0.16",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "three": "^0.185.1"
+    "three": "^0.185.1",
+    "twitter-api-v2": "^1.29.1"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",
