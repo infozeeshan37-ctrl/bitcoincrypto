@@ -201,24 +201,41 @@ export default function LiveEcosystemOverview() {
                 </span>
               </div>
 
-              {/* Coin list with 1-Second Flashes */}
+              {/* Coin list with 1-Second Flashes (Clickable to prediction analysis) */}
               <div className="space-y-2">
                 {coins.map((c) => {
                   const isBull = c.change24h >= 0;
                   const tick = coinTicks[c.symbol || c.base];
+                  const rawBase = (c.base || c.symbol || "").replace(/USDT$/i, "").toUpperCase();
+                  const slugMap: Record<string, string> = {
+                    BTC: "bitcoin",
+                    ETH: "ethereum",
+                    SOL: "solana",
+                    BNB: "binancecoin",
+                    XRP: "ripple",
+                    DOGE: "dogecoin",
+                    ADA: "cardano",
+                    SUI: "sui",
+                    AVAX: "avalanche-2",
+                    LINK: "chainlink"
+                  };
+                  const coinHref = slugMap[rawBase] ? `/predictions/${slugMap[rawBase]}` : "/markets";
+
                   return (
-                    <div
+                    <Link
                       key={c.symbol || c.base}
-                      className={`flex items-center justify-between p-2.5 rounded-xl border transition-all duration-300 text-xs ${
+                      href={coinHref}
+                      title={`View ${rawBase} Price Prediction & Quantitative Models`}
+                      className={`flex items-center justify-between p-2.5 rounded-xl border transition-all duration-300 text-xs group cursor-pointer ${
                         tick === "up"
-                          ? "bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-400 shadow-sm"
+                          ? "bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-400 shadow-sm scale-[1.01]"
                           : tick === "down"
-                          ? "bg-rose-50/70 dark:bg-rose-950/40 border-rose-400 shadow-sm"
-                          : "bg-white dark:bg-slate-800 border-slate-200/80 dark:border-slate-700"
+                          ? "bg-rose-50/70 dark:bg-rose-950/40 border-rose-400 shadow-sm scale-[1.01]"
+                          : "bg-white dark:bg-slate-800 border-slate-200/80 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-400"
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-slate-900 dark:text-white font-mono">{c.base || c.symbol}</span>
+                        <span className="font-extrabold text-slate-900 dark:text-white font-mono group-hover:text-amber-500 dark:group-hover:text-amber-400 transition">{c.base || c.symbol}</span>
                         <span
                           className={`font-mono text-[11px] font-bold transition-colors ${
                             tick === "up"
@@ -244,7 +261,7 @@ export default function LiveEcosystemOverview() {
                       >
                         {isBull ? "+" : ""}{c.change24h.toFixed(2)}%
                       </span>
-                    </div>
+                    </Link>
                   );
                 })}
               </div>

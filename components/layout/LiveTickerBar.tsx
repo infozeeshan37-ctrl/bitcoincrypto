@@ -36,6 +36,61 @@ const DEFAULT_TICKERS: TickerPrice[] = [
   { symbol: "DOTUSDT", base: "DOT", price: 8.40, change24h: 2.90 },
 ];
 
+const COIN_PREDICTION_SLUGS: Record<string, string> = {
+  BTC: "bitcoin",
+  ETH: "ethereum",
+  SOL: "solana",
+  BNB: "binancecoin",
+  XRP: "ripple",
+  DOGE: "dogecoin",
+  ADA: "cardano",
+  SUI: "sui",
+  AVAX: "avalanche-2",
+  LINK: "chainlink",
+  NEAR: "near",
+  PEPE: "pepe",
+  TAO: "bittensor",
+  INJ: "injective-protocol",
+  KAS: "kaspa",
+  RENDER: "render-token",
+  FET: "fetch-ai",
+  WIF: "dogwifcoin",
+  SHIB: "shiba-inu",
+  DOT: "polkadot",
+  TIA: "celestia",
+  APT: "aptos",
+  LTC: "litecoin",
+  TRX: "tron",
+  ICP: "internet-computer",
+  FIL: "filecoin",
+  ARB: "arbitrum",
+  OP: "optimism",
+  ATOM: "cosmos",
+  XLM: "stellar",
+  HBAR: "hedera-hashgraph",
+  AAVE: "aave",
+  MKR: "maker",
+  UNI: "uniswap",
+  SEI: "sei-network",
+  BONK: "bonk",
+  FLOKI: "floki",
+  PENDLE: "pendle",
+  ONDO: "ondo-finance",
+  JUP: "jupiter-exchange-solana",
+  TON: "the-open-network",
+  ENA: "ethena",
+  POPCAT: "popcat",
+  RUNE: "thorchain",
+  DYDX: "dydx-chain",
+  GALA: "gala",
+  FTM: "fantom",
+  CRV: "curve-dao-token",
+  LDO: "lido-dao",
+  PYTH: "pyth-network",
+  JTO: "jito-governance-token",
+  STRK: "starknet"
+};
+
 export default function LiveTickerBar() {
   const [tickers, setTickers] = useState<TickerPrice[]>(DEFAULT_TICKERS);
   const [lastTickDirection, setLastTickDirection] = useState<Record<string, "up" | "down" | null>>({});
@@ -269,6 +324,11 @@ export default function LiveTickerBar() {
     return n.toFixed(6);
   };
 
+  const getTickerHref = (base: string) => {
+    const slug = COIN_PREDICTION_SLUGS[base.toUpperCase()];
+    return slug ? `/predictions/${slug}` : "/markets";
+  };
+
   return (
     <div className="relative bg-slate-950 text-slate-200 text-[11px] border-b border-amber-500/20 select-none overflow-hidden w-full z-40 shadow-sm">
       
@@ -347,7 +407,8 @@ export default function LiveTickerBar() {
               return (
                 <Link
                   key={`ticker-1-${t.symbol}`}
-                  href="/markets"
+                  href={getTickerHref(t.base)}
+                  title={`View ${t.base} Price Prediction & Analysis`}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition-all duration-300 group shrink-0 border ${
                     tick === "up"
                       ? "bg-emerald-500/25 border-emerald-400 shadow-md shadow-emerald-500/40 text-emerald-300 scale-[1.03]"
@@ -391,7 +452,8 @@ export default function LiveTickerBar() {
               return (
                 <Link
                   key={`ticker-2-${t.symbol}`}
-                  href="/markets"
+                  href={getTickerHref(t.base)}
+                  title={`View ${t.base} Price Prediction & Analysis`}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition-all duration-300 group shrink-0 border ${
                     tick === "up"
                       ? "bg-emerald-500/25 border-emerald-400 shadow-md shadow-emerald-500/40 text-emerald-300 scale-[1.03]"
