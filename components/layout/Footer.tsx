@@ -24,7 +24,8 @@ import {
   MessageSquare,
   BookOpen,
   Landmark,
-  Radio
+  Radio,
+  GraduationCap
 } from "lucide-react";
 import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
@@ -162,8 +163,13 @@ export default function Footer() {
 
           {/* Col 4: Research & Education */}
           <div className="space-y-3">
-            <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Research Desk</h4>
+            <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Research &amp; Learn</h4>
             <ul className="space-y-2 text-slate-400">
+              <li>
+                <Link href="/learn" className="text-emerald-400 hover:text-emerald-300 font-bold transition flex items-center gap-1.5">
+                  <GraduationCap className="w-3.5 h-3.5" /> Crypto Learn Masterclass
+                </Link>
+              </li>
               <li><Link href="/concepts" className="hover:text-white transition">Trading Concepts &amp; Models</Link></li>
               <li><Link href="/blog" className="hover:text-white transition">Research Desk &amp; Analysis</Link></li>
               <li><Link href="/about" className="hover:text-white transition">Architecture &amp; Methodology</Link></li>

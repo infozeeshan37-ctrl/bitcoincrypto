@@ -29,7 +29,8 @@ import {
   ShieldCheck,
   X,
   ArrowRight,
-  Target
+  Target,
+  GraduationCap
 } from "lucide-react";
 
 function CoinGlassSubNavInner() {
@@ -124,12 +125,14 @@ function CoinGlassSubNavInner() {
       badgeColor: "bg-amber-400/20 text-amber-300 border-amber-400/40"
     },
     {
-      label: "Macro Battles",
-      href: "/news",
-      isActive: pathname === "/news",
-      icon: Radio,
-      iconColor: "text-sky-400",
-      activeColor: "from-sky-500/25 via-sky-500/15 to-transparent border-sky-500/60 text-sky-300"
+      label: "Crypto Learn",
+      href: "/learn",
+      isActive: pathname.startsWith("/learn"),
+      icon: GraduationCap,
+      iconColor: "text-emerald-400",
+      activeColor: "from-emerald-500/25 via-emerald-500/15 to-transparent border-emerald-500/60 text-emerald-300",
+      badge: "Course",
+      badgeColor: "bg-emerald-400/20 text-emerald-300 border-emerald-400/40"
     },
     {
       label: "DCA Models",
