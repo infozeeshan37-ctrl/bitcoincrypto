@@ -209,24 +209,35 @@ function BitcoinTransitionContent() {
       <div className="absolute w-44 h-44 sm:w-56 sm:h-56 rounded-full border border-amber-400/40 animate-btc-ring-1 pointer-events-none" />
       <div className="absolute w-44 h-44 sm:w-56 sm:h-56 rounded-full border border-yellow-300/30 animate-btc-ring-2 pointer-events-none" />
 
-      {/* 3. Centerpiece "Big B" Bitcoin Logo Badge */}
+      {/* 3. Centerpiece "Big B" Bitcoin Logo Badge - Moving & Spinning in a Circle */}
       <div className="relative group flex items-center justify-center">
-        {/* Floating 3D pulse wrapper */}
-        <div className="animate-btc-float flex items-center justify-center">
-          <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl sm:rounded-[2.25rem] bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 text-slate-950 flex items-center justify-center shadow-[0_0_60px_rgba(245,158,11,0.6),0_20px_40px_rgba(0,0,0,0.5)] border-2 border-yellow-200/80 relative overflow-hidden">
-            
-            {/* Diagonal Metallic Shimmer Reflection */}
-            <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-              <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/55 to-transparent transform -skew-x-12 animate-btc-shimmer" />
+        {/* Orbital Circular Track & Fast Golden Comet Spinner */}
+        <div className="absolute w-48 h-48 sm:w-56 sm:h-56 rounded-full border border-amber-400/20 pointer-events-none" />
+        <div
+          className="absolute w-48 h-48 sm:w-56 sm:h-56 rounded-full border-2 border-transparent border-t-amber-400 border-r-yellow-300 pointer-events-none animate-spin"
+          style={{ animationDuration: "1.2s" }}
+        />
+
+        {/* Circular Orbit Movement Container ("B Moves in a Circle") */}
+        <div className="animate-btc-orbit flex items-center justify-center">
+          {/* Continuous 360-Degree Circular Spin ("B Spins in a Circle") */}
+          <div className="animate-btc-spin flex items-center justify-center">
+            {/* Golden Circular Bitcoin Medallion Badge */}
+            <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 text-slate-950 flex items-center justify-center shadow-[0_0_65px_rgba(245,158,11,0.7),0_20px_40px_rgba(0,0,0,0.55)] border-4 border-yellow-200/90 relative overflow-hidden select-none">
+              {/* Diagonal Metallic Shimmer Reflection */}
+              <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden rounded-full">
+                <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/55 to-transparent transform -skew-x-12 animate-btc-shimmer" />
+              </div>
+
+              {/* Inner Embossed Concentric Coin Rings */}
+              <div className="absolute inset-2 sm:inset-2.5 rounded-full border-2 border-amber-950/25 pointer-events-none" />
+              <div className="absolute inset-3.5 sm:inset-4 rounded-full border border-dashed border-amber-950/20 pointer-events-none" />
+
+              {/* The Big ₿ Symbol */}
+              <span className="text-6xl sm:text-7xl font-black text-slate-950 tracking-tighter drop-shadow-md select-none">
+                ₿
+              </span>
             </div>
-
-            {/* Inner Embossed Bevel Border */}
-            <div className="absolute inset-1.5 sm:inset-2 rounded-[1.3rem] sm:rounded-[1.75rem] border border-amber-950/20 pointer-events-none" />
-
-            {/* The Big ₿ Symbol */}
-            <span className="text-6xl sm:text-7xl font-black text-slate-950 tracking-tighter drop-shadow-md select-none">
-              ₿
-            </span>
           </div>
         </div>
       </div>

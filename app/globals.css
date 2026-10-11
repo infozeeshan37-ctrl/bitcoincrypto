@@ -269,6 +269,24 @@
 }
 
 /* Bitcoin Navigation Transition Animations ("Big B") */
+@keyframes btc-orbit-circle {
+  0% {
+    transform: rotate(0deg) translateY(-14px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateY(-14px) rotate(-360deg);
+  }
+}
+
+@keyframes btc-spin-circle {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes btc-float-pulse {
   0%, 100% {
     transform: translateY(0px) scale(1);
@@ -310,6 +328,14 @@
   100% {
     transform: translateX(100%);
   }
+}
+
+.animate-btc-orbit {
+  animation: btc-orbit-circle 2.2s linear infinite;
+}
+
+.animate-btc-spin {
+  animation: btc-spin-circle 1.4s linear infinite;
 }
 
 .animate-btc-float {
