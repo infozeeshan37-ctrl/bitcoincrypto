@@ -132,14 +132,6 @@ function CoinGlassSubNavInner() {
       activeColor: "from-sky-500/25 via-sky-500/15 to-transparent border-sky-500/60 text-sky-300"
     },
     {
-      label: "Masterclasses",
-      href: "/concepts",
-      isActive: pathname.startsWith("/concepts"),
-      icon: Compass,
-      iconColor: "text-emerald-400",
-      activeColor: "from-emerald-500/25 via-emerald-500/15 to-transparent border-emerald-500/60 text-emerald-300"
-    },
-    {
       label: "DCA Models",
       href: "/tools/dca-simulator",
       isActive: pathname === "/tools/dca-simulator" || activeTab === "dca",
@@ -150,6 +142,13 @@ function CoinGlassSubNavInner() {
   ];
 
   const moreItems = [
+    {
+      label: "Trading Concepts Academy",
+      href: "/concepts",
+      icon: Compass,
+      desc: "Order books, funding basis & microstructure",
+      tag: "Academy"
+    },
     {
       label: "Risk & Position Sizer",
       href: "/tools/position-sizer",
