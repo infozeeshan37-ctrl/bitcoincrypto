@@ -25,6 +25,7 @@ export interface QuizQuestion {
 export interface CourseChapter {
   id: string;
   chapterNumber: string;
+  moduleNumber?: string;
   title: string;
   tagline: string;
   category: "fundamentals" | "technical" | "microstructure" | "derivatives" | "risk" | "macro";

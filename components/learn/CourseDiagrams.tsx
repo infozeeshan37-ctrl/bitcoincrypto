@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -9,7 +9,9 @@ import {
   Flame,
   Shield,
   Zap,
-  Info
+  Info,
+  Crosshair,
+  Gauge
 } from "lucide-react";
 
 interface DiagramProps {
@@ -41,16 +43,62 @@ export default function CourseDiagrams({ type, className = "" }: DiagramProps) {
 }
 
 // -------------------------------------------------------------
-// 1. Halving Rhythm & Supply Shock Diagram
+// Helper to get normalized SVG X/Y from Mouse/Touch Event
+// -------------------------------------------------------------
+function useSvgCursor(viewBoxWidth: number, viewBoxHeight: number) {
+  const [cursor, setCursor] = useState<{ x: number; y: number; active: boolean }>({
+    x: viewBoxWidth / 2,
+    y: viewBoxHeight / 2,
+    active: false,
+  });
+
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const handlePointerMove = useCallback(
+    (e: React.MouseEvent<SVGSVGElement> | React.TouchEvent<SVGSVGElement>) => {
+      if (!svgRef.current) return;
+      const rect = svgRef.current.getBoundingClientRect();
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+      const normX = Math.max(0, Math.min(viewBoxWidth, ((clientX - rect.left) / rect.width) * viewBoxWidth));
+      const normY = Math.max(0, Math.min(viewBoxHeight, ((clientY - rect.top) / rect.height) * viewBoxHeight));
+
+      setCursor({ x: normX, y: normY, active: true });
+    },
+    [viewBoxWidth, viewBoxHeight]
+  );
+
+  const handlePointerLeave = useCallback(() => {
+    setCursor((prev) => ({ ...prev, active: false }));
+  }, []);
+
+  return { svgRef, cursor, handlePointerMove, handlePointerLeave };
+}
+
+// -------------------------------------------------------------
+// 1. Halving Rhythm & Supply Shock Diagram (Live Cursor)
 // -------------------------------------------------------------
 function HalvingDiagram({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (n: number) => void }) {
+  const { svgRef, cursor, handlePointerMove, handlePointerLeave } = useSvgCursor(840, 320);
+
   const epochs = [
-    { year: "2012 (Epoch 1)", subsidy: "25 BTC", inflation: "12.5%", color: "text-amber-400", x: 120, y: 70 },
-    { year: "2016 (Epoch 2)", subsidy: "12.5 BTC", inflation: "4.2%", color: "text-blue-400", x: 280, y: 130 },
-    { year: "2020 (Epoch 3)", subsidy: "6.25 BTC", inflation: "1.8%", color: "text-purple-400", x: 440, y: 180 },
-    { year: "2024 (Epoch 4)", subsidy: "3.125 BTC", inflation: "0.83%", color: "text-emerald-400", x: 600, y: 220 },
-    { year: "2028 (Epoch 5)", subsidy: "1.5625 BTC", inflation: "0.41%", color: "text-cyan-400", x: 740, y: 250 },
+    { year: "2012 (Epoch 1)", date: 2012, subsidy: 25, inflation: 12.5, s2f: 8.0, x: 120, y: 70 },
+    { year: "2016 (Epoch 2)", date: 2016, subsidy: 12.5, inflation: 4.2, s2f: 25.0, x: 280, y: 130 },
+    { year: "2020 (Epoch 3)", date: 2020, subsidy: 6.25, inflation: 1.8, s2f: 56.0, x: 440, y: 180 },
+    { year: "2024 (Epoch 4)", date: 2024, subsidy: 3.125, inflation: 0.83, s2f: 112.0, x: 600, y: 220 },
+    { year: "2028 (Epoch 5)", date: 2028, subsidy: 1.5625, inflation: 0.41, s2f: 224.0, x: 740, y: 250 },
   ];
+
+  // Calculate live value from cursor position along the curve
+  const clampedX = Math.max(60, Math.min(800, cursor.x));
+  const t = (clampedX - 60) / (800 - 60); // 0.0 to 1.0
+  const simYear = (2012 + t * 16).toFixed(1);
+  const simSubsidy = (25 * Math.pow(0.5, t * 4)).toFixed(3);
+  const simInflation = (12.5 * Math.pow(0.5, t * 4)).toFixed(2);
+  const simS2f = (100 / Math.max(0.2, Number(simInflation))).toFixed(1);
+  // Curve approximate Y
+  const simY = 50 + t * (260 - 50) * Math.sin((t * Math.PI) / 2);
 
   return (
     <div className="space-y-4">
@@ -60,26 +108,58 @@ function HalvingDiagram({ activeStep, setActiveStep }: { activeStep: number; set
             ₿
           </div>
           <div>
-            <h4 className="text-sm font-black text-white">Bitcoin 4-Year Halving Supply Inflation Decay Curve</h4>
-            <span className="text-[11px] text-slate-400 font-mono">Block Subsidy cuts by 50% every 210,000 blocks</span>
+            <h4 className="text-sm font-black text-white flex items-center gap-2">
+              <span>Bitcoin 4-Year Halving Supply Inflation Decay Curve</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Live Interactive Cursor
+              </span>
+            </h4>
+            <span className="text-[11px] text-slate-400 font-mono">Move cursor across trendline to inspect live block subsidy &amp; inflation</span>
           </div>
         </div>
-        <span className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-          Terminal Supply: 21,000,000 BTC
+        <span className="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-xl border border-amber-500/20 shrink-0">
+          Terminal Cap: 21,000,000 BTC
         </span>
       </div>
 
-      <div className="relative w-full overflow-x-auto">
-        <svg viewBox="0 0 840 320" className="w-full min-w-[680px] h-auto font-mono text-xs">
+      {/* LIVE HOVER READOUT BAR */}
+      <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2 text-slate-300">
+          <Crosshair className="w-4 h-4 text-amber-400 animate-spin" />
+          <span className="text-slate-400">Timeline:</span>
+          <strong className="text-white text-sm">Year {simYear}</strong>
+        </div>
+        <div className="flex items-center gap-4">
+          <div>
+            <span className="text-slate-400 text-[10px] block">Block Subsidy:</span>
+            <span className="text-amber-400 font-bold">{simSubsidy} BTC</span>
+          </div>
+          <div>
+            <span className="text-slate-400 text-[10px] block">Annual Inflation:</span>
+            <span className="text-cyan-400 font-bold">{simInflation}%</span>
+          </div>
+          <div>
+            <span className="text-slate-400 text-[10px] block">Stock-to-Flow:</span>
+            <span className="text-emerald-400 font-bold">{simS2f}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-x-auto select-none">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 840 320"
+          className="w-full min-w-[680px] h-auto font-mono text-xs cursor-crosshair"
+          onMouseMove={handlePointerMove}
+          onMouseLeave={handlePointerLeave}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerLeave}
+        >
           <defs>
             <linearGradient id="halvingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.4" />
               <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.2" />
               <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
-            </linearGradient>
-            <linearGradient id="goldComparison" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#d97706" stopOpacity="0.6" />
             </linearGradient>
           </defs>
 
@@ -120,16 +200,54 @@ function HalvingDiagram({ activeStep, setActiveStep }: { activeStep: number; set
                 strokeWidth={activeStep === idx ? "3" : "2"}
               />
               <text x={ep.x} y={ep.y - 14} textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold">
-                {ep.subsidy}
+                {ep.subsidy} BTC
               </text>
               <text x={ep.x} y={ep.y + 24} textAnchor="middle" fill="#94a3b8" fontSize="9">
                 {ep.year}
               </text>
               <text x={ep.x} y={ep.y + 36} textAnchor="middle" fill="#38bdf8" fontSize="8.5" fontWeight="bold">
-                Inf: {ep.inflation}
+                Inf: {ep.inflation}%
               </text>
             </g>
           ))}
+
+          {/* LIVE DYNAMIC CROSSHAIR & TRACKER */}
+          {cursor.active && (
+            <g pointerEvents="none">
+              <line
+                x1={clampedX}
+                y1="30"
+                x2={clampedX}
+                y2="280"
+                stroke="#38bdf8"
+                strokeWidth="1.5"
+                strokeDasharray="4 3"
+              />
+              <circle
+                cx={clampedX}
+                cy={simY}
+                r="7"
+                fill="#38bdf8"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+              />
+              <circle
+                cx={clampedX}
+                cy={simY}
+                r="14"
+                fill="none"
+                stroke="#38bdf8"
+                strokeWidth="1"
+                opacity="0.5"
+              />
+              {/* Floating Tooltip Box */}
+              <g transform={`translate(${Math.min(680, Math.max(70, clampedX - 60))}, ${Math.max(40, simY - 60)})`}>
+                <rect width="130" height="42" rx="8" fill="#020617" stroke="#38bdf8" strokeWidth="1" opacity="0.95" />
+                <text x="8" y="16" fill="#f8fafc" fontSize="10" fontWeight="bold">Year {simYear}</text>
+                <text x="8" y="32" fill="#38bdf8" fontSize="9">Subsidy: {simSubsidy} BTC</text>
+              </g>
+            </g>
+          )}
 
           {/* Post-2024 Hard Money Crossover Label */}
           <rect x="520" y="70" width="260" height="52" rx="10" fill="#0f172a" stroke="#10b981" strokeWidth="1" opacity="0.9" />
@@ -157,9 +275,32 @@ function HalvingDiagram({ activeStep, setActiveStep }: { activeStep: number; set
 }
 
 // -------------------------------------------------------------
-// 2. MVRV Z-Score Cycle Valuation Chart
+// 2. MVRV Z-Score Cycle Valuation Chart (Live Cursor)
 // -------------------------------------------------------------
 function MvrvDiagram({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (n: number) => void }) {
+  const { svgRef, cursor, handlePointerMove, handlePointerLeave } = useSvgCursor(840, 300);
+
+  const clampedX = Math.max(60, Math.min(800, cursor.x));
+  const t = (clampedX - 60) / (800 - 60);
+
+  // Compute simulated MVRV Z-Score based on multi-cycle wave
+  // 4 cycles peaks and troughs
+  const wave = Math.sin(t * Math.PI * 3.5) * 3.2 + 2.5;
+  const simZScore = Math.max(-0.2, Math.min(8.5, wave)).toFixed(2);
+  const zNum = Number(simZScore);
+  
+  let zoneText = "Neutral Fair Value (Hold)";
+  let zoneColor = "text-blue-400";
+  if (zNum > 5.5) {
+    zoneText = "EXTREME MANIA (> 5.5) • Take Profit Zone";
+    zoneColor = "text-rose-400";
+  } else if (zNum < 0.3) {
+    zoneText = "HISTORICAL BARGAIN (< 0.3) • Accumulation Floor";
+    zoneColor = "text-emerald-400";
+  }
+
+  const simCurveY = 240 - (zNum / 8.5) * 190;
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
@@ -168,18 +309,50 @@ function MvrvDiagram({ activeStep, setActiveStep }: { activeStep: number; setAct
             Z
           </div>
           <div>
-            <h4 className="text-sm font-black text-white">MVRV Z-Score Multi-Cycle Valuation Channel</h4>
-            <span className="text-[11px] text-slate-400 font-mono">Market Cap vs Realized On-Chain Acquisition Cost Basis</span>
+            <h4 className="text-sm font-black text-white flex items-center gap-2">
+              <span>MVRV Z-Score Multi-Cycle Valuation Channel</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                Live Interactive Cursor
+              </span>
+            </h4>
+            <span className="text-[11px] text-slate-400 font-mono">Hover across the cycle timeline to measure exact Z-Score deviations</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-mono">
+        <div className="flex items-center gap-2 text-[10px] font-mono shrink-0">
           <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">Top Mania: &gt; 6.0</span>
           <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Bottom Bargain: &lt; 0.1</span>
         </div>
       </div>
 
-      <div className="relative w-full overflow-x-auto">
-        <svg viewBox="0 0 840 300" className="w-full min-w-[680px] h-auto font-mono text-xs">
+      {/* LIVE HOVER READOUT BAR */}
+      <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2 text-slate-300">
+          <Gauge className="w-4 h-4 text-blue-400" />
+          <span className="text-slate-400">Position:</span>
+          <strong className="text-white">Cycle Progress {(t * 100).toFixed(0)}%</strong>
+        </div>
+        <div className="flex items-center gap-4">
+          <div>
+            <span className="text-slate-400 text-[10px] block">MVRV Z-Score:</span>
+            <span className={`text-sm font-black font-mono ${zoneColor}`}>{simZScore}</span>
+          </div>
+          <div>
+            <span className="text-slate-400 text-[10px] block">Regime Status:</span>
+            <span className={`font-bold ${zoneColor}`}>{zoneText}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-x-auto select-none">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 840 300"
+          className="w-full min-w-[680px] h-auto font-mono text-xs cursor-crosshair"
+          onMouseMove={handlePointerMove}
+          onMouseLeave={handlePointerLeave}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerLeave}
+        >
           {/* Overbought Red Band (Z-Score > 6.0) */}
           <rect x="60" y="30" width="740" height="45" fill="#ef4444" opacity="0.15" />
           <line x1="60" y1="75" x2="800" y2="75" stroke="#ef4444" strokeWidth="1" strokeDasharray="4 4" />
@@ -203,7 +376,7 @@ function MvrvDiagram({ activeStep, setActiveStep }: { activeStep: number; setAct
             strokeLinecap="round"
           />
 
-          {/* Highlight Points */}
+          {/* Historical Fixed Key Points */}
           <circle cx="160" cy="50" r="5" fill="#ef4444" />
           <text x="160" y="35" textAnchor="middle" fill="#fca5a5" fontSize="8.5" fontWeight="bold">2013 Peak ($1.1K)</text>
 
@@ -222,8 +395,36 @@ function MvrvDiagram({ activeStep, setActiveStep }: { activeStep: number; setAct
           <circle cx="700" cy="235" r="5" fill="#10b981" />
           <text x="700" y="260" textAnchor="middle" fill="#86efac" fontSize="8.5" fontWeight="bold">2022 Low ($16K)</text>
 
-          <circle cx="790" cy="140" r="6" fill="#fbbf24" stroke="#fff" strokeWidth="2" />
-          <text x="790" y="125" textAnchor="middle" fill="#fbbf24" fontSize="9" fontWeight="bold">Current Epoch</text>
+          {/* LIVE HOVER CROSSHAIR */}
+          {cursor.active && (
+            <g pointerEvents="none">
+              <line
+                x1={clampedX}
+                y1="30"
+                x2={clampedX}
+                y2="260"
+                stroke="#fbbf24"
+                strokeWidth="1.5"
+                strokeDasharray="4 3"
+              />
+              <circle
+                cx={clampedX}
+                cy={simCurveY}
+                r="7"
+                fill="#fbbf24"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+              />
+              {/* Floating Tooltip */}
+              <g transform={`translate(${Math.min(670, Math.max(70, clampedX - 70))}, ${Math.max(40, simCurveY - 55)})`}>
+                <rect width="140" height="40" rx="8" fill="#020617" stroke="#fbbf24" strokeWidth="1" opacity="0.95" />
+                <text x="8" y="16" fill="#f8fafc" fontSize="10" fontWeight="bold">Z-Score: {simZScore}</text>
+                <text x="8" y="30" fill={zNum > 5.5 ? "#f87171" : zNum < 0.3 ? "#4ade80" : "#38bdf8"} fontSize="8.5">
+                  {zNum > 5.5 ? "Mania Peak" : zNum < 0.3 ? "Generational Dip" : "Fair Value"}
+                </text>
+              </g>
+            </g>
+          )}
         </svg>
       </div>
 
@@ -240,9 +441,38 @@ function MvrvDiagram({ activeStep, setActiveStep }: { activeStep: number; setAct
 }
 
 // -------------------------------------------------------------
-// 3. Technical Analysis Market Structure Diagram (BOS vs CHoCH)
+// 3. Technical Analysis Market Structure Diagram (Live Cursor)
 // -------------------------------------------------------------
 function MarketStructureDiagram({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (n: number) => void }) {
+  const { svgRef, cursor, handlePointerMove, handlePointerLeave } = useSvgCursor(840, 320);
+
+  const clampedX = Math.max(60, Math.min(800, cursor.x));
+  
+  // Calculate simulated price at cursor X
+  let state = "Bullish Continuation (BOS)";
+  let stateColor = "text-emerald-400";
+  let simPrice = 92000;
+
+  if (clampedX < 520) {
+    // Uptrend from 60 to 520
+    const progress = (clampedX - 60) / (520 - 60);
+    simPrice = Math.round(62000 + progress * 36000);
+    state = "Bullish Uptrend (Higher Highs & Higher Lows)";
+    stateColor = "text-emerald-400";
+  } else if (clampedX < 690) {
+    // Reversal testing Protected Low
+    const progress = (clampedX - 520) / (690 - 520);
+    simPrice = Math.round(98000 - progress * 14000);
+    state = "Bearish Transition (Testing Protected Swing Low)";
+    stateColor = "text-amber-400";
+  } else {
+    // CHoCH breakdown
+    const progress = (clampedX - 690) / (800 - 690);
+    simPrice = Math.round(84000 - progress * 16000);
+    state = "CHoCH Breakdown Invalidation (New Downtrend)";
+    stateColor = "text-rose-400";
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
@@ -251,21 +481,47 @@ function MarketStructureDiagram({ activeStep, setActiveStep }: { activeStep: num
             TA
           </div>
           <div>
-            <h4 className="text-sm font-black text-white">Market Structure Anatomy: Higher Highs, BOS &amp; CHoCH</h4>
-            <span className="text-[11px] text-slate-400 font-mono">Institutional trend continuation vs trend invalidation</span>
+            <h4 className="text-sm font-black text-white flex items-center gap-2">
+              <span>Market Structure Anatomy: Higher Highs, BOS &amp; CHoCH</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Live Interactive Cursor
+              </span>
+            </h4>
+            <span className="text-[11px] text-slate-400 font-mono">Move cursor across trendline to inspect price levels and structural breaks</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-mono">
+        <div className="flex items-center gap-2 text-[10px] font-mono shrink-0">
           <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">BOS: Continuation</span>
           <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">CHoCH: Reversal</span>
         </div>
       </div>
 
-      <div className="relative w-full overflow-x-auto">
-        <svg viewBox="0 0 840 320" className="w-full min-w-[680px] h-auto font-mono text-xs">
+      {/* LIVE HOVER READOUT BAR */}
+      <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2 text-slate-300">
+          <Crosshair className="w-4 h-4 text-emerald-400" />
+          <span className="text-slate-400">Simulated Price:</span>
+          <strong className="text-white text-sm font-mono">${simPrice.toLocaleString()}</strong>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-slate-400 text-[10px]">Structure State:</span>
+          <span className={`font-bold ${stateColor}`}>{state}</span>
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-x-auto select-none">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 840 320"
+          className="w-full min-w-[680px] h-auto font-mono text-xs cursor-crosshair"
+          onMouseMove={handlePointerMove}
+          onMouseLeave={handlePointerLeave}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerLeave}
+        >
           {/* Trendline grid */}
           <line x1="40" y1="280" x2="800" y2="280" stroke="#1e293b" />
-          
+
           {/* Bullish Phase: Higher Low (HL1), Higher High (HH1), HL2, HH2 */}
           <polyline
             points="60,250 160,150 220,200 340,90 410,160 520,60"
@@ -311,6 +567,34 @@ function MarketStructureDiagram({ activeStep, setActiveStep }: { activeStep: num
           <text x="520" y="45" textAnchor="middle" fill="#10b981" fontSize="10" fontWeight="bold">HH 3 (Top)</text>
           <text x="640" y="88" textAnchor="middle" fill="#f43f5e" fontSize="10" fontWeight="bold">LH (Failure)</text>
           <text x="740" y="260" textAnchor="middle" fill="#f43f5e" fontSize="10" fontWeight="bold">LL (New Downtrend)</text>
+
+          {/* LIVE HOVER CROSSHAIR */}
+          {cursor.active && (
+            <g pointerEvents="none">
+              <line
+                x1={clampedX}
+                y1="30"
+                x2={clampedX}
+                y2="280"
+                stroke="#10b981"
+                strokeWidth="1.5"
+                strokeDasharray="4 3"
+              />
+              <circle
+                cx={clampedX}
+                cy={cursor.y}
+                r="6"
+                fill="#10b981"
+                stroke="#ffffff"
+                strokeWidth="2"
+              />
+              <g transform={`translate(${Math.min(680, Math.max(70, clampedX - 60))}, ${Math.max(30, cursor.y - 40)})`}>
+                <rect width="125" height="32" rx="6" fill="#020617" stroke="#10b981" strokeWidth="1" opacity="0.95" />
+                <text x="8" y="14" fill="#34d399" fontSize="9.5" fontWeight="bold">${simPrice.toLocaleString()}</text>
+                <text x="8" y="25" fill="#94a3b8" fontSize="8">{clampedX > 690 ? "Broken" : "Intact"}</text>
+              </g>
+            </g>
+          )}
         </svg>
       </div>
 
@@ -329,9 +613,26 @@ function MarketStructureDiagram({ activeStep, setActiveStep }: { activeStep: num
 }
 
 // -------------------------------------------------------------
-// 4. RSI Bullish & Bearish Divergence Waveform Diagram
+// 4. RSI Bullish & Bearish Divergence Waveform (Live Cursor)
 // -------------------------------------------------------------
 function RsiDivergenceDiagram({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (n: number) => void }) {
+  const { svgRef, cursor, handlePointerMove, handlePointerLeave } = useSvgCursor(840, 330);
+
+  const clampedX = Math.max(80, Math.min(760, cursor.x));
+  const t = (clampedX - 80) / (760 - 80);
+
+  // Compute live price and live RSI along timeline
+  const simPrice = clampedX < 420
+    ? Math.round(92000 + ((clampedX - 80) / 340) * 8000)
+    : Math.round(100000 - ((clampedX - 420) / 340) * 12000);
+
+  const simRsi = clampedX < 420
+    ? Math.round(76 - ((clampedX - 80) / 340) * 18) // RSI lower high
+    : Math.round(28 + ((clampedX - 420) / 340) * 22); // RSI higher low
+
+  const divMode = clampedX < 420 ? "Bearish Divergence (Price Up, RSI Down)" : "Bullish Divergence (Price Down, RSI Up)";
+  const divColor = clampedX < 420 ? "text-rose-400" : "text-emerald-400";
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
@@ -340,14 +641,46 @@ function RsiDivergenceDiagram({ activeStep, setActiveStep }: { activeStep: numbe
             RSI
           </div>
           <div>
-            <h4 className="text-sm font-black text-white">Relative Strength Index (RSI 14) Divergence Mechanics</h4>
-            <span className="text-[11px] text-slate-400 font-mono">Price Action vs Internal Momentum Velocity</span>
+            <h4 className="text-sm font-black text-white flex items-center gap-2">
+              <span>Relative Strength Index (RSI 14) Divergence Mechanics</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                Live Dual Cursor
+              </span>
+            </h4>
+            <span className="text-[11px] text-slate-400 font-mono">Simultaneous crosshair tracking across Spot Price &amp; RSI Momentum panels</span>
           </div>
         </div>
       </div>
 
-      <div className="relative w-full overflow-x-auto">
-        <svg viewBox="0 0 840 330" className="w-full min-w-[680px] h-auto font-mono text-xs">
+      {/* LIVE HOVER READOUT BAR */}
+      <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2 text-slate-300">
+          <Activity className="w-4 h-4 text-purple-400" />
+          <span className="text-slate-400">Spot Price:</span>
+          <strong className="text-white text-sm">${simPrice.toLocaleString()}</strong>
+        </div>
+        <div className="flex items-center gap-4">
+          <div>
+            <span className="text-slate-400 text-[10px] block">RSI (14):</span>
+            <span className={`text-sm font-black ${divColor}`}>{simRsi}</span>
+          </div>
+          <div>
+            <span className="text-slate-400 text-[10px] block">Momentum Condition:</span>
+            <span className={`font-bold ${divColor}`}>{divMode}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-x-auto select-none">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 840 330"
+          className="w-full min-w-[680px] h-auto font-mono text-xs cursor-crosshair"
+          onMouseMove={handlePointerMove}
+          onMouseLeave={handlePointerLeave}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerLeave}
+        >
           {/* PANEL 1: PRICE ACTION (TOP) */}
           <rect x="50" y="20" width="750" height="130" fill="#0f172a" rx="12" stroke="#1e293b" />
           <text x="65" y="40" fill="#94a3b8" fontSize="10" fontWeight="bold">PANEL 1: SPOT PRICE ($BTC)</text>
@@ -357,14 +690,14 @@ function RsiDivergenceDiagram({ activeStep, setActiveStep }: { activeStep: numbe
           <circle cx="220" cy="70" r="5" fill="#38bdf8" />
           <circle cx="360" cy="40" r="5" fill="#f43f5e" />
           <line x1="220" y1="70" x2="360" y2="40" stroke="#f43f5e" strokeWidth="2" strokeDasharray="4 3" />
-          <text x="290" y="45" fill="#f87171" fontSize="9.5" fontWeight="bold">Price Higher High &uarr;</text>
+          <text x="290" y="45" fill="#f87171" fontSize="9.5" fontWeight="bold">Price Higher High ↑</text>
 
           {/* Bullish Div Price Trend (Lower Low) */}
           <path d="M 480,50 Q 550,110 620,90 T 760,125" fill="none" stroke="#e2e8f0" strokeWidth="2.5" />
           <circle cx="620" cy="90" r="5" fill="#38bdf8" />
           <circle cx="760" cy="125" r="5" fill="#10b981" />
           <line x1="620" y1="90" x2="760" y2="125" stroke="#10b981" strokeWidth="2" strokeDasharray="4 3" />
-          <text x="690" y="115" fill="#34d399" fontSize="9.5" fontWeight="bold">Price Lower Low &darr;</text>
+          <text x="690" y="115" fill="#34d399" fontSize="9.5" fontWeight="bold">Price Lower Low ↓</text>
 
           {/* PANEL 2: RSI 14 (BOTTOM) */}
           <rect x="50" y="170" width="750" height="130" fill="#0b0f19" rx="12" stroke="#1e293b" />
@@ -381,14 +714,32 @@ function RsiDivergenceDiagram({ activeStep, setActiveStep }: { activeStep: numbe
           <circle cx="220" cy="195" r="5" fill="#c084fc" />
           <circle cx="360" cy="230" r="5" fill="#f43f5e" />
           <line x1="220" y1="195" x2="360" y2="230" stroke="#f43f5e" strokeWidth="2" strokeDasharray="4 3" />
-          <text x="290" y="222" fill="#f87171" fontSize="9.5" fontWeight="bold">RSI Lower High &darr; (BEARISH DIV)</text>
+          <text x="290" y="222" fill="#f87171" fontSize="9.5" fontWeight="bold">RSI Lower High ↓ (BEARISH DIV)</text>
 
           {/* Bullish Div RSI line (Higher Low!) */}
           <path d="M 480,210 Q 550,275 620,270 T 760,235" fill="none" stroke="#c084fc" strokeWidth="2.5" />
           <circle cx="620" cy="270" r="5" fill="#c084fc" />
           <circle cx="760" cy="235" r="5" fill="#10b981" />
           <line x1="620" y1="270" x2="760" y2="235" stroke="#10b981" strokeWidth="2" strokeDasharray="4 3" />
-          <text x="690" y="260" fill="#34d399" fontSize="9.5" fontWeight="bold">RSI Higher Low &uarr; (BULLISH DIV)</text>
+          <text x="690" y="260" fill="#34d399" fontSize="9.5" fontWeight="bold">RSI Higher Low ↑ (BULLISH DIV)</text>
+
+          {/* SYNCHRONIZED DUAL PANEL CROSSHAIR */}
+          {cursor.active && (
+            <g pointerEvents="none">
+              <line
+                x1={clampedX}
+                y1="25"
+                x2={clampedX}
+                y2="295"
+                stroke="#c084fc"
+                strokeWidth="1.5"
+                strokeDasharray="4 3"
+              />
+              {/* Tracker dots in both panels */}
+              <circle cx={clampedX} cy={cursor.y < 160 ? cursor.y : 80} r="6" fill="#38bdf8" stroke="#fff" strokeWidth="2" />
+              <circle cx={clampedX} cy={235} r="6" fill="#c084fc" stroke="#fff" strokeWidth="2" />
+            </g>
+          )}
         </svg>
       </div>
 
@@ -407,9 +758,23 @@ function RsiDivergenceDiagram({ activeStep, setActiveStep }: { activeStep: numbe
 }
 
 // -------------------------------------------------------------
-// 5. Level-2 Order Book Depth & Bid/Ask Wall Diagram
+// 5. Level-2 Order Book Depth & Bid/Ask Wall (Live Cursor)
 // -------------------------------------------------------------
 function OrderBookDiagram({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (n: number) => void }) {
+  const { svgRef, cursor, handlePointerMove, handlePointerLeave } = useSvgCursor(840, 280);
+
+  const isBids = cursor.x < 420;
+  const hoverDist = Math.abs(cursor.x - 420);
+  const hoverPrice = isBids
+    ? Math.round(94500 - (hoverDist / 370) * 150)
+    : Math.round(94500 + (hoverDist / 370) * 150);
+
+  const volumeBtc = isBids
+    ? Math.round(30 + (hoverDist / 370) * 450)
+    : Math.round(25 + (hoverDist / 370) * 380);
+
+  const usdValue = ((volumeBtc * hoverPrice) / 1000000).toFixed(1);
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
@@ -418,17 +783,52 @@ function OrderBookDiagram({ activeStep, setActiveStep }: { activeStep: number; s
             L2
           </div>
           <div>
-            <h4 className="text-sm font-black text-white">Central Limit Order Book (CLOB) Market Depth Architecture</h4>
-            <span className="text-[11px] text-slate-400 font-mono">Resting Limit Bids vs Asks &amp; The Mid-Price Spread</span>
+            <h4 className="text-sm font-black text-white flex items-center gap-2">
+              <span>Central Limit Order Book (CLOB) Market Depth Architecture</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">
+                Live Interactive Cursor
+              </span>
+            </h4>
+            <span className="text-[11px] text-slate-400 font-mono">Inspect resting bids and asks depth at any price level</span>
           </div>
         </div>
-        <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+        <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20 shrink-0">
           OBI: +68% Buy Imbalance
         </span>
       </div>
 
-      <div className="relative w-full overflow-x-auto">
-        <svg viewBox="0 0 840 280" className="w-full min-w-[680px] h-auto font-mono text-xs">
+      {/* LIVE HOVER READOUT BAR */}
+      <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="flex items-center gap-2">
+          <span className="text-slate-400">Order Tier:</span>
+          <strong className={isBids ? "text-emerald-400" : "text-rose-400"}>
+            {isBids ? "Resting BID (Buyer Wall)" : "Resting ASK (Seller Offer)"}
+          </strong>
+        </div>
+        <div className="flex items-center gap-4">
+          <div>
+            <span className="text-slate-400 text-[10px] block">Price Level:</span>
+            <span className="text-white font-bold">${hoverPrice.toLocaleString()}</span>
+          </div>
+          <div>
+            <span className="text-slate-400 text-[10px] block">Depth Size:</span>
+            <span className={isBids ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+              {volumeBtc} BTC (${usdValue}M)
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-x-auto select-none">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 840 280"
+          className="w-full min-w-[680px] h-auto font-mono text-xs cursor-crosshair"
+          onMouseMove={handlePointerMove}
+          onMouseLeave={handlePointerLeave}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerLeave}
+        >
           {/* Background and Midline */}
           <rect x="50" y="20" width="740" height="230" fill="#090d16" rx="16" stroke="#1e293b" />
           <line x1="420" y1="20" x2="420" y2="250" stroke="#f59e0b" strokeWidth="2" strokeDasharray="4 4" />
@@ -437,8 +837,7 @@ function OrderBookDiagram({ activeStep, setActiveStep }: { activeStep: number; s
 
           {/* BIDS SIDE (LEFT - GREEN ACCUMULATION DEPTH) */}
           <text x="230" y="45" textAnchor="middle" fill="#10b981" fontSize="11" fontWeight="bold">BIDS (Resting Buy Limits)</text>
-          
-          {/* Depth Tiers - Bars from mid to left */}
+
           <rect x="350" y="80" width="60" height="18" fill="#10b981" opacity="0.9" rx="3" />
           <text x="340" y="93" textAnchor="end" fill="#f8fafc" fontSize="9">45 BTC @ $94,499</text>
 
@@ -473,10 +872,32 @@ function OrderBookDiagram({ activeStep, setActiveStep }: { activeStep: number; s
           <text x="660" y="198" textAnchor="start" fill="#94a3b8" fontSize="8.5">Cumulative: 410 BTC</text>
 
           {/* Aggressor Taker Arrow */}
-          <path d="M 450,225 L 490,225" stroke="#f59e0b" strokeWidth="2.5" markerEnd="url(#arrow)" />
           <text x="420" y="235" textAnchor="middle" fill="#fbbf24" fontSize="9.5" fontWeight="bold">
-            Aggressive Market Taker Buys consume resting asks &rarr; Price lifts upward
+            Aggressive Market Taker Buys consume resting asks → Price lifts upward
           </text>
+
+          {/* LIVE HOVER CROSSHAIR */}
+          {cursor.active && (
+            <g pointerEvents="none">
+              <line
+                x1={cursor.x}
+                y1="30"
+                x2={cursor.x}
+                y2="245"
+                stroke={isBids ? "#34d399" : "#fb7185"}
+                strokeWidth="1.5"
+                strokeDasharray="4 3"
+              />
+              <circle
+                cx={cursor.x}
+                cy={cursor.y}
+                r="6"
+                fill={isBids ? "#10b981" : "#f43f5e"}
+                stroke="#fff"
+                strokeWidth="2"
+              />
+            </g>
+          )}
         </svg>
       </div>
 
@@ -490,9 +911,28 @@ function OrderBookDiagram({ activeStep, setActiveStep }: { activeStep: number; s
 }
 
 // -------------------------------------------------------------
-// 6. CoinGlass Liquidation Cascade Waterfall
+// 6. CoinGlass Liquidation Cascade Waterfall (Live Cursor)
 // -------------------------------------------------------------
 function LiquidationCascadeDiagram({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (n: number) => void }) {
+  const { svgRef, cursor, handlePointerMove, handlePointerLeave } = useSvgCursor(840, 280);
+
+  let currentTier = "Tier 1: 100x Margin Liquidations";
+  let liqVolume = "$25 Million";
+  let riskStatus = "Initial Flush Triggered";
+  let statusColor = "text-rose-400";
+
+  if (cursor.x > 500) {
+    currentTier = "Tier 3: 25x Margin Long Capitulation";
+    liqVolume = "$180 Million";
+    riskStatus = "Terminal Cascade Peak (V-Shape Absorption Near)";
+    statusColor = "text-emerald-400";
+  } else if (cursor.x > 260) {
+    currentTier = "Tier 2: 50x Margin Liquidations";
+    liqVolume = "$65 Million";
+    riskStatus = "Secondary Cascade Accelerating";
+    statusColor = "text-purple-400";
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
@@ -501,15 +941,45 @@ function LiquidationCascadeDiagram({ activeStep, setActiveStep }: { activeStep: 
             <Flame className="w-4 h-4 text-rose-400" />
           </div>
           <div>
-            <h4 className="text-sm font-black text-white">CoinGlass Liquidation Squeeze Waterfall Dynamics</h4>
-            <span className="text-[11px] text-slate-400 font-mono">Forced exchange liquidation market orders triggering cascades</span>
+            <h4 className="text-sm font-black text-white flex items-center gap-2">
+              <span>CoinGlass Liquidation Squeeze Waterfall Dynamics</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                Live Interactive Cursor
+              </span>
+            </h4>
+            <span className="text-[11px] text-slate-400 font-mono">Inspect cascading forced liquidation tiers down the waterfall</span>
           </div>
         </div>
       </div>
 
-      <div className="relative w-full overflow-x-auto">
-        <svg viewBox="0 0 840 280" className="w-full min-w-[680px] h-auto font-mono text-xs">
-          {/* Steps */}
+      {/* LIVE HOVER READOUT BAR */}
+      <div className="p-3 rounded-2xl bg-slate-950/90 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div>
+          <span className="text-slate-400 text-[10px] block">Leverage Tier:</span>
+          <strong className="text-white">{currentTier}</strong>
+        </div>
+        <div className="flex items-center gap-4">
+          <div>
+            <span className="text-slate-400 text-[10px] block">Forced Market Sells:</span>
+            <span className="text-rose-400 font-bold">{liqVolume}</span>
+          </div>
+          <div>
+            <span className="text-slate-400 text-[10px] block">Cascade State:</span>
+            <span className={`font-bold ${statusColor}`}>{riskStatus}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-x-auto select-none">
+        <svg
+          ref={svgRef}
+          viewBox="0 0 840 280"
+          className="w-full min-w-[680px] h-auto font-mono text-xs cursor-crosshair"
+          onMouseMove={handlePointerMove}
+          onMouseLeave={handlePointerLeave}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerLeave}
+        >
           {/* Tier 1: 100x */}
           <g>
             <rect x="60" y="30" width="160" height="60" rx="12" fill="#881337" stroke="#f43f5e" strokeWidth="1.5" />
@@ -544,9 +1014,25 @@ function LiquidationCascadeDiagram({ activeStep, setActiveStep }: { activeStep: 
               ★ INSTITUTIONAL ABSORPTION POOL ($300M+ Resting Limit Bids)
             </text>
             <text x="420" y="254" textAnchor="middle" fill="#6ee7b7" fontSize="9">
-              Cascade exhausts &rarr; Massive Mean Reversion V-Shape Reversal Triggered
+              Cascade exhausts → Massive Mean Reversion V-Shape Reversal Triggered
             </text>
           </g>
+
+          {/* LIVE HOVER CROSSHAIR */}
+          {cursor.active && (
+            <g pointerEvents="none">
+              <line
+                x1={cursor.x}
+                y1="20"
+                x2={cursor.x}
+                y2="265"
+                stroke="#f59e0b"
+                strokeWidth="1.5"
+                strokeDasharray="4 3"
+              />
+              <circle cx={cursor.x} cy={cursor.y} r="6" fill="#fbbf24" stroke="#fff" strokeWidth="2" />
+            </g>
+          )}
         </svg>
       </div>
 
@@ -560,9 +1046,11 @@ function LiquidationCascadeDiagram({ activeStep, setActiveStep }: { activeStep: 
 }
 
 // -------------------------------------------------------------
-// 7. Exponential Drawdown Recovery & Risk Matrix
+// 7. Exponential Drawdown Recovery & Risk Matrix (Interactive Slider & Live Cursor)
 // -------------------------------------------------------------
 function DrawdownMatrixDiagram({ activeStep, setActiveStep }: { activeStep: number; setActiveStep: (n: number) => void }) {
+  const [sliderLoss, setSliderLoss] = useState<number>(50);
+
   const drawdowns = [
     { loss: "10%", gain: "11.1%", severity: "Normal Noise", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
     { loss: "20%", gain: "25.0%", severity: "Manageable", color: "text-blue-400", bg: "bg-blue-500/10 border-blue-500/20" },
@@ -572,23 +1060,67 @@ function DrawdownMatrixDiagram({ activeStep, setActiveStep }: { activeStep: numb
     { loss: "90%", gain: "900.0%", severity: "Account Ruin (10x Needed)", color: "text-red-500", bg: "bg-red-500/20 border-red-500/40" },
   ];
 
+  // Calculate live formula from slider
+  const lossFraction = sliderLoss / 100;
+  const liveRequiredGain = lossFraction >= 0.99 ? "∞" : ((1 / (1 - lossFraction) - 1) * 100).toFixed(1);
+  const remainingCapital = Math.round(10000 * (1 - lossFraction));
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
             %
           </div>
           <div>
-            <h4 className="text-sm font-black text-white">The Asymmetric Mathematics of Account Drawdown Recovery</h4>
-            <span className="text-[11px] text-slate-400 font-mono">Why an 80% loss requires a 400% gain to break even</span>
+            <h4 className="text-sm font-black text-white flex items-center gap-2">
+              <span>The Asymmetric Mathematics of Account Drawdown Recovery</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                Interactive Simulator
+              </span>
+            </h4>
+            <span className="text-[11px] text-slate-400 font-mono">Slide or hover across drawdown levels to see the required mathematical recovery gain</span>
           </div>
+        </div>
+      </div>
+
+      {/* LIVE DYNAMIC SLIDER SIMULATOR */}
+      <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span className="text-xs font-mono text-slate-400 uppercase font-bold">Simulate Account Drawdown:</span>
+            <div className="text-2xl font-black font-mono text-rose-400 mt-0.5">
+              -{sliderLoss}% Account Loss
+            </div>
+          </div>
+          <div className="text-left sm:text-right">
+            <span className="text-xs font-mono text-slate-400 uppercase font-bold">Required Gain to Break Even:</span>
+            <div className="text-2xl font-black font-mono text-emerald-400 mt-0.5">
+              +{liveRequiredGain}% Return Needed
+            </div>
+          </div>
+        </div>
+
+        <input
+          type="range"
+          min="5"
+          max="95"
+          step="1"
+          value={sliderLoss}
+          onChange={(e) => setSliderLoss(Number(e.target.value))}
+          className="w-full accent-emerald-500 cursor-pointer h-2 bg-slate-800 rounded-lg"
+        />
+
+        <div className="flex items-center justify-between text-xs font-mono text-slate-400 pt-1">
+          <span>Starting Capital: $10,000</span>
+          <span>Capital Remaining: <strong className="text-white">${remainingCapital.toLocaleString()}</strong></span>
+          <span>Target Capital: $10,000</span>
         </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
         {drawdowns.map((d) => (
-          <div key={d.loss} className={`p-3.5 rounded-2xl border ${d.bg} flex flex-col justify-between space-y-2`}>
+          <div key={d.loss} className={`p-3.5 rounded-2xl border ${d.bg} flex flex-col justify-between space-y-2 cursor-pointer hover:scale-[1.02] transition`} onClick={() => setSliderLoss(parseInt(d.loss))}>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400 block">Account Loss:</span>
               <span className="text-xl font-black text-white font-mono">{d.loss}</span>

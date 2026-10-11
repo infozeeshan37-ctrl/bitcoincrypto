@@ -9,6 +9,7 @@ import CommandPalette from "@/components/common/CommandPalette";
 import ChatWidget from "@/components/chat/ChatWidget";
 import CookieConsentBanner from "@/components/common/CookieConsentBanner";
 import { WebSiteJsonLd, OrganizationJsonLd, SoftwareAppJsonLd } from "@/components/seo/JsonLd";
+import BitcoinPageTransition from "@/components/transitions/BitcoinPageTransition";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -147,6 +148,7 @@ export default function RootLayout({
         <OrganizationJsonLd />
         <SoftwareAppJsonLd />
         <ThemeProvider>
+          <BitcoinPageTransition />
           <Navbar />
           <CoinGlassSubNav />
           <main className="flex-1">
