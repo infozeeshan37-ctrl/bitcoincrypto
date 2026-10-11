@@ -57,7 +57,7 @@ export default function ChapterPdfModal({
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/20"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-amber-400 hover:from-emerald-400 hover:to-amber-300 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/20"
             >
               <Download className="w-4 h-4" />
               <span>Save / Download PDF</span>
@@ -70,6 +70,12 @@ export default function ChapterPdfModal({
               <X className="w-5 h-5" />
             </button>
           </div>
+        </div>
+
+        {/* INSTRUCTION BANNER (PRINT:HIDDEN) */}
+        <div className="bg-emerald-950/50 border-b border-emerald-800/40 px-4 sm:px-6 py-2.5 flex items-center justify-between text-xs text-emerald-300 print:hidden font-mono">
+          <span>💡 <strong>Quick PDF Tip:</strong> Click <strong>&quot;Save / Download PDF&quot;</strong>, then select <strong>&quot;Save as PDF&quot;</strong> as your Destination to download this eBook.</span>
+          <span className="hidden sm:inline text-slate-400">{chapter.lessons.length} Articles</span>
         </div>
 
         {/* PRINTABLE BOOK CONTENT AREA */}
