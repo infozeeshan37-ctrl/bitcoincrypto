@@ -50,7 +50,7 @@ const PREDICTION_FAQS = [
   },
   {
     q: "Can I use the AI prediction model for free with paper demo funds?",
-    a: "Yes! BitcoinCrypto.tech equips all analysts and learners with a free simulated demo wallet and an 'Auto-Follow AI Bot' toggle to backtest and study quantitative scalping and swing trading strategies completely risk-free."
+    a: "Yes! BitcoinCrypto.tech equips all analysts and learners with a free simulated demo wallet and an 'Auto-Follow AI Bot' toggle to backtest and study quantitative scalping and swing trading strategies in a simulated paper-trading environment without risking real capital."
   }
 ];
 

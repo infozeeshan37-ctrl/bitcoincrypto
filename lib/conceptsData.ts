@@ -99,8 +99,8 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "2. The Delta-Neutral Cash-and-Carry Strategy",
         paragraphs: [
-          "Institutional desks utilize funding rate imbalances to generate risk-free dollar yield. By purchasing 1.0 BTC in spot and simultaneously opening a 1.0 BTC short perpetual position, the trader's total portfolio delta is mathematically zero.",
-          "Regardless of whether Bitcoin doubles or drops 50%, the portfolio value remains pegged to USD, while collecting the continuous 8-hour funding fee payments paid by levered market speculators.",
+          "Institutional desks utilize funding rate imbalances to generate market-neutral delta-hedged dollar yield. By purchasing 1.0 BTC in spot and simultaneously opening a 1.0 BTC short perpetual position, the trader's total portfolio delta is mathematically zero.",
+          "Regardless of whether Bitcoin doubles or drops 50%, the portfolio value remains pegged to USD, while collecting the continuous 8-hour funding fee payments paid by levered market speculators (subject to exchange counterparty and margin maintenance parameters).",
         ],
       },
     ],

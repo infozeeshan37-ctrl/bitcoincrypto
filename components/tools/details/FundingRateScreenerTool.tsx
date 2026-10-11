@@ -567,8 +567,8 @@ export default function FundingRateScreenerTool() {
       a: "Unlike traditional calendar futures contracts which expire on a set date (e.g., quarterly settlement), crypto perpetual contracts (Perps) never expire. To ensure the perpetual contract price stays pegged to the underlying spot index price, exchanges execute an automatic peer-to-peer cash transfer known as the Funding Rate every 8 hours (00:00, 08:00, 16:00 UTC). When perps trade at a premium to spot, longs pay shorts (positive rate). When perps trade at a discount, shorts pay longs (negative rate)."
     },
     {
-      q: "How does the Delta-Neutral Cash-and-Carry Basis Arbitrage strategy generate risk-free yield?",
-      a: "In a positive funding environment, an institutional trader buys $50,000 worth of spot Bitcoin and simultaneously opens a $50,000 1x short perpetual futures contract on Binance or OKX. Because the long spot position (+1 delta) perfectly offsets the short futures position (-1 delta), the total portfolio market delta is exactly 0. The trader is 100% immune to Bitcoin price crashes or rallies, while passively collecting the 8-hour funding fee payments. This generates annualized yields between 12% and 35%+ with zero directional drawdown risk."
+      q: "How does the Delta-Neutral Cash-and-Carry Basis Arbitrage strategy generate market-neutral yield?",
+      a: "In a positive funding environment, an institutional trader buys $50,000 worth of spot Bitcoin and simultaneously opens a $50,000 1x short perpetual futures contract on Binance or OKX. Because the long spot position (+1 delta) offsets the short futures position (-1 delta), the total portfolio market delta is approximately zero. The trader minimizes directional price exposure while passively collecting the 8-hour funding fee payments. This can generate annualized basis yields between 12% and 35%+ (subject to exchange counterparty, execution slippage, and margin maintenance requirements)."
     },
     {
       q: "What does an extreme positive or negative funding rate indicate for market direction?",
@@ -580,7 +580,7 @@ export default function FundingRateScreenerTool() {
     },
     {
       q: "What is Cross-Exchange Funding Rate Spread Arbitrage?",
-      a: "Cross-exchange spread arbitrage exploits discrepancies between different exchanges for the same asset. For example, if Bybit has a funding rate of +0.025% on SOL while OKX has +0.008%, a trader can Short SOL on Bybit (collecting +0.025%) and Long SOL on OKX (paying only 0.008%), netting a risk-free +0.017% spread per 8-hour epoch (~18.6% annualized APY) without holding any underlying spot collateral."
+      a: "Cross-exchange spread arbitrage exploits discrepancies between different exchanges for the same asset. For example, if Bybit has a funding rate of +0.025% on SOL while OKX has +0.008%, a trader can Short SOL on Bybit (collecting +0.025%) and Long SOL on OKX (paying only 0.008%), netting a delta-hedged +0.017% spread per 8-hour epoch (~18.6% annualized APY) without holding any underlying spot collateral."
     }
   ];
 
