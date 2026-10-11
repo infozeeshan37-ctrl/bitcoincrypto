@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/ads.txt"],
         disallow: ["/api/"],
       },
       // OpenAI ChatGPT & SearchGPT crawlers
@@ -58,10 +58,18 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Googlebot-Image",
         allow: "/",
       },
-      // Google AdSense Crawler
+      // Google AdSense Crawlers
       {
         userAgent: "Mediapartners-Google",
-        allow: "/",
+        allow: ["/", "/ads.txt"],
+      },
+      {
+        userAgent: "AdsBot-Google",
+        allow: ["/", "/ads.txt"],
+      },
+      {
+        userAgent: "AdsBot-Google-Mobile",
+        allow: ["/", "/ads.txt"],
       },
       // Apple & Microsoft / Bing AI crawlers
       {
