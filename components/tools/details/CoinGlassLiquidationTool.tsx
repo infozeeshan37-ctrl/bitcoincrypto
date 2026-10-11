@@ -654,7 +654,7 @@ export default function CoinGlassLiquidationTool() {
     {
       name: "Strategy 1: The Coinglass Liquidation Pool Sweep (Fade the Stop Run)",
       type: "Mean Reversion / Liquidity Hunter",
-      badge: "High Probability (72% Win Rate)",
+      badge: "High Statistical Confluence (Backtested)",
       icon: Crosshair,
       color: "border-amber-500/40 bg-amber-500/5",
       overview: "Identify dense yellow liquidation bands on the Coinglass heatmap resting just beyond obvious support or resistance levels. Instead of trading the breakout, wait for institutional market makers to engineer a liquidity sweep through the cluster.",
@@ -686,10 +686,10 @@ export default function CoinGlassLiquidationTool() {
     {
       name: "Strategy 3: Coinglass Extreme Funding Rate Cash & Carry Arbitrage",
       type: "Market-Neutral / Delta-Neutral Yield",
-      badge: "Low Risk Institutional Play",
+      badge: "Delta-Neutral Basis Play",
       icon: Scale,
       color: "border-blue-500/40 bg-blue-500/5",
-      overview: "Harness extreme funding rate anomalies identified on Coinglass to capture risk-free annualized yield or profit from violent funding mean-reversion resets.",
+      overview: "Harness extreme funding rate anomalies identified on Coinglass to capture delta-neutral annualized funding yield or trade violent funding mean-reversion resets.",
       steps: [
         "Monitor Coinglass Multi-Exchange Funding Rate Heatmaps for annualized rates exceeding +50% APY (or negative <-30% APY).",
         "Buy 1.0 BTC on the Spot Market while simultaneously opening a 1.0 BTC Short position on the Perpetual Futures Market (Delta-Neutral).",
@@ -704,7 +704,7 @@ export default function CoinGlassLiquidationTool() {
       badge: "Institutional Sniping (1:5+ R:R)",
       icon: Target,
       color: "border-purple-500/40 bg-purple-500/5",
-      overview: "When a multi-hundred million dollar liquidation waterfall exhausts all available stop-orders and encounters massive institutional limit buy orders, an explosive V-shaped mean-reversion bounce is mathematically imminent.",
+      overview: "When a multi-hundred million dollar liquidation waterfall exhausts all available stop-orders and encounters massive institutional limit buy orders, an explosive V-shaped mean-reversion bounce historically occurs with high statistical frequency.",
       steps: [
         "Monitor Coinglass Real-Time Liquidation Tape for a massive spike (> $80M in a single 15-minute bar).",
         "Verify on the Coinglass Heatmap that the entire yellow liquidity shelf has been 100% wiped clean with no further dense clusters below.",
@@ -1250,6 +1250,11 @@ export default function CoinGlassLiquidationTool() {
         </div>
 
         {/* Funding Rate Regime Forward 7-Day Alpha Table */}
+        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            Historical Quantitative Backtest Model (Educational Analysis — Past Performance Does Not Guarantee Future Returns)
+          </span>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
             <thead>
@@ -1257,7 +1262,7 @@ export default function CoinGlassLiquidationTool() {
                 <th className="pb-3 font-black uppercase">Funding Regime</th>
                 <th className="pb-3 font-black uppercase">8h Rate Range</th>
                 <th className="pb-3 font-black uppercase">Annualized APY</th>
-                <th className="pb-3 font-black uppercase">Forward 7d Long Win Rate</th>
+                <th className="pb-3 font-black uppercase">Historical 7d Long Success Rate</th>
                 <th className="pb-3 font-black uppercase">Expected Institutional Play</th>
               </tr>
             </thead>
