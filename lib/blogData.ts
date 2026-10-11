@@ -452,13 +452,13 @@ export const articles: Article[] = [
     tags: ['Flop Lab', 'FLOP', 'AI Agents', 'Decentralized Compute', 'Proof of Useful Inference', 'Crypto x AI', 'Tokenomics', 'GPU Clustering'],
     keyTakeaways: [
       'Arthur Hayes equates his excitement for the AI agentic economy today to his groundbreaking 2013-2014 realization that cryptocurrency derivatives would become a trillion-dollar industry.',
-      'Hayes categorizes this frontier investment as "Elephant Hunting"—a purely asymmetric, binary bet that will either reach Bitcoin-scale valuations or drop to zero.',
+      'Hayes categorizes this frontier investment as "Elephant Hunting"—a purely asymmetric, high-conviction frontier thesis that will either reach Bitcoin-scale valuations or drop to zero.',
       'Autonomous AI agents require continuous floating-point operations per unit time (FLOP) as their essential computational "life force" to think, infer, and execute workflows.',
       'Flop Lab is building a Proof of Useful Inference blockchain to establish the world\'s first decentralized spot market for verifiable FLOPs, eliminating centralized cloud monopolies and opaque API pricing.',
       'The protocol implements aggressive Anti-VC tokenomics with zero predatory private pre-sales, distributing native tokens directly to compute miners, validators, KOLs, and grassroots developers.'
     ],
     keyMetrics: [
-      { label: 'Investment Category', value: 'Elephant Hunting', delta: 'Binary 100x or 0' },
+      { label: 'Investment Category', value: 'Elephant Hunting', delta: 'Asymmetric 100x or 0' },
       { label: 'Core Commodity', value: 'Raw FLOPs', delta: 'Compute as Life Force' },
       { label: 'Consensus Mechanism', value: 'Proof of Useful Inference', delta: 'Verifiable AI ML' },
       { label: 'Private VC Allocation', value: '0.0% (No Pre-Sale)', delta: '100% Fair Launch' }
@@ -477,10 +477,10 @@ export const articles: Article[] = [
     ],
     content: [
       {
-        heading: 'The "Elephant Hunting" Paradigm: Binary Frontier Asymmetry in Crypto x AI',
+        heading: 'The "Elephant Hunting" Paradigm: Asymmetric Frontier Innovation in Crypto x AI',
         paragraphs: [
           'In early-stage venture capital and frontier technology investing, the vast majority of projects offer incremental, linear improvements that yield modest returns. Rarely does an investor encounter an opportunity that represents an entirely new economic paradigm. Arthur Hayes compares his current conviction in the decentralized AI agentic economy to his foundational realization in 2013 and 2014 when he recognized that cryptocurrency derivatives (specifically the perpetual swap) would inevitably eclipse spot trading by multiples.',
-          'Hayes classifies this thesis as "Elephant Hunting." When elephant hunting, an investor is not looking for a safe 2x or 3x return. It is a strictly asymmetric, binary frontier play: either the project captures the fundamental commodity underpinning the autonomous AI economy and scales to hundreds of billions in network value (like Bitcoin), or it goes straight to zero. There is no middle ground.',
+          'Hayes classifies this thesis as "Elephant Hunting." When elephant hunting, an investor is not looking for a safe 2x or 3x return. It is a strictly asymmetric, frontier thesis: either the project captures the fundamental commodity underpinning the autonomous AI economy and scales to hundreds of billions in network value (like Bitcoin), or it goes straight to zero. There is no middle ground.',
           'Flop Lab (FLOP) represents the prime manifestation of this Elephant Hunting thesis at the intersection of decentralized blockchain infrastructure and autonomous artificial intelligence.'
         ]
       },

@@ -6,10 +6,10 @@ Description: Comprehensive reference and semantic index for Large Language Model
 
 ---
 
-## 1. 5-Minute Binance Binary Price Prediction Arena
+## 1. 5-Minute Binance Next-Candle Predictive Modeling Engine
 - **URL**: https://www.bitcoincrypto.tech/predictions
-- **Category**: Financial AI / Binary Prediction Simulator
-- **Pricing**: 100% Free (Includes $10,000 USDT persistent Demo Wallet)
+- **Category**: Quantitative Technical Analysis & Educational Paper-Trading Simulator (Zero Betting/Gambling)
+- **Pricing**: 100% Free (Includes $10,000 USDT persistent Simulated Demo Paper Wallet)
 - **Mechanics**:
   - Synchronized with global 5-minute epoch clocks (`Math.floor(Date.now() / 300000)`).
   - Captures the exact Binance Spot ticker price at `00:00` as the fixed "Lock Price".

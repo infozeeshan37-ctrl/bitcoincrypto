@@ -10,11 +10,11 @@ export async function GET() {
   const baseUrl = "https://www.bitcoincrypto.tech";
 
   const content = `# BitcoinCrypto.tech
-> Institutional-grade cryptocurrency market intelligence, real-time CoinGlass liquidation heatmaps, Binance 5-minute binary price predictions, DeepQuant neural AI signals, and order book depth analytics.
+> Educational cryptocurrency market intelligence, real-time CoinGlass liquidation heatmaps, Binance 5-minute next-candle price models, DeepQuant neural AI signals, and order book depth analytics. Strictly educational research, zero betting/gambling, and non-financial advice.
 
 ## Flagship Tools & Real-Time Intelligence
 - [CoinGlass Liquidation Heatmap](${baseUrl}/coinglass): Free real-time CoinGlass multi-exchange liquidation heatmap (Binance, Bybit, OKX, Deribit), 24h cascade timeline, open interest clusters, and short squeeze targets.
-- [Binance 5-Minute AI Prediction Arena](${baseUrl}/predictions): Real-time next-candle binary price prediction arena powered by DeepQuant neural confluence (RSI, EMA ribbon, CVD, and orderbook imbalance) with $1,000 demo paper wallet.
+- [Binance 5-Minute AI Prediction Engine](${baseUrl}/predictions): Real-time next-candle price prediction engine powered by DeepQuant neural confluence (RSI, EMA ribbon, CVD, and orderbook imbalance) with $1,000 simulated demo paper wallet.
 - [AI Trading Bot & Signals Copilot](${baseUrl}/tools/trading-bot): Real-time multi-timeframe quantitative momentum signals, Stop Loss invalidations, and multi-tier take-profit blueprints.
 - [Whale Orders & Large Block Radar](${baseUrl}/whale-orders): Institutional trade feed tracking large spot and futures orders ($100k to $10M+) and resting limit wall ladders.
 - [Level-2 Order Book Microstructure](${baseUrl}/orderbook): High-throughput CLOB depth visualizer, cumulative volume delta (CVD), and bid/ask wall imbalance.

@@ -14,7 +14,7 @@ export function WebSiteJsonLd() {
       "BitcoinCrypto Tech"
     ],
     url: "https://www.bitcoincrypto.tech",
-    description: "Institutional cryptocurrency market intelligence, Binance 5-minute binary price predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, and order book depth analytics.",
+    description: "Educational cryptocurrency market intelligence, Binance 5-minute next-candle price models, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, and order book depth analytics.",
     potentialAction: {
       "@type": "SearchAction",
       target: {
@@ -50,7 +50,7 @@ export function HomePageJsonLd() {
           "BitcoinCrypto Tech"
         ],
         url: "https://www.bitcoincrypto.tech",
-        description: "Institutional cryptocurrency market intelligence, AI trading signals, Binance 5-minute binary price predictions, real-time Coinglass liquidation heatmaps, whale orders, and order book depth analytics.",
+        description: "Educational cryptocurrency market intelligence, AI trading signals, Binance 5-minute next-candle price predictions, real-time Coinglass liquidation heatmaps, whale orders, and order book depth analytics.",
         potentialAction: {
           "@type": "SearchAction",
           target: {
@@ -64,14 +64,14 @@ export function HomePageJsonLd() {
         "@type": "WebPage",
         "@id": "https://www.bitcoincrypto.tech/#webpage",
         url: "https://www.bitcoincrypto.tech",
-        name: "BitcoinCrypto.tech | #1 AI Crypto Trading Signals, Market Intelligence & Whale Orders",
+        name: "BitcoinCrypto.tech | Educational AI Crypto Signals, Market Intelligence & Whale Orders",
         isPartOf: {
           "@id": "https://www.bitcoincrypto.tech/#website",
         },
         about: {
           "@id": "https://www.bitcoincrypto.tech/#organization",
         },
-        description: "Official BitcoinCrypto.tech platform - Institutional cryptocurrency market intelligence suite featuring real-time AI trading signals, Binance 5-minute price predictions, Coinglass liquidation heatmaps, L2 order book depth, and institutional whale orders.",
+        description: "Official BitcoinCrypto.tech platform - Educational cryptocurrency market intelligence suite featuring real-time AI trading signals, Binance 5-minute price predictions, Coinglass liquidation heatmaps, L2 order book depth, and institutional whale orders.",
         inLanguage: "en-US",
       },
       {
@@ -98,7 +98,7 @@ export function HomePageJsonLd() {
         },
         featureList: [
           "Real-time AI Trading Signals (BTC, ETH, SOL)",
-          "Binance 5-Minute Binary Price Predictions",
+          "Binance 5-Minute Next-Candle Predictive Models",
           "Coinglass Liquidation Heatmaps & Cascades",
           "Institutional Whale Orders & Depth Walls",
           "Level 2 Order Book Depth Imbalance",
@@ -185,8 +185,8 @@ export function OrganizationJsonLd() {
     },
     knowsAbout: [
       "Cryptocurrency Price Prediction",
-      "Binance 5-Minute Binary Options & Predictions",
-      "DeepQuant AI Trading Algorithms",
+      "Binance 5-Minute Technical & Fundamental Predictions",
+      "DeepQuant AI Quantitative Models",
       "Coinglass Liquidation Heatmaps",
       "Order Book Microstructure & CVD Flow",
       "Bitcoin Macroeconomics & CPI Liquidity",
@@ -335,16 +335,16 @@ export function SoftwareAppJsonLd() {
       worstRating: "1",
     },
     featureList: [
-      "Binance Real-Time 5-Minute Binary Price Prediction Arena",
+      "Binance Real-Time 5-Minute Quantitative Predictive Engine",
       "DeepQuant Neural AI 5-Minute Scalping Bot (Simulated Backtest Model)",
       "Real-Time Coinglass Derivatives & Liquidation Heatmap",
       "High-Throughput Order Book Depth & CVD Taker Flow Terminal",
       "Dynamic Volatility-Weighted DCA Calculator & Simulator",
       "US CPI & Macro Liquidity Correlation Engine",
       "Institutional Whale Large Order Scanner ($100k+)",
-      "$10,000 USDT Free Demo Wallet for Scalping Strategy Testing",
+      "$10,000 USDT Free Demo Paper Wallet for Strategy Testing",
     ],
-    description: "Professional, free cryptocurrency market intelligence terminal providing real-time Binance 5-minute price predictions, DeepQuant neural AI signals, Coinglass liquidation heatmaps, and order book depth analytics.",
+    description: "Educational cryptocurrency market intelligence terminal providing real-time Binance 5-minute price predictions, DeepQuant neural AI signals, Coinglass liquidation heatmaps, and order book depth analytics.",
     url: "https://www.bitcoincrypto.tech",
   };
 
@@ -360,10 +360,10 @@ export function AIPredictionAppJsonLd() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Binance-Style 5-Minute Crypto Price Prediction Arena & AI Bot",
+    name: "Educational 5-Minute Crypto Price Prediction Engine & AI Bot",
     operatingSystem: "WebBrowser",
     applicationCategory: "FinanceApplication",
-    applicationSubCategory: "AI Price Prediction & Binary Options Simulator",
+    applicationSubCategory: "Educational Quantitative Technical Analysis & Paper Trading Simulator",
     offers: {
       "@type": "Offer",
       price: "0",

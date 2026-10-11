@@ -48,10 +48,10 @@ export const metadata: Metadata = {
     "crypto order book depth",
     "cvd crypto scanner",
     "deepquant neural bot",
-    "bitcoin dca simulator ai",
-    "crypto binary prediction demo wallet",
+    "crypto dca simulator ai",
+    "crypto quantitative prediction paper trading demo wallet",
     "real time crypto market intelligence",
-    "free crypto trading signals btc eth sol",
+    "free crypto educational signals btc eth sol",
     "crypto market scanner live",
     "short squeeze heatmap"
   ],
@@ -74,8 +74,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "BitcoinCrypto.tech | Best AI Crypto Prediction & Market Intelligence Suite",
-    description: "Institutional-grade digital asset terminal with Binance 5-minute price predictions, DeepQuant AI signals, Coinglass liquidation heatmaps, and order book depth.",
+    title: "BitcoinCrypto.tech | Educational AI Crypto Prediction & Market Intelligence Suite",
+    description: "Educational digital asset terminal with Binance 5-minute price predictions, DeepQuant AI models, Coinglass liquidation heatmaps, and order book depth.",
     url: "https://www.bitcoincrypto.tech",
     siteName: "BitcoinCrypto.tech",
     locale: "en_US",
@@ -83,8 +83,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BitcoinCrypto.tech | AI Crypto Market Intelligence & Prediction Tools",
-    description: "Binance 5-minute binary price predictions, DeepQuant neural AI, Coinglass liquidation heatmaps, and L2 order book depth.",
+    title: "BitcoinCrypto.tech | Educational AI Crypto Market Intelligence & Prediction Tools",
+    description: "Binance 5-minute next-candle price models, DeepQuant neural AI, Coinglass liquidation heatmaps, and L2 order book depth.",
     creator: "@bitcoincrypto",
   },
   verification: {

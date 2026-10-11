@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     "coinglass liquidation heatmap",
     "bitcoin price prediction",
     "crypto signals btc eth sol",
-    "binance 5 minute binary prediction"
+    "binance 5 minute next candle prediction"
   ],
   alternates: {
     canonical: "https://www.bitcoincrypto.tech",
@@ -102,10 +102,10 @@ export default function HomePage() {
               <span>Official Platform Hub • BitcoinCrypto.tech</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Institutional Cryptocurrency Market Intelligence &amp; AI Quantitative Suite
+              Educational Cryptocurrency Market Intelligence &amp; AI Quantitative Suite
             </h2>
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-              <strong>BitcoinCrypto.tech</strong> is an open-access institutional digital asset terminal providing real-time high-frequency WebSocket streams, Tri-Pillar AI trading signals, Binance 5-minute epoch price predictions, aggregated L2 order book depth, Coinglass liquidation squeeze heatmaps, and macroeconomic US CPI volatility forecasting.
+              <strong>BitcoinCrypto.tech</strong> is an open-access educational cryptocurrency research terminal providing real-time market telemetry, quantitative Technical Analysis models, Fundamental macroeconomic indicators (US CPI), L2 order book depth, Coinglass liquidation heatmaps, and simulated paper trading. <strong>Strictly educational, zero betting or gambling, and non-financial advice.</strong>
             </p>
           </div>
 
@@ -137,7 +137,7 @@ export default function HomePage() {
                 5-Minute &amp; Multi-Horizon AI Predictions
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                High-frequency machine learning forecasting Binance 5-minute binary closing epochs along with 24h, 7-day, and 30-day directional targets for Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and 35+ top altcoins.
+                Quantitative machine learning forecasting Binance 5-minute next-candle closing epochs along with 24h, 7-day, and 30-day directional targets for Bitcoin (BTC), Ethereum (ETH), Solana (SOL), and 35+ top altcoins.
               </p>
               <Link href="/predictions" className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center gap-1">
                 Explore AI Predictions <ArrowRight className="w-3.5 h-3.5" />
