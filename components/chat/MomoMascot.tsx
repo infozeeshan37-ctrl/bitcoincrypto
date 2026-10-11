@@ -59,18 +59,18 @@ export default function MomoMascot({
             </div>
             <div>
               <div className="font-semibold text-slate-900 dark:text-amber-400 flex items-center gap-1">
-                TradingMomo Desk
+                BitcoinCrypto Copilot
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               </div>
               <p className="text-slate-600 dark:text-slate-300 mt-0.5 leading-snug">
-                Need trading help, margin info, or want to chat with our 24/7 human desk?
+                Need market intelligence help, liquidation heatmap analysis, or want to consult our research desk?
               </p>
               <div className="mt-2 flex gap-1.5">
                 <button
                   onClick={handleClick}
                   className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold rounded-md text-[11px] transition-all shadow-sm active:scale-95"
                 >
-                  Ask Momo FAQ
+                  Ask AI FAQ
                 </button>
                 {onOpenLiveAgent && (
                   <button
@@ -81,7 +81,7 @@ export default function MomoMascot({
                     }}
                     className="px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-md text-[11px] font-medium transition-colors"
                   >
-                    Support Agent
+                    Research Desk
                   </button>
                 )}
               </div>
@@ -99,7 +99,7 @@ export default function MomoMascot({
           setIsHovered(true);
         }}
         onMouseLeave={() => setIsHovered(false)}
-        aria-label="Open TradingMomo Chat Support"
+        aria-label="Open BitcoinCrypto Chat Support"
         className={`group relative flex items-center justify-center rounded-full transition-all duration-300 transform active:scale-95 ${
           isOpen
             ? 'w-14 h-14 bg-slate-900 border-2 border-amber-500/80 shadow-lg text-amber-400'

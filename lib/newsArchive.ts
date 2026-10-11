@@ -104,7 +104,7 @@ export const HISTORICAL_NEWS_ARCHIVE: HistoricalNewsItem[] = [
     "title": "BlackRock's BUIDL Tokenized Fund Surpasses $600M AUM as Wall Street RWA Adoption Accelerates",
     "summary": "BlackRock's USD Institutional Digital Liquidity Fund (BUIDL) on Ethereum crosses $600 million in assets under management, driving institutional Real World Asset (RWA) tokenization to multi-billion dollar milestones.",
     "paragraphs": [
-      "BlackRock's BUIDL fund, launched in partnership with Securitize on the Ethereum blockchain, has rapidly grown past $600 million in assets under management. The fund provides institutional investors with daily yield payouts backed 100% by cash, US Treasury bills, and repurchase agreements.",
+      "BlackRock's BUIDL fund, launched in partnership with Securitize on the Ethereum blockchain, has rapidly grown past $600 million in assets under management. The fund provides institutional investors with daily yield distributions backed 100% by cash, US Treasury bills, and repurchase agreements.",
       "Decentralized finance (DeFi) protocols, including Ondo Finance and MakerDAO (Sky), have integrated BUIDL as collateral backing for yield-bearing stablecoins and tokenized treasuries, demonstrating the accelerating convergence of traditional asset management and public blockchain rails.",
       "Institutional surveys indicate that asset managers manage over $12 billion in tokenized real-world assets, with market forecasts predicting RWA tokenization will expand into a multi-trillion dollar sector by 2030."
     ],

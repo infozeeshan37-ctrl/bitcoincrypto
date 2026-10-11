@@ -87,13 +87,13 @@ export default function FAQView({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-base text-white tracking-tight">TradingMomo Support</h3>
+                <h3 className="font-bold text-base text-white tracking-tight">BitcoinCrypto Desk</h3>
                 <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[10px] font-semibold flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  Support Desk 24/7
+                  Research Desk 24/7
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">Instant Knowledge Base &amp; Specialists</p>
+              <p className="text-xs text-slate-400 mt-0.5">Market Knowledge Base &amp; Analytics</p>
             </div>
           </div>
 

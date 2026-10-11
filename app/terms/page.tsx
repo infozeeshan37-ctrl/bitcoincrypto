@@ -53,13 +53,13 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
               <ShieldAlert className="w-5 h-5 text-amber-500" />
-              <span>2. Informational &amp; Analytical Purpose Only</span>
+              <span>2. Strictly Educational Research Purpose (No Financial or Investment Advice)</span>
             </h2>
             <p>
-              All software tools, AI price predictions, Coinglass liquidation charts, orderbook imbalance metrics, macroeconomic CPI forecasts, and educational articles provided on BitcoinCrypto.tech are for <strong>general informational and analytical purposes only</strong>.
+              All software tools, AI price predictions, Coinglass liquidation charts, orderbook imbalance metrics, macroeconomic CPI forecasts, and educational articles provided on BitcoinCrypto.tech are strictly for <strong>educational, informational, and quantitative research purposes only</strong>.
             </p>
             <p>
-              Nothing on this website constitutes professional financial advice, investment advice, trading recommendations, tax advice, or legal counsel. For detailed disclosures, please review our <Link href="/disclaimer" className="text-amber-600 dark:text-amber-400 font-bold hover:underline">Financial Disclaimer</Link>.
+              All predictive models, volatility bands, and signal simulations are formulated strictly on historical <strong>Technical Analysis</strong> (Order Book depth, CVD, momentum indicators) and <strong>Fundamental macroeconomic metrics</strong> (CPI inflation releases). Nothing on this website constitutes professional financial advice, investment advice, trading recommendations, tax advice, legal counsel, or solicitation of investment capital. For detailed disclosures, please review our <Link href="/disclaimer" className="text-amber-600 dark:text-amber-400 font-bold hover:underline">Educational &amp; Financial Disclaimer</Link>.
             </p>
           </section>
 
@@ -67,14 +67,16 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
               <Terminal className="w-5 h-5 text-blue-500" />
-              <span>3. Simulated Paper Wallets &amp; Virtual Gamification</span>
+              <span>3. Simulated Paper Trading &amp; Prohibition of Gambling/Betting Classification</span>
             </h2>
             <p>
-              BitcoinCrypto.tech provides virtual paper trading simulation tools (including a simulated $10,000 USDT demo wallet) and binary 5-minute prediction arenas.
+              BitcoinCrypto.tech provides virtual paper trading simulation tools and interactive algorithmic testing environments. <strong>Under no circumstances is this platform a betting site, online casino, sportsbook, or binary options bookmaker.</strong>
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-slate-600 dark:text-slate-300">
               <li><strong>Zero Real-World Fiat/Crypto Deposits:</strong> We do not accept, hold, custody, or transmit real fiat currency or cryptocurrency tokens. All demo wallet balances are purely virtual simulations stored locally on your device.</li>
+              <li><strong>Zero Bets, Wagers, or Gambling:</strong> No real-money wagers, stakes, bets, or gambling transactions can be placed on or through this platform.</li>
               <li><strong>No Real-World Monetary Value:</strong> Virtual demo balances cannot be withdrawn, redeemed, exchanged, or converted into any real-world asset or currency.</li>
+              <li><strong>No Investment Fund or Brokerage:</strong> We do not pool investor funds, manage accounts, or operate an investment fund or exchange.</li>
               <li><strong>Educational Practice:</strong> Simulated results do not reflect real market conditions such as slippage, exchange counterparty risk, and liquidity constraints.</li>
             </ul>
           </section>

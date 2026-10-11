@@ -159,7 +159,7 @@ export default function LiveAgentView({
       setIsAgentTyping(false);
       setTypingStatusText('Agent is active');
       onReceiveAgentMessage(
-        `Thanks for your patience! As part of TradingMomo's ${agent.department}, could you please clarify your question so I can provide the exact steps?`
+        `Thanks for your patience! As part of BitcoinCrypto.tech's ${agent.department}, could you please clarify your question so I can provide the exact steps?`
       );
       chatAudio.playMessageReceived();
     }
@@ -441,7 +441,7 @@ export default function LiveAgentView({
           <div className="flex items-center gap-1.5">
             <span className="flex items-center gap-1 text-emerald-400 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              TradingMomo Verified 24/7 Support Desk
+              BitcoinCrypto.tech Research &amp; Intelligence Desk
             </span>
           </div>
           <span>Shift + Enter for new line</span>

@@ -34,7 +34,7 @@ export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: 'platform' | 'trading' | 'security' | 'signals' | 'fees';
+  category: 'platform' | 'trading' | 'security' | 'signals' | 'fees' | 'market_data' | 'derivatives' | 'compliance';
   tags: string[];
   quickActions?: {
     label: string;
@@ -44,7 +44,7 @@ export interface FAQItem {
 }
 
 export interface FAQCategory {
-  id: 'all' | 'platform' | 'trading' | 'security' | 'signals' | 'fees';
+  id: 'all' | 'platform' | 'trading' | 'security' | 'signals' | 'fees' | 'market_data' | 'derivatives' | 'compliance';
   name: string;
   iconName: string;
   description: string;

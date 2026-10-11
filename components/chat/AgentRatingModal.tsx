@@ -63,7 +63,7 @@ export default function AgentRatingModal({
             </div>
             <h4 className="font-bold text-base text-white">Thank You for Your Feedback!</h4>
             <p className="text-slate-400 max-w-xs text-xs">
-              Your review for <strong>{agent.name}</strong> helps us maintain tier-1 customer support on TradingMomo.
+              Your review for <strong>{agent.name}</strong> helps us maintain tier-1 research support on BitcoinCrypto.tech.
             </p>
           </div>
         ) : (

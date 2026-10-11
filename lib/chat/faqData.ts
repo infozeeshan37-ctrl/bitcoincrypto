@@ -5,162 +5,167 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
     id: 'all',
     name: 'All Topics',
     iconName: 'LayoutGrid',
-    description: 'Explore all pre-stored guides and answers.',
+    description: 'Explore all pre-stored guides, tool methodologies, and platform answers.',
   },
   {
     id: 'platform',
-    name: 'About TradingMomo',
+    name: 'About BitcoinCrypto.tech',
     iconName: 'ShieldCheck',
-    description: 'Platform overview, security, institutional tools & account features.',
+    description: 'Platform mission, DeepQuant AI architecture, educational research desk & compliance.',
   },
   {
-    id: 'trading',
-    name: 'Trading & Derivatives',
+    id: 'market_data',
+    name: 'Market Feeds & Telemetry',
     iconName: 'TrendingUp',
-    description: 'Leverage, margin modes, liquidation mechanics & order types.',
+    description: 'Binance sub-second WebSockets, L2 Central Limit Order Book depth & CVD taker flow.',
   },
   {
     id: 'signals',
-    name: 'Momo AI Signals & Analytics',
+    name: 'DeepQuant AI Signals & Models',
     iconName: 'Bot',
-    description: 'AI trend indicators, Coinglass heatmap feeds & backtesting models.',
+    description: 'Binance 5-minute epochs, multi-factor neural scores, backtest benchmarking & risk rules.',
   },
   {
-    id: 'fees',
-    name: 'Fees & Liquidity',
+    id: 'derivatives',
+    name: 'CoinGlass & Derivatives',
     iconName: 'Percent',
-    description: 'Maker/Taker tiers, deposit zero-fee policy & funding rates.',
+    description: 'Liquidation heatmaps, perpetual open interest, funding rate screener & basis arbitrage.',
   },
   {
-    id: 'security',
-    name: 'Security & 2FA',
+    id: 'compliance',
+    name: 'Free Access & AdSense Policy',
     iconName: 'Lock',
-    description: 'Cold storage proof-of-reserves, multi-sig vaults & withdrawal protection.',
+    description: '100% free open-access, zero funds custody, privacy disclosures, GDPR & AdSense standards.',
   },
 ];
 
 export const PRESTORED_FAQS: FAQItem[] = [
-  // --- Category: About TradingMomo ---
+  // --- Category: About BitcoinCrypto.tech ---
   {
     id: 'faq-platform-1',
     category: 'platform',
-    question: 'What is TradingMomo and what makes it unique for crypto traders?',
-    answer: `TradingMomo is a next-generation cryptocurrency market intelligence and execution hub. It integrates real-time institutional order flow mechanics, Coinglass liquidation heatmaps, multi-timeframe AI trend indicators, and deep liquidity aggregation across spot and perpetual futures markets. Traders use TradingMomo to uncover hidden order-book imbalances and trade with unmatched analytical precision.`,
-    tags: ['Overview', 'Platform', 'Intelligence', 'Features'],
+    question: 'What is BitcoinCrypto.tech and what makes it unique?',
+    answer: `BitcoinCrypto.tech is an institutional-grade digital asset market intelligence and quantitative research suite. It unites sub-second Binance Central Limit Order Book telemetry, Coinglass liquidation cluster heatmaps, US CPI macroeconomic simulators, and the DeepQuant Neural AI prediction engine. All tools are open-access, educational, and designed to help researchers and traders analyze market microstructure with mathematical rigor.`,
+    tags: ['Overview', 'Platform', 'Intelligence', 'Architecture'],
     quickActions: [
       { label: 'Explore Market Intelligence', actionType: 'open_url', payload: '/markets' },
-      { label: 'Chat with Specialist', actionType: 'ask_agent', payload: 'Can you give me a personalized tour of TradingMomo features?' },
+      { label: 'Chat with Specialist', actionType: 'ask_agent', payload: 'Can you give me a personalized tour of BitcoinCrypto.tech features?' },
     ],
   },
   {
     id: 'faq-platform-2',
     category: 'platform',
-    question: 'How do I generate API keys for automated or bot trading on TradingMomo?',
-    answer: `You can generate secure API keys with customizable permissions (Read-Only, Trade, or Withdraw) directly in your Account Settings > API Management. We support REST API endpoints and low-latency WebSocket feeds compatible with standard CCXT libraries and custom Python/Node trading algorithms. Always ensure IP Whitelisting is activated for maximum protection.`,
-    tags: ['API', 'Algo Trading', 'WebSockets', 'Keys'],
+    question: 'Does BitcoinCrypto.tech hold customer funds or execute real money trades?',
+    answer: `No. BitcoinCrypto.tech is strictly an educational analytics and software intelligence platform. We do not accept fiat currency or cryptocurrency deposits, we do not custody tokens, and we do not operate a brokerage or casino. All interactive simulation modules—including the 5-Minute Prediction Arena—operate with a simulated $10,000 USDT demo paper wallet stored locally in your browser with zero monetary value.`,
+    tags: ['Safety', 'Non-Custodial', 'Paper Trading', 'Compliance'],
     quickActions: [
-      { label: 'View API Docs', actionType: 'open_url', payload: '/tools/dca-calculator' },
-      { label: 'Ask API Engineer', actionType: 'ask_agent', payload: 'How do I set up webhooks with TradingMomo API?' },
+      { label: 'Launch Demo Prediction Arena', actionType: 'open_url', payload: '/predictions' },
+      { label: 'Review Financial Disclaimer', actionType: 'open_url', payload: '/disclaimer' },
     ],
   },
   {
     id: 'faq-platform-3',
     category: 'platform',
-    question: 'Is TradingMomo licensed and how is customer collateral secured?',
-    answer: `TradingMomo prioritizes 1:1 asset backing with verifiable on-chain Merkle-Tree Proof of Reserves (PoR). 98% of user funds are segregated in institutional-grade multi-signature cold storage vaults provided by leading custodians with multi-party computation (MPC) technology. Customer assets are never lent out or rehypothecated.`,
-    tags: ['Security', 'Proof of Reserves', 'Cold Storage', 'Safety'],
+    question: 'How can developers and AI engines access BitcoinCrypto.tech data and specs?',
+    answer: `BitcoinCrypto.tech is engineered for open accessibility. We provide standardized /llms.txt and /llms-full.txt endpoints for LLMs (ChatGPT, Claude, Perplexity), public Schema.org JSON-LD structured data on all pages, and embeddable research citation widgets for academic papers, blogs, and GitHub repositories.`,
+    tags: ['API', 'LLMs.txt', 'Developer', 'Citations'],
     quickActions: [
-      { label: 'Ask Compliance Lead', actionType: 'ask_agent', payload: 'Tell me more about TradingMomo Proof of Reserves verification.' },
+      { label: 'View llms.txt Standard', actionType: 'open_url', payload: '/llms.txt' },
+      { label: 'View Methodology Desk', actionType: 'open_url', payload: '/about' },
     ],
   },
 
-  // --- Category: Trading & Derivatives ---
+  // --- Category: Market Feeds & Telemetry ---
   {
-    id: 'faq-trading-1',
-    category: 'trading',
-    question: 'How do Isolated Margin and Cross Margin differ on TradingMomo?',
-    answer: `• **Isolated Margin**: Allocates a specific, fixed amount of collateral to an individual position. If the market moves past the liquidation threshold, your maximum loss is strictly limited to that isolated allocation, protecting the rest of your balance.\n\n• **Cross Margin**: Shares your entire available margin balance across all open cross positions. This provides a wider buffer against temporary flash crashes, but exposes your shared account collateral if positions are left unhedged.`,
-    tags: ['Isolated Margin', 'Cross Margin', 'Risk', 'Derivatives'],
+    id: 'faq-data-1',
+    category: 'market_data',
+    question: 'What data feeds power the real-time order books and charts?',
+    answer: `Our platform aggregates direct low-latency WebSocket streams and REST API endpoints from leading centralized exchanges (including Binance, Coinbase, OKX, Bybit) alongside on-chain node telemetry. Central Limit Order Book (CLOB) depth updates in real-time, calculating live Cumulative Volume Delta (CVD) and bid-ask slippage across 10 depth levels.`,
+    tags: ['WebSockets', 'Order Book', 'CVD', 'Binance'],
     quickActions: [
-      { label: 'Ask Risk Specialist', actionType: 'ask_agent', payload: 'Which margin mode should I use for swing trading vs scalping?' },
+      { label: 'Open L2 Order Book Terminal', actionType: 'open_url', payload: '/orderbook' },
+      { label: 'Ask Order Flow Analyst', actionType: 'ask_agent', payload: 'How do I read bid-ask imbalance in the L2 terminal?' },
     ],
   },
   {
-    id: 'faq-trading-2',
-    category: 'trading',
-    question: 'How is Liquidation Price calculated and how can I prevent it?',
-    answer: `Your liquidation price is triggered when your Position Equity drops below the Maintenance Margin Requirement (MMR). To avoid liquidation:\n1. Use strict Stop-Loss orders immediately upon entering a position.\n2. Keep effective leverage reasonable (e.g., 3x–10x rather than max 50x/100x).\n3. Monitor the live Funding Rate and Liquidation Heatmaps to avoid high-density cascading zones.\n4. Add margin to isolated positions in advance of high-volatility events (like CPI or FOMC).`,
-    tags: ['Liquidation', 'Margin', 'Stop-Loss', 'Risk Management'],
+    id: 'faq-data-2',
+    category: 'market_data',
+    question: 'What is Cumulative Volume Delta (CVD) and how does it signal market absorption?',
+    answer: `Cumulative Volume Delta measures the net difference between market buy volume (taker aggression) and market sell volume over time. When price makes a higher high while CVD makes a lower high, it signals 'bearish CVD divergence'—meaning aggressive market buyers are being passively absorbed by institutional limit sell orders, frequently preceding a sharp pullback.`,
+    tags: ['CVD', 'Volume Delta', 'Absorption', 'Market Flow'],
     quickActions: [
-      { label: 'Open DCA & Risk Calculator', actionType: 'open_url', payload: '/tools/dca-calculator' },
-      { label: 'Discuss with Desk', actionType: 'ask_agent', payload: 'How can I calculate my exact maintenance margin threshold?' },
-    ],
-  },
-  {
-    id: 'faq-trading-3',
-    category: 'trading',
-    question: 'What are Perpetual Funding Rates and when are they paid?',
-    answer: `Perpetual futures contracts do not have an expiry date. To keep the perpetual contract price anchored to the spot index price, a periodic **Funding Rate** is exchanged directly between long and short traders (every 8 hours at 00:00, 08:00, 16:00 UTC):\n• **Positive Funding**: Longs pay Shorts (bullish sentiment prevailing).\n• **Negative Funding**: Shorts pay Longs (bearish sentiment prevailing).\nTradingMomo charges 0% intermediary fee on funding payments.`,
-    tags: ['Funding Rates', 'Perpetuals', 'Basis Arbitrage', 'Derivatives'],
-    quickActions: [
-      { label: 'Check Live Coinglass Feeds', actionType: 'open_url', payload: '/coinglass' },
-    ],
-  },
-  {
-    id: 'faq-trading-4',
-    category: 'trading',
-    question: 'What advanced order types are supported on TradingMomo?',
-    answer: `TradingMomo supports 7 institutional order execution models:\n1. **Limit & Market Orders** (with Post-Only and IOC/FOK flags)\n2. **Stop-Market & Stop-Limit** (triggered via Mark Price or Last Price)\n3. **Trailing Stop** (dynamic trailing delta tracking favorable trend)\n4. **Take-Profit / Stop-Loss (TP/SL)** bracket orders\n5. **TWAP (Time-Weighted Average Price)** algorithmic execution for large sizes\n6. **Iceberg Orders** (hides total visible size in the public order book)\n7. **Reduce-Only** (guarantees order will only close or reduce an existing position).`,
-    tags: ['Order Types', 'Stop Loss', 'Trailing Stop', 'TWAP', 'Execution'],
-    quickActions: [
-      { label: 'Ask Execution Specialist', actionType: 'ask_agent', payload: 'How do Trailing Stop orders execute during high slippage?' },
+      { label: 'Explore Whale Orders Radar', actionType: 'open_url', payload: '/whale-orders' },
     ],
   },
 
-  // --- Category: Momo AI Signals ---
+  // --- Category: DeepQuant AI Signals ---
   {
     id: 'faq-signals-1',
     category: 'signals',
-    question: 'How does the TradingMomo AI Signal Engine generate buy/sell alerts?',
-    answer: `The Momo AI Signal Engine analyzes quantitative inputs in real time: multi-timeframe RSI momentum, Bollinger Band volatility squeezes, order book bid/ask delta, open interest divergence, and liquidation cluster levels. When at least 4 out of 5 confluence criteria align with strict statistical significance, the engine issues high-probability Long/Short setups with predetermined Entry, Stop-Loss, and 3 Take-Profit target zones.`,
-    tags: ['AI Signals', 'Quantitative', 'Algorithm', 'Confluence'],
+    question: 'How does the DeepQuant Neural AI Engine calculate 5-minute price predictions?',
+    answer: `The DeepQuant AI Engine synchronizes with global Binance 5-minute epoch rounds. It evaluates multi-factor technical indicators (1m/5m EMA ribbon alignment, RSI oversold/overbought conditions, Bollinger Band squeeze channels), level-2 order book depth imbalance, and taker flow aggression to generate simulated directional probabilities (Call vs Put). All signals are educational mathematical models and do not guarantee future market behavior.`,
+    tags: ['DeepQuant', '5-Min Epochs', 'Neural Model', 'Multi-Factor'],
     quickActions: [
-      { label: 'View Signal Engine Docs', actionType: 'open_url', payload: '/concepts/market-structure' },
-      { label: 'Ask Quant Engineer', actionType: 'ask_agent', payload: 'What is the win-rate and risk-reward profile of Momo AI signals?' },
+      { label: 'Open AI Prediction Arena', actionType: 'open_url', payload: '/predictions' },
+      { label: 'Ask Quant Systems Engineer', actionType: 'ask_agent', payload: 'What technical indicators are weighted highest in DeepQuant?' },
     ],
   },
   {
     id: 'faq-signals-2',
     category: 'signals',
-    question: 'How do I interpret Liquidation Heatmap clusters on TradingMomo?',
-    answer: `Liquidation Heatmaps visually map estimated liquidation volume across price levels using bright yellow/purple color bands. Highly concentrated bright zones represent 'liquidity pools' where large clusters of stop-outs and forced market orders reside. Smart money and institutional market makers frequently push price toward these clusters to fill large orders (liquidity sweeps) before reversing.`,
-    tags: ['Heatmap', 'Liquidity', 'Coinglass', 'Order Flow'],
+    question: 'Are DeepQuant signals financial advice or guaranteed trading profits?',
+    answer: `No. DeepQuant signals are mathematical simulations calibrated on historical backtests and technical analysis principles. Digital asset trading involves substantial risk of loss. Past algorithmic backtest results are never a guarantee of future performance. Always practice risk management (e.g. 1–2% max account risk) and consult an independent financial advisor before trading real capital.`,
+    tags: ['Risk Warning', 'Educational', 'No Guarantees', 'Disclaimer'],
     quickActions: [
-      { label: 'View Coinglass Analytics', actionType: 'open_url', payload: '/coinglass' },
+      { label: 'Read Financial Disclaimer', actionType: 'open_url', payload: '/disclaimer' },
+      { label: 'Calculate Position Size', actionType: 'open_url', payload: '/tools/position-sizer' },
     ],
   },
 
-  // --- Category: Fees & Liquidity ---
+  // --- Category: CoinGlass & Derivatives ---
   {
-    id: 'faq-fees-1',
-    category: 'fees',
-    question: 'What are the Maker and Taker fee schedules on TradingMomo?',
-    answer: `TradingMomo operates on a competitive tiered fee schedule:\n• **Standard Tier**: Spot Maker: 0.08% | Spot Taker: 0.10%\n• **Futures / Derivatives**: Maker: 0.02% | Taker: 0.05%\n• **VIP / High-Volume Traders**: Maker rebates up to -0.005% (you get paid to provide liquidity) and Taker discounts down to 0.015%.\n• **Crypto Deposits**: 100% Free with 0 network surcharge.`,
-    tags: ['Fees', 'Maker/Taker', 'VIP Discounts', 'Deposits'],
+    id: 'faq-derivatives-1',
+    category: 'derivatives',
+    question: 'How do I interpret Liquidation Heatmap clusters on BitcoinCrypto.tech?',
+    answer: `Liquidation Heatmaps visually project estimated liquidation price levels using color intensity bands (from blue/purple up to high-density golden-yellow). Dense golden-yellow bands indicate major pools of resting leveraged stop-orders and forced liquidations. Institutional market makers frequently drive price into these dense liquidity clusters to fill large orders (liquidity sweeps) before initiating sharp counter-trend reversals.`,
+    tags: ['CoinGlass', 'Liquidation Heatmap', 'Stop Sweep', 'Liquidity Pools'],
     quickActions: [
-      { label: 'Ask VIP Desk about Discounts', actionType: 'ask_agent', payload: 'How can I qualify for VIP tier fee discounts on TradingMomo?' },
+      { label: 'View CoinGlass Liquidation Radar', actionType: 'open_url', payload: '/coinglass' },
+      { label: 'Ask Derivatives Analyst', actionType: 'ask_agent', payload: 'How do I identify stop runs on the liquidation heatmap?' },
+    ],
+  },
+  {
+    id: 'faq-derivatives-2',
+    category: 'derivatives',
+    question: 'What are Perpetual Funding Rates and how can they be screened?',
+    answer: `Perpetual futures contracts utilize an 8-hour Funding Rate mechanism (settling at 00:00, 08:00, 16:00 UTC) to tether the perpetual contract price to the underlying spot index. When funding is positive, long traders pay short traders; when negative, short traders pay longs. Our CoinGlass Funding Rate Screener monitors multi-exchange funding anomalies to identify overleveraged sentiment extremes and delta-neutral cash-and-carry basis opportunities.`,
+    tags: ['Funding Rates', 'Perpetuals', 'Basis Arbitrage', 'CoinGlass'],
+    quickActions: [
+      { label: 'Funding Rate Screener', actionType: 'open_url', payload: '/tools/funding-rate-screener' },
     ],
   },
 
-  // --- Category: Security & 2FA ---
+  // --- Category: Free Access & Compliance ---
   {
-    id: 'faq-security-1',
-    category: 'security',
-    question: 'How do I enable 2FA and secure my TradingMomo account?',
-    answer: `To secure your account:\n1. Go to Account > Security Center and enable Authenticator App 2FA (Google Authenticator, Authy, or YubiKey hardware key).\n2. Enable **Address Whitelisting**: Any new crypto withdrawal address will be locked under a 24-hour safety delay.\n3. Configure **Anti-Phishing Code**: Every official email from TradingMomo will display your secret passcode to prevent spoofing.`,
-    tags: ['2FA', 'YubiKey', 'Whitelisting', 'Anti-Phishing'],
+    id: 'faq-compliance-1',
+    category: 'compliance',
+    question: 'Is BitcoinCrypto.tech completely free to use?',
+    answer: `Yes! All tools, 5-minute prediction arenas, Coinglass liquidation charts, order book terminals, DCA simulators, and macro research articles are 100% free for users worldwide. We support our infrastructure operations through transparent, compliant advertising (including Google AdSense) that strictly adheres to publisher quality standards.`,
+    tags: ['Free Access', 'AdSense Compliant', 'Open Access', 'Transparency'],
     quickActions: [
-      { label: 'Ask Security Lead', actionType: 'ask_agent', payload: 'What happens if I lose my 2FA authenticator backup key?' },
+      { label: 'View About Platform', actionType: 'open_url', payload: '/about' },
+      { label: 'Review Privacy Policy', actionType: 'open_url', payload: '/privacy' },
+    ],
+  },
+  {
+    id: 'faq-compliance-2',
+    category: 'compliance',
+    question: 'How does BitcoinCrypto.tech protect user privacy and handle cookies?',
+    answer: `BitcoinCrypto.tech adheres to GDPR, CCPA/CPRA, and Google EU User Consent standards. We do not sell personal information. All demo wallet balances and theme preferences are stored locally on your device (localStorage). Third-party advertising partners (such as Google AdSense) use cookies to serve relevant ads; visitors can manage consent or opt out at any time via our Cookie Consent banner or Google Ads Settings.`,
+    tags: ['Privacy', 'GDPR', 'Cookies', 'AdSense'],
+    quickActions: [
+      { label: 'Privacy Policy', actionType: 'open_url', payload: '/privacy' },
+      { label: 'Cookie Policy', actionType: 'open_url', payload: '/cookie-policy' },
     ],
   },
 ];

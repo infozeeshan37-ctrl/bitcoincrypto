@@ -1150,7 +1150,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Facto
 
 🛡️ CAPITAL PRESERVATION & RISK NOTICE:
 • Max Risk: Never risk more than 1.0% - 1.5% of total capital per setup. Always set Stop-Loss at entry.
-• Educational paper-trading model only. Not financial advice. Past simulated performance does not guarantee future results.
+• Educational research model only. Based strictly on Technical & Fundamental analysis. Zero betting/gambling. Not financial or investment advice. Past simulated results do not guarantee future performance.
 
 🔗 Verified on: https://www.bitcoincrypto.tech/predictions`;
 
@@ -1982,6 +1982,20 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Facto
             </p>
           </div>
         </div>
+      </div>
+
+      {/* 4. EDUCATIONAL PURPOSE & TECHNICAL/FUNDAMENTAL COMPLIANCE DISCLOSURE */}
+      <div className="p-6 rounded-3xl bg-amber-500/10 border border-amber-500/20 space-y-3 text-xs leading-relaxed text-slate-700 dark:text-slate-300 shadow-xs">
+        <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white text-sm">
+          <ShieldCheck className="w-5 h-5 text-amber-500" />
+          <span>Educational Purpose &amp; Quantitative Compliance Notice</span>
+        </div>
+        <p>
+          <strong>Methodology:</strong> Every price projection, volatility channel, and algorithmic signal across this suite is formulated purely using quantitative <strong>Technical Analysis</strong> (Level-2 Order Book Imbalance, CVD Taker Flow, EMA ribbons, RSI momentum) and <strong>Fundamental macroeconomic metrics</strong> (US Bureau of Labor Statistics CPI inflation schedules, on-chain volumes).
+        </p>
+        <p>
+          <strong>Zero Betting / No Investment Policy:</strong> BitcoinCrypto.tech is <strong>NOT a betting, gambling, sportsbook, or binary options site</strong>. No real-money bets, wagers, deposits, or payouts exist. We do not provide financial advice, broker services, custody, or investment fund management. All interactive features use simulated paper funds with zero monetary value.
+        </p>
       </div>
         </div>
       )}

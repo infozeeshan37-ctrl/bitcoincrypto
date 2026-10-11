@@ -48,11 +48,11 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed">
-              An institutional cryptocurrency intelligence hub combining real-time CoinMarketCap metrics, Coinglass derivatives analytics, macroeconomic CPI releases, and verifiable AI price predictions.
+              An educational cryptocurrency analytics and quantitative research platform combining real-time market data, Coinglass derivatives telemetry, macroeconomic CPI schedules, and algorithmic Technical &amp; Fundamental predictive models.
             </p>
             <div className="flex items-center gap-2 text-slate-400 text-xs pt-1">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Independent Real-Time Data &amp; Neural Models</span>
+              <span>Strictly Educational Research &amp; Quantitative Models</span>
             </div>
 
             {/* Social Reach & Community Buttons */}
@@ -358,9 +358,14 @@ export default function Footer() {
             </div>
           </div>
 
-          <p className="text-slate-500 leading-relaxed text-[10px]">
-            <strong>Regulatory &amp; Financial Disclaimer:</strong> BitcoinCrypto.tech is an informational, educational, and mathematical modeling software platform. Real-time cryptocurrency metrics, derivatives open interest, CPI predictive estimates, and algorithmic trading signals are published strictly for educational and analytical purposes and do not constitute financial, investment, trading, or tax advice. Cryptocurrency trading carries substantial risk of loss.
-          </p>
+          <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2 text-[10px] leading-relaxed text-slate-400">
+            <p>
+              <strong className="text-amber-400 font-bold uppercase tracking-wider">Educational Purpose &amp; Non-Betting Compliance Notice:</strong> BitcoinCrypto.tech is strictly an educational research, software analytics, and quantitative modeling platform. <strong>We are NOT a betting platform, gambling operator, casino, broker, custodian, or financial advisor.</strong> No real money can be deposited, wagered, bet, or won on this site. All interactive paper-trading modules and demo wallets operate with virtual simulated tokens with zero monetary value.
+            </p>
+            <p>
+              <strong className="text-slate-300 font-bold">Methodology Disclosure:</strong> All algorithmic signals, AI price projections, order book imbalance metrics, and volatility channels are mathematical simulations formulated strictly on historical <strong>Technical Analysis</strong> (Order Book depth, CVD, momentum indicators) and <strong>Fundamental macroeconomic factors</strong> (CPI inflation releases, on-chain volumes). Nothing on this website constitutes financial, investment, legal, or tax advice. Digital asset trading carries substantial financial risk.
+            </p>
+          </div>
         </div>
 
       </div>

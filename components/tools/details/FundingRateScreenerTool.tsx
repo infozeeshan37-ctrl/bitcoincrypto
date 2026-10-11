@@ -1331,7 +1331,7 @@ export default function FundingRateScreenerTool() {
                   <li>Buy <strong>${(arbitrageCapital / 2).toLocaleString()}</strong> Spot {selectedCoin.base} on Binance / Coinbase.</li>
                   <li>Deposit <strong>${(arbitrageCapital / 2).toLocaleString()}</strong> USDT as margin in Binance / OKX Perpetual Futures.</li>
                   <li>Open 1x Short {selectedCoin.symbol} Perpetual with notional size of <strong>${(arbitrageCapital / 2).toLocaleString()}</strong>.</li>
-                  <li>Collect automatic funding payouts every 8 hours directly into your margin account.</li>
+                  <li>Collect automatic funding yield settlements every 8 hours directly into your margin account.</li>
                 </ul>
               </div>
             </div>
@@ -1347,7 +1347,7 @@ export default function FundingRateScreenerTool() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800">
-                  <div className="text-[10px] text-slate-400">8-Hour Epoch Payout</div>
+                  <div className="text-[10px] text-slate-400">8-Hour Epoch Yield</div>
                   <div className="text-xl font-black text-emerald-400 mt-1">
                     +${(grossDailyYieldUsd / 3).toFixed(2)}
                   </div>
@@ -1355,7 +1355,7 @@ export default function FundingRateScreenerTool() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800">
-                  <div className="text-[10px] text-slate-400">Daily Payout (24h)</div>
+                  <div className="text-[10px] text-slate-400">Daily Yield (24h)</div>
                   <div className="text-xl font-black text-cyan-400 mt-1">
                     +${grossDailyYieldUsd.toFixed(2)}
                   </div>

@@ -1,5 +1,5 @@
 /**
- * Lightweight Web Audio API sound synthesizer for TradingMomo Chat Support.
+ * Lightweight Web Audio API sound synthesizer for BitcoinCrypto.tech Chat Support.
  * Operates purely client-side without external asset dependencies.
  */
 

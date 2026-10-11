@@ -183,6 +183,22 @@ export default async function CoinPredictionPage({ params }: PageProps) {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+        {/* Educational & Non-Investment Compliance Banner */}
+        <div className="p-4 sm:p-5 rounded-3xl bg-amber-500/10 border border-amber-500/25 text-slate-800 dark:text-slate-200 text-xs sm:text-sm flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+          <div className="flex items-start md:items-center gap-3">
+            <ShieldCheck className="w-5 h-5 text-amber-500 shrink-0 mt-0.5 md:mt-0" />
+            <p className="leading-relaxed text-xs">
+              <strong>Educational Research Notice:</strong> All price targets, support/resistance bands, and algorithmic signals for <strong>{coin.name} ({coin.symbol})</strong> are mathematical projections based strictly on <strong>quantitative Technical Analysis</strong> (Order Book depth, CVD, Momentum) and <strong>Fundamental macroeconomic metrics</strong> (CPI, on-chain activity). <strong>BitcoinCrypto.tech is NOT a betting site, casino, or investment fund.</strong> No real money wagering, deposits, or investments. Not financial advice.
+            </p>
+          </div>
+          <Link
+            href="/disclaimer"
+            className="px-3.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition self-start md:self-center shrink-0 shadow-sm"
+          >
+            Review Disclaimer &rarr;
+          </Link>
+        </div>
+
         {/* Coin Hero Header */}
         <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 border border-purple-500/20 p-8 sm:p-12 shadow-2xl text-white">
           <div className="absolute -right-16 -top-16 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />

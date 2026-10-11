@@ -69,7 +69,7 @@ export default function AboutView() {
             About BitcoinCrypto.tech Platform &amp; Methodology
           </h1>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            BitcoinCrypto.tech is an institutional-grade digital asset terminal delivering real-time Binance 5-minute binary predictions, DeepQuant neural AI signals, real-time Coinglass liquidation heatmaps, and macroeconomic research.
+            BitcoinCrypto.tech is an independent educational cryptocurrency research and quantitative analytics platform. We deliver empirical Technical Analysis models, Fundamental macroeconomic indicators (US CPI), real-time derivatives telemetry, and simulated paper-trading tools. <strong>Strictly educational, zero betting or gambling, and no investment advice.</strong>
           </p>
         </div>
 

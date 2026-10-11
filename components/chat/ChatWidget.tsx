@@ -10,9 +10,9 @@ import { AGENT_PERSONAS, getRandomAgent } from '@/lib/chat/agentsData';
 import { chatAudio } from '@/lib/chat/audioHelper';
 
 const STORAGE_KEYS = {
-  SETTINGS: 'tradingmomo_chat_settings',
-  MESSAGES: 'tradingmomo_chat_messages',
-  CURRENT_AGENT: 'tradingmomo_current_agent',
+  SETTINGS: 'bitcoincrypto_chat_settings',
+  MESSAGES: 'bitcoincrypto_chat_messages',
+  CURRENT_AGENT: 'bitcoincrypto_current_agent',
 };
 
 const DEFAULT_SETTINGS: ChatSettings = {

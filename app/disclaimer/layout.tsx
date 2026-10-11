@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Financial & Investment Risk Disclaimer | BitcoinCrypto.tech",
+  title: "Educational Purpose, Risk & Non-Betting Disclaimer | BitcoinCrypto.tech",
   description:
-    "Official Financial & Cryptocurrency Risk Disclaimer for BitcoinCrypto.tech. Understand market risks, algorithmic AI modeling limitations, and educational purpose disclaimers.",
+    "Official Educational & Risk Disclaimer for BitcoinCrypto.tech. Strictly educational quantitative research platform. Zero betting or gambling. All predictions based on Technical and Fundamental Analysis. No investment advice.",
   alternates: {
     canonical: "/disclaimer",
   },
   openGraph: {
-    title: "Financial & Risk Disclaimer | BitcoinCrypto.tech",
+    title: "Educational Purpose & Non-Betting Disclaimer | BitcoinCrypto.tech",
     description:
-      "Full disclosure regarding high-risk digital asset volatility, AI predictive modeling, and educational non-financial advice terms.",
+      "Full disclosure regarding strictly educational research purpose, zero betting/gambling policy, technical and fundamental methodology, and non-financial advice terms.",
     url: "https://www.bitcoincrypto.tech/disclaimer",
   },
 };

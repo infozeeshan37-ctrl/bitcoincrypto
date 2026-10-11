@@ -693,7 +693,7 @@ export default function CoinGlassLiquidationTool() {
       steps: [
         "Monitor Coinglass Multi-Exchange Funding Rate Heatmaps for annualized rates exceeding +50% APY (or negative <-30% APY).",
         "Buy 1.0 BTC on the Spot Market while simultaneously opening a 1.0 BTC Short position on the Perpetual Futures Market (Delta-Neutral).",
-        "Collect the 8-hour funding payouts paid by aggressive retail long speculators directly into your margin account.",
+        "Collect the 8-hour funding fee settlements paid by aggressive retail long speculators directly into your margin account.",
         "Alternatively, for directional traders: when funding reaches extreme historical percentiles, prepare to enter counter-trend swing trades as overleveraged participants get wiped out."
       ],
       proTip: "Use isolated margin and keep collateral well above maintenance thresholds to prevent liquidation during temporary price wicks."

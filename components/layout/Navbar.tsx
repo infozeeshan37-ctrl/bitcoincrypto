@@ -122,7 +122,7 @@ export default function Navbar() {
             <Brain className="w-4 h-4 text-purple-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Predictions</span>
             <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded-md bg-purple-500/15 text-purple-600 dark:text-purple-300 border border-purple-500/30 shadow-xs">
-              AI 98%
+              AI BOT
             </span>
           </Link>
 
