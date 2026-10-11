@@ -107,6 +107,7 @@ export default function FearGreedIndexTool() {
   const [buyThreshold, setBuyThreshold] = useState<number>(20);
   const [sellThreshold, setSellThreshold] = useState<number>(80);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [hoveredScore, setHoveredScore] = useState<number | null>(null);
 
   // Micro-fluctuation simulator for live heartbeat
   useEffect(() => {
@@ -130,7 +131,16 @@ export default function FearGreedIndexTool() {
     return { label: "Extreme Greed", color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/30", hex: "#10b981" };
   };
 
-  const category = getScoreCategory(liveScore);
+  const displayScore = hoveredScore !== null ? hoveredScore : liveScore;
+  const category = getScoreCategory(displayScore);
+
+  const getStrategyInsight = (score: number) => {
+    if (score <= 24) return "Historical Accumulation Zone: Peak asymmetric upside during retail capitulation.";
+    if (score <= 45) return "Cautionary Value: Subdued sentiment with favorable spot DCA dynamics.";
+    if (score <= 55) return "Neutral Equilibrium: Balanced order flow and market chop.";
+    if (score <= 75) return "Greed Expansion: Momentum rally; recommend trailing stop-losses.";
+    return "Extreme Greed Alert: Overleveraged longs and retail FOMO; prime for liquidity sweeps.";
+  };
 
   // 6 Quantitative Weighted Factors
   const factors: SentimentFactor[] = [
@@ -209,8 +219,8 @@ export default function FearGreedIndexTool() {
   // SVG Speedometer parameters
   const angle = useMemo(() => {
     // 0 -> -90 deg (left), 100 -> +90 deg (right)
-    return (liveScore / 100) * 180 - 90;
-  }, [liveScore]);
+    return (displayScore / 100) * 180 - 90;
+  }, [displayScore]);
 
   const faqs = [
     {
@@ -259,8 +269,26 @@ export default function FearGreedIndexTool() {
           </div>
 
           {/* SVG Semi-Circle Speedometer */}
-          <div className="my-6 flex flex-col items-center justify-center relative">
-            <svg viewBox="0 0 200 120" className="w-64 sm:w-80 h-auto overflow-visible">
+          <div className="my-6 flex flex-col items-center justify-center relative group">
+            <svg
+              viewBox="0 0 200 120"
+              className="w-64 sm:w-80 h-auto overflow-visible cursor-pointer select-none"
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const svgX = ((e.clientX - rect.left) / rect.width) * 200;
+                const svgY = ((e.clientY - rect.top) / rect.height) * 120;
+                const dx = svgX - 100;
+                const dy = svgY - 100;
+                const rad = Math.atan2(dy, dx);
+                const deg = (rad * 180) / Math.PI;
+                if (deg < 10 && deg > -190) {
+                  const normalized = Math.max(0, Math.min(180, deg + 180));
+                  const score = Math.max(0, Math.min(100, Math.round((normalized / 180) * 100)));
+                  setHoveredScore(score);
+                }
+              }}
+              onMouseLeave={() => setHoveredScore(null)}
+            >
               <defs>
                 <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#f43f5e" />
@@ -289,8 +317,8 @@ export default function FearGreedIndexTool() {
                 strokeWidth="18"
                 strokeLinecap="round"
                 strokeDasharray="251.32"
-                strokeDashoffset={251.32 - (251.32 * liveScore) / 100}
-                className="transition-all duration-700 ease-out"
+                strokeDashoffset={251.32 - (251.32 * displayScore) / 100}
+                className="transition-all duration-300 ease-out"
               />
 
               {/* Center Pivot */}
@@ -299,7 +327,7 @@ export default function FearGreedIndexTool() {
               {/* Needle Indicator */}
               <g
                 transform={`rotate(${angle} 100 100)`}
-                className="transition-transform duration-700 ease-out origin-center"
+                className="transition-transform duration-300 ease-out origin-center"
               >
                 <line
                   x1="100"
@@ -311,7 +339,18 @@ export default function FearGreedIndexTool() {
                   strokeLinecap="round"
                   className="shadow-lg"
                 />
-                <circle cx="100" cy="30" r="3" fill={category.hex} />
+                <circle cx="100" cy="30" r="3.5" fill={category.hex} />
+
+                {/* Pulsing beacon on tip when live */}
+                {hoveredScore === null && (
+                  <circle
+                    cx="100"
+                    cy="30"
+                    r="6"
+                    fill={category.hex}
+                    className="animate-ping opacity-75"
+                  />
+                )}
               </g>
 
               {/* Axis Labels */}
@@ -320,13 +359,14 @@ export default function FearGreedIndexTool() {
               <text x="150" y="116" fontSize="7" fontWeight="bold" className="fill-slate-400">100 (GREED)</text>
             </svg>
 
-            {/* Score Overlay */}
-            <div className="text-center mt-2 space-y-1">
-              <div className="text-5xl sm:text-6xl font-black tracking-tight text-slate-900 dark:text-white flex items-center justify-center gap-1">
-                <span>{Math.round(liveScore)}</span>
+            {/* Score Overlay & Value Callout */}
+            <div className="text-center mt-2 space-y-1.5">
+              <div className="text-5xl sm:text-6xl font-black tracking-tight text-slate-900 dark:text-white flex items-center justify-center gap-1 font-mono">
+                <span>{Math.round(displayScore)}</span>
                 <span className="text-xl text-slate-400 font-normal">/100</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border shadow-sm"
+              <div
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border shadow-sm transition-all"
                 style={{
                   color: category.hex,
                   borderColor: `${category.hex}40`,
@@ -334,7 +374,16 @@ export default function FearGreedIndexTool() {
                 }}
               >
                 <Flame className="w-3.5 h-3.5" />
-                <span>{category.label}</span>
+                <span>{category.label} {hoveredScore !== null ? "• Hover Inspection" : ""}</span>
+              </div>
+
+              {/* Live Guidance / Hover Strategy Tooltip */}
+              <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 max-w-xs mx-auto pt-1">
+                {hoveredScore !== null ? (
+                  <span className="text-amber-500 font-semibold">{getStrategyInsight(hoveredScore)}</span>
+                ) : (
+                  <span>Hover cursor over speedometer arc to inspect sentiment regimes</span>
+                )}
               </div>
             </div>
           </div>

@@ -213,6 +213,15 @@ export default function OrderbookTerminal() {
   const [liqLeverageFilter, setLiqLeverageFilter] = useState<"ALL" | "50X_100X" | "100X">("ALL");
   const [liqExchange, setLiqExchange] = useState<"AGGREGATE" | "BINANCE" | "BYBIT" | "OKX">("AGGREGATE");
   const [hoveredLiq, setHoveredLiq] = useState<LiquidationCluster | null>(null);
+  const [hoveredDepth, setHoveredDepth] = useState<{
+    x: number;
+    y: number;
+    price: number;
+    side: "BID" | "ASK";
+    cumulativeSize: number;
+    cumulativeUsd: number;
+    distancePct: number;
+  } | null>(null);
 
   // 1-Second Real-Time Live Ticker State
   const [livePrice, setLivePrice] = useState<number>(activePair.price);
@@ -422,6 +431,131 @@ export default function OrderbookTerminal() {
         bidDominancePercent: bidDominance
       };
     }, [activePair, tickPrecision, depthRowCount, livePrice]);
+
+  // Dynamic Stepped Depth Geometry & Calculations for Live Interactive Depth Chart
+  const depthChartGeometry = useMemo(() => {
+    const maxBidTotal = bids.length > 0 ? bids[bids.length - 1].total : 1;
+    const maxAskTotal = asks.length > 0 ? asks[0].total : 1;
+    const maxTotal = Math.max(maxBidTotal, maxAskTotal, 0.001);
+
+    // Bids: from mid-price (x=195) stepping left to x=0
+    const bidPoints: Array<{ x: number; y: number; price: number; total: number; totalUsd: number; distancePct: number }> = [];
+    const bidPolyCoords: string[] = ["195,160"];
+
+    bids.forEach((b, i) => {
+      const x = 195 - ((i + 1) / bids.length) * 185;
+      const y = 150 - (b.total / maxTotal) * 125;
+      const dist = midPrice > 0 ? ((b.price - midPrice) / midPrice) * 100 : 0;
+
+      bidPoints.push({
+        x,
+        y,
+        price: b.price,
+        total: b.total,
+        totalUsd: b.totalUsd,
+        distancePct: dist,
+      });
+    });
+
+    if (bidPoints.length > 0) {
+      bidPolyCoords.push(`195,${bidPoints[0].y.toFixed(1)}`);
+      for (let i = 0; i < bidPoints.length; i++) {
+        const pt = bidPoints[i];
+        bidPolyCoords.push(`${pt.x.toFixed(1)},${(i > 0 ? bidPoints[i - 1].y : pt.y).toFixed(1)}`);
+        bidPolyCoords.push(`${pt.x.toFixed(1)},${pt.y.toFixed(1)}`);
+      }
+      bidPolyCoords.push(`0,${bidPoints[bidPoints.length - 1].y.toFixed(1)}`);
+      bidPolyCoords.push("0,160");
+    }
+
+    // Asks: from mid-price (x=205) stepping right to x=400
+    const orderedAsks = [...asks].reverse();
+    const askPoints: Array<{ x: number; y: number; price: number; total: number; totalUsd: number; distancePct: number }> = [];
+    const askPolyCoords: string[] = ["205,160"];
+
+    orderedAsks.forEach((a, i) => {
+      const x = 205 + ((i + 1) / orderedAsks.length) * 185;
+      const y = 150 - (a.total / maxTotal) * 125;
+      const dist = midPrice > 0 ? ((a.price - midPrice) / midPrice) * 100 : 0;
+
+      askPoints.push({
+        x,
+        y,
+        price: a.price,
+        total: a.total,
+        totalUsd: a.totalUsd,
+        distancePct: dist,
+      });
+    });
+
+    if (askPoints.length > 0) {
+      askPolyCoords.push(`205,${askPoints[0].y.toFixed(1)}`);
+      for (let i = 0; i < askPoints.length; i++) {
+        const pt = askPoints[i];
+        askPolyCoords.push(`${pt.x.toFixed(1)},${(i > 0 ? askPoints[i - 1].y : pt.y).toFixed(1)}`);
+        askPolyCoords.push(`${pt.x.toFixed(1)},${pt.y.toFixed(1)}`);
+      }
+      askPolyCoords.push(`400,${askPoints[askPoints.length - 1].y.toFixed(1)}`);
+      askPolyCoords.push("400,160");
+    }
+
+    return {
+      bidPoints,
+      askPoints,
+      bidPolygon: bidPolyCoords.join(" "),
+      askPolygon: askPolyCoords.join(" "),
+    };
+  }, [bids, asks, midPrice]);
+
+  const handleDepthMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const rawX = e.clientX - rect.left;
+    const svgX = Math.max(0, Math.min(400, (rawX / rect.width) * 400));
+
+    if (svgX <= 196) {
+      if (depthChartGeometry.bidPoints.length === 0) return;
+      let closest = depthChartGeometry.bidPoints[0];
+      let minDist = Math.abs(svgX - closest.x);
+      for (const pt of depthChartGeometry.bidPoints) {
+        const d = Math.abs(svgX - pt.x);
+        if (d < minDist) {
+          minDist = d;
+          closest = pt;
+        }
+      }
+      setHoveredDepth({
+        x: closest.x,
+        y: closest.y,
+        price: closest.price,
+        side: "BID",
+        cumulativeSize: closest.total,
+        cumulativeUsd: closest.totalUsd,
+        distancePct: closest.distancePct,
+      });
+    } else if (svgX >= 204) {
+      if (depthChartGeometry.askPoints.length === 0) return;
+      let closest = depthChartGeometry.askPoints[0];
+      let minDist = Math.abs(svgX - closest.x);
+      for (const pt of depthChartGeometry.askPoints) {
+        const d = Math.abs(svgX - pt.x);
+        if (d < minDist) {
+          minDist = d;
+          closest = pt;
+        }
+      }
+      setHoveredDepth({
+        x: closest.x,
+        y: closest.y,
+        price: closest.price,
+        side: "ASK",
+        cumulativeSize: closest.total,
+        cumulativeUsd: closest.totalUsd,
+        distancePct: closest.distancePct,
+      });
+    } else {
+      setHoveredDepth(null);
+    }
+  };
 
   // HIGH-DENSITY LIQUIDATION BAR PROFILE & HEATMAP GENERATOR
   // Creates authentic institutional liquidation bars with leverage tiers (25x, 50x, 100x)
@@ -1129,51 +1263,154 @@ export default function OrderbookTerminal() {
             </div>
 
             {/* Stepped SVG Depth Chart */}
-            <div className="h-60 w-full bg-slate-950 rounded-2xl border border-slate-800 p-3 relative flex items-end overflow-hidden">
-              <svg className="w-full h-full" viewBox="0 0 400 160" preserveAspectRatio="none">
+            <div className="h-64 w-full bg-slate-950 rounded-2xl border border-slate-800 p-3 relative flex items-end overflow-hidden group select-none">
+              <svg
+                className="w-full h-full cursor-crosshair"
+                viewBox="0 0 400 160"
+                preserveAspectRatio="none"
+                onMouseMove={handleDepthMouseMove}
+                onMouseLeave={() => setHoveredDepth(null)}
+              >
                 <defs>
                   <linearGradient id="bidStepGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.5" />
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.55" />
                     <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
                   </linearGradient>
                   <linearGradient id="askStepGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.5" />
+                    <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.55" />
                     <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.05" />
                   </linearGradient>
                 </defs>
 
-                {/* Bids Stepped Polygon (Green Left) */}
+                {/* Horizontal Depth Reference Lines */}
+                <line x1="0" y1="40" x2="400" y2="40" stroke="#1e293b" strokeWidth="0.5" strokeDasharray="3 3" />
+                <line x1="0" y1="80" x2="400" y2="80" stroke="#1e293b" strokeWidth="0.5" strokeDasharray="3 3" />
+                <line x1="0" y1="120" x2="400" y2="120" stroke="#1e293b" strokeWidth="0.5" strokeDasharray="3 3" />
+
+                {/* Bids Stepped Dynamic Polygon (Green Left) */}
                 <polygon
-                  points="0,25 35,30 70,45 105,65 140,95 170,125 195,150 195,160 0,160"
+                  points={depthChartGeometry.bidPolygon}
                   fill="url(#bidStepGrad)"
                   stroke="#10b981"
                   strokeWidth="2.5"
+                  strokeLinejoin="miter"
                 />
 
-                {/* Asks Stepped Polygon (Red Right) */}
+                {/* Asks Stepped Dynamic Polygon (Red Right) */}
                 <polygon
-                  points="205,150 230,125 260,95 295,65 330,45 365,30 400,25 400,160 205,160"
+                  points={depthChartGeometry.askPolygon}
                   fill="url(#askStepGrad)"
                   stroke="#f43f5e"
                   strokeWidth="2.5"
+                  strokeLinejoin="miter"
                 />
 
                 {/* Center Mid-Price Line */}
                 <line x1="200" y1="0" x2="200" y2="160" stroke="#f59e0b" strokeWidth="2" strokeDasharray="3 3" />
+
+                {/* Live Best Bid & Best Ask Beacons */}
+                {!hoveredDepth && (
+                  <g>
+                    <circle cx="195" cy="148" r="4" fill="#10b981" className="animate-ping opacity-75" />
+                    <circle cx="195" cy="148" r="2.5" fill="#10b981" />
+                    <circle cx="205" cy="148" r="4" fill="#f43f5e" className="animate-ping opacity-75" />
+                    <circle cx="205" cy="148" r="2.5" fill="#f43f5e" />
+                  </g>
+                )}
+
+                {/* Hover Crosshairs & Indicator Dot */}
+                {hoveredDepth && (
+                  <g>
+                    {/* Vertical Hairline */}
+                    <line
+                      x1={hoveredDepth.x}
+                      y1="0"
+                      x2={hoveredDepth.x}
+                      y2="160"
+                      stroke="#cbd5e1"
+                      strokeWidth="1"
+                      strokeDasharray="2 2"
+                    />
+                    {/* Horizontal Hairline */}
+                    <line
+                      x1="0"
+                      y1={hoveredDepth.y}
+                      x2="400"
+                      y2={hoveredDepth.y}
+                      stroke="#cbd5e1"
+                      strokeWidth="0.75"
+                      strokeDasharray="2 2"
+                    />
+                    {/* Marker Dot */}
+                    <circle
+                      cx={hoveredDepth.x}
+                      cy={hoveredDepth.y}
+                      r="4.5"
+                      fill="#ffffff"
+                      stroke={hoveredDepth.side === "BID" ? "#10b981" : "#f43f5e"}
+                      strokeWidth="2.5"
+                    />
+                  </g>
+                )}
               </svg>
 
+              {/* Floating Tooltip Card */}
+              {hoveredDepth && (
+                <div
+                  className="absolute z-30 pointer-events-none top-3 px-3 py-2 rounded-xl bg-slate-900/95 border border-slate-700/80 shadow-2xl backdrop-blur-md text-white font-mono text-xs space-y-1 transition-all"
+                  style={{
+                    left: `${Math.min(72, Math.max(8, (hoveredDepth.x / 400) * 100))}%`,
+                    transform: hoveredDepth.x > 200 ? "translateX(-90%)" : "translateX(10%)",
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-3 border-b border-slate-800 pb-1">
+                    <span
+                      className={`text-[10px] font-black uppercase px-1.5 py-0.5 rounded ${
+                        hoveredDepth.side === "BID"
+                          ? "bg-emerald-500/20 text-emerald-400"
+                          : "bg-rose-500/20 text-rose-400"
+                      }`}
+                    >
+                      {hoveredDepth.side === "BID" ? "🟢 Buy Support" : "🔴 Sell Wall"}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-bold">
+                      {hoveredDepth.distancePct >= 0 ? "+" : ""}
+                      {hoveredDepth.distancePct.toFixed(2)}% Mid
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 text-xs">
+                    <span className="text-slate-400">Price:</span>
+                    <strong className="text-white font-bold">
+                      ${hoveredDepth.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </strong>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 text-[11px]">
+                    <span className="text-slate-400">Cumul. Vol:</span>
+                    <strong className="text-amber-400 font-bold">
+                      {hoveredDepth.cumulativeSize.toLocaleString()} {activePair.base}
+                    </strong>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 text-[11px]">
+                    <span className="text-slate-400">Total Depth:</span>
+                    <strong className="text-slate-200">
+                      ${Math.round(hoveredDepth.cumulativeUsd).toLocaleString()}
+                    </strong>
+                  </div>
+                </div>
+              )}
+
               {/* Mid-Price Pin Badge */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-slate-900 text-amber-400 font-mono text-[10px] font-black border border-amber-400/60 shadow-lg">
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-slate-900 text-amber-400 font-mono text-[10px] font-black border border-amber-400/60 shadow-lg pointer-events-none">
                 ${midPrice.toLocaleString()} Mid
               </div>
 
               {/* Bottom Labels */}
-              <div className="absolute bottom-2.5 left-3 text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <div className="absolute bottom-2.5 left-3 text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1 pointer-events-none">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Bids: ${Math.round(totalBidDepthUsd / 1000).toLocaleString()}K</span>
               </div>
-              <div className="absolute bottom-2.5 right-3 text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-rose-500" />
+              <div className="absolute bottom-2.5 right-3 text-[10px] font-mono text-rose-400 font-bold flex items-center gap-1 pointer-events-none">
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                 <span>Asks: ${Math.round(totalAskDepthUsd / 1000).toLocaleString()}K</span>
               </div>
             </div>

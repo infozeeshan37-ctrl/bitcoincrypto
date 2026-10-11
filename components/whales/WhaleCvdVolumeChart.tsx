@@ -354,6 +354,25 @@ export default function WhaleCvdVolumeChart({
             strokeLinejoin="round"
           />
 
+          {/* Live Tip Beacon */}
+          {!hoveredPoint && cvdData.length > 0 && (
+            <g>
+              <circle
+                cx={getX(cvdData.length - 1)}
+                cy={getCvdY(cvdData[cvdData.length - 1].cvd)}
+                r="5"
+                fill={whaleCvdDeltaUsd >= 0 ? "#10b981" : "#ef4444"}
+                className="animate-ping opacity-75"
+              />
+              <circle
+                cx={getX(cvdData.length - 1)}
+                cy={getCvdY(cvdData[cvdData.length - 1].cvd)}
+                r="3"
+                fill={whaleCvdDeltaUsd >= 0 ? "#10b981" : "#ef4444"}
+              />
+            </g>
+          )}
+
           {/* Active Hover Dot & Crosshair */}
           {hoveredPoint && (
             (() => {
@@ -369,7 +388,16 @@ export default function WhaleCvdVolumeChart({
                     y1={topPad}
                     x2={x}
                     y2={chartHeight - botPad}
-                    stroke="#94a3b8"
+                    stroke="#cbd5e1"
+                    strokeWidth="1"
+                    strokeDasharray="2 2"
+                  />
+                  <line
+                    x1={leftPad}
+                    y1={y}
+                    x2={chartWidth - rightPad}
+                    y2={y}
+                    stroke="#cbd5e1"
                     strokeWidth="0.75"
                     strokeDasharray="2 2"
                   />
@@ -386,6 +414,52 @@ export default function WhaleCvdVolumeChart({
             })()
           )}
         </svg>
+
+        {/* On-Chart Floating Interactive Hover Tooltip */}
+        {hoveredPoint && (
+          (() => {
+            const idx = cvdData.findIndex((p) => p.time === hoveredPoint.time);
+            if (idx === -1) return null;
+            const x = getX(idx);
+            const y = getCvdY(hoveredPoint.cvd);
+            const isPositive = hoveredPoint.cvd >= 0;
+
+            return (
+              <div
+                className="absolute z-30 pointer-events-none p-3 rounded-xl bg-slate-900/95 border border-slate-700/80 shadow-2xl backdrop-blur-md text-white font-mono text-xs space-y-1 transition-all"
+                style={{
+                  left: `${Math.min(chartWidth - 210, Math.max(10, x + 15))}px`,
+                  top: `${Math.min(chartHeight - 95, Math.max(10, y - 45))}px`,
+                }}
+              >
+                <div className="flex items-center justify-between gap-3 border-b border-slate-800 pb-1">
+                  <span className="text-[10px] text-amber-400 font-bold">{hoveredPoint.timeStr}</span>
+                  <span className={`text-[10px] font-bold ${isPositive ? "text-emerald-400" : "text-rose-400"}`}>
+                    {isPositive ? "Accumulation" : "Distribution"}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-3 text-xs">
+                  <span className="text-slate-400">Spot Price:</span>
+                  <strong className="text-white font-bold">
+                    ${hoveredPoint.price >= 1 ? hoveredPoint.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : hoveredPoint.price.toFixed(4)}
+                  </strong>
+                </div>
+                <div className="flex justify-between gap-3 text-xs">
+                  <span className="text-slate-400">CVD Delta:</span>
+                  <strong className={`font-black ${isPositive ? "text-emerald-400" : "text-rose-400"}`}>
+                    {formatUsd(hoveredPoint.cvd)}
+                  </strong>
+                </div>
+                <div className="flex justify-between gap-3 text-[10px] text-slate-400">
+                  <span>Net Taker Flow:</span>
+                  <span className={hoveredPoint.institutionalDelta >= 0 ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+                    {formatUsd(hoveredPoint.institutionalDelta)}
+                  </span>
+                </div>
+              </div>
+            );
+          })()
+        )}
       </div>
 
       {/* CVD Explainer Note */}

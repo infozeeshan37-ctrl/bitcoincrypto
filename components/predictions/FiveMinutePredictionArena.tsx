@@ -146,6 +146,468 @@ function formatUtcClock(timestamp: number): string {
   return `${h}:${m}:${s} UTC`;
 }
 
+interface PredictionTrajectoryChartProps {
+  candles: CandleData[];
+  livePrice: number;
+  selectedCoin: PredictionCoin;
+  timeframe: CandleTimeframe;
+  forecast: NextCandleForecast;
+}
+
+function PredictionTrajectoryChart({
+  candles,
+  livePrice,
+  selectedCoin,
+  timeframe,
+  forecast,
+}: PredictionTrajectoryChartProps) {
+  const [hovered, setHovered] = useState<{
+    x: number;
+    y: number;
+    time: string;
+    label: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    pct: number;
+    volume: number;
+    isGreen: boolean;
+  } | null>(null);
+
+  const recentCandles = useMemo(() => {
+    return candles.slice(-13);
+  }, [candles]);
+
+  const chartData = useMemo(() => {
+    if (recentCandles.length === 0) return null;
+
+    const allPrices: number[] = [livePrice, forecast.projectedHigh, forecast.projectedLow];
+    recentCandles.forEach((c) => {
+      allPrices.push(c.high, c.low, c.open, c.close);
+    });
+
+    const minP = Math.min(...allPrices);
+    const maxP = Math.max(...allPrices);
+    const range = maxP - minP || 1;
+    const pad = range * 0.12;
+    const bounds = {
+      min: minP - pad,
+      max: maxP + pad,
+      range: range + pad * 2,
+    };
+
+    const width = 760;
+    const height = 230;
+    const topPad = 25;
+    const botPad = 35;
+    const leftPad = 20;
+    const rightPad = 75;
+    const plotW = width - leftPad - rightPad;
+    const plotH = height - topPad - botPad;
+
+    const getY = (val: number) => {
+      return height - botPad - ((val - bounds.min) / bounds.range) * plotH;
+    };
+
+    const totalSlots = recentCandles.length + 1;
+    const slotStep = plotW / totalSlots;
+    const candleWidth = Math.min(22, Math.max(10, slotStep * 0.65));
+
+    const items = recentCandles.map((c, i) => {
+      const isLast = i === recentCandles.length - 1;
+      const effectiveClose = isLast ? livePrice : c.close;
+      const effectiveHigh = isLast ? Math.max(c.high, livePrice) : c.high;
+      const effectiveLow = isLast ? Math.min(c.low, livePrice) : c.low;
+      const cx = leftPad + i * slotStep + slotStep / 2;
+      const openY = getY(c.open);
+      const closeY = getY(effectiveClose);
+      const highY = getY(effectiveHigh);
+      const lowY = getY(effectiveLow);
+      const isGreen = effectiveClose >= c.open;
+      const diff = effectiveClose - c.open;
+      const pct = c.open > 0 ? (diff / c.open) * 100 : 0;
+      const timeStr = new Date(c.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      return {
+        id: `c-${i}`,
+        x: cx,
+        openY,
+        closeY,
+        highY,
+        lowY,
+        open: c.open,
+        high: effectiveHigh,
+        low: effectiveLow,
+        close: effectiveClose,
+        volume: c.volume,
+        isGreen,
+        pct,
+        timeStr,
+        isLast,
+      };
+    });
+
+    const projX = leftPad + recentCandles.length * slotStep + slotStep / 2;
+    const projOpenY = getY(forecast.projectedOpen);
+    const projCloseY = getY(forecast.projectedClose);
+    const projHighY = getY(forecast.projectedHigh);
+    const projLowY = getY(forecast.projectedLow);
+    const projDiff = forecast.projectedClose - forecast.projectedOpen;
+    const projPct = forecast.projectedOpen > 0 ? (projDiff / forecast.projectedOpen) * 100 : 0;
+
+    const projectedItem = {
+      x: projX,
+      openY: projOpenY,
+      closeY: projCloseY,
+      highY: projHighY,
+      lowY: projLowY,
+      open: forecast.projectedOpen,
+      high: forecast.projectedHigh,
+      low: forecast.projectedLow,
+      close: forecast.projectedClose,
+      isGreen: forecast.isBullish,
+      pct: projPct,
+      timeStr: `Next ${timeframe.toUpperCase()}`,
+    };
+
+    const gridCount = 4;
+    const gridLines = Array.from({ length: gridCount + 1 }).map((_, idx) => {
+      const price = bounds.min + (idx / gridCount) * bounds.range;
+      return { y: getY(price), price };
+    });
+
+    const liveY = getY(livePrice);
+
+    return {
+      width,
+      height,
+      topPad,
+      botPad,
+      leftPad,
+      rightPad,
+      plotW,
+      plotH,
+      items,
+      projectedItem,
+      candleWidth,
+      gridLines,
+      liveY,
+      getY,
+    };
+  }, [recentCandles, livePrice, forecast, timeframe]);
+
+  if (!chartData) return null;
+
+  return (
+    <div className="relative w-full bg-slate-950 rounded-2xl border border-slate-800 p-3 sm:p-4 overflow-hidden select-none">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-800/80 mb-2">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+            Live {timeframe.toUpperCase()} Candlestick &amp; AI Predictive Trajectory
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-[11px] font-mono text-slate-400">
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded bg-emerald-500" />
+            <span>Bullish Candle</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded bg-rose-500" />
+            <span>Bearish Candle</span>
+          </span>
+          <span className="flex items-center gap-1 text-amber-400 font-bold">
+            <span className="w-2 h-2 rounded border border-dashed border-amber-400 bg-amber-400/20" />
+            <span>AI Projected Trajectory</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="relative w-full overflow-x-auto">
+        <svg
+          viewBox={`0 0 ${chartData.width} ${chartData.height}`}
+          className="w-full min-w-[620px] h-56 cursor-crosshair overflow-visible"
+          onMouseLeave={() => setHovered(null)}
+        >
+          {/* Horizontal Grid Lines & Price Labels */}
+          {chartData.gridLines.map((gl, i) => (
+            <g key={`grid-${i}`}>
+              <line
+                x1={chartData.leftPad}
+                y1={gl.y}
+                x2={chartData.width - chartData.rightPad}
+                y2={gl.y}
+                stroke="#1e293b"
+                strokeWidth="0.75"
+                strokeDasharray="4 4"
+              />
+              <text
+                x={chartData.width - chartData.rightPad + 6}
+                y={gl.y + 3.5}
+                fill="#64748b"
+                fontSize="9"
+                fontFamily="monospace"
+              >
+                ${formatCoinPrice(gl.price, selectedCoin.decimals)}
+              </text>
+            </g>
+          ))}
+
+          {/* Current Live Price Horizontal Reticle Line */}
+          <line
+            x1={chartData.leftPad}
+            y1={chartData.liveY}
+            x2={chartData.width - chartData.rightPad}
+            y2={chartData.liveY}
+            stroke="#f59e0b"
+            strokeWidth="1.25"
+            strokeDasharray="3 3"
+          />
+          {/* Live Price Tag on Right Axis */}
+          <rect
+            x={chartData.width - chartData.rightPad + 2}
+            y={chartData.liveY - 8}
+            width="68"
+            height="16"
+            rx="4"
+            fill="#d97706"
+          />
+          <text
+            x={chartData.width - chartData.rightPad + 36}
+            y={chartData.liveY + 3.5}
+            fill="#ffffff"
+            fontSize="8.5"
+            fontWeight="bold"
+            fontFamily="monospace"
+            textAnchor="middle"
+          >
+            ${formatCoinPrice(livePrice, selectedCoin.decimals)}
+          </text>
+
+          {/* Historical & Forming Candlesticks */}
+          {chartData.items.map((c) => {
+            const topY = Math.min(c.openY, c.closeY);
+            const botY = Math.max(c.openY, c.closeY);
+            const bodyH = Math.max(2, botY - topY);
+            const strokeCol = c.isGreen ? "#10b981" : "#f43f5e";
+            const fillCol = c.isGreen ? "rgba(16, 185, 129, 0.9)" : "rgba(244, 63, 94, 0.9)";
+
+            return (
+              <g
+                key={c.id}
+                className="cursor-pointer"
+                onMouseEnter={() => {
+                  setHovered({
+                    x: c.x,
+                    y: c.closeY,
+                    time: c.timeStr,
+                    label: c.isLast ? "Active Forming Candle" : "Historical 5m Candle",
+                    open: c.open,
+                    high: c.high,
+                    low: c.low,
+                    close: c.close,
+                    pct: c.pct,
+                    volume: c.volume,
+                    isGreen: c.isGreen,
+                  });
+                }}
+              >
+                {/* Upper & Lower Wick */}
+                <line
+                  x1={c.x}
+                  y1={c.highY}
+                  x2={c.x}
+                  y2={c.lowY}
+                  stroke={strokeCol}
+                  strokeWidth="1.5"
+                />
+
+                {/* Candle Body */}
+                <rect
+                  x={c.x - chartData.candleWidth / 2}
+                  y={topY}
+                  width={chartData.candleWidth}
+                  height={bodyH}
+                  rx="2"
+                  fill={fillCol}
+                  stroke={strokeCol}
+                  strokeWidth="1.2"
+                />
+
+                {/* Active candle live pulsing beacon */}
+                {c.isLast && (
+                  <g>
+                    <circle
+                      cx={c.x}
+                      cy={c.closeY}
+                      r="5"
+                      fill={strokeCol}
+                      className="animate-ping opacity-75"
+                    />
+                    <circle cx={c.x} cy={c.closeY} r="3" fill="#ffffff" />
+                  </g>
+                )}
+              </g>
+            );
+          })}
+
+          {/* AI Projected Future Candlestick */}
+          {(() => {
+            const p = chartData.projectedItem;
+            const topY = Math.min(p.openY, p.closeY);
+            const botY = Math.max(p.openY, p.closeY);
+            const bodyH = Math.max(4, botY - topY);
+            const projCol = p.isGreen ? "#34d399" : "#fb7185";
+
+            return (
+              <g
+                className="cursor-pointer"
+                onMouseEnter={() => {
+                  setHovered({
+                    x: p.x,
+                    y: p.closeY,
+                    time: p.timeStr,
+                    label: "AI Quantitative Forecasted Candle",
+                    open: p.open,
+                    high: p.high,
+                    low: p.low,
+                    close: p.close,
+                    pct: p.pct,
+                    volume: 0,
+                    isGreen: p.isGreen,
+                  });
+                }}
+              >
+                {/* Projected Zone Glow Box */}
+                <rect
+                  x={p.x - chartData.candleWidth * 0.9}
+                  y={p.highY - 4}
+                  width={chartData.candleWidth * 1.8}
+                  height={Math.max(10, p.lowY - p.highY + 8)}
+                  rx="6"
+                  fill={p.isGreen ? "rgba(16, 185, 129, 0.08)" : "rgba(244, 63, 94, 0.08)"}
+                  stroke={p.isGreen ? "#10b981" : "#f43f5e"}
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
+                />
+
+                {/* Projected Wick */}
+                <line
+                  x1={p.x}
+                  y1={p.highY}
+                  x2={p.x}
+                  y2={p.lowY}
+                  stroke={projCol}
+                  strokeWidth="1.5"
+                  strokeDasharray="2 2"
+                />
+
+                {/* Projected Body */}
+                <rect
+                  x={p.x - chartData.candleWidth / 2}
+                  y={topY}
+                  width={chartData.candleWidth}
+                  height={bodyH}
+                  rx="3"
+                  fill={p.isGreen ? "rgba(16, 185, 129, 0.35)" : "rgba(244, 63, 94, 0.35)"}
+                  stroke={projCol}
+                  strokeWidth="1.75"
+                  strokeDasharray="3 2"
+                />
+
+                {/* AI Badge Top Label */}
+                <text
+                  x={p.x}
+                  y={p.highY - 8}
+                  fill={projCol}
+                  fontSize="8"
+                  fontWeight="bold"
+                  fontFamily="monospace"
+                  textAnchor="middle"
+                >
+                  AI TARGET
+                </text>
+              </g>
+            );
+          })()}
+
+          {/* Active Hover Crosshairs */}
+          {hovered && (
+            <g>
+              <line
+                x1={hovered.x}
+                y1={chartData.topPad}
+                x2={hovered.x}
+                y2={chartData.height - chartData.botPad}
+                stroke="#cbd5e1"
+                strokeWidth="1"
+                strokeDasharray="2 2"
+              />
+              <line
+                x1={chartData.leftPad}
+                y1={hovered.y}
+                x2={chartData.width - chartData.rightPad}
+                y2={hovered.y}
+                stroke="#cbd5e1"
+                strokeWidth="0.75"
+                strokeDasharray="2 2"
+              />
+              <circle
+                cx={hovered.x}
+                cy={hovered.y}
+                r="4.5"
+                fill="#ffffff"
+                stroke={hovered.isGreen ? "#10b981" : "#f43f5e"}
+                strokeWidth="2.5"
+              />
+            </g>
+          )}
+        </svg>
+
+        {/* Floating Tooltip Card */}
+        {hovered && (
+          <div
+            className="absolute z-30 pointer-events-none top-4 px-3 py-2 rounded-xl bg-slate-900/95 border border-slate-700/80 shadow-2xl backdrop-blur-md text-white font-mono text-xs space-y-1 transition-all"
+            style={{
+              left: `${Math.min(chartData.width - 230, Math.max(10, hovered.x - 70))}px`,
+            }}
+          >
+            <div className="flex items-center justify-between gap-3 border-b border-slate-800 pb-1">
+              <span className="text-[10px] text-amber-400 font-bold">{hovered.label}</span>
+              <span className="text-[10px] text-slate-400">{hovered.time}</span>
+            </div>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[11px]">
+              <div>
+                <span className="text-slate-400 text-[10px]">Open: </span>
+                <span className="font-bold">${formatCoinPrice(hovered.open, selectedCoin.decimals)}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 text-[10px]">High: </span>
+                <span className="font-bold">${formatCoinPrice(hovered.high, selectedCoin.decimals)}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 text-[10px]">Low: </span>
+                <span className="font-bold">${formatCoinPrice(hovered.low, selectedCoin.decimals)}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 text-[10px]">Close: </span>
+                <span className="font-bold text-white">${formatCoinPrice(hovered.close, selectedCoin.decimals)}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between border-t border-slate-800/80 pt-1 text-[10px]">
+              <span className="text-slate-400">Net Delta:</span>
+              <span className={`font-black ${hovered.pct >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                {hovered.pct >= 0 ? "+" : ""}{hovered.pct.toFixed(2)}%
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function FiveMinutePredictionArena() {
   const [mounted, setMounted] = useState<boolean>(false);
   const [selectedCoin, setSelectedCoin] = useState<PredictionCoin>(SUPPORTED_PREDICTION_COINS[0]);
@@ -903,6 +1365,15 @@ export default function FiveMinutePredictionArena() {
                 </div>
               </div>
             </div>
+
+            {/* INTERACTIVE LIVE CANDLESTICK & AI TRAJECTORY CHART */}
+            <PredictionTrajectoryChart
+              candles={candles}
+              livePrice={livePrice}
+              selectedCoin={selectedCoin}
+              timeframe={timeframe}
+              forecast={nextCandleForecast}
+            />
 
             {/* CARD B: ACTIVE CANDLE REAL-TIME ANATOMY & PROBABILITY METER */}
             <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-4 font-mono">

@@ -145,36 +145,160 @@ export default function CoinMarketCapDashboard() {
     return `$${n.toLocaleString()}`;
   };
 
-  // Render SVG mini sparkline
-  const renderSparkline = (points: number[] | undefined, isBull: boolean) => {
+  // Render interactive SVG mini sparkline with hover crosshairs and tooltips
+  function InteractiveSparkline({
+    points,
+    isBull,
+    symbol,
+  }: {
+    points?: number[];
+    isBull: boolean;
+    symbol: string;
+    currentPrice: number;
+  }) {
+    const [hoverData, setHoverData] = useState<{
+      x: number;
+      y: number;
+      price: number;
+      pctDelta: number;
+      dayLabel: string;
+    } | null>(null);
+
     if (!points || points.length < 2) return null;
+
     const min = Math.min(...points);
     const max = Math.max(...points);
     const range = max - min || 1;
-    const width = 110;
-    const height = 32;
+    const width = 120;
+    const height = 34;
+    const startPrice = points[0];
 
-    const coords = points
-      .map((p, i) => {
-        const x = (i / (points.length - 1)) * width;
-        const y = height - ((p - min) / range) * (height - 6) - 3;
-        return `${x.toFixed(1)},${y.toFixed(1)}`;
-      })
-      .join(" ");
+    const coords = points.map((p, i) => {
+      const x = (i / (points.length - 1)) * width;
+      const y = height - ((p - min) / range) * (height - 8) - 4;
+      return { x, y, price: p };
+    });
+
+    const polylinePoints = coords.map((c) => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" ");
+    const latestCoord = coords[coords.length - 1];
+
+    const strokeColor = isBull ? "#10b981" : "#f43f5e";
+    const areaPath = `M ${coords[0].x} ${coords[0].y} ` +
+      coords.slice(1).map((c) => `L ${c.x} ${c.y}`).join(" ") +
+      ` L ${width} ${height} L 0 ${height} Z`;
+
+    const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const mouseX = Math.max(0, Math.min(width, e.clientX - rect.left));
+      const step = width / (points.length - 1);
+      const nearestIdx = Math.min(points.length - 1, Math.max(0, Math.round(mouseX / step)));
+      const pt = coords[nearestIdx];
+      const pct = startPrice > 0 ? ((pt.price - startPrice) / startPrice) * 100 : 0;
+      const daysAgo = points.length - 1 - nearestIdx;
+      const dayLabel = daysAgo === 0 ? "Now" : `T-${daysAgo}d`;
+
+      setHoverData({
+        x: pt.x,
+        y: pt.y,
+        price: pt.price,
+        pctDelta: pct,
+        dayLabel,
+      });
+    };
 
     return (
-      <svg width={width} height={height} className="overflow-visible">
-        <polyline
-          fill="none"
-          stroke={isBull ? "#10b981" : "#f43f5e"}
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          points={coords}
-        />
-      </svg>
+      <div className="relative inline-flex items-center justify-center group cursor-crosshair">
+        <svg
+          width={width}
+          height={height}
+          className="overflow-visible"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => setHoverData(null)}
+        >
+          <defs>
+            <linearGradient id={`sparkGrad-${symbol}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={strokeColor} stopOpacity="0.25" />
+              <stop offset="100%" stopColor={strokeColor} stopOpacity="0.0" />
+            </linearGradient>
+          </defs>
+
+          {/* Shaded Area Fill */}
+          <path d={areaPath} fill={`url(#sparkGrad-${symbol})`} />
+
+          {/* Sparkline curve */}
+          <polyline
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            points={polylinePoints}
+          />
+
+          {/* Latest live point pulsing beacon */}
+          {!hoverData && (
+            <g>
+              <circle
+                cx={latestCoord.x}
+                cy={latestCoord.y}
+                r="3.5"
+                fill={strokeColor}
+                className="animate-ping opacity-75"
+              />
+              <circle
+                cx={latestCoord.x}
+                cy={latestCoord.y}
+                r="2.5"
+                fill={strokeColor}
+              />
+            </g>
+          )}
+
+          {/* Hover Crosshair & Dot */}
+          {hoverData && (
+            <g>
+              <line
+                x1={hoverData.x}
+                y1="0"
+                x2={hoverData.x}
+                y2={height}
+                stroke="#94a3b8"
+                strokeWidth="1"
+                strokeDasharray="2 2"
+              />
+              <circle
+                cx={hoverData.x}
+                cy={hoverData.y}
+                r="4"
+                fill="#ffffff"
+                stroke={strokeColor}
+                strokeWidth="2"
+              />
+            </g>
+          )}
+        </svg>
+
+        {/* Floating Hover Card */}
+        {hoverData && (
+          <div
+            className="absolute z-50 pointer-events-none -top-10 px-2 py-0.5 rounded-lg bg-slate-900/95 dark:bg-slate-950/95 text-white border border-slate-700/80 shadow-2xl backdrop-blur-md text-[10px] font-mono whitespace-nowrap flex items-center gap-1.5 transition-all"
+            style={{
+              left: `${Math.min(width - 35, Math.max(25, hoverData.x))}px`,
+              transform: "translateX(-50%)",
+            }}
+          >
+            <span className="text-slate-400 font-semibold">{hoverData.dayLabel}:</span>
+            <span className="font-bold text-white">
+              {fmtPrice(hoverData.price)}
+            </span>
+            <span className={`font-black ${hoverData.pctDelta >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              {hoverData.pctDelta >= 0 ? "+" : ""}{hoverData.pctDelta.toFixed(1)}%
+            </span>
+          </div>
+        )}
+      </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-10 pb-20">
@@ -548,7 +672,12 @@ export default function CoinMarketCapDashboard() {
                     {/* Mini Sparkline */}
                     <td className="py-4 px-4 text-center hidden lg:table-cell">
                       <div className="flex justify-center">
-                        {renderSparkline(coin.sparkline, isBull7d)}
+                        <InteractiveSparkline
+                          points={coin.sparkline}
+                          isBull={isBull7d}
+                          symbol={coin.symbol}
+                          currentPrice={coin.price}
+                        />
                       </div>
                     </td>
 
