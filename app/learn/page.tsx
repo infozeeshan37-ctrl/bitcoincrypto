@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import CryptoLearnView from "@/components/learn/CryptoLearnView";
-import { courseModules } from "@/lib/courseData";
+import { courseChapters } from "@/lib/courseData";
 
 export const metadata: Metadata = {
-  title: "Crypto Learn: Complete Fundamental & Technical Analysis Course | BitcoinCrypto.tech",
+  title: "Crypto Learn: 100-Article Masterclass & Downloadable Chapter PDF eBooks | BitcoinCrypto.tech",
   description:
-    "Master cryptocurrency trading with our free 7-module masterclass. Comprehensive curriculum covering on-chain fundamentals, MVRV Z-Scores, market structure price action, Level-2 order book depth, CoinGlass liquidation heatmaps, and mathematical risk management.",
+    "Master digital asset trading with our comprehensive 10-chapter masterclass spanning 100 original, human-written research articles and downloadable chapter PDF books. Master on-chain valuation, MVRV Z-Scores, market structure price action, Level-2 order book depth, CoinGlass liquidation squeeze cascades, and mathematical risk management.",
   keywords: [
     "crypto course free",
     "learn crypto trading",
@@ -16,24 +16,26 @@ export const metadata: Metadata = {
     "mvrv z score bitcoin",
     "bitcoin halving mechanics",
     "crypto risk management course",
-    "crypto price action trading"
+    "crypto price action trading",
+    "crypto book pdf download",
+    "bitcoin trading masterclass"
   ],
   alternates: {
     canonical: "https://www.bitcoincrypto.tech/learn",
   },
   openGraph: {
-    title: "Crypto Learn: Complete Fundamental & Technical Analysis Course",
+    title: "Crypto Learn: 100-Article Masterclass & Downloadable Chapter PDF eBooks",
     description:
-      "Institutional-grade 7-module cryptocurrency masterclass: On-chain valuation, market structure price action, order flow depth, derivatives, and capital preservation.",
+      "Institutional-grade 10-chapter cryptocurrency masterclass: 100 human-written articles on on-chain valuation, market structure price action, order flow depth, derivatives, and capital preservation.",
     url: "https://www.bitcoincrypto.tech/learn",
     siteName: "BitcoinCrypto.tech",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Crypto Learn: Complete Fundamental & Technical Analysis Masterclass",
+    title: "Crypto Learn: 100-Article Masterclass & Downloadable Chapter eBooks",
     description:
-      "Free comprehensive 7-module course covering on-chain metrics, technical price action, CoinGlass liquidations, and risk management.",
+      "Free comprehensive 10-chapter, 100-article masterclass covering on-chain metrics, technical price action, CoinGlass liquidations, and risk management.",
   },
 };
 
@@ -43,7 +45,7 @@ export default function LearnPage() {
     "@type": "Course",
     "name": "Crypto Learn: Institutional Cryptocurrency Trading & Valuation Masterclass",
     "description":
-      "Comprehensive digital asset educational course covering blockchain fundamentals, on-chain valuation ratios, market structure technical analysis, order flow, derivatives liquidations, and risk management.",
+      "Comprehensive digital asset educational course covering 10 chapters and 100 articles on blockchain fundamentals, on-chain valuation ratios, market structure technical analysis, order flow, derivatives liquidations, and risk management.",
     "provider": {
       "@type": "Organization",
       "name": "BitcoinCrypto.tech",
@@ -52,23 +54,23 @@ export default function LearnPage() {
     "hasCourseInstance": {
       "@type": "CourseInstance",
       "courseMode": "Online",
-      "courseWorkload": "PT4H30M"
+      "courseWorkload": "PT8H00M"
     },
-    "coursePrerequisites": "None. Beginners through advanced quantitative traders.",
+    "coursePrerequisites": "None. Suitable for beginners through institutional quantitative traders.",
     "educationalCredentialAwarded": "Certificate of Completion",
-    "syllabusSections": courseModules.map((m) => ({
+    "syllabusSections": courseChapters.map((ch) => ({
       "@type": "Syllabus",
-      "name": `Module ${m.moduleNumber}: ${m.title}`,
-      "description": m.overview,
-      "timeRequired": m.estimatedTime
+      "name": `Chapter ${ch.chapterNumber}: ${ch.title}`,
+      "description": ch.overview,
+      "timeRequired": ch.estimatedTime
     }))
   };
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": courseModules.flatMap((m) =>
-      m.quiz.map((q) => ({
+    "mainEntity": courseChapters.flatMap((ch) =>
+      ch.quiz.map((q) => ({
         "@type": "Question",
         "name": q.question,
         "acceptedAnswer": {

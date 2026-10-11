@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
   GraduationCap,
@@ -14,29 +14,39 @@ import {
   ArrowRight,
   HelpCircle,
   Clock,
-  Compass,
-  Cpu,
   Zap,
-  Target,
-  Flame,
   ChevronRight,
   Bookmark,
   Share2,
   Check,
-  RotateCcw
+  RotateCcw,
+  Download,
+  Search,
+  FileText,
+  Sliders,
+  ExternalLink
 } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import CourseDiagrams from "./CourseDiagrams";
-import { courseModules, courseGlossary, CourseModule } from "@/lib/courseData";
+import ChapterPdfModal from "./ChapterPdfModal";
+import {
+  courseChapters,
+  allArticles,
+  courseGlossary,
+  CourseChapter,
+  CourseLesson
+} from "@/lib/courseData";
 
 export default function CryptoLearnView() {
-  const [activeModuleId, setActiveModuleId] = useState<string>(courseModules[0].id);
+  const [activeChapterId, setActiveChapterId] = useState<string>(courseChapters[0].id);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [completedLessons, setCompletedLessons] = useState<Record<string, boolean>>({});
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState<Record<string, boolean>>({});
   const [copiedLink, setCopiedLink] = useState(false);
+  const [pdfModalChapter, setPdfModalChapter] = useState<CourseChapter | null>(null);
 
   // Restore progress from localStorage
   useEffect(() => {
@@ -60,23 +70,39 @@ export default function CryptoLearnView() {
     });
   };
 
-  const activeModule = courseModules.find((m) => m.id === activeModuleId) || courseModules[0];
+  const activeChapter = useMemo(() => {
+    return courseChapters.find((c) => c.id === activeChapterId) || courseChapters[0];
+  }, [activeChapterId]);
 
-  const totalLessons = courseModules.reduce((acc, m) => acc + m.lessons.length, 0);
+  const totalArticlesCount = allArticles.length;
   const completedCount = Object.values(completedLessons).filter(Boolean).length;
-  const progressPercent = Math.min(100, Math.round((completedCount / totalLessons) * 100));
+  const progressPercent = Math.min(100, Math.round((completedCount / totalArticlesCount) * 100));
 
-  const filteredModules = activeCategory === "all"
-    ? courseModules
-    : courseModules.filter((m) => m.category === activeCategory);
+  // Category filter
+  const filteredChapters = useMemo(() => {
+    if (activeCategory === "all") return courseChapters;
+    return courseChapters.filter((c) => c.category === activeCategory);
+  }, [activeCategory]);
+
+  // Global search across all 100 articles
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const query = searchQuery.toLowerCase();
+    return allArticles.filter((article) => {
+      const matchTitle = article.title.toLowerCase().includes(query);
+      const matchConcepts = article.keyConcepts.some((k) => k.toLowerCase().includes(query));
+      const matchContent = article.content.some((c) => c.toLowerCase().includes(query));
+      return matchTitle || matchConcepts || matchContent;
+    });
+  }, [searchQuery]);
 
   const handleSelectQuizOption = (qIdx: number, optIdx: number) => {
-    const key = `${activeModule.id}_q${qIdx}`;
+    const key = `${activeChapter.id}_q${qIdx}`;
     setQuizAnswers((prev) => ({ ...prev, [key]: optIdx }));
   };
 
   const handleSubmitQuiz = (qIdx: number) => {
-    const key = `${activeModule.id}_q${qIdx}`;
+    const key = `${activeChapter.id}_q${qIdx}`;
     setQuizSubmitted((prev) => ({ ...prev, [key]: true }));
   };
 
@@ -84,6 +110,10 @@ export default function CryptoLearnView() {
     navigator.clipboard.writeText("https://www.bitcoincrypto.tech/learn");
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const handleOpenPdf = (chapter: CourseChapter) => {
+    setPdfModalChapter(chapter);
   };
 
   return (
@@ -111,34 +141,34 @@ export default function CryptoLearnView() {
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-                Crypto Learn: Complete Fundamental &amp; Technical Analysis Course
+                Crypto Learn: 100 Authentic Articles &amp; Downloadable Chapter eBooks
               </h1>
 
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                The institutional masterclass for digital asset traders and researchers. Master on-chain valuation ratios, market structure price action, Level-2 order book depth, CoinGlass liquidation squeeze cascades, and mathematical risk management with interactive charts and real-time simulators.
+                The institutional masterclass for digital asset traders and researchers. Spanning 10 core chapters and 100 human-written research articles, master on-chain valuation ratios, market structure price action, Level-2 order book depth, CoinGlass liquidation squeeze cascades, and mathematical risk management with live interactive cursor charts.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-mono text-slate-300">
                 <span className="flex items-center gap-1.5">
-                  <BookOpen className="w-4 h-4 text-emerald-400" /> 7 Comprehensive Modules
+                  <BookOpen className="w-4 h-4 text-emerald-400" /> 10 Chapters (100 Articles)
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-blue-400" /> 4.5 Hours Curriculum
+                  <Download className="w-4 h-4 text-amber-400" /> Individual Chapter PDF eBooks
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <BarChart2 className="w-4 h-4 text-purple-400" /> 7 Interactive SVG Diagrams
+                  <BarChart2 className="w-4 h-4 text-purple-400" /> Live-Cursor Trendline Charts
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Shield className="w-4 h-4 text-amber-400" /> 100% Free &amp; Open Access
+                  <Shield className="w-4 h-4 text-cyan-400" /> 100% Free &amp; Open Access
                 </span>
               </div>
             </div>
 
-            {/* PROGRESS CARD */}
+            {/* PROGRESS & PDF TRIGGER CARD */}
             <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4 lg:w-80 shrink-0">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono text-slate-400 uppercase font-bold">Course Progress</span>
-                <span className="text-xs font-mono font-black text-emerald-400">{progressPercent}% Completed</span>
+                <span className="text-xs font-mono font-black text-emerald-400">{progressPercent}% Done</span>
               </div>
 
               <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
@@ -149,7 +179,7 @@ export default function CryptoLearnView() {
               </div>
 
               <div className="flex items-center justify-between text-xs text-slate-300">
-                <span>{completedCount} of {totalLessons} Lessons Finished</span>
+                <span>{completedCount} of {totalArticlesCount} Articles</span>
                 <button
                   onClick={handleCopyCourseLink}
                   className="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 transition"
@@ -159,19 +189,90 @@ export default function CryptoLearnView() {
                   <span>{copiedLink ? "Copied" : "Share"}</span>
                 </button>
               </div>
+
+              <button
+                onClick={() => handleOpenPdf(activeChapter)}
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/20"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download Chapter {activeChapter.chapterNumber} PDF</span>
+              </button>
             </div>
           </div>
         </section>
 
+        {/* SEARCH BAR & ARTICLE DIRECTORY */}
+        <div className="relative">
+          <div className="relative flex items-center">
+            <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search across all 100 articles (e.g. MVRV, Funding Rate, BOS, Liquidations, Halving)..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 text-xs font-mono text-slate-400 hover:text-white"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          {/* SEARCH RESULTS DROPDOWN */}
+          {searchQuery && (
+            <div className="mt-3 p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-3 max-h-96 overflow-y-auto">
+              <div className="flex items-center justify-between text-xs font-mono text-slate-400 pb-2 border-b border-slate-200 dark:border-slate-800">
+                <span>Found {searchResults.length} matching articles</span>
+                <span>Click article to jump</span>
+              </div>
+              {searchResults.length === 0 ? (
+                <p className="text-xs text-slate-500 dark:text-slate-400 py-3 text-center">
+                  No articles matched your search query. Try searching for "CVD", "SOPR", "Fibonacci", or "Margin".
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {searchResults.map((a) => (
+                    <button
+                      key={a.id}
+                      onClick={() => {
+                        setActiveChapterId(a.chapterId);
+                        setSearchQuery("");
+                      }}
+                      className="w-full text-left p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/70 hover:bg-slate-100 dark:hover:bg-slate-800/60 border border-slate-200 dark:border-slate-800/60 transition flex items-center justify-between group"
+                    >
+                      <div className="space-y-1 pr-3">
+                        <div className="flex items-center gap-2 text-[10px] font-mono text-amber-600 dark:text-amber-400">
+                          <span>Chapter {a.chapterNumber}</span>
+                          <span>•</span>
+                          <span>{a.chapterBadge}</span>
+                        </div>
+                        <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition">
+                          {a.title}
+                        </h4>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-400 shrink-0" />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
         {/* CATEGORY FILTER TABS */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800 text-xs font-mono">
           {[
-            { id: "all", label: "All 7 Modules" },
-            { id: "fundamentals", label: "1. Fundamentals & Macro" },
-            { id: "technical", label: "2. Technical Analysis (TA)" },
-            { id: "microstructure", label: "3. Order Flow & Level-2" },
-            { id: "derivatives", label: "4. Derivatives & Liquidations" },
-            { id: "risk", label: "5. Risk Management Math" },
+            { id: "all", label: "All 10 Chapters (100 Articles)" },
+            { id: "fundamentals", label: "Fundamentals & On-Chain" },
+            { id: "macro", label: "Macro & Global Liquidity" },
+            { id: "technical", label: "Technical Analysis & Price Action" },
+            { id: "microstructure", label: "Microstructure & Order Flow" },
+            { id: "derivatives", label: "Derivatives & CoinGlass" },
+            { id: "risk", label: "Risk Management Math" },
           ].map((cat) => (
             <button
               key={cat.id}
@@ -187,122 +288,138 @@ export default function CryptoLearnView() {
           ))}
         </div>
 
-        {/* MODULE CAROUSEL SELECTOR */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {filteredModules.map((m) => {
-            const isSelected = m.id === activeModuleId;
-            const completedInModule = m.lessons.filter((l) => completedLessons[l.id]).length;
-            const isModuleFinished = completedInModule === m.lessons.length && m.lessons.length > 0;
+        {/* CHAPTERS GRID SELECTOR */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          {filteredChapters.map((chapter) => {
+            const isSelected = chapter.id === activeChapterId;
+            const completedInChapter = chapter.lessons.filter((l) => completedLessons[l.id]).length;
+            const isChapterFinished = completedInChapter === chapter.lessons.length && chapter.lessons.length > 0;
 
             return (
-              <button
-                key={m.id}
-                onClick={() => setActiveModuleId(m.id)}
-                className={`p-5 rounded-3xl text-left border transition-all duration-200 flex flex-col justify-between space-y-4 group ${
+              <div
+                key={chapter.id}
+                onClick={() => setActiveChapterId(chapter.id)}
+                className={`p-4 rounded-3xl text-left border transition-all duration-200 flex flex-col justify-between space-y-3 group cursor-pointer ${
                   isSelected
                     ? "bg-white dark:bg-slate-900 border-emerald-500 shadow-lg shadow-emerald-500/10 ring-2 ring-emerald-500/20"
                     : "bg-white dark:bg-slate-900/70 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                 }`}
               >
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-[11px] font-mono">
                     <span className="font-black text-amber-600 dark:text-amber-400">
-                      Module {m.moduleNumber}
+                      Ch. {chapter.chapterNumber}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold">
-                      {m.level}
+                    <span className="px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-bold text-[10px]">
+                      {chapter.level}
                     </span>
                   </div>
 
-                  <h3 className={`font-black text-sm tracking-tight leading-snug transition ${
+                  <h3 className={`font-black text-xs sm:text-sm tracking-tight leading-snug transition line-clamp-2 ${
                     isSelected ? "text-emerald-600 dark:text-emerald-400" : "text-slate-900 dark:text-white group-hover:text-emerald-500"
                   }`}>
-                    {m.title}
+                    {chapter.title}
                   </h3>
 
-                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                    {m.tagline}
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                    {chapter.tagline}
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px] font-mono">
-                  <span className="text-slate-400">{m.estimatedTime}</span>
-                  {isModuleFinished ? (
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] font-mono">
+                  <span className="text-slate-400">{chapter.lessons.length} Articles</span>
+                  {isChapterFinished ? (
                     <span className="text-emerald-500 font-bold flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Completed
+                      <CheckCircle2 className="w-3 h-3" /> Done
                     </span>
                   ) : (
-                    <span className="text-slate-400">{completedInModule}/{m.lessons.length} done</span>
+                    <span className="text-slate-400">{completedInChapter}/{chapter.lessons.length}</span>
                   )}
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>
 
-        {/* ACTIVE MODULE CONTAINER */}
+        {/* ACTIVE CHAPTER DISPLAY CONTAINER */}
         <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm space-y-10">
           
-          {/* Module Header Bar */}
+          {/* Chapter Top Bar */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-600 dark:text-amber-400">
-                <span>MODULE {activeModule.moduleNumber}</span>
+                <span>CHAPTER {activeChapter.chapterNumber}</span>
                 <span>•</span>
-                <span className="text-slate-400">{activeModule.level}</span>
+                <span className="text-slate-400">{activeChapter.badge}</span>
                 <span>•</span>
-                <span className="text-slate-400">{activeModule.estimatedTime}</span>
+                <span className="text-slate-400">{activeChapter.estimatedTime}</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                {activeModule.title}
+                {activeChapter.title}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-                {activeModule.overview}
+                {activeChapter.overview}
               </p>
             </div>
 
-            {/* Direct Tool Link */}
-            <Link
-              href={activeModule.linkedTool.href}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs transition shadow-md shadow-amber-400/20 shrink-0 self-start md:self-auto"
-            >
-              <Zap className="w-4 h-4" />
-              <span>{activeModule.linkedTool.actionText}</span>
-            </Link>
+            <div className="flex flex-wrap items-center gap-3 shrink-0 self-start md:self-auto">
+              <button
+                onClick={() => handleOpenPdf(activeChapter)}
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs font-mono transition shadow-md shadow-emerald-500/20"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download Chapter PDF eBook</span>
+              </button>
+
+              <Link
+                href={activeChapter.linkedTool.href}
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs transition shadow-md shadow-amber-400/20"
+              >
+                <Zap className="w-4 h-4" />
+                <span>{activeChapter.linkedTool.actionText}</span>
+              </Link>
+            </div>
           </div>
 
-          {/* INTERACTIVE DIAGRAM SECTION */}
+          {/* INTERACTIVE LIVE-CURSOR DIAGRAM SECTION */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
                 <BarChart2 className="w-4 h-4 text-emerald-500" />
-                <span>Interactive Masterclass Concept Diagram</span>
+                <span>Live Interactive Trendline Diagram</span>
               </h3>
-              <span className="text-[11px] font-mono text-slate-400">SVG Interactive Engine</span>
+              <span className="text-[11px] font-mono text-emerald-500 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Live Hover Active
+              </span>
             </div>
-            <CourseDiagrams type={activeModule.diagramType} />
+            <CourseDiagrams type={activeChapter.diagramType} />
           </div>
 
-          {/* DETAILED LESSONS */}
+          {/* DETAILED HUMAN-WRITTEN ARTICLES (10 ARTICLES IN THIS CHAPTER) */}
           <div className="space-y-6">
-            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-amber-500" />
-              <span>Curriculum Lessons ({activeModule.lessons.length} Modules)</span>
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-amber-500" />
+                <span>Chapter {activeChapter.chapterNumber} Articles ({activeChapter.lessons.length} Total)</span>
+              </h3>
+              <span className="text-xs font-mono text-slate-400">100% Original Human Analysis</span>
+            </div>
 
             <div className="space-y-6">
-              {activeModule.lessons.map((lesson, lIdx) => {
+              {activeChapter.lessons.map((lesson, lIdx) => {
                 const isDone = Boolean(completedLessons[lesson.id]);
 
                 return (
-                  <div
+                  <article
                     key={lesson.id}
-                    className="p-6 sm:p-7 rounded-3xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-5"
+                    id={lesson.slug}
+                    className="p-6 sm:p-7 rounded-3xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-5 scroll-mt-20"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
                       <div>
                         <span className="text-[11px] font-mono font-bold text-amber-600 dark:text-amber-400">
-                          LESSON {lIdx + 1} OF {activeModule.lessons.length}
+                          ARTICLE {lIdx + 1} OF {activeChapter.lessons.length}
                         </span>
                         <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-0.5">
                           {lesson.title}
@@ -328,7 +445,7 @@ export default function CryptoLearnView() {
                     {/* Key takeaways bullet box */}
                     <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
                       <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block tracking-wider">
-                        Key Conceptual Takeaways:
+                        Core Conceptual Framework:
                       </span>
                       <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
                         {lesson.keyConcepts.map((kc, kIdx) => (
@@ -341,7 +458,7 @@ export default function CryptoLearnView() {
                     </div>
 
                     {/* Lesson Paragraphs */}
-                    <div className="space-y-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                    <div className="space-y-3.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
                       {lesson.content.map((p, pIdx) => (
                         <p key={pIdx}>{p}</p>
                       ))}
@@ -366,7 +483,7 @@ export default function CryptoLearnView() {
                     <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 text-xs text-amber-950 dark:text-amber-200 leading-relaxed">
                       <strong>Institutional Pro Tip:</strong> {lesson.proTip}
                     </div>
-                  </div>
+                  </article>
                 );
               })}
             </div>
@@ -380,15 +497,15 @@ export default function CryptoLearnView() {
                   Self-Assessment Checkpoint
                 </span>
                 <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
-                  Module {activeModule.moduleNumber} Knowledge Check
+                  Chapter {activeChapter.chapterNumber} Knowledge Check
                 </h3>
               </div>
-              <span className="text-xs font-mono text-slate-400">{activeModule.quiz.length} Questions</span>
+              <span className="text-xs font-mono text-slate-400">{activeChapter.quiz.length} Questions</span>
             </div>
 
             <div className="space-y-6">
-              {activeModule.quiz.map((q, qIdx) => {
-                const key = `${activeModule.id}_q${qIdx}`;
+              {activeChapter.quiz.map((q, qIdx) => {
+                const key = `${activeChapter.id}_q${qIdx}`;
                 const selectedOpt = quizAnswers[key];
                 const isSubmitted = Boolean(quizSubmitted[key]);
                 const isCorrect = selectedOpt === q.correctIndex;
@@ -398,21 +515,27 @@ export default function CryptoLearnView() {
                     key={qIdx}
                     className="p-6 rounded-3xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-4"
                   >
-                    <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-                      Q{qIdx + 1}. {q.question}
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                      {qIdx + 1}. {q.question}
                     </h4>
 
                     <div className="space-y-2">
                       {q.options.map((opt, optIdx) => {
-                        let btnStyle = "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300";
+                        const isChosen = selectedOpt === optIdx;
+                        let optionStyle =
+                          "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300";
+
                         if (isSubmitted) {
                           if (optIdx === q.correctIndex) {
-                            btnStyle = "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-500 text-emerald-800 dark:text-emerald-200 font-bold";
-                          } else if (selectedOpt === optIdx) {
-                            btnStyle = "bg-rose-50 dark:bg-rose-950/50 border-rose-500 text-rose-800 dark:text-rose-200 font-bold";
+                            optionStyle =
+                              "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-300 font-bold";
+                          } else if (isChosen && !isCorrect) {
+                            optionStyle =
+                              "bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-300 line-through";
                           }
-                        } else if (selectedOpt === optIdx) {
-                          btnStyle = "bg-amber-50 dark:bg-amber-950/50 border-amber-500 text-amber-900 dark:text-amber-200 font-bold";
+                        } else if (isChosen) {
+                          optionStyle =
+                            "bg-amber-50 dark:bg-amber-950/30 border-amber-400 text-amber-900 dark:text-amber-200 font-bold";
                         }
 
                         return (
@@ -420,72 +543,65 @@ export default function CryptoLearnView() {
                             key={optIdx}
                             disabled={isSubmitted}
                             onClick={() => handleSelectQuizOption(qIdx, optIdx)}
-                            className={`w-full text-left p-3.5 rounded-2xl border text-xs transition flex items-center justify-between ${btnStyle}`}
+                            className={`w-full text-left p-3.5 rounded-2xl border text-xs transition flex items-center justify-between ${optionStyle}`}
                           >
                             <span>{opt}</span>
                             {isSubmitted && optIdx === q.correctIndex && (
-                              <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                             )}
                           </button>
                         );
                       })}
                     </div>
 
-                    {!isSubmitted ? (
-                      <button
-                        disabled={selectedOpt === undefined}
-                        onClick={() => handleSubmitQuiz(qIdx)}
-                        className="py-2 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-mono text-xs font-bold disabled:opacity-40 transition"
-                      >
-                        Submit Answer
-                      </button>
-                    ) : (
-                      <div className={`p-4 rounded-2xl text-xs space-y-1 ${
-                        isCorrect
-                          ? "bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200"
-                          : "bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200"
-                      }`}>
-                        <strong>{isCorrect ? "✓ Correct!" : "✗ Incorrect."}</strong>
-                        <p>{q.explanation}</p>
-                      </div>
-                    )}
+                    <div className="flex items-center justify-between pt-2">
+                      {!isSubmitted ? (
+                        <button
+                          disabled={selectedOpt === undefined}
+                          onClick={() => handleSubmitQuiz(qIdx)}
+                          className="px-4 py-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-mono font-bold disabled:opacity-40 disabled:cursor-not-allowed transition"
+                        >
+                          Check Answer
+                        </button>
+                      ) : (
+                        <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 flex-1">
+                          <strong>Explanation:</strong> {q.explanation}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })}
             </div>
           </div>
-
         </section>
 
-        {/* GLOSSARY QUICK DIRECTORY */}
-        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
-            <div>
-              <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase">
-                Reference Compendium
-              </span>
-              <h3 className="text-xl font-black text-slate-900 dark:text-white mt-0.5">
-                Institutional Cryptocurrency Trading Glossary
-              </h3>
-            </div>
-            <span className="text-xs font-mono text-slate-400">10 Core Definitions</span>
+        {/* GLOSSARY SECTION */}
+        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 space-y-6">
+          <div>
+            <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase">
+              Institutional Encyclopedia
+            </span>
+            <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+              Trading &amp; Valuation Terminology Reference
+            </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {courseGlossary.map((item, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {courseGlossary.map((item, gIdx) => (
               <div
-                key={idx}
-                className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5"
+                key={gIdx}
+                className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-1.5"
               >
-                <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-xs text-slate-900 dark:text-white">
-                    {item.term}
-                  </h4>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                <div className="flex items-center justify-between text-[10px] font-mono">
+                  <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold">
                     {item.category}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white font-mono">
+                  {item.term}
+                </h4>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                   {item.def}
                 </p>
               </div>
@@ -493,14 +609,21 @@ export default function CryptoLearnView() {
           </div>
         </section>
 
-        {/* 1-CLICK CITATION WIDGET */}
+        {/* CITATION & DISCLAIMER */}
         <ToolCitationWidget
-          toolName="BitcoinCrypto Institutional Crypto Learn Academy"
-          toolUrl="https://www.bitcoincrypto.tech/learn"
-          description="Complete 7-module cryptocurrency trading and valuation masterclass covering on-chain fundamentals, technical price action, order book depth, CoinGlass liquidations, and risk management."
+          toolName="Crypto Learn Masterclass"
+          description="Complete 10-Chapter institutional curriculum spanning 100 human-written articles on fundamental on-chain valuation, market microstructure, derivatives liquidations, and capital preservation."
         />
-
       </div>
+
+      {/* CHAPTER PDF MODAL */}
+      {pdfModalChapter && (
+        <ChapterPdfModal
+          chapter={pdfModalChapter}
+          isOpen={Boolean(pdfModalChapter)}
+          onClose={() => setPdfModalChapter(null)}
+        />
+      )}
     </div>
   );
 }
