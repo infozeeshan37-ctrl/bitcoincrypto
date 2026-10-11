@@ -1126,7 +1126,7 @@ export default function AIPredictionSuite() {
 Asset: ${activeAsset.name} (${activeAsset.base}/USDT)
 Live Price: $${formatPrice(activeAsset.currentPrice)}
 Signal Direction: ${activeAsset.direction}
-Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accuracy)
+Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Factor Score)
 
 📍 EXACT EXECUTION LEVELS:
 • Optimal Entry Zone: $${formatPrice(em.entryZoneMin)} - $${formatPrice(em.entryZoneMax)}
@@ -1148,8 +1148,9 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
 • Upper Short Squeeze Pool: ${dl.upperShortLiquidationPool.usdAmount} at ${dl.upperShortLiquidationPool.priceZone}
 • Funding Rate: ${dl.fundingRate} (${dl.fundingBias})
 
-🛡️ CAPITAL PRESERVATION RULE:
+🛡️ CAPITAL PRESERVATION & RISK NOTICE:
 • Max Risk: Never risk more than 1.0% - 1.5% of total capital per setup. Always set Stop-Loss at entry.
+• Educational paper-trading model only. Not financial advice. Past simulated performance does not guarantee future results.
 
 🔗 Verified on: https://www.bitcoincrypto.tech/predictions`;
 
@@ -1382,7 +1383,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
                   <span>{activeAsset.direction}</span>
                 </div>
                 <div className="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                  Confluence Score: {activeAsset.confidenceScore}% (98.2% Accuracy)
+                  Confluence Confidence: {activeAsset.confidenceScore}% (Multi-Factor Model)
                 </div>
               </div>
             </div>
@@ -1869,7 +1870,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (98.2% Historical Accurac
             {/* Historical Verification Audit */}
             <div className="p-4 rounded-2xl bg-slate-950 text-white space-y-2 border border-slate-800">
               <div className="flex justify-between items-center text-[11px] text-slate-400">
-                <span>Verified Prediction Win Rate:</span>
+                <span>Simulated Backtest Accuracy:</span>
                 <span className="text-emerald-400 font-black">{activeAsset.audit.winRatePercent}%</span>
               </div>
               <div className="text-[10px] text-slate-300">

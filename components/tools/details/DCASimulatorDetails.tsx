@@ -29,7 +29,7 @@ export default function DCASimulatorDetails() {
     },
     {
       factor: "Average Cost Basis",
-      dca: "Harmonic mean pricing guarantees more units purchased at market bottoms.",
+      dca: "Harmonic mean pricing mathematically purchases more units at market bottoms.",
       lumpSum: "Locked at a single discrete entry price point for the entire position."
     },
     {
@@ -77,7 +77,7 @@ export default function DCASimulatorDetails() {
     },
     {
       q: "How does Bitcoin's 4-year halving cycle affect DCA returns?",
-      a: "Historically, Bitcoin experiences a 4-year rhythm: halving supply cut, parabolic bull run, 70-80% bear market correction, and multi-year recovery. Running a 3-to-4 year DCA strategy guarantees that your accumulation phase spans the deep discount bear market, resulting in massive asymmetric compounding during the subsequent bull expansion."
+      a: "Historically, Bitcoin experiences a 4-year rhythm: halving supply cut, parabolic bull run, 70-80% bear market correction, and multi-year recovery. Running a multi-year DCA strategy ensures that your accumulation phase spans historical bear market valuation dips, positioning your portfolio for compounding during subsequent cyclical expansions."
     },
     {
       q: "How should I manage exchange transaction fees while DCAing?",

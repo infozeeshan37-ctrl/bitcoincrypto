@@ -661,7 +661,7 @@ export default function CPIMacroAIPredictor() {
                   <span className="font-black text-emerald-600 dark:text-emerald-300 text-sm">48% Prob</span>
                 </div>
                 <div className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-                  <strong>Fed Pivot:</strong> Guarantees aggressive 50bps rate cut in Sep.
+                  <strong>Fed Pivot:</strong> Strongly signals aggressive 50bps rate cut in Sep.
                 </div>
                 <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mt-1">
                   Crypto Reaction: Super Bullish (+6% to +10%) • BTC targets $88K+

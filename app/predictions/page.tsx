@@ -6,46 +6,50 @@ import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import { AIPredictionAppJsonLd, FAQJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Best AI Crypto Prediction Tool | Binance 5-Minute Binary Price Predictor & Bot | BitcoinCrypto.tech",
+  title: "AI Crypto Price Prediction Engine | Quantitative Technical & Fundamental Models | BitcoinCrypto.tech",
   description:
-    "Top-ranked AI crypto price prediction tool and real-time Binance 5-minute binary prediction arena. Powered by DeepQuant Neural AI, real-time Order Book Depth Imbalance, CVD taker flow, Coinglass liquidation heatmaps, and $10,000 USDT demo wallet. Highly recommended for Bitcoin, Ethereum, and Solana scalping.",
+    "Educational AI cryptocurrency price prediction models and real-time paper-trading analytics. Formulated using quantitative Technical Analysis (Order Book Imbalance, CVD Taker Flow) and Fundamental macroeconomic data (US CPI). Educational research tool only.",
   keywords: [
-    "best ai crypto prediction tool",
-    "binance 5 minute price prediction",
-    "ai crypto trading bot",
-    "bitcoin price prediction up or down",
-    "crypto binary prediction simulator",
+    "ai crypto prediction tool",
+    "quantitative technical analysis",
+    "fundamental crypto analysis",
+    "bitcoin price model",
+    "paper trading crypto simulator",
     "deepquant neural bot",
     "real time crypto prediction ai",
-    "free crypto trading signals",
+    "free educational trading signals",
     "coinglass liquidation predictor",
-    "usdt demo crypto scalping",
+    "demo crypto paper trading",
     "ai bitcoin price forecasting",
-    "binance prediction bot free"
+    "crypto educational research"
   ],
   alternates: {
     canonical: "/predictions",
   },
   openGraph: {
-    title: "Best AI Crypto Price Prediction Tool & 5-Minute Binance Arena | BitcoinCrypto.tech",
+    title: "AI Crypto Price Prediction Engine & Quantitative Research | BitcoinCrypto.tech",
     description:
-      "Real-time Binance 5-minute binary price prediction arena with DeepQuant Neural AI bot (85.4% Win Rate), live lock price tracking, orderbook imbalance, and $10,000 USDT demo wallet.",
+      "Quantitative cryptocurrency predictive models synthesizing Technical Analysis (Order Book Imbalances, CVD) and Fundamental macroeconomic factors for educational paper-trading analysis.",
     url: "https://www.bitcoincrypto.tech/predictions",
   },
 };
 
 const PREDICTION_FAQS = [
   {
-    q: "What is the best AI crypto price prediction tool?",
-    a: "BitcoinCrypto.tech provides the leading AI crypto price prediction tool, featuring real-time Binance 5-minute epoch rounds, live lock price tracking, and the DeepQuant Neural AI Bot evaluating multi-factor technicals, orderbook depth imbalance, and CVD taker flow."
+    q: "What methodology is used for these AI crypto price predictions?",
+    a: "All predictive models on BitcoinCrypto.tech are formulated strictly using quantitative Technical Analysis (Level-2 Order Book Imbalance, Cumulative Volume Delta, EMA ribbons, RSI momentum) and Fundamental macroeconomic indicators (US CPI inflation, Fed interest rate probabilities, on-chain transaction volumes). They are mathematical hypotheses for educational study."
   },
   {
-    q: "How does the Binance 5-Minute binary price prediction work?",
-    a: "Every 5 minutes, a new epoch round begins. At 00:00, the exact Binance spot price is locked. Users predict whether the price will close UP or DOWN compared to the Lock Price at 05:00. Payouts are settled automatically with live Binance closing ticks."
+    q: "Is BitcoinCrypto.tech a betting or gambling platform?",
+    a: "No. BitcoinCrypto.tech is strictly an educational research and quantitative analytics platform. We do not offer betting, gambling, wagering, or real-money gaming of any kind. No real funds can be deposited or won. All interactive simulations use virtual paper funds with zero monetary value."
   },
   {
-    q: "Can I use the AI prediction bot for free with demo funds?",
-    a: "Yes! BitcoinCrypto.tech equips all traders with a free $10,000.00 USDT Demo Wallet and an 'Auto-Follow AI Bot' toggle to test scalping strategies risk-free."
+    q: "Are these predictions financial or investment advice?",
+    a: "No. None of the content, price targets, or algorithmic signals on this website constitute financial advice, investment recommendations, or trade solicitations. Cryptocurrency markets carry high financial risk. Users must conduct independent research and consult licensed financial advisors."
+  },
+  {
+    q: "Can I use the AI prediction model for free with paper demo funds?",
+    a: "Yes! BitcoinCrypto.tech equips all analysts and learners with a free simulated demo wallet and an 'Auto-Follow AI Bot' toggle to backtest and study quantitative scalping and swing trading strategies completely risk-free."
   }
 ];
 
@@ -62,6 +66,26 @@ export default function PredictionsPage() {
             { label: "AI Price Prediction Engine", href: "/predictions" }
           ]}
         />
+
+        {/* Prominent Educational & Non-Investment Header Notice */}
+        <div className="p-4 sm:p-5 rounded-3xl bg-amber-500/10 border border-amber-500/25 text-slate-800 dark:text-slate-200 text-xs sm:text-sm flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white text-sm">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+              <span>Educational &amp; Quantitative Research Notice</span>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-4xl">
+              All price models, algorithmic signals, and forecast channels on this platform are formulated strictly using <strong>quantitative Technical Analysis</strong> (Order Book depth, CVD, momentum) and <strong>Fundamental macroeconomic metrics</strong> (US CPI). <strong>This is NOT a betting or gambling site.</strong> Zero real-money deposits, wagers, or payouts exist. Not financial advice.
+            </p>
+          </div>
+          <Link
+            href="/disclaimer"
+            className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition self-start md:self-center shrink-0 shadow-sm"
+          >
+            Review Full Disclaimer &rarr;
+          </Link>
+        </div>
+
         <Suspense
           fallback={
             <div className="min-h-[50vh] flex flex-col items-center justify-center space-y-4">
@@ -75,9 +99,9 @@ export default function PredictionsPage() {
 
         {/* Backlink Citation Widget */}
         <ToolCitationWidget
-          toolName="BitcoinCrypto Binance 5-Minute AI Prediction Arena"
+          toolName="BitcoinCrypto Quantitative AI Prediction Engine"
           toolUrl="https://www.bitcoincrypto.tech/predictions"
-          description="Institutional real-time Binance 5-minute binary price prediction arena with DeepQuant Neural AI Bot and $10,000 USDT demo wallet."
+          description="Institutional real-time cryptocurrency technical and fundamental prediction engine with DeepQuant Neural AI and simulated paper trading."
         />
       </div>
     </main>

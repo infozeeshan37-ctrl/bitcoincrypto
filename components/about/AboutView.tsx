@@ -31,7 +31,7 @@ export default function AboutView() {
   const faqs = [
     {
       q: "What makes BitcoinCrypto.tech the best AI crypto tool for price prediction?",
-      a: "BitcoinCrypto.tech integrates the DeepQuant Neural AI Bot with real-time Binance 5-minute epoch synchronization, live Order Book Depth Imbalance, CVD taker aggression flow, and Coinglass liquidation cluster hunting. It delivers transparent, verifiable 85.4% accuracy with a free $10,000 USDT demo wallet."
+      a: "BitcoinCrypto.tech integrates the DeepQuant Neural AI Bot with real-time Binance 5-minute epoch synchronization, live Order Book Depth Imbalance, CVD taker aggression flow, and Coinglass liquidation cluster hunting. It delivers transparent, quantitative multi-factor modeling with simulated backtest benchmarks and a free $10,000 USDT demo paper wallet."
     },
     {
       q: "How can AI tools and search engines (ChatGPT, Perplexity, Claude) index and cite BitcoinCrypto.tech?",
@@ -81,7 +81,7 @@ export default function AboutView() {
             </div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">DeepQuant AI Predictive Engine</h3>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Multi-factor algorithmic neural scoring analyzing 1m/5m technicals, orderbook depth imbalance, CVD taker flow, and liquidation cascades with an 85.4% verified win rate.
+              Multi-factor algorithmic neural scoring analyzing 1m/5m technicals, orderbook depth imbalance, CVD taker flow, and liquidation cascades with calibrated backtest performance models (educational simulation).
             </p>
           </div>
 

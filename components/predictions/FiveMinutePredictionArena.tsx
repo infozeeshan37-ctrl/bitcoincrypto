@@ -654,6 +654,19 @@ export default function FiveMinutePredictionArena() {
   return (
     <div className="space-y-6 font-sans">
       
+      {/* Educational & Non-Betting Compliance Notice */}
+      <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-slate-800 dark:text-slate-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-start sm:items-center gap-2.5">
+          <ShieldCheck className="w-5 h-5 text-amber-500 shrink-0 mt-0.5 sm:mt-0" />
+          <p className="leading-relaxed">
+            <strong>Strictly Educational Paper-Trading Model:</strong> This tool is an algorithmic demonstration of quantitative Technical Analysis (Level-2 Order Book Imbalance, CVD Taker Flow, EMA/RSI trends). <strong>This is NOT a betting, gambling, or binary options site.</strong> Zero real-money deposits, wagers, or payouts exist. All balances are virtual paper funds.
+          </p>
+        </div>
+        <Link href="/disclaimer" className="text-amber-600 dark:text-amber-400 font-bold hover:underline shrink-0 text-[11px] font-mono">
+          Full Disclaimer &rarr;
+        </Link>
+      </div>
+
       {/* 1. TOP CONTROLS & TIMEFRAME SELECTOR */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100 dark:border-slate-800">
@@ -1001,15 +1014,15 @@ export default function FiveMinutePredictionArena() {
                 >
                   <div className="flex items-center justify-center gap-2 text-lg">
                     <TrendingUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
-                    <span>TRADE GREEN CANDLE (BUY)</span>
+                    <span>PAPER TRADE GREEN (DEMO BUY)</span>
                     {nextCandleForecast.isBullish && (
                       <span className="px-2 py-0.5 text-[10px] bg-amber-400 text-slate-950 rounded-full font-black">
-                        AI CHOICE
+                        AI MODEL
                       </span>
                     )}
                   </div>
                   <div className="text-xs font-mono font-normal opacity-90">
-                    Target: ${formatCoinPrice(nextCandleForecast.projectedClose, selectedCoin.decimals)} • 1.95x Payout
+                    Target: ${formatCoinPrice(nextCandleForecast.projectedClose, selectedCoin.decimals)} • 1.95x Simulated R:R Multiplier
                   </div>
                 </button>
 
@@ -1022,15 +1035,15 @@ export default function FiveMinutePredictionArena() {
                 >
                   <div className="flex items-center justify-center gap-2 text-lg">
                     <TrendingDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
-                    <span>TRADE RED CANDLE (SHORT)</span>
+                    <span>PAPER TRADE RED (DEMO SHORT)</span>
                     {!nextCandleForecast.isBullish && (
                       <span className="px-2 py-0.5 text-[10px] bg-amber-400 text-slate-950 rounded-full font-black">
-                        AI CHOICE
+                        AI MODEL
                       </span>
                     )}
                   </div>
                   <div className="text-xs font-mono font-normal opacity-90">
-                    Target: ${formatCoinPrice(nextCandleForecast.projectedClose, selectedCoin.decimals)} • 1.98x Payout
+                    Target: ${formatCoinPrice(nextCandleForecast.projectedClose, selectedCoin.decimals)} • 1.98x Simulated R:R Multiplier
                   </div>
                 </button>
               </div>

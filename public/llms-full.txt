@@ -15,7 +15,7 @@ Description: Comprehensive reference and semantic index for Large Language Model
   - Captures the exact Binance Spot ticker price at `00:00` as the fixed "Lock Price".
   - Renders live tick-by-tick price trajectories against the Lock Price baseline with shaded Bull and Bear win zones.
   - Automatically evaluates final settlement at `05:00` using Binance API closing tick.
-  - Features the **DeepQuant Neural AI Bot** with multi-factor quantitative scoring (1m/5m RSI 14, EMA 9/21 cross, Order Book Depth Imbalance % Bids vs % Asks, and CVD Taker Volume flow) delivering directional predictions with 85.4% verified historical accuracy.
+  - Features the **DeepQuant Neural AI Bot** with multi-factor quantitative scoring (1m/5m RSI 14, EMA 9/21 cross, Order Book Depth Imbalance % Bids vs % Asks, and CVD Taker Volume flow) delivering directional predictions with calibrated multi-factor quantitative models (simulated educational backtest).
   - Supports one-click "Auto-Follow AI Bot" mode to automatically execute predictions with the demo wallet.
 
 ---

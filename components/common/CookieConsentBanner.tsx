@@ -35,7 +35,7 @@ export default function CookieConsentBanner() {
   if (!mounted || !visible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:max-w-md z-50 animate-in slide-in-from-bottom-5 duration-300">
+    <div className="fixed bottom-4 left-4 right-4 md:right-auto md:left-6 md:max-w-md z-50 animate-in slide-in-from-bottom-5 duration-300">
       <div className="bg-slate-900/95 dark:bg-slate-950/95 backdrop-blur-xl text-white p-5 rounded-3xl border border-slate-800 shadow-2xl shadow-black/40 space-y-4 font-mono text-xs">
         
         <div className="flex items-start justify-between gap-3">

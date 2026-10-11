@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const title = `${coin.name} (${coin.symbol}) AI Price Prediction — 24h, 7d & 30d Quantitative Forecast`;
-  const description = `Live ${coin.name} (${coin.symbol}) AI price prediction with 98.6% confluence. Discover 24-hour, 7-day, and 30-day forecast channels, on-chain MVRV metrics, technical setups, and institutional support/resistance levels.`;
+  const description = `Live ${coin.name} (${coin.symbol}) quantitative AI price prediction model. Discover 24-hour, 7-day, and 30-day forecast channels, on-chain MVRV metrics, technical setups, and institutional support/resistance levels.`;
   const canonicalUrl = `https://www.bitcoincrypto.tech/predictions/${coin.slug}`;
 
   return {
@@ -114,11 +114,12 @@ export default async function CoinPredictionPage({ params }: PageProps) {
     })),
   };
 
-  // Generate Financial Product / WebPage Schema
+  // Generate WebApplication / Educational Tool Schema
   const webPageSchema = {
     "@context": "https://schema.org",
-    "@type": "FinancialProduct",
+    "@type": "WebApplication",
     "name": `${coin.name} (${coin.symbol}) AI Quantitative Price Forecast`,
+    "applicationCategory": "EducationalApplication",
     "description": coin.summaryThesis,
     "provider": {
       "@type": "Organization",

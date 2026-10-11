@@ -17,7 +17,7 @@ declare global {
 }
 
 export default function AdBanner({
-  slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID || "1234567890",
+  slotId = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID,
   format = "auto",
   responsive = true,
   className = "",
@@ -27,7 +27,12 @@ export default function AdBanner({
   const [adLoaded, setAdLoaded] = useState(false);
   const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-5486114901283025";
 
+  // Google AdSense Policy Compliance: Only render manual ad unit if a valid numeric slot ID is provided
+  // (Prevents broken 400 requests and empty placeholder boxes that trigger AdSense policy violations)
+  const isValidSlot = Boolean(slotId && slotId !== "1234567890" && /^\d{6,14}$/.test(slotId.trim()));
+
   useEffect(() => {
+    if (!isValidSlot) return;
     try {
       if (typeof window !== "undefined" && adRef.current) {
         // Push ad request to Google AdSense queue
@@ -37,7 +42,13 @@ export default function AdBanner({
     } catch (err) {
       console.warn("AdSense push error or ad-blocker detected:", err);
     }
-  }, []);
+  }, [isValidSlot]);
+
+  // If no valid manual ad slot is configured, gracefully return null.
+  // Google Auto Ads (configured globally in layout) handles optimal responsive ad placements without empty boxes.
+  if (!isValidSlot) {
+    return null;
+  }
 
   return (
     <div className={`w-full my-6 text-center overflow-hidden flex flex-col items-center justify-center ${className}`}>

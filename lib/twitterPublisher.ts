@@ -260,7 +260,7 @@ Try the interactive model directly in your browser:
 export async function publishTweet(
   tweetText: string,
   credentials?: TwitterCredentials
-): Promise<{ success: boolean; tweetId?: string; error?: string }> {
+): Promise<{ success: boolean; tweetId?: string; error?: string; rawError?: any }> {
   const apiKey =
     credentials?.apiKey ||
     process.env.TWITTER_API_KEY ||

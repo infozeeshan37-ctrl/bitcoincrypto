@@ -52,7 +52,7 @@ const toolConfigs: Record<string, ToolConfig> = {
     description: "Execute data-driven trading strategies with our institutional AI Trading Bot. Get real-time buy/sell signals, dynamic trailing stops, and multi-timeframe confirmation for Bitcoin, Ethereum, and major altcoins.",
     keywords: ["crypto ai trading bot", "automated trading signals", "bitcoin algorithmic trading", "crypto risk copilot", "crypto momentum indicator"],
     features: [
-      "98.6% Historical Confluence Accuracy",
+      "Multi-Indicator Technical Confluence (Simulated Backtest Model)",
       "Dynamic Stop-Loss and Take-Profit Calculation",
       "Multi-Exchange Real-Time WebSocket Pricing",
       "Continuous Pattern & Order Book Imbalance Detection"

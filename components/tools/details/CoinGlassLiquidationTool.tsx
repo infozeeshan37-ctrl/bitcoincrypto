@@ -673,7 +673,7 @@ export default function CoinGlassLiquidationTool() {
       badge: "High Asymmetric R:R (1:4+)",
       icon: Zap,
       color: "border-emerald-500/40 bg-emerald-500/5",
-      overview: "When aggregate Coinglass Open Interest reaches record highs and price consolidates in a tight multi-day coiling pattern, a multi-tier liquidation cascade is guaranteed upon breakout.",
+      overview: "When aggregate Coinglass Open Interest reaches record highs and price consolidates in a tight multi-day coiling pattern, a multi-tier liquidation cascade is highly probable upon breakout.",
       steps: [
         "Confirm that Open Interest on Coinglass has expanded for 3+ consecutive days while 24h Realized Volatility has contracted.",
         "Identify stacked liquidation tiers on the Coinglass Heatmap: 100x -> 50x -> 25x -> 10x all positioned in the same directional vector.",

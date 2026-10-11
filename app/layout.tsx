@@ -8,7 +8,6 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import CommandPalette from "@/components/common/CommandPalette";
 import ChatWidget from "@/components/chat/ChatWidget";
 import CookieConsentBanner from "@/components/common/CookieConsentBanner";
-import AdSenseScript from "@/components/ads/AdSenseScript";
 import { WebSiteJsonLd, OrganizationJsonLd, SoftwareAppJsonLd } from "@/components/seo/JsonLd";
 
 const plusJakarta = Plus_Jakarta_Sans({

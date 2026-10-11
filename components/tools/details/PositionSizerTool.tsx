@@ -72,7 +72,7 @@ export default function PositionSizerTool() {
     },
     {
       q: "What is the Half-Kelly Criterion and how does it prevent blowups?",
-      a: "The Kelly Criterion calculates the mathematically optimal fraction of bankroll to wager to maximize geometric growth. Full Kelly is known to produce high volatility and severe drawdowns; 'Half-Kelly' halves the wager fraction to achieve 75% of maximum growth with 50% less portfolio variance."
+      a: "The Kelly Criterion calculates the mathematically optimal fraction of portfolio capital to allocate to maximize long-term geometric compounding. Full Kelly is known to produce high volatility and severe drawdowns; 'Half-Kelly' halves the allocation fraction to achieve 75% of maximum growth with 50% less portfolio variance."
     },
     {
       q: "How does my Stop-Loss distance dictate my position size?",

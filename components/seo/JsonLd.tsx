@@ -336,7 +336,7 @@ export function SoftwareAppJsonLd() {
     },
     featureList: [
       "Binance Real-Time 5-Minute Binary Price Prediction Arena",
-      "DeepQuant Neural AI 5-Minute Scalping Bot (85.4% Win Rate)",
+      "DeepQuant Neural AI 5-Minute Scalping Bot (Simulated Backtest Model)",
       "Real-Time Coinglass Derivatives & Liquidation Heatmap",
       "High-Throughput Order Book Depth & CVD Taker Flow Terminal",
       "Dynamic Volatility-Weighted DCA Calculator & Simulator",
