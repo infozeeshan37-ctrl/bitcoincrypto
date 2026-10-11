@@ -24,7 +24,8 @@ import {
   Search,
   FileText,
   Sliders,
-  ExternalLink
+  ExternalLink,
+  BookMarked
 } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
@@ -148,6 +149,25 @@ export default function CryptoLearnView() {
                 The institutional masterclass for digital asset traders and researchers. Spanning 10 core chapters and 100 human-written research articles, master on-chain valuation ratios, market structure price action, Level-2 order book depth, CoinGlass liquidation squeeze cascades, and mathematical risk management with live interactive cursor charts.
               </p>
 
+              {/* ACTION BUTTONS IN HERO */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <button
+                  onClick={() => handleOpenPdf(activeChapter)}
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-amber-500 hover:from-emerald-400 hover:to-amber-400 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/25"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download Chapter {activeChapter.chapterNumber} PDF Book</span>
+                </button>
+
+                <a
+                  href="#pdf-library"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs font-mono transition border border-white/10"
+                >
+                  <BookMarked className="w-4 h-4 text-amber-400" />
+                  <span>Browse All 10 PDF Books ↓</span>
+                </a>
+              </div>
+
               <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-mono text-slate-300">
                 <span className="flex items-center gap-1.5">
                   <BookOpen className="w-4 h-4 text-emerald-400" /> 10 Chapters (100 Articles)
@@ -190,14 +210,63 @@ export default function CryptoLearnView() {
                 </button>
               </div>
 
+              {/* DEDICATED HIGH-CONTRAST DOWNLOAD BUTTON */}
               <button
                 onClick={() => handleOpenPdf(activeChapter)}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/20"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/20 group"
               >
-                <Download className="w-4 h-4" />
-                <span>Download Chapter {activeChapter.chapterNumber} PDF</span>
+                <Download className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span>📥 Download Chapter {activeChapter.chapterNumber} PDF</span>
               </button>
             </div>
+          </div>
+        </section>
+
+        {/* 📚 DEDICATED CHAPTER PDF EBOOK DOWNLOAD LIBRARY (UNMISSABLE QUICK-ACCESS) */}
+        <section id="pdf-library" className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border-2 border-emerald-500/30 text-white shadow-xl space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                <Download className="w-3.5 h-3.5" />
+                <span>OFFLINE EBOOK LIBRARY (10 BOOKS)</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Download Individual Chapter PDF Books
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400">
+                Save any of the 10 course chapters to your device as a formatted A4 PDF book for offline reading. Zero ads, complete mathematical formulas, and full study notes.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {courseChapters.map((ch) => (
+              <div
+                key={ch.id}
+                className="p-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 hover:border-emerald-500/50 transition flex flex-col justify-between space-y-3"
+              >
+                <div>
+                  <div className="flex items-center justify-between text-[10px] font-mono mb-1">
+                    <span className="font-bold text-amber-400">Chapter {ch.chapterNumber}</span>
+                    <span className="text-slate-400">{ch.badge}</span>
+                  </div>
+                  <h3 className="text-xs font-bold text-white line-clamp-2 leading-snug">
+                    {ch.title}
+                  </h3>
+                  <span className="text-[10px] text-slate-400 font-mono block mt-1">
+                    {ch.lessons.length} Articles • {ch.estimatedTime}
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => handleOpenPdf(ch)}
+                  className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[11px] font-mono transition shadow-sm"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download PDF</span>
+                </button>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -326,8 +395,20 @@ export default function CryptoLearnView() {
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-slate-400">{chapter.lessons.length} Articles</span>
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 text-[10px] font-mono">
+                  {/* DIRECT PDF DOWNLOAD ON EACH CARD */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenPdf(chapter);
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[10px] transition shadow-sm"
+                    title={`Download Chapter ${chapter.chapterNumber} PDF`}
+                  >
+                    <Download className="w-3 h-3" />
+                    <span>PDF</span>
+                  </button>
+
                   {isChapterFinished ? (
                     <span className="text-emerald-500 font-bold flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" /> Done
@@ -365,17 +446,17 @@ export default function CryptoLearnView() {
             <div className="flex flex-wrap items-center gap-3 shrink-0 self-start md:self-auto">
               <button
                 onClick={() => handleOpenPdf(activeChapter)}
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs font-mono transition shadow-md shadow-emerald-500/20"
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-amber-500 hover:from-emerald-400 hover:to-amber-400 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/20"
               >
                 <Download className="w-4 h-4" />
-                <span>Download Chapter PDF eBook</span>
+                <span>Download Chapter {activeChapter.chapterNumber} PDF eBook</span>
               </button>
 
               <Link
                 href={activeChapter.linkedTool.href}
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs transition shadow-md shadow-amber-400/20"
+                className="inline-flex items-center gap-2 px-4 py-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-xs transition border border-slate-200 dark:border-slate-700"
               >
-                <Zap className="w-4 h-4" />
+                <Zap className="w-4 h-4 text-amber-500" />
                 <span>{activeChapter.linkedTool.actionText}</span>
               </Link>
             </div>
@@ -403,7 +484,13 @@ export default function CryptoLearnView() {
                 <BookOpen className="w-5 h-5 text-amber-500" />
                 <span>Chapter {activeChapter.chapterNumber} Articles ({activeChapter.lessons.length} Total)</span>
               </h3>
-              <span className="text-xs font-mono text-slate-400">100% Original Human Analysis</span>
+              <button
+                onClick={() => handleOpenPdf(activeChapter)}
+                className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-600 dark:text-emerald-400 hover:underline font-bold"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Download this chapter as PDF eBook</span>
+              </button>
             </div>
 
             <div className="space-y-6">
@@ -426,8 +513,18 @@ export default function CryptoLearnView() {
                         </h4>
                       </div>
 
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5">
+                        <button
+                          onClick={() => handleOpenPdf(activeChapter)}
+                          className="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-mono text-xs font-black transition flex items-center gap-1.5 shadow-sm"
+                          title="Download Chapter PDF eBook"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>PDF Book</span>
+                        </button>
+
                         <span className="text-xs font-mono text-slate-400">{lesson.duration}</span>
+
                         <button
                           onClick={() => toggleLessonComplete(lesson.id)}
                           className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition flex items-center gap-1.5 ${
@@ -614,6 +711,17 @@ export default function CryptoLearnView() {
           toolName="Crypto Learn Masterclass"
           description="Complete 10-Chapter institutional curriculum spanning 100 human-written articles on fundamental on-chain valuation, market microstructure, derivatives liquidations, and capital preservation."
         />
+      </div>
+
+      {/* FLOATING ACTION PILL: ALWAYS VISIBLE AS USER SCROLLS */}
+      <div className="fixed bottom-6 right-6 z-40 print:hidden">
+        <button
+          onClick={() => handleOpenPdf(activeChapter)}
+          className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full bg-gradient-to-r from-emerald-500 to-amber-500 hover:from-emerald-400 hover:to-amber-400 text-slate-950 font-black text-xs font-mono shadow-2xl shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all border-2 border-white/20"
+        >
+          <Download className="w-4 h-4 animate-bounce" />
+          <span>Download Chapter {activeChapter.chapterNumber} PDF</span>
+        </button>
       </div>
 
       {/* CHAPTER PDF MODAL */}
