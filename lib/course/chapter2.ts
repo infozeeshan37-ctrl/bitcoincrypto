@@ -18,6 +18,17 @@ export const chapter2: CourseChapter = {
     href: "/tools/chart-terminal",
     actionText: "Analyze L1 Assets on Chart Terminal →"
   },
+  references: [
+    { title: "Ethereum: A Next-Generation Smart Contract & Decentralized Application Platform", url: "https://ethereum.org/en/whitepaper/", source: "Vitalik Buterin", type: "Primary Source" },
+    { title: "EIP-1559: Fee Market Change for ETH 1.0 Chain", url: "https://eips.ethereum.org/EIPS/eip-1559", source: "Ethereum Improvement Proposals", type: "Primary Source" },
+    { title: "Why Proof of Stake: Economic Cryptoeconomic Security Models", url: "https://vitalik.eth.limo/general/2020/11/06/pos2020.html", source: "Vitalik Buterin Research", type: "Academic" },
+    { title: "Solana Proof-of-History Architecture & High-Performance Blockchain Specs", url: "https://docs.solanalabs.com/", source: "Solana Labs", type: "Primary Source" }
+  ],
+  relatedInternalLinks: [
+    { title: "Ethereum (ETH) 30-Day AI Price Prediction & Volatility Corridor", href: "/predictions/ethereum", badge: "AI Forecast", description: "Deep neural net projections, gas burn velocity, and support/resistance for ETH." },
+    { title: "Solana (SOL) High-Beta AI Price Projection", href: "/predictions/solana", badge: "AI Forecast", description: "Algorithmic momentum and DeFi TVL correlation models for Solana." },
+    { title: "Spot Market Rankings & L1 Comparison Terminal", href: "/markets", badge: "Live Terminal", description: "Real-time market cap, volume, and 24h order flow across top Layer-1 ecosystems." }
+  ],
   lessons: [
     {
       id: "c2-l1",

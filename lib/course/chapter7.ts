@@ -18,6 +18,17 @@ export const chapter7: CourseChapter = {
     href: "/tools/chart-terminal",
     actionText: "Apply Momentum Indicators on Chart Terminal →"
   },
+  references: [
+    { title: "New Concepts in Technical Trading Systems: RSI, ATR & Momentum Formulation", url: "https://www.investopedia.com/terms/r/rsi.asp", source: "J. Welles Wilder Research", type: "Primary Source" },
+    { title: "Anchored VWAP: Evaluating True Market Benchmark Cost Basis", url: "https://alphatrends.net/", source: "Brian Shannon Research", type: "Primary Source" },
+    { title: "Bollinger on Bollinger Bands: Volatility Envelopes & Standard Deviation Bands", url: "https://www.bollingerbands.com/", source: "John Bollinger Research", type: "Academic" },
+    { title: "Moving Average Convergence Divergence (MACD) Mathematical Models", url: "https://www.investopedia.com/terms/m/macd.asp", source: "Gerald Appel Systems", type: "Primary Source" }
+  ],
+  relatedInternalLinks: [
+    { title: "Crypto Fear & Greed Index Sentiment Gauge", href: "/tools/fear-greed-index", badge: "Sentiment", description: "Quantify retail crowd euphoria vs despair across multi-factor momentum indicators." },
+    { title: "TradingView Pro Chart Terminal", href: "/tools/chart-terminal", badge: "Live Charting", description: "Apply RSI 14, MACD, Bollinger Squeezes, and Anchored VWAP with live data." },
+    { title: "AI Trading Signals & Copilot Terminal", href: "/tools/trading-bot", badge: "AI Signals", description: "Multi-indicator confluence scoring engine delivering algorithmic entry alerts." }
+  ],
   lessons: [
     {
       id: "c7-l1",

@@ -18,6 +18,17 @@ export const chapter3: CourseChapter = {
     href: "/tools/macro-battles",
     actionText: "Track Macro Economic Indicators →"
   },
+  references: [
+    { title: "Federal Reserve Economic Data (FRED): M2 Money Supply", url: "https://fred.stlouisfed.org/series/M2SL", source: "Federal Reserve Bank of St. Louis", type: "Government / Fed" },
+    { title: "Federal Reserve Balance Sheet Assets (WALCL)", url: "https://fred.stlouisfed.org/series/WALCL", source: "Federal Reserve Board of Governors", type: "Government / Fed" },
+    { title: "US Bureau of Labor Statistics: Consumer Price Index (CPI) Datasets", url: "https://www.bls.gov/cpi/", source: "US Bureau of Labor Statistics", type: "Government / Fed" },
+    { title: "Bank for International Settlements (BIS) Global Liquidity Indicators", url: "https://www.bis.org/statistics/gli.htm", source: "Bank for International Settlements", type: "Academic" }
+  ],
+  relatedInternalLinks: [
+    { title: "US CPI Inflation AI Predictor & Schedule", href: "/cpi", badge: "AI Forecaster", description: "Real-time CPI consensus predictions, market expectations, and historical BTC volatility impact." },
+    { title: "Real-Time Macroeconomic News Wire", href: "/news", badge: "Live Feed", description: "Breaking central bank statements, FOMC rate probabilities, and liquidity alerts." },
+    { title: "Spot Market Capitalization Rankings", href: "/markets", badge: "Terminal", description: "Real-time pricing, volume, and market breadth across the entire digital asset ecosystem." }
+  ],
   lessons: [
     {
       id: "c3-l1",

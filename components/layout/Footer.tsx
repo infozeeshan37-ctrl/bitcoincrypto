@@ -239,23 +239,29 @@ export default function Footer() {
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
               <Landmark className="w-3.5 h-3.5 text-amber-400" />
-              Official External Data Sources &amp; Regulatory References (E-E-A-T Verified):
+              Official External Data Sources &amp; Regulatory References (E-E-A-T Verified Outbound Citations):
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-[11px]">
             {[
               { label: "US BLS (CPI Inflation)", url: "https://www.bls.gov/cpi/" },
-              { label: "St. Louis Fed (FRED)", url: "https://fred.stlouisfed.org/" },
+              { label: "St. Louis Fed (FRED M2)", url: "https://fred.stlouisfed.org/" },
               { label: "US SEC (EDGAR Filings)", url: "https://www.sec.gov/edgar/searchedgar/companysearch" },
               { label: "Federal Reserve FOMC", url: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" },
+              { label: "Cambridge CBECI Index", url: "https://ccaf.io/cbeci/index" },
+              { label: "Bank for Intl Settl. (BIS)", url: "https://www.bis.org/" },
+              { label: "CME Group Crypto Futures", url: "https://www.cmegroup.com/markets/cryptocurrencies.html" },
+              { label: "Deribit Derivatives Index", url: "https://www.deribit.com/" },
+              { label: "Glassnode Academy On-Chain", url: "https://academy.glassnode.com/" },
+              { label: "BitMEX Quantitative Research", url: "https://blog.bitmex.com/research/" },
               { label: "Binance API Docs", url: "https://developers.binance.com/" },
               { label: "TradingView Charts", url: "https://www.tradingview.com/" },
               { label: "CoinGlass Portal", url: "https://www.coinglass.com/" },
-              { label: "CoinMarketCap", url: "https://coinmarketcap.com/" },
-              { label: "CoinGecko API", url: "https://www.coingecko.com/" },
-              { label: "DefiLlama TVL", url: "https://defillama.com/" },
-              { label: "Bitcoin Whitepaper", url: "https://bitcoin.org/bitcoin.pdf" },
-              { label: "Ethereum.org Specs", url: "https://ethereum.org/" },
+              { label: "DefiLlama Analytics", url: "https://defillama.com/" },
+              { label: "Bitcoin Whitepaper (Nakamoto)", url: "https://bitcoin.org/bitcoin.pdf" },
+              { label: "Ethereum.org Yellowpaper Specs", url: "https://ethereum.org/" },
+              { label: "CoinMarketCap Data", url: "https://coinmarketcap.com/" },
+              { label: "CoinGecko API System", url: "https://www.coingecko.com/" },
             ].map((ext) => (
               <a
                 key={ext.label}
@@ -264,9 +270,44 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="px-2.5 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-850 hover:text-amber-300 text-slate-400 border border-slate-800 transition font-mono flex items-center justify-between"
               >
-                <span>{ext.label}</span>
-                <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
+                <span className="truncate">{ext.label}</span>
+                <ExternalLink className="w-2.5 h-2.5 text-slate-500 shrink-0 ml-1" />
               </a>
+            ))}
+          </div>
+        </div>
+
+        {/* SEO Cross-Linking Directory Section: Crypto Learn Masterclass Chapters */}
+        <div className="space-y-3 pt-2 border-b border-slate-800 pb-8">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
+              Crypto Learn Masterclass Curriculum (10 Chapters &amp; 100 Comprehensive Lessons):
+            </span>
+            <Link href="/learn" className="text-[11px] text-emerald-400 hover:underline font-mono">
+              View All 100 Lessons &rarr;
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-[11px]">
+            {[
+              { label: "Ch 1: Bitcoin Foundations & Consensus", href: "/learn#bitcoin-foundations" },
+              { label: "Ch 2: Ethereum EVM & Smart Contracts", href: "/learn#ethereum-smart-contracts" },
+              { label: "Ch 3: Macro Liquidity & Fed Policy", href: "/learn#macro-economics-crypto" },
+              { label: "Ch 4: On-Chain Valuation & MVRV", href: "/learn#onchain-metrics-valuation" },
+              { label: "Ch 5: Candlestick & Auction Theory", href: "/learn#candlesticks-market-structure" },
+              { label: "Ch 6: Order Flow, CVD & Depth", href: "/learn#order-flow-liquidity-orderbook" },
+              { label: "Ch 7: Technical Confluence & Indicators", href: "/learn#technical-indicators-strategies" },
+              { label: "Ch 8: Market Microstructure & HFT", href: "/learn#crypto-market-microstructure" },
+              { label: "Ch 9: Derivatives, Funding & Greeks", href: "/learn#derivatives-futures-options" },
+              { label: "Ch 10: Quantitative Risk & Kelly", href: "/learn#risk-management-psychology" },
+            ].map((ch) => (
+              <Link
+                key={ch.label}
+                href={ch.href}
+                className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-emerald-950/80 hover:text-emerald-300 text-slate-400 border border-slate-800 transition font-mono truncate"
+              >
+                {ch.label} &rarr;
+              </Link>
             ))}
           </div>
         </div>

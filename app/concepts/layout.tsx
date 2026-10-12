@@ -4,6 +4,16 @@ export const metadata: Metadata = {
   title: "Cryptocurrency Financial Concepts, Market Microstructure & Masterclasses | BitcoinCrypto.tech",
   description:
     "Institutional education masterclasses on Bitcoin market structure, order flow mechanics, derivatives funding rates, volatility regimes, and on-chain valuation models.",
+  keywords: [
+    "crypto financial concepts",
+    "market microstructure crypto",
+    "order book depth education",
+    "crypto funding rates explained",
+    "on-chain valuation metrics",
+    "mvrv z score bitcoin",
+    "dollar cost averaging math",
+    "crypto masterclass free"
+  ],
   alternates: {
     canonical: "/concepts",
   },

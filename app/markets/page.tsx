@@ -6,8 +6,20 @@ import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
-  title: "Crypto Markets & Coin Rankings | Spot Prices & Volume",
-  description: "Real-time cryptocurrency market prices, market cap rankings, 24h trading volume, top gainers, and dominance indicators on BitcoinCrypto.tech.",
+  title: "Crypto Markets & Coin Rankings Live | Spot Prices, Volume & Market Cap — BitcoinCrypto.tech",
+  description: "Real-time cryptocurrency market cap rankings, 24h spot trading volume, top gainers/losers, interactive 7d sparklines, and Bitcoin dominance metrics on BitcoinCrypto.tech.",
+  keywords: [
+    "cryptocurrency market cap rankings",
+    "live crypto prices",
+    "top crypto gainers volume",
+    "coinmarketcap alternative",
+    "bitcoin market dominance live",
+    "24h crypto volume rankings",
+    "spot crypto markets terminal",
+    "crypto price tracker live",
+    "altcoin market cap live",
+    "ethereum solana btc price today"
+  ],
   alternates: {
     canonical: "https://www.bitcoincrypto.tech/markets",
   },

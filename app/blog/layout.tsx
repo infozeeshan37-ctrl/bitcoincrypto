@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Institutional Research Desk, Macroeconomic Papers & Crypto Analysis | BitcoinCrypto.tech",
+  title: "Crypto Research Desk: Liquidation Heatmaps, Funding Rates & Macro Analysis | BitcoinCrypto.tech",
   description:
-    "Comprehensive research papers on Yield Curve Control, monetary debasement, Bitcoin cycle trajectories, Ethereum Layer-1 economics, Ethena basis dynamics, and decentralized AI compute.",
+    "Institutional cryptocurrency research papers: CoinGlass liquidation heatmap guides, perpetual funding rate basis arbitrage, Level-2 order book depth, Bitcoin DCA cycle math, and AI quantitative models.",
+  keywords: [
+    "crypto research desk",
+    "coinglass liquidation heatmap guide",
+    "crypto funding rates analysis",
+    "order book depth microstructure",
+    "bitcoin dca math halving cycles",
+    "ai crypto prediction models",
+    "macro liquidity crypto",
+    "yield curve control bitcoin",
+    "crypto derivatives research"
+  ],
   alternates: {
     canonical: "/blog",
   },

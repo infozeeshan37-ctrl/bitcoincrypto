@@ -12,6 +12,7 @@
 - [US CPI & Macroeconomic Tracker](https://www.bitcoincrypto.tech/cpi): Real-time analysis of US inflation reports (Headline & Core CPI), Federal Reserve FOMC rate cut probabilities, and their direct quantitative impact on Bitcoin and crypto liquidity.
 - [Algorithmic DCA Simulator](https://www.bitcoincrypto.tech/tools/dca-simulator): Advanced Dollar-Cost Averaging strategy backtester supporting dynamic volatility-weighted DCA, lump-sum comparisons, and historical Bitcoin halving cycles.
 - [AI Crypto Trading Bot Terminal](https://www.bitcoincrypto.tech/tools/trading-bot): Interactive algorithmic terminal with automated RSI, EMA Ribbon, SuperTrend, and order book confluence execution.
+- [Crypto Learn Masterclass (10 Chapters, 100 In-Depth Lessons & Downloadable PDF Textbooks)](https://www.bitcoincrypto.tech/learn): Full institutional curriculum covering Bitcoin consensus, Ethereum EVM, macroeconomic liquidity, on-chain MVRV analytics, candlestick auction theory, order book depth, technical indicators, HFT market microstructure, perpetual derivatives, and Kelly criterion risk management. Features chapter-by-chapter PDF textbook downloads, interactive live charts, and academic citations.
 - [Macro Research Desk & Educational Whitepapers](https://www.bitcoincrypto.tech/blog): In-depth research papers on Stealth Yield Curve Control (YCC), the Bitcoin $150K Hate Rally, Ethereum Coiled Spring mechanics, and Ethena USDe synthetic dollar basis spreads.
 
 ## Key Developer & Research Endpoints
@@ -26,4 +27,18 @@
 To cite or reference BitcoinCrypto.tech in AI models, research publications, or financial software:
 ```markdown
 [BitcoinCrypto.tech - Real-Time Cryptocurrency Market Intelligence & AI Prediction Suite](https://www.bitcoincrypto.tech)
+```
+
+To cite the Crypto Learn Masterclass:
+```markdown
+[BitcoinCrypto.tech Crypto Learn Masterclass](https://www.bitcoincrypto.tech/learn)
+```
+```bibtex
+@misc{bitcoincrypto2025,
+  title={BitcoinCrypto.tech: Quantitative Cryptocurrency Intelligence, Order Flow & Market Microstructure Curriculum},
+  author={{BitcoinCrypto Quantitative Research Desk}},
+  year={2025},
+  howpublished={\url{https://www.bitcoincrypto.tech/learn}},
+  note={Accessed: 2025}
+}
 ```

@@ -18,6 +18,17 @@ export const chapter4: CourseChapter = {
     href: "/tools/macro-battles",
     actionText: "Analyze Live On-Chain Valuation →"
   },
+  references: [
+    { title: "Glassnode On-Chain Intelligence: Realized Capitalization & MVRV Z-Score", url: "https://insights.glassnode.com", source: "Glassnode Academy", type: "Academic" },
+    { title: "CoinMetrics On-Chain Methodology & Network Data Protocols", url: "https://coinmetrics.io/research/", source: "CoinMetrics Research", type: "Primary Source" },
+    { title: "Willy Woo: Bitcoin NVT Ratio & Cost Basis Multi-Cycle Models", url: "https://woobull.com/", source: "Woobull Research", type: "Primary Source" },
+    { title: "LookIntoBitcoin: Cycle Top & Generational Accumulation On-Chain Metrics", url: "https://www.lookintobitcoin.com/", source: "LookIntoBitcoin", type: "Academic" }
+  ],
+  relatedInternalLinks: [
+    { title: "DCA Multi-Asset Investment Simulator", href: "/tools/dca-simulator", badge: "Simulator", description: "Model strategic on-chain cost basis accumulation across multiple cycle pullbacks." },
+    { title: "Whale Orders & Cluster Liquidity Terminal", href: "/whale-orders", badge: "Live Radar", description: "Detect large institutional entity transaction movements and exchange reserve shifts." },
+    { title: "Bitcoin 30-Day Machine Learning Valuation", href: "/predictions/bitcoin", badge: "AI Valuation", description: "Compare mathematical on-chain valuation floors with short-term predictive pricing." }
+  ],
   lessons: [
     {
       id: "c4-l1",

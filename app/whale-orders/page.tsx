@@ -8,9 +8,22 @@ import AdBanner from "@/components/ads/AdBanner";
 import { WhaleOrdersPageJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Whale Orders & Institutional Liquidity Heatmap Radar | BitcoinCrypto.tech",
+  title: "Crypto Whale Orders Live & Institutional Liquidity Radar | BitcoinCrypto.tech",
   description:
-    "Real-time cryptocurrency whale order tracking, multi-million dollar institutional block trades, resting limit buy/sell walls, and CoinGlass-style liquidity heatmaps on BitcoinCrypto.tech.",
+    "Free real-time cryptocurrency whale order tracking: multi-million dollar institutional block trades, resting limit buy/sell walls, iceberg execution alerts, and CoinGlass-style liquidity radar across Binance, Bybit, and OKX.",
+  keywords: [
+    "crypto whale tracker live",
+    "bitcoin whale alert real time",
+    "whale orders crypto",
+    "institutional block trades crypto",
+    "resting limit walls crypto",
+    "iceberg order detection",
+    "large crypto transactions radar",
+    "crypto order flow whale orders",
+    "coinglass whale tracker",
+    "whale wallet tracker live",
+    "bitcoin whale trades binance"
+  ],
   alternates: {
     canonical: "https://www.bitcoincrypto.tech/whale-orders",
   },

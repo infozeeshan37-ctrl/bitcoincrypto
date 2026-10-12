@@ -18,6 +18,17 @@ export const chapter1: CourseChapter = {
     href: "/tools/dca-simulator",
     actionText: "Simulate Halving DCA Cycles →"
   },
+  references: [
+    { title: "Bitcoin: A Peer-to-Peer Electronic Cash System", url: "https://bitcoin.org/bitcoin.pdf", source: "Satoshi Nakamoto", type: "Primary Source" },
+    { title: "Cambridge Bitcoin Electricity Consumption Index (CBECI)", url: "https://ccaf.io/cbeci/index", source: "Cambridge Centre for Alternative Finance", type: "Academic" },
+    { title: "Bitcoin Core Protocol Rules & BIP Repository", url: "https://github.com/bitcoin/bitcoin", source: "Bitcoin Core Developers", type: "Primary Source" },
+    { title: "SEC Spot Bitcoin ETP Approval Order (Release No. 34-99306)", url: "https://www.sec.gov/files/rules/other/2024/34-99306.pdf", source: "US Securities and Exchange Commission", type: "Regulatory" }
+  ],
+  relatedInternalLinks: [
+    { title: "Bitcoin (BTC) AI Price Prediction & 30-Day Volatility Model", href: "/predictions/bitcoin", badge: "AI Forecast", description: "Real-time algorithmic forecasts and support/resistance channels for Bitcoin." },
+    { title: "Dollar-Cost Averaging (DCA) Multi-Asset Simulator", href: "/tools/dca-simulator", badge: "Interactive Tool", description: "Simulate harmonic-mean accumulation across Bitcoin 4-year halving cycles." },
+    { title: "Level-2 Order Book Terminal", href: "/orderbook", badge: "Live Data", description: "Inspect institutional resting bid/ask depth for BTC across major spot exchanges." }
+  ],
   lessons: [
     {
       id: "c1-l1",

@@ -18,6 +18,17 @@ export const chapter5: CourseChapter = {
     href: "/tools/chart-terminal",
     actionText: "Practice Technical Charting on Terminal →"
   },
+  references: [
+    { title: "TradingView Charting Engine & Pine Script Algorithmic Framework", url: "https://www.tradingview.com/", source: "TradingView Financial Data", type: "Primary Source" },
+    { title: "CFA Institute: Technical Analysis Principles & Market Behavior", url: "https://www.cfainstitute.org/", source: "CFA Institute Global Curriculum", type: "Academic" },
+    { title: "Japanese Candlestick Charting Techniques: Auction Theory", url: "https://www.investopedia.com/terms/c/candlestick.asp", source: "Steve Nison Research", type: "Primary Source" },
+    { title: "Wyckoff Method: Accumulation, Distribution & Composite Operator Dynamics", url: "https://school.stockcharts.com/doku.php?id=market_analysis:the_wyckoff_method", source: "Wyckoff Educational Foundation", type: "Academic" }
+  ],
+  relatedInternalLinks: [
+    { title: "TradingView Pro Interactive Chart Terminal", href: "/tools/chart-terminal", badge: "Live Charting", description: "Real-time candlestick charts with multi-timeframe indicators and drawing tools." },
+    { title: "AI Trading Signals & Copilot Terminal", href: "/tools/trading-bot", badge: "AI Signals", description: "Algorithmic momentum and multi-timeframe trend confluence execution assistant." },
+    { title: "Quantitative Trading Concepts & Educational Guides", href: "/concepts", badge: "Guides", description: "Deep-dive mathematical primers on market structure, liquidity, and indicators." }
+  ],
   lessons: [
     {
       id: "c5-l1",

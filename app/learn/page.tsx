@@ -49,8 +49,30 @@ export default function LearnPage() {
     "provider": {
       "@type": "Organization",
       "name": "BitcoinCrypto.tech",
-      "sameAs": "https://www.bitcoincrypto.tech"
+      "url": "https://www.bitcoincrypto.tech",
+      "sameAs": [
+        "https://www.bitcoincrypto.tech",
+        "https://twitter.com/bitcoincrypto",
+        "https://github.com/infozeeshan37-ctrl/bitcoincrypto"
+      ]
     },
+    "citation": [
+      "https://bitcoin.org/bitcoin.pdf",
+      "https://fred.stlouisfed.org/series/M2SL",
+      "https://ethereum.org/en/whitepaper/",
+      "https://ccaf.io/cbeci/index",
+      "https://insights.glassnode.com",
+      "https://www.tradingview.com",
+      "https://www.coinglass.com",
+      "https://www.sec.gov",
+      "https://www.cmegroup.com",
+      "https://www.bis.org"
+    ],
+    "isBasedOn": [
+      "https://bitcoin.org/bitcoin.pdf",
+      "https://eips.ethereum.org/EIPS/eip-1559",
+      "https://fred.stlouisfed.org/series/M2SL"
+    ],
     "hasCourseInstance": {
       "@type": "CourseInstance",
       "courseMode": "Online",

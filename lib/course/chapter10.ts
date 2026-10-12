@@ -18,6 +18,17 @@ export const chapter10: CourseChapter = {
     href: "/tools/position-sizer",
     actionText: "Calculate Mathematical Position Size →"
   },
+  references: [
+    { title: "A New Interpretation of Information Rate: The Kelly Criterion", url: "https://archive.org/details/bstj35-4-917", source: "John L. Kelly Jr. (Bell System Technical Journal)", type: "Academic" },
+    { title: "The Kelly Capital Growth Investment Criterion: Mathematical Proofs", url: "https://www.edwardothorp.com/", source: "Dr. Edward O. Thorp", type: "Academic" },
+    { title: "The Mathematics of Money Management: Risk Analysis Techniques for Traders", url: "https://www.wiley.com/en-us/The+Mathematics+of+Money+Management-p-9780471547389", source: "Ralph Vince (John Wiley & Sons)", type: "Academic" },
+    { title: "Statistical Consequences of Fat Tails: Asymmetric Payoff Mathematics", url: "https://arxiv.org/abs/2001.10488", source: "Nassim Nicholas Taleb Research", type: "Academic" }
+  ],
+  relatedInternalLinks: [
+    { title: "Mathematical Position Sizer & Risk Tool", href: "/tools/position-sizer", badge: "Risk Engine", description: "Calculate exact contract sizing based on dollar risk and structural stop loss." },
+    { title: "Profit & Compound ROI Calculator", href: "/tools/profit-calculator", badge: "Calculator", description: "Model risk-to-reward expectancy, commission impact, and compounding returns." },
+    { title: "Dollar-Cost Averaging (DCA) Multi-Asset Simulator", href: "/tools/dca-simulator", badge: "Simulator", description: "Model asymmetric drawdown survival and harmonic mean advantages." }
+  ],
   lessons: [
     {
       id: "c10-l1",

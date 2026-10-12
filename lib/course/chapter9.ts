@@ -18,6 +18,17 @@ export const chapter9: CourseChapter = {
     href: "/tools/macro-battles",
     actionText: "View Live Liquidation Heatmaps →"
   },
+  references: [
+    { title: "CoinGlass Portal: Global Derivatives Analytics & Liquidation Heatmaps", url: "https://www.coinglass.com/", source: "CoinGlass", type: "Exchange Data" },
+    { title: "BitMEX Research: The Perpetual Swap Mechanism & Funding Calculations", url: "https://www.bitmex.com/app/perpetualContractsGuide", source: "BitMEX (Arthur Hayes)", type: "Primary Source" },
+    { title: "Deribit Options Analytics: Volatility Surface & Max Pain Metrics", url: "https://www.deribit.com/", source: "Deribit Exchange", type: "Exchange Data" },
+    { title: "CME Group: Cryptocurrency Futures Contract Specifications & Commitments of Traders (COT)", url: "https://www.cmegroup.com/markets/cryptocurrencies/bitcoin/bitcoin.contractSpecs.html", source: "CME Group", type: "Regulatory" }
+  ],
+  relatedInternalLinks: [
+    { title: "CoinGlass Liquidation Heatmap & Cascade Terminal", href: "/coinglass", badge: "Live Radar", description: "Visualize multi-tier liquidation clusters, open interest spikes, and squeeze risk." },
+    { title: "CoinGlass Funding Rate Screener", href: "/tools/funding-rate-screener", badge: "Live Screener", description: "Real-time 8-hour funding rates across Binance, Bybit, OKX, and dYdX." },
+    { title: "CoinGlass Liquidation Radar & Calculator", href: "/tools/liquidation-heatmap", badge: "Calculator", description: "Estimate liquidation price levels, leverage margin requirements, and squeeze targets." }
+  ],
   lessons: [
     {
       id: "c9-l1",

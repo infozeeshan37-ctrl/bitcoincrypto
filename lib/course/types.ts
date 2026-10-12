@@ -49,6 +49,18 @@ export interface CourseChapter {
     href: string;
     actionText: string;
   };
+  references?: {
+    title: string;
+    url: string;
+    source: string;
+    type: "Primary Source" | "Academic" | "Government / Fed" | "Exchange Data" | "Regulatory";
+  }[];
+  relatedInternalLinks?: {
+    title: string;
+    href: string;
+    badge: string;
+    description: string;
+  }[];
 }
 
 export interface CourseGlossaryItem {

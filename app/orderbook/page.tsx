@@ -7,17 +7,21 @@ import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
-  title: "Real-Time Crypto Order Book Depth & CVD Scanner | BitcoinCrypto.tech",
+  title: "Crypto Order Book Depth Live & L2 CVD Imbalance Scanner | BitcoinCrypto.tech",
   description:
-    "Free Level-2 cryptocurrency Order Book depth scanner, real-time Cumulative Volume Delta (CVD) taker flow, bid/ask wall imbalance detector, and whale block trade tape on BitcoinCrypto.tech.",
+    "Free Level-2 cryptocurrency order book depth scanner with dynamic stepped curves: real-time Cumulative Volume Delta (CVD) taker flow, bid/ask wall imbalance detector, whale tape, and slippage simulator across Binance, Coinbase, and OKX.",
   keywords: [
     "crypto order book depth",
     "bitcoin orderbook live",
+    "level 2 market data crypto",
     "order book imbalance scanner",
     "cvd crypto live",
     "cumulative volume delta btc",
     "real time market depth visualizer",
+    "stepped depth chart crypto",
     "whale order tape crypto",
+    "crypto slippage simulator",
+    "binance order book depth",
     "level 2 crypto data free"
   ],
   alternates: {

@@ -72,11 +72,28 @@ export default function ToolCitationWidget({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const whatsappShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(toolName + " — Free Real-Time AI Intelligence: " + toolUrl)}`;
   const shareText = encodeURIComponent(`Check out the live CoinGlass Liquidation Heatmap & AI Crypto Predictions on BitcoinCrypto.tech: ${toolUrl}`);
   const twitterShareUrl = `https://twitter.com/intent/tweet?text=${shareText}&hashtags=CoinGlass,Bitcoin,CryptoTrading,TradingBot`;
   const telegramShareUrl = `https://t.me/share/url?url=${encodeURIComponent(toolUrl)}&text=${encodeURIComponent(toolName + " - " + description)}`;
   const redditShareUrl = `https://reddit.com/submit?url=${encodeURIComponent(toolUrl)}&title=${encodeURIComponent(toolName)}`;
   const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(toolUrl)}`;
+
+  const handleNativeShare = async () => {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: toolName,
+          text: description,
+          url: toolUrl,
+        });
+      } catch {
+        // User cancelled share
+      }
+    } else {
+      handleCopy();
+    }
+  };
 
   return (
     <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-rose-500/30 text-white shadow-xl space-y-6">
@@ -185,6 +202,15 @@ export default function ToolCitationWidget({
           </a>
 
           <a
+            href={whatsappShareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 transition flex items-center gap-1.5 text-xs font-semibold"
+          >
+            <span>WhatsApp</span>
+          </a>
+
+          <a
             href={linkedInShareUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -192,6 +218,15 @@ export default function ToolCitationWidget({
           >
             <span>LinkedIn</span>
           </a>
+
+          <button
+            onClick={handleNativeShare}
+            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
+            title="Share via native mobile apps"
+          >
+            <Share2 className="w-3 h-3 text-amber-400" />
+            <span>More</span>
+          </button>
         </div>
 
         {/* LLMs.txt Direct Standard Link */}

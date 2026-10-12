@@ -18,6 +18,17 @@ export const chapter8: CourseChapter = {
     href: "/tools/chart-terminal",
     actionText: "Analyze Level-2 Depth on Chart Terminal →"
   },
+  references: [
+    { title: "Trading and Exchanges: Market Microstructure for Practitioners", url: "https://global.oup.com/academic/product/trading-and-exchanges-9780195144703", source: "Prof. Larry Harris (Oxford University Press)", type: "Academic" },
+    { title: "Binance Spot & Futures API Docs: Order Book WebSocket Streams", url: "https://developers.binance.com/", source: "Binance Developer Portal", type: "Primary Source" },
+    { title: "NASDAQ Market Technology: Matching Engine Architecture & Order Queuing", url: "https://www.nasdaq.com/solutions/market-technology", source: "NASDAQ", type: "Primary Source" },
+    { title: "CME Group Market Depth & Order Book Microstructure Standards", url: "https://www.cmegroup.com/market-data/distributor/market-depth.html", source: "CME Group", type: "Exchange Data" }
+  ],
+  relatedInternalLinks: [
+    { title: "Level-2 Order Book Depth Terminal", href: "/orderbook", badge: "Live Engine", description: "Real-time visual order depth, bid/ask spread analysis, and resting limit wall monitoring." },
+    { title: "Whale Orders & Cluster Liquidity Terminal", href: "/whale-orders", badge: "Live Radar", description: "Detect aggressive multi-million dollar prints and iceberg order reloads." },
+    { title: "Order Book Microstructure & Depth Concept Guide", href: "/concepts/order-book-microstructure-and-depth", badge: "Deep Guide", description: "Comprehensive breakdown of FIFO matching engines and order flow imbalance." }
+  ],
   lessons: [
     {
       id: "c8-l1",

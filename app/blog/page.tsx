@@ -12,13 +12,15 @@ export default function BlogIndexPage() {
 
   const categories = [
     { id: "all", label: "All Research" },
+    { id: "Derivatives & Liquidity", label: "Liquidation Heatmaps" },
+    { id: "DeFi & Derivatives", label: "Funding Rates & Basis" },
+    { id: "Trading Methodology", label: "Order Flow & Whales" },
+    { id: "AI & Decentralized Compute", label: "AI Predictions" },
+    { id: "Investment Strategies", label: "DCA & Cycle Math" },
     { id: "Macro Economics", label: "Macro & YCC" },
     { id: "Market Psychology & Targets", label: "Market Psychology" },
     { id: "Layer 1 Analysis", label: "Layer 1 & ETH" },
-    { id: "DeFi & Derivatives", label: "DeFi & Basis" },
-    { id: "AI & Decentralized Compute", label: "AI & Compute" },
     { id: "Market Intelligence", label: "Market Intelligence" },
-    { id: "Trading Methodology", label: "Order Flow" },
   ];
 
   const filteredArticles = articles.filter((art) => {

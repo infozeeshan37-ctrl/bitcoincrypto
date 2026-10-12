@@ -7,9 +7,20 @@ import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
-  title: "US CPI Inflation Intelligence & AI Crypto Price Predictor | BitcoinCrypto.tech",
+  title: "US CPI Inflation Intelligence & AI Bitcoin Volatility Predictor | BitcoinCrypto.tech",
   description:
-    "Examine real-time macroeconomic indicators, historical CPI release history vs Bitcoin price impact, and AI predictive scenario modeling for upcoming US Bureau of Labor Statistics (BLS) inflation prints.",
+    "Real-time US Bureau of Labor Statistics (BLS) CPI inflation calendar, historical crypto volatility reactions, Federal Reserve FOMC interest rate probabilities, and AI Bitcoin price scenario modeling.",
+  keywords: [
+    "us cpi crypto impact",
+    "cpi inflation bitcoin price prediction",
+    "bls inflation report crypto",
+    "fomc rate cut probability bitcoin",
+    "macro crypto volatility predictor",
+    "fed interest rate crypto",
+    "us cpi release date schedule",
+    "bitcoin macro liquidity",
+    "core cpi vs bitcoin price"
+  ],
   alternates: {
     canonical: "https://www.bitcoincrypto.tech/cpi",
   },

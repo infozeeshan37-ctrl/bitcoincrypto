@@ -18,6 +18,17 @@ export const chapter6: CourseChapter = {
     href: "/tools/chart-terminal",
     actionText: "Map Market Structure on Live Chart →"
   },
+  references: [
+    { title: "CBOE Global Markets: Market Structure & Order Flow Dynamics", url: "https://www.cboe.com/", source: "Chicago Board Options Exchange", type: "Primary Source" },
+    { title: "US SEC: Regulation NMS & Market Structure Best Execution Framework", url: "https://www.sec.gov/fast-answers/answersregnmshtm.html", source: "US Securities and Exchange Commission", type: "Regulatory" },
+    { title: "CME Group: Liquidity Pools, Aggressive Routing & Price Discovery", url: "https://www.cmegroup.com/", source: "CME Group Market Architecture", type: "Primary Source" },
+    { title: "Street Smarts: High Probability Short Term Trading Strategies (Turtle Soup)", url: "https://www.amazon.com/Street-Smarts-Probability-Trading-Strategies/dp/0965046509", source: "Linda Bradford Raschke", type: "Academic" }
+  ],
+  relatedInternalLinks: [
+    { title: "TradingView Chart Terminal & Structural Annotations", href: "/tools/chart-terminal", badge: "Interactive Chart", description: "Plot swing fractals, BOS continuation breaks, and FVG mitigation zones." },
+    { title: "Whale Orders & Cluster Liquidity Terminal", href: "/whale-orders", badge: "Live Radar", description: "Detect resting limit pools and institutional absorption blocks in real time." },
+    { title: "Order Book Microstructure & Depth Concept Guide", href: "/concepts/order-book-microstructure-and-depth", badge: "Core Guide", description: "Comprehensive breakdown of bids, asks, and institutional liquidity sweeps." }
+  ],
   lessons: [
     {
       id: "c6-l1",

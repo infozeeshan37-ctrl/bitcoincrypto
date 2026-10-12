@@ -45,7 +45,8 @@ import {
   Server,
   Crosshair,
   Binary,
-  Compass
+  Compass,
+  Share2
 } from "lucide-react";
 
 export type CandleTimeframe = "5m" | "15m" | "1h";
@@ -1524,6 +1525,60 @@ export default function FiveMinutePredictionArena() {
                   {tradeFeedback}
                 </div>
               )}
+            </div>
+
+            {/* VIRAL SHARE & COMMUNITY REACH BAR */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-emerald-500/10 border border-amber-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold shrink-0">
+                  <Share2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="font-bold text-slate-900 dark:text-white block">
+                    Share Live Signal ({selectedCoin.base}/USDT)
+                  </span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Broadcast this AI call to your crypto trading groups
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`🚨 Live 5-Minute AI Prediction for #${selectedCoin.name} (${selectedCoin.base}/USDT): Spot ${formatPrice(livePrice, selectedCoin.decimals)}. Check the confluence radar & liquidation heatmap:`)}&url=${encodeURIComponent('https://www.bitcoincrypto.tech/predictions')}&hashtags=Bitcoin,CryptoTrading,TradingBot`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white border border-slate-700 hover:bg-slate-800 transition flex items-center gap-1 font-bold text-[11px]"
+                >
+                  <span>𝕏 Post</span>
+                </a>
+                <a
+                  href={`https://t.me/share/url?url=${encodeURIComponent('https://www.bitcoincrypto.tech/predictions')}&text=${encodeURIComponent(`⚡ Live AI ${selectedCoin.base} 5-Minute Prediction Call & Liquidation Radar on BitcoinCrypto.tech`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-2.5 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white transition flex items-center gap-1 font-bold text-[11px]"
+                >
+                  <span>Telegram</span>
+                </a>
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out the live 5-minute AI crypto prediction on BitcoinCrypto.tech: https://www.bitcoincrypto.tech/predictions`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1 font-bold text-[11px]"
+                >
+                  <span>WhatsApp</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText("https://www.bitcoincrypto.tech/predictions");
+                    setTradeFeedback("✓ Link copied to clipboard! Share it in your trading groups.");
+                    setTimeout(() => setTradeFeedback(null), 3000);
+                  }}
+                  className="px-2.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold transition flex items-center gap-1 text-[11px] cursor-pointer"
+                >
+                  <span>Copy Link</span>
+                </button>
+              </div>
             </div>
 
           </div>

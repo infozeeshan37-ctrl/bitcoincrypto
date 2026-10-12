@@ -22,22 +22,34 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "BitcoinCrypto.tech | #1 AI Crypto Trading Signals, Market Intelligence & Whale Orders",
+  title: "BitcoinCrypto.tech | #1 Free CoinGlass Liquidation Heatmap, AI Crypto Predictions & Whale Radar",
   description:
-    "Official BitcoinCrypto.tech platform - Institutional cryptocurrency market intelligence suite featuring real-time AI trading signals, Binance 5-minute price predictions, Coinglass liquidation heatmaps, L2 order book depth, and institutional whale orders.",
+    "Official BitcoinCrypto.tech platform - The leading cryptocurrency market intelligence terminal with real-time CoinGlass liquidation heatmaps, Binance 5-minute AI price predictions, Level-2 order book depth, institutional whale orders, and perpetual futures funding rates.",
   keywords: [
     "bitcoincrypto.tech",
     "bitcoincrypto",
     "bitcoincrypto tech",
     "bitcoin crypto",
     "bitcoin crypto ai",
+    "coinglass liquidation heatmap",
+    "coinglass",
+    "coinglass crypto",
+    "coinglass alternative free",
+    "coinglass btc heatmap",
     "ai crypto trading bot",
+    "ai crypto prediction",
+    "binance 5 minute price prediction",
     "crypto market intelligence",
     "whale orders",
-    "coinglass liquidation heatmap",
+    "crypto whale tracker live",
     "bitcoin price prediction",
     "crypto signals btc eth sol",
-    "binance 5 minute next candle prediction"
+    "binance 5 minute next candle prediction",
+    "crypto order book depth",
+    "crypto funding rates live",
+    "bitcoin liquidation levels",
+    "short squeeze heatmap",
+    "crypto dca simulator"
   ],
   alternates: {
     canonical: "https://www.bitcoincrypto.tech",

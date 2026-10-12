@@ -643,6 +643,98 @@ export default function CryptoLearnView() {
               })}
             </div>
           </div>
+
+          {/* PRIMARY SOURCES & EXTERNAL CITATIONS (E-E-A-T AUTHORITATIVE OUTBOUND LINKS) */}
+          {activeChapter.references && activeChapter.references.length > 0 && (
+            <div className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase">
+                    E-E-A-T Academic &amp; Regulatory Verification
+                  </span>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5 flex items-center gap-2">
+                    <ExternalLink className="w-4 h-4 text-emerald-500" />
+                    <span>Primary Sources &amp; Authoritative References (External Links)</span>
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-slate-400">{activeChapter.references.length} Verified Sources</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {activeChapter.references.map((ref, rIdx) => (
+                  <a
+                    key={rIdx}
+                    href={ref.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 hover:bg-slate-100 dark:hover:bg-slate-800/60 border border-slate-200 dark:border-slate-800 transition flex flex-col justify-between space-y-2 group"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between text-[10px] font-mono">
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">
+                          {ref.type}
+                        </span>
+                        <span className="text-slate-400">{ref.source}</span>
+                      </div>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition line-clamp-2">
+                        {ref.title}
+                      </h4>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 dark:text-slate-400 pt-1 group-hover:text-emerald-400 transition">
+                      <span className="truncate">{ref.url}</span>
+                      <ExternalLink className="w-3 h-3 shrink-0" />
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* INTEGRATED PREDICTIVE MODELS & REAL-TIME TRADING TOOLS (INTERNAL BACKLINKS) */}
+          {activeChapter.relatedInternalLinks && activeChapter.relatedInternalLinks.length > 0 && (
+            <div className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase">
+                    Platform Ecosystem Cross-Links
+                  </span>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5 flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-amber-500" />
+                    <span>Connected Analytical Tools &amp; Predictive Models (Internal Links)</span>
+                  </h3>
+                </div>
+                <span className="text-xs font-mono text-slate-400">Live Software Modules</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {activeChapter.relatedInternalLinks.map((link, lIdx) => (
+                  <Link
+                    key={lIdx}
+                    href={link.href}
+                    className="p-4 rounded-2xl bg-gradient-to-br from-slate-50 to-white dark:from-slate-950/80 dark:to-slate-900/80 hover:border-emerald-500/50 border border-slate-200 dark:border-slate-800 transition flex flex-col justify-between space-y-2 group shadow-sm"
+                  >
+                    <div className="space-y-1">
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-[10px] font-mono">
+                        {link.badge}
+                      </span>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition line-clamp-2">
+                        {link.title}
+                      </h4>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                        {link.description}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold pt-1">
+                      <span>Launch Model</span>
+                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* GLOSSARY SECTION */}
@@ -678,9 +770,10 @@ export default function CryptoLearnView() {
           </div>
         </section>
 
-        {/* CITATION & DISCLAIMER */}
+        {/* CITATION & BACKLINK HUB */}
         <ToolCitationWidget
-          toolName="Crypto Learn Masterclass"
+          toolName="Crypto Learn: Institutional Cryptocurrency Trading & Valuation Masterclass"
+          toolUrl="https://www.bitcoincrypto.tech/learn"
           description="Complete 10-Chapter institutional curriculum spanning 100 human-written articles on fundamental on-chain valuation, market microstructure, derivatives liquidations, and capital preservation."
         />
       </div>
