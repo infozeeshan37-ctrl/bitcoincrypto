@@ -41,15 +41,20 @@ function CoinGlassSubNavInner() {
   const [ecosystemOpen, setEcosystemOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const ecosystemRef = useRef<HTMLDivElement>(null);
+  const ecosystemPanelRef = useRef<HTMLDivElement>(null);
   const moreRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns on outside click or Escape key
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (ecosystemRef.current && !ecosystemRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const inEcosystemBtn = ecosystemRef.current?.contains(target);
+      const inEcosystemPanel = ecosystemPanelRef.current?.contains(target);
+
+      if (!inEcosystemBtn && !inEcosystemPanel) {
         setEcosystemOpen(false);
       }
-      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+      if (moreRef.current && !moreRef.current.contains(target)) {
         setMoreOpen(false);
       }
     }
@@ -361,6 +366,7 @@ function CoinGlassSubNavInner() {
       {/* 4. MEGA-MENU: 'Explore Ecosystem' Full Panel (100% Solid Opaque Obsidian Background) */}
       {ecosystemOpen && (
         <div
+          ref={ecosystemPanelRef}
           className="absolute top-full left-0 right-0 max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 pt-2 pointer-events-auto"
           style={{ zIndex: 100 }}
         >
@@ -599,6 +605,18 @@ function CoinGlassSubNavInner() {
                 </div>
 
                 <div className="space-y-1">
+                  <Link
+                    href="/learn"
+                    onClick={() => setEcosystemOpen(false)}
+                    className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-800/90 transition group"
+                  >
+                    <GraduationCap className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-black text-xs text-white group-hover:text-emerald-300 transition block">Crypto Learn Course</span>
+                      <span className="text-[10px] text-slate-400 leading-snug block">10 chapters &amp; 100 articles curriculum</span>
+                    </div>
+                  </Link>
+
                   <Link
                     href="/concepts"
                     onClick={() => setEcosystemOpen(false)}

@@ -175,13 +175,13 @@ function BitcoinTransitionContent() {
       startTransition(customEvent.detail?.label || "Terminal");
     };
 
-    document.addEventListener("click", handleDocumentClick, true);
+    document.addEventListener("click", handleDocumentClick, false);
     window.addEventListener("popstate", handlePopState);
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("btc-transition-start", handleCustomTrigger);
 
     return () => {
-      document.removeEventListener("click", handleDocumentClick, true);
+      document.removeEventListener("click", handleDocumentClick, false);
       window.removeEventListener("popstate", handlePopState);
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("btc-transition-start", handleCustomTrigger);
