@@ -1544,7 +1544,7 @@ export default function FiveMinutePredictionArena() {
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`🚨 Live 5-Minute AI Prediction for #${selectedCoin.name} (${selectedCoin.base}/USDT): Spot ${formatPrice(livePrice, selectedCoin.decimals)}. Check the confluence radar & liquidation heatmap:`)}&url=${encodeURIComponent('https://www.bitcoincrypto.tech/predictions')}&hashtags=Bitcoin,CryptoTrading,TradingBot`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`🚨 Live 5-Minute AI Prediction for #${selectedCoin.name} (${selectedCoin.base}/USDT): Spot ${formatCoinPrice(livePrice, selectedCoin.decimals)}. Check the confluence radar & liquidation heatmap:`)}&url=${encodeURIComponent('https://www.bitcoincrypto.tech/predictions')}&hashtags=Bitcoin,CryptoTrading,TradingBot`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white border border-slate-700 hover:bg-slate-800 transition flex items-center gap-1 font-bold text-[11px]"

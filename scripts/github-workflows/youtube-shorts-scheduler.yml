@@ -1,0 +1,27 @@
+name: 🎬 BitcoinCrypto YouTube Shorts Daily Generator
+
+on:
+  schedule:
+    # Runs daily at 13:00 UTC (9:00 AM EST) for peak YouTube Shorts viewer traffic
+    - cron: '0 13 * * *'
+  # Allows manual triggering anytime from GitHub Actions
+  workflow_dispatch:
+
+jobs:
+  generate-short:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci --omit=dev
+
+      - name: 🎬 Generate Daily YouTube Short Pack
+        run: npm run youtube:shorts
