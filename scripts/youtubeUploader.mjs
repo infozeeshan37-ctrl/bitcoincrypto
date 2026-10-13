@@ -18,6 +18,27 @@ import fs from "fs";
 import path from "path";
 import { generateDailyShort } from "./youtubeShortsGenerator.mjs";
 
+function loadEnv() {
+  const envPath = path.resolve(process.cwd(), ".env.local");
+  if (fs.existsSync(envPath)) {
+    const lines = fs.readFileSync(envPath, "utf-8").split("\n");
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eqIdx = trimmed.indexOf("=");
+      if (eqIdx !== -1) {
+        const key = trimmed.slice(0, eqIdx).trim();
+        const val = trimmed.slice(eqIdx + 1).trim();
+        if (!process.env[key]) {
+          process.env[key] = val;
+        }
+      }
+    }
+  }
+}
+
+loadEnv();
+
 async function getAccessToken() {
   const clientId = process.env.YOUTUBE_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_CLIENT_SECRET;
@@ -49,6 +70,22 @@ async function getAccessToken() {
     return data.access_token;
   } catch (error) {
     console.error("❌ Error fetching YouTube access token:", error.message);
+    return null;
+  }
+}
+
+async function verifyChannel(accessToken) {
+  try {
+    const res = await fetch(
+      "https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&mine=true",
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.items && data.items.length > 0 ? data.items[0] : null;
+  } catch {
     return null;
   }
 }
@@ -141,12 +178,31 @@ async function main() {
     await uploadVideoToYouTube(videoPath, shortMetadata);
   } else {
     console.log("══════════════════════════════════════════════════════════════════════");
-    console.log("  ▶️ YouTube Content Generated & Ready for Today");
+    console.log("  ▶️ YouTube Automation Status & Content Preview");
     console.log("══════════════════════════════════════════════════════════════════════");
-    console.log(`Title: ${shortMetadata.title}`);
-    console.log(`URL:   ${shortMetadata.targetUrl}`);
-    console.log(`\nTo upload an .mp4 video file to YouTube directly via API, run:`);
-    console.log(`  node scripts/youtubeUploader.mjs --video=./path_to_video.mp4\n`);
+
+    const token = await getAccessToken();
+    if (token) {
+      console.log("🔑 YouTube OAuth Status: ✅ Authenticated & Connected!");
+      const channel = await verifyChannel(token);
+      if (channel) {
+        console.log(`📺 Connected Channel:    ${channel.snippet?.title || "Your Channel"}`);
+        console.log(`🆔 Channel ID:            ${channel.id}`);
+        console.log(`👥 Subscribers:           ${channel.statistics?.subscriberCount || "Hidden/0"}`);
+        console.log(`🎥 Total Videos:          ${channel.statistics?.videoCount || "0"}`);
+      } else {
+        console.log("ℹ️ Channel connected, ready to upload.");
+      }
+    } else {
+      console.log("🔑 YouTube OAuth Status: ❌ Credentials not configured or token expired.");
+    }
+
+    console.log("\n──────────────────────────────────────────────────────────────────────");
+    console.log(`🎬 Today's Short Title:   ${shortMetadata.title}`);
+    console.log(`🔗 Target Website URL:    ${shortMetadata.targetUrl}`);
+    console.log("──────────────────────────────────────────────────────────────────────");
+    console.log("\nTo upload an .mp4 video file to YouTube directly via API, run:");
+    console.log("  node scripts/youtubeUploader.mjs --video=./path_to_video.mp4\n");
   }
 }
 
