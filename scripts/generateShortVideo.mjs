@@ -1,22 +1,27 @@
 /**
- * BitcoinCrypto.tech — Automated 9:16 YouTube Shorts Video Synthesizer
+ * BitcoinCrypto.tech — High-Engagement 9:16 YouTube Shorts Video Synthesizer
  * 
- * Uses ffmpeg + ASS Subtitle Engine to generate institutional-quality,
- * 1080x1920 (9:16) vertical crypto shorts with cyber grid, high-CTR typography,
- * animated cards, and tech ambient audio.
+ * Features:
+ *   - Real AI Neural Voiceover (en-US-ChristopherNeural)
+ *   - Live Website Screen Capture (bitcoincrypto.tech interface in center)
+ *   - Cyber dark UI backdrop with high-contrast glowing neon typography (ASS)
+ *   - Audio mixing (crystal-clear voice + subtle high-tech ambient pulse)
+ *   - 1080x1920 (9:16 vertical) resolution
  */
 
 import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
+import { generateVoiceover } from "./generateVoiceover.mjs";
+import { captureWebsiteScreen } from "./captureWebsiteScreenshots.mjs";
 
-/**
- * Builds an Advanced SubStation Alpha (.ass) subtitle file
- * with custom typography, glowing colors, and smooth fade transitions.
- */
-function createAssScript(slides, durationSeconds = 24) {
-  // Styles in ASS format (Colors in &HAABBGGRR format)
-  // Gold/Amber: &H0000D7FF, Cyan: &H00E6D800, White: &H00FFFFFF, Dark Gray: &H002A2016
+function createAssScript(metadata, duration) {
+  const title = (metadata.title || "Crypto Alert").replace(/#Shorts/gi, "").trim();
+  const category = (metadata.category || "AI Technical Model").toUpperCase();
+  const durationSec = Math.ceil(duration);
+
+  // Colors in ASS format (&HAABBGGRR)
+  // Gold/Amber: &H0000D7FF, Cyan: &H00E6D800, White: &H00FFFFFF
   return `[Script Info]
 ScriptType: v4.00+
 PlayResX: 1080
@@ -25,114 +30,86 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: BrandHeader,Arial,38,&H0000D7FF,&H00000000,&H00000000,&H80000000,1,0,0,0,100,100,2,0,1,2,0,8,40,40,90,1
-Style: BadgeTag,Arial,34,&H00E6D800,&H00000000,&H00000000,&H80000000,1,0,0,0,100,100,1,0,1,2,0,8,40,40,160,1
-Style: MainHook,Arial,72,&H00FFFFFF,&H00000000,&H00000000,&H90000000,1,0,0,0,100,100,1,0,1,4,3,5,60,60,30,1
-Style: AccentText,Arial,66,&H0000D7FF,&H00000000,&H00000000,&H90000000,1,0,0,0,100,100,1,0,1,4,3,5,60,60,30,1
-Style: BodyText,Arial,52,&H00E2E8F0,&H00000000,&H00000000,&H90000000,1,0,0,0,100,100,1,0,1,3,2,5,70,70,30,1
-Style: FooterCta,Arial,42,&H0000D7FF,&H00000000,&H00000000,&HA0000000,1,0,0,0,100,100,1,0,1,3,1,2,40,40,140,1
-Style: FooterSub,Arial,34,&H00A0AEC0,&H00000000,&H00000000,&HA0000000,0,0,0,0,100,100,0,0,1,2,0,2,40,40,85,1
+Style: HeaderBrand,Arial,38,&H0000D7FF,&H00000000,&H00000000,&HA0000000,1,0,0,0,100,100,2,0,1,3,0,8,40,40,80,1
+Style: CategoryBadge,Arial,32,&H00E6D800,&H00000000,&H00000000,&HA0000000,1,0,0,0,100,100,1,0,1,2,0,8,40,40,140,1
+Style: HookBanner,Arial,48,&H00FFFFFF,&H00000000,&H00000000,&HB0000000,1,0,0,0,100,100,1,0,1,4,2,8,40,40,195,1
+Style: BottomCta,Arial,42,&H0000D7FF,&H00000000,&H00000000,&HB0000000,1,0,0,0,100,100,1,0,1,4,2,2,40,40,150,1
+Style: BottomSub,Arial,32,&H00A0AEC0,&H00000000,&H00000000,&HB0000000,1,0,0,0,100,100,0,0,1,2,0,2,40,40,95,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-; Permanent Top Branding Header
-Dialogue: 0,0:00:00.00,0:00:${durationSeconds}.00,BrandHeader,,0,0,0,,{\\fad(300,300)}BITCOINCRYPTO.TECH • QUANT RESEARCH
-Dialogue: 0,0:00:00.00,0:00:${durationSeconds}.00,BadgeTag,,0,0,0,,{\\fad(300,300)}[ LIVE QUANTITATIVE INTELLIGENCE ]
+; Top Brand Watermark
+Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,HeaderBrand,,0,0,0,,{\\fad(250,250)}⚡ BITCOINCRYPTO.TECH • LIVE TERMINAL ⚡
+Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,CategoryBadge,,0,0,0,,{\\fad(250,250)}[ ${category} ]
 
-; Permanent Bottom Call-to-Action
-Dialogue: 0,0:00:00.00,0:00:${durationSeconds}.00,FooterCta,,0,0,0,,{\\fad(400,400)}👉 FREE LIVE TERMINAL & 100 LESSONS
-Dialogue: 0,0:00:00.00,0:00:${durationSeconds}.00,FooterSub,,0,0,0,,{\\fad(400,400)}Link Pinned in Description & Comments
+; Headline Hook Banner above screenshot
+Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,HookBanner,,0,0,0,,{\\fad(300,300)}${title}
 
-${slides.map((s, idx) => {
-  const startStr = formatTime(s.start);
-  const endStr = formatTime(s.end);
-  const safeText = s.text.replace(/\n/g, "\\N");
-  return `Dialogue: 1,${startStr},${endStr},${s.style},,0,0,0,,{\\fad(350,350)}${safeText}`;
-}).join("\n")}
+; Bottom Call to Action below screenshot
+Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,BottomCta,,0,0,0,,{\\fad(300,300)}👉 FREE REAL-TIME TERMINAL & 100 LESSONS
+Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,BottomSub,,0,0,0,,{\\fad(300,300)}Link Pinned in Description & Comments
 `;
 }
 
-function formatTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
-  const cs = Math.floor((seconds % 1) * 100);
-  return `0:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${String(cs).padStart(2, "0")}`;
-}
-
-/**
- * Synthesizes dynamic slide content from short metadata
- */
-export function extractSlidesFromMetadata(metadata) {
-  const category = metadata.category || "Crypto Intelligence";
-  const title = (metadata.title || "Bitcoin Market Alert").replace(/#Shorts/gi, "").trim();
-
-  // Create 4 engaging visual scenes (total 24 seconds)
-  const slides = [
-    {
-      start: 0,
-      end: 6,
-      style: "MainHook",
-      text: `🚨 ${title.toUpperCase()} 🚨`
-    },
-    {
-      start: 6,
-      end: 12,
-      style: "AccentText",
-      text: `📊 REAL-TIME ORDER FLOW & CVD\\N\\N${metadata.category.toUpperCase()}`
-    },
-    {
-      start: 12,
-      end: 18,
-      style: "BodyText",
-      text: `⚡ INSTITUTIONAL LIQUIDITY\\N\\NOrder Book Imbalance\\nCoinglass Liquidation Clusters`
-    },
-    {
-      start: 18,
-      end: 24,
-      style: "AccentText",
-      text: `🎓 MASTER 100 LESSONS & TOOLS\\N\\N100% Free • Zero Betting\\nbitcoincrypto.tech/learn`
-    }
-  ];
-
-  return slides;
-}
-
-/**
- * Generates an MP4 video file (1080x1920, 9:16 vertical)
- */
 export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
   const timestamp = Date.now();
+  const voicePath = path.resolve(outputDir, `voice_${timestamp}.mp3`);
+  const screenPath = path.resolve(outputDir, `screen_${timestamp}.png`);
   const assPath = path.resolve(outputDir, `sub_${timestamp}.ass`);
   const outputPath = path.resolve(outputDir, `short_${timestamp}.mp4`);
 
-  const duration = 24;
-  const slides = extractSlidesFromMetadata(metadata);
-  const assContent = createAssScript(slides, duration);
+  // Step 1: Synthesize AI Voiceover
+  const voiceoverText = metadata.voiceover || metadata.description;
+  const { duration } = await generateVoiceover(voiceoverText, voicePath);
 
+  // Step 2: Capture live website screenshot of the target URL
+  const targetUrl = metadata.targetUrl || "https://www.bitcoincrypto.tech/predictions";
+  await captureWebsiteScreen(targetUrl, screenPath, 1080, 1380);
+
+  // Step 3: Generate ASS Subtitle Script
+  const assContent = createAssScript(metadata, duration);
   fs.writeFileSync(assPath, assContent, "utf-8");
 
-  // Use relative path with forward slashes so ffmpeg does not see Windows drive letter colon (C:)
-  const relAssPath = path.relative(process.cwd(), assPath).replace(/\\/g, "/");
-  const vf = `drawgrid=w=90:h=90:t=1:c=0x1E293B@0.45,ass='${relAssPath}'`;
+  // Relative paths for FFmpeg
+  const relScreen = path.relative(process.cwd(), screenPath).replace(/\\/g, "/");
+  const relVoice = path.relative(process.cwd(), voicePath).replace(/\\/g, "/");
+  const relAss = path.relative(process.cwd(), assPath).replace(/\\/g, "/");
 
-  console.log(`🎬 Rendering 9:16 vertical short (${duration}s, 1080x1920)...`);
+  console.log(`🎬 Composing high-production Short via FFmpeg (${duration.toFixed(1)}s)...`);
+
+  // Filter complex:
+  // - Dark tech background with cyber grid (drawgrid)
+  // - Live website screenshot placed in center (scale to 980 width, Y offset at 270)
+  // - Glowing frame border around screenshot
+  // - High-contrast ASS typography on top
+  // - Voiceover audio boosted to 1.3x volume + subtle ambient synth tone (0.04x)
+  const filterComplex = `[0:v]drawgrid=w=80:h=80:t=1:c=0x1E293B@0.4[bg];` +
+    `[1:v]scale=980:-1[screen];` +
+    `[bg][screen]overlay=(W-w)/2:270[vwithscreen];` +
+    `[vwithscreen]ass='${relAss}'[outv];` +
+    `[2:a]volume=1.3[voice];` +
+    `[3:a]volume=0.03[bgm];` +
+    `[voice][bgm]amix=inputs=2:duration=first[outa]`;
 
   const ffmpegArgs = [
     "-f", "lavfi",
     "-i", `color=c=0x0B0F19:s=1080x1920:d=${duration}`,
+    "-i", relScreen,
+    "-i", relVoice,
     "-f", "lavfi",
     "-i", `sine=f=120:d=${duration}`,
-    "-vf", vf,
+    "-filter_complex", filterComplex,
+    "-map", "[outv]",
+    "-map", "[outa]",
     "-c:v", "libx264",
     "-preset", "fast",
     "-pix_fmt", "yuv420p",
     "-c:a", "aac",
-    "-b:a", "96k",
-    "-af", "volume=0.08",
+    "-b:a", "128k",
     "-t", `${duration}`,
     outputPath,
     "-y"
@@ -147,13 +124,15 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     });
 
     proc.on("close", (code) => {
-      // Clean up temporary ASS file
-      if (fs.existsSync(assPath)) {
-        try { fs.unlinkSync(assPath); } catch (_) {}
-      }
+      // Clean up temporary audio, screenshot, and ASS files
+      try {
+        if (fs.existsSync(voicePath)) fs.unlinkSync(voicePath);
+        if (fs.existsSync(screenPath)) fs.unlinkSync(screenPath);
+        if (fs.existsSync(assPath)) fs.unlinkSync(assPath);
+      } catch (_) {}
 
       if (code === 0 && fs.existsSync(outputPath)) {
-        console.log(`✅ Video generated successfully: ${outputPath}`);
+        console.log(`✅ Short video created: ${outputPath}`);
         resolve(outputPath);
       } else {
         console.error("❌ FFmpeg error:", stderr.slice(-400));
@@ -162,9 +141,6 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     });
 
     proc.on("error", (err) => {
-      if (fs.existsSync(assPath)) {
-        try { fs.unlinkSync(assPath); } catch (_) {}
-      }
       reject(err);
     });
   });

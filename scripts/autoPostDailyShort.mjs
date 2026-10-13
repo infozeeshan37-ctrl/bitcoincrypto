@@ -1,13 +1,22 @@
 /**
  * BitcoinCrypto.tech — Autonomous Daily YouTube Shorts Creator & Publisher
  * 
- * Generates and automatically posts an institutional-quality 9:16 vertical
- * YouTube Short directly to your authorized YouTube channel every day.
+ * Generates and automatically posts high-production 9:16 vertical YouTube Shorts
+ * with real AI neural voiceover, live website interface screen capture, and
+ * direct upload to YouTube Data API v3.
+ * 
+ * 3 Daily High-Engagement Slots:
+ *   - Slot 1: 12:00 UTC (8:00 AM EST)  -> AI Price Predictions & Order Flow
+ *   - Slot 2: 16:00 UTC (12:00 PM EST) -> CoinGlass Liquidation Squeeze Alert
+ *   - Slot 3: 21:00 UTC (5:00 PM EST)  -> Crypto Learn Masterclass 100-Lesson Series
  * 
  * Usage:
- *   node scripts/autoPostDailyShort.mjs             # Generates video & uploads to YouTube
- *   node scripts/autoPostDailyShort.mjs --dry-run   # Generates video only, skips upload
- *   npm run youtube:auto                           # Convenience script
+ *   node scripts/autoPostDailyShort.mjs               # Posts 1 short for the current slot
+ *   node scripts/autoPostDailyShort.mjs --slot=1      # Forces Slot 1 (AI Prediction)
+ *   node scripts/autoPostDailyShort.mjs --slot=2      # Forces Slot 2 (CoinGlass Heatmap)
+ *   node scripts/autoPostDailyShort.mjs --slot=3      # Forces Slot 3 (Crypto Learn)
+ *   node scripts/autoPostDailyShort.mjs --all-slots   # Generates & uploads all 3 daily shorts
+ *   node scripts/autoPostDailyShort.mjs --dry-run     # Generates video only, skips upload
  */
 
 import fs from "fs";
@@ -54,42 +63,38 @@ function logHistory(entry) {
   }
 
   history.unshift(entry);
-  fs.writeFileSync(logFile, JSON.stringify(history.slice(0, 50), null, 2), "utf-8");
+  fs.writeFileSync(logFile, JSON.stringify(history.slice(0, 100), null, 2), "utf-8");
 }
 
-export async function runAutoShortPipeline() {
-  const isDryRun = process.argv.includes("--dry-run");
-
-  console.log("══════════════════════════════════════════════════════════════════════");
-  console.log("  🚀 BitcoinCrypto.tech — Autonomous Daily YouTube Short Engine");
-  console.log("══════════════════════════════════════════════════════════════════════");
-
-  // Step 1: Authentication Check
-  const token = await getAccessToken();
-  if (!token) {
-    console.error("❌ YouTube OAuth credentials missing or invalid in .env.local.");
-    console.error("   Ensure YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN are set.");
-    process.exit(1);
+function resolveSlotCategory(args) {
+  const slotArg = args.find((a) => a.startsWith("--slot="));
+  if (slotArg) {
+    const slotNum = parseInt(slotArg.split("=")[1], 10);
+    if (slotNum === 1) return "ai_prediction";
+    if (slotNum === 2) return "coinglass_squeeze";
+    if (slotNum === 3) return "crypto_learn";
   }
 
-  const channel = await verifyChannel(token);
-  console.log(`📺 Channel:       ${channel?.snippet?.title || "Connected YouTube Channel"}`);
-  console.log(`🆔 Channel ID:    ${channel?.id || "N/A"}`);
-  console.log("──────────────────────────────────────────────────────────────────────");
+  // If no slot specified, pick based on current UTC hour
+  const currentHour = new Date().getUTCHours();
+  if (currentHour < 14) return "ai_prediction";      // Morning window
+  if (currentHour < 19) return "coinglass_squeeze";  // Afternoon window
+  return "crypto_learn";                             // Evening window
+}
 
-  // Step 2: Content Generation
-  console.log("🧠 Generating today's quantitative Short topic & script...");
-  const metadata = await generateDailyShort();
+async function publishSingleShort(categoryOverride, isDryRun, keepVideo) {
+  console.log("──────────────────────────────────────────────────────────────────────");
+  console.log(`🧠 Generating topic for category: [${categoryOverride}]...`);
+  const metadata = await generateDailyShort(categoryOverride);
   console.log(`📌 Category:      ${metadata.category}`);
   console.log(`🔥 Title:         ${metadata.title}`);
   console.log(`🔗 Target URL:    ${metadata.targetUrl}`);
   console.log("──────────────────────────────────────────────────────────────────────");
 
-  // Step 3: Video Rendering (1080x1920 9:16)
-  console.log("🎬 Synthesizing 1080x1920 vertical video via FFmpeg & ASS engine...");
+  console.log("🎬 Synthesizing 9:16 vertical Short (Neural Voiceover + Live Website Screen)...");
   const videoPath = await generateShortVideo(metadata);
   const fileSizeMb = (fs.statSync(videoPath).size / (1024 * 1024)).toFixed(2);
-  console.log(`📁 Rendered Video: ${videoPath} (${fileSizeMb} MB)`);
+  console.log(`📁 Video Ready:   ${videoPath} (${fileSizeMb} MB)`);
   console.log("──────────────────────────────────────────────────────────────────────");
 
   if (isDryRun) {
@@ -98,8 +103,7 @@ export async function runAutoShortPipeline() {
     return { success: true, mode: "dry-run", videoPath, metadata };
   }
 
-  // Step 4: Direct Upload to YouTube
-  console.log("🚀 Uploading Short to YouTube API...");
+  console.log("🚀 Uploading directly to YouTube API...");
   const uploadResult = await uploadVideoToYouTube(videoPath, metadata);
 
   if (uploadResult && uploadResult.id) {
@@ -120,17 +124,53 @@ export async function runAutoShortPipeline() {
       url: watchUrl
     });
 
-    // Cleanup video file after successful upload to save disk space
-    try {
-      if (!process.argv.includes("--keep-video")) {
-        fs.unlinkSync(videoPath);
-      }
-    } catch (_) {}
+    if (!keepVideo) {
+      try { fs.unlinkSync(videoPath); } catch (_) {}
+    }
 
     return { success: true, videoId: uploadResult.id, watchUrl, metadata };
   } else {
-    console.error("❌ Upload failed. Video file preserved at:", videoPath);
+    console.error("❌ Upload failed. Video preserved at:", videoPath);
     return { success: false, videoPath, metadata };
+  }
+}
+
+export async function runAutoShortPipeline() {
+  const args = process.argv.slice(2);
+  const isDryRun = args.includes("--dry-run");
+  const keepVideo = args.includes("--keep-video");
+  const allSlots = args.includes("--all-slots");
+
+  console.log("══════════════════════════════════════════════════════════════════════");
+  console.log("  🚀 BitcoinCrypto.tech — High-Impact Daily YouTube Shorts Publisher");
+  console.log("══════════════════════════════════════════════════════════════════════");
+
+  // Step 1: Authentication Check
+  const token = await getAccessToken();
+  if (!token) {
+    console.error("❌ YouTube OAuth credentials missing or invalid in .env.local.");
+    console.error("   Ensure YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN are set.");
+    process.exit(1);
+  }
+
+  const channel = await verifyChannel(token);
+  console.log(`📺 Connected Channel: ${channel?.snippet?.title || "Your YouTube Channel"}`);
+  console.log(`🆔 Channel ID:        ${channel?.id || "N/A"}`);
+
+  if (allSlots) {
+    console.log("🌟 Publishing ALL 3 DAILY SHORTS in sequence (AI Prediction, CoinGlass, Crypto Learn)...");
+    const categories = ["ai_prediction", "coinglass_squeeze", "crypto_learn"];
+    const results = [];
+    for (const cat of categories) {
+      const res = await publishSingleShort(cat, isDryRun, keepVideo);
+      results.push(res);
+      // Brief pause between uploads
+      await new Promise((r) => setTimeout(r, 4000));
+    }
+    return results;
+  } else {
+    const category = resolveSlotCategory(args);
+    return await publishSingleShort(category, isDryRun, keepVideo);
   }
 }
 

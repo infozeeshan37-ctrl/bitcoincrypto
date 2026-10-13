@@ -1,15 +1,18 @@
-name: 🎬 Autonomous Daily YouTube Shorts Publisher
+name: 🎬 Autonomous 3x Daily YouTube Shorts Publisher
 
 on:
   schedule:
-    # Runs daily at 13:00 UTC (peak global YouTube Shorts engagement)
-    - cron: '0 13 * * *'
+    # Runs 3x Daily at peak global engagement times:
+    # 1) 12:00 UTC (8:00 AM EST)  -> Slot 1: Next 24h AI Price Prediction
+    # 2) 16:00 UTC (12:00 PM EST) -> Slot 2: CoinGlass Liquidation Squeeze Alert
+    # 3) 21:00 UTC (5:00 PM EST)  -> Slot 3: Crypto Learn 100-Lesson Masterclass
+    - cron: '0 12,16,21 * * *'
   # Allows 1-click manual trigger anytime from GitHub Actions tab
   workflow_dispatch:
 
 jobs:
   publish-short:
-    name: 🚀 Generate & Publish Daily YouTube Short
+    name: 🚀 Synthesize & Upload YouTube Short
     runs-on: ubuntu-latest
 
     steps:
@@ -22,15 +25,21 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: 🐍 Setup Python & Install Edge-TTS
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install edge-tts
+
       - name: 🎥 Install FFmpeg
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg chromium-browser
 
       - name: 📦 Install Project Dependencies
         run: npm ci --omit=dev
 
-      - name: 🎬 Generate Video & Upload Directly to YouTube
+      - name: 🎬 Generate Video (Voice + UI Screen) & Upload Directly to YouTube
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}

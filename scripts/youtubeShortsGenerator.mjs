@@ -34,7 +34,7 @@ function formatPrice(val) {
   return `$${val.toFixed(4)}`;
 }
 
-export async function generateDailyShort() {
+export async function generateDailyShort(categoryOverride = null) {
   const categories = [
     "ai_prediction",
     "coinglass_squeeze",
@@ -43,7 +43,9 @@ export async function generateDailyShort() {
     "cpi_macro"
   ];
 
-  const chosenCategory = categories[Math.floor(Math.random() * categories.length)];
+  const chosenCategory = categoryOverride && categories.includes(categoryOverride)
+    ? categoryOverride
+    : categories[Math.floor(Math.random() * categories.length)];
   const coin = POPULAR_COINS[Math.floor(Math.random() * POPULAR_COINS.length)];
   const livePrice = await fetchLiveBinancePrice(coin.symbol, 88500);
 
