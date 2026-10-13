@@ -1,0 +1,38 @@
+name: 🎬 Autonomous Daily YouTube Shorts Publisher
+
+on:
+  schedule:
+    # Runs daily at 13:00 UTC (peak global YouTube Shorts engagement)
+    - cron: '0 13 * * *'
+  # Allows 1-click manual trigger anytime from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  publish-short:
+    name: 🚀 Generate & Publish Daily YouTube Short
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 🎥 Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: 📦 Install Project Dependencies
+        run: npm ci --omit=dev
+
+      - name: 🎬 Generate Video & Upload Directly to YouTube
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+        run: node scripts/autoPostDailyShort.mjs

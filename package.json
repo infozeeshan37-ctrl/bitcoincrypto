@@ -10,7 +10,8 @@
     "tweet:dry-run": "node scripts/twitterAutoPublisher.mjs --dry-run",
     "youtube:shorts": "node scripts/youtubeShortsGenerator.mjs",
     "youtube:upload": "node scripts/youtubeUploader.mjs",
-    "youtube:token": "node scripts/getYoutubeToken.mjs"
+    "youtube:token": "node scripts/getYoutubeToken.mjs",
+    "youtube:auto": "node scripts/autoPostDailyShort.mjs"
   },
   "dependencies": {
     "@types/three": "^0.185.4",

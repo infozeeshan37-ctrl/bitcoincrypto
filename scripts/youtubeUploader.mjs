@@ -39,7 +39,7 @@ function loadEnv() {
 
 loadEnv();
 
-async function getAccessToken() {
+export async function getAccessToken() {
   const clientId = process.env.YOUTUBE_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_CLIENT_SECRET;
   const refreshToken = process.env.YOUTUBE_REFRESH_TOKEN;
@@ -74,7 +74,7 @@ async function getAccessToken() {
   }
 }
 
-async function verifyChannel(accessToken) {
+export async function verifyChannel(accessToken) {
   try {
     const res = await fetch(
       "https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&mine=true",
@@ -90,7 +90,7 @@ async function verifyChannel(accessToken) {
   }
 }
 
-async function uploadVideoToYouTube(videoPath, metadata) {
+export async function uploadVideoToYouTube(videoPath, metadata) {
   const accessToken = await getAccessToken();
 
   if (!accessToken) {
