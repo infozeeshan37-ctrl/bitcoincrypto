@@ -145,15 +145,14 @@ export async function uploadVideoToYouTube(videoPath, metadata) {
     return false;
   }
 
-  const fileStream = fs.createReadStream(videoPath);
+  const fileBuffer = fs.readFileSync(videoPath);
   const uploadRes = await fetch(uploadUrl, {
     method: "PUT",
     headers: {
       "Content-Length": fileSize.toString(),
       "Content-Type": "video/mp4"
     },
-    body: fileStream,
-    duplex: "half"
+    body: fileBuffer
   });
 
   if (!uploadRes.ok) {
