@@ -24,7 +24,7 @@ COMPLETE BITCOINCRYPTO.TECH PLATFORM KNOWLEDGE:
 - **Platform Identity**: BitcoinCrypto.tech is a premier digital asset market intelligence, order flow analytics, and quantitative research suite.
 - **Pages & Navigation**:
   • / (Home): Real-time crypto ecosystem overview, live market tickers, AI signals copilot, and market intelligence dashboard.
-  • /predictions: 5-Minute Binary Price Prediction Arena synchronized with Binance epochs, DeepQuant Neural AI Bot, and a free $10,000 USDT demo paper wallet.
+  • /predictions: 5-Minute Next-Candle Price Forecasting Arena synchronized with Binance epochs, DeepQuant Neural AI Bot, and a free $10,000 USDT demo paper wallet.
   • /markets: Live spot & perpetual prices, 24h volume, market cap rankings, gainers/losers, and crypto dominance metrics.
   • /orderbook: L2 Central Limit Order Book (CLOB) terminal with live 10-level bid/ask depth, Cumulative Volume Delta (CVD), and micro-tick telemetry.
   • /whale-orders: Whale order flow radar tracking high-value institutional transactions and liquidity walls.

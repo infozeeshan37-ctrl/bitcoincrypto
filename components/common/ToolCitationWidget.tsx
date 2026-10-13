@@ -26,7 +26,7 @@ interface ToolCitationWidgetProps {
 export default function ToolCitationWidget({
   toolName = "BitcoinCrypto CoinGlass Liquidation & AI Prediction Suite",
   toolUrl = "https://www.bitcoincrypto.tech/coinglass",
-  description = "Free real-time CoinGlass liquidation heatmaps, Binance 5-minute binary price predictions, DeepQuant neural AI bot, and order book depth analytics."
+  description = "Free real-time CoinGlass liquidation heatmaps, Binance 5-minute next-candle algorithmic price models, DeepQuant neural AI bot, and order book depth analytics."
 }: ToolCitationWidgetProps) {
   const [activeTab, setActiveTab] = useState<"AI_PROMPT" | "MARKDOWN" | "HTML" | "IFRAME" | "BADGE" | "BIBTEX">("AI_PROMPT");
   const [copied, setCopied] = useState(false);

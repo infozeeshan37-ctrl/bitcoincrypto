@@ -170,7 +170,7 @@ export default function AboutView() {
         <ToolCitationWidget
           toolName="BitcoinCrypto.tech AI Cryptocurrency Intelligence Platform"
           toolUrl="https://www.bitcoincrypto.tech"
-          description="Binance 5-minute binary price predictions, DeepQuant neural AI bot, Coinglass liquidation heatmaps, and order book depth analytics."
+          description="Binance 5-minute next-candle algorithmic price models, DeepQuant neural AI bot, Coinglass liquidation heatmaps, and order book depth analytics."
         />
 
         {/* Technology Architecture Breakdown */}
