@@ -401,6 +401,53 @@ export default async function DedicatedToolPage({ params }: PageProps) {
         {/* Google AdSense Compliant Banner Slot */}
         <AdBanner format="auto" />
 
+        {/* Institutional Application & Strategy Workflow */}
+        <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+          <div className="border-b border-slate-100 dark:border-slate-800 pb-4 space-y-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Institutional Strategy Integration</span>
+            </div>
+            <h3 className="text-xl font-black text-slate-900 dark:text-white">
+              How to Integrate the {tool.shortName} Into Your Trading Framework
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              A structured 4-step quantitative workflow for professional market participants.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="w-6 h-6 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-mono font-black flex items-center justify-center text-xs">1</span>
+              <h4 className="font-bold text-slate-900 dark:text-white text-xs">Data Ingestion</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Connect to live sub-second order book and price feeds. Establish current market regime (trending, consolidating, or mean-reverting).
+              </p>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="w-6 h-6 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-mono font-black flex items-center justify-center text-xs">2</span>
+              <h4 className="font-bold text-slate-900 dark:text-white text-xs">Risk Invalidation</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Identify key structural support/resistance levels. Predefine clear invalidation points before establishing any exposure.
+              </p>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="w-6 h-6 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-mono font-black flex items-center justify-center text-xs">3</span>
+              <h4 className="font-bold text-slate-900 dark:text-white text-xs">Position Calibration</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Apply quantitative sizing formulas (Kelly Criterion / ATR distance) to cap maximum drawdown to less than 1.5% of total capital.
+              </p>
+            </div>
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+              <span className="w-6 h-6 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-mono font-black flex items-center justify-center text-xs">4</span>
+              <h4 className="font-bold text-slate-900 dark:text-white text-xs">Execution &amp; Scaling</h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Scale out progressively into resting liquidity tiers to capture positive mathematical expectancy without timing stress.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Other Trading Suite Tools Grid */}
         <section className="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4">
           <div className="flex items-center justify-between">

@@ -139,10 +139,28 @@ export const conceptGuides: ConceptGuide[] = [
     },
     sections: [
       {
-        heading: "1. The Harmonic Mean Advantage",
+        heading: "1. The Harmonic Mean Advantage: Mathematical Proof",
         paragraphs: [
-          "The mathematical secret behind Dollar-Cost Averaging is the Harmonic Mean. Because an investor commits a fixed dollar amount (e.g., $500 every Monday) rather than a fixed token quantity, the portfolio mathematically acquires a greater volume of tokens during market drawdowns.",
-          "Over multi-year volatile cycles, this structural mechanic depresses the investor's break-even threshold significantly below the midpoint of the price channel.",
+          "The mathematical foundation of Dollar-Cost Averaging relies on the Harmonic Mean. Because an investor commits a fixed fiat dollar amount (e.g., $500 every Monday) rather than purchasing a fixed quantity of tokens, the portfolio mathematically acquires a substantially larger volume of units when asset prices drop.",
+          "Over multi-year volatile cycles, this structural mechanic depresses the investor's break-even acquisition threshold significantly below the simple arithmetic average of the market's trading range, providing a systemic quantitative edge over discretionary timing.",
+        ],
+        callout: {
+          title: "Harmonic Pricing Principle",
+          text: "When buying with equal dollar tranches, your average cost per unit equals total cash spent divided by total units purchased, mathematically guaranteeing a cost basis below the arithmetic midpoint.",
+        },
+      },
+      {
+        heading: "2. DCA vs. Lump-Sum: Volatility Drag & Drawdown Mitigation",
+        paragraphs: [
+          "While lump-sum capital deployment can outperform during sustained, uninterrupted bull runs by securing immediate market exposure, it exposes the investor to severe psychological and structural vulnerability if capital is entered near a cyclical blow-off top.",
+          "A 75% drawdown requires a subsequent 300% gain merely to break even. DCA eliminates this timing hazard by spreading capital deployment across multiple quarters, actively converting deep macro drawdowns into accelerated accumulation opportunities.",
+        ],
+      },
+      {
+        heading: "3. Dynamic Value Averaging (DVA) & Halving Cycle Optimization",
+        paragraphs: [
+          "Advanced quantitative desks implement Dynamic Value Averaging (DVA) by modulating weekly contributions based on macroeconomic and on-chain valuation metrics. When the Bitcoin Fear & Greed Index drops below 20 or the 200-week moving average is tested, contributions scale up by 1.5x to 2.0x.",
+          "Conversely, when euphoric retail expansion pushes MVRV Z-Scores above 5.0, periodic allocations are dialed down or shifted into profit-harvesting ladders, capturing an estimated 18% to 28% higher annualized internal rate of return (IRR).",
         ],
       },
     ],
@@ -150,6 +168,14 @@ export const conceptGuides: ConceptGuide[] = [
       {
         question: "Is DCA better than Lump Sum for Bitcoin?",
         answer: "In persistent bull runs, lump sum can win by deploying capital earlier; however, in high-volatility sideways or bear-market accumulation phases, DCA significantly reduces drawdown risk and produces superior risk-adjusted Sharpe ratios.",
+      },
+      {
+        question: "How does Bitcoin's 4-year halving cycle affect DCA returns?",
+        answer: "Bitcoin follows a 4-year halving supply cut rhythm: bull market expansion, bear market correction, and multi-year recovery. Running a multi-year DCA schedule ensures accumulation during historical bear market dips, positioning portfolios for compounding into cyclical bull runs.",
+      },
+      {
+        question: "How should I manage exchange transaction fees while DCAing?",
+        answer: "Utilize low-fee liquid exchanges with recurring automated buy features. Accumulate funds on-platform until reaching a set threshold (e.g. $1,000 or 0.01 BTC), then execute a batch transfer to cold storage hardware to minimize on-chain UTXO consolidation fees.",
       },
     ],
     relatedTools: [
@@ -179,8 +205,26 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "1. How Inflation Prints Transmit to Crypto Markets",
         paragraphs: [
-          "Bitcoin does not trade in isolation; it trades as a high-beta gauge of global monetary conditions. When the US Consumer Price Index is published monthly, market makers instantly recalculate the implied probability of Federal Reserve interest rate hikes or cuts.",
-          "Lower interest rates reduce the risk-free rate of return in US Treasuries, driving global liquidity into scarce digital assets.",
+          "Bitcoin trades as a sensitive real-time gauge of global monetary conditions and fiat liquidity expansion. When the US Bureau of Labor Statistics (BLS) publishes monthly Consumer Price Index (CPI) figures, quantitative algorithms instantly recalculate implied Federal Reserve FOMC interest rate cut and hike probabilities.",
+          "Lower inflation prints accelerate the probability of central bank easing, lowering the nominal yield on risk-free US Treasury debt and forcing institutional capital into scarce, asymmetric risk assets like Bitcoin and Ethereum.",
+        ],
+        callout: {
+          title: "Monetary Transmission Rule",
+          text: "When real yields (Fed Funds Rate minus Inflation) compress, capital departs fiat debt and moves aggressively into non-debaseable digital commodities.",
+        },
+      },
+      {
+        heading: "2. Headline CPI vs. SuperCore Services (ex-Housing)",
+        paragraphs: [
+          "While mainstream headlines focus on headline Year-over-Year (YoY) CPI, central bankers and institutional hedge funds scrutinize SuperCore Inflation—defined as Core Services excluding Shelter and Energy.",
+          "Because housing rents carry an inherent 9-to-12-month lag in BLS survey methodology, SuperCore inflation offers the purest window into wage pressures and domestic services momentum, dictating whether Fed rate cuts will be aggressive or restrained.",
+        ],
+      },
+      {
+        heading: "3. Order Book Gaps & Millisecond Liquidity Sweeps at 8:30 AM ET",
+        paragraphs: [
+          "At precisely 8:30:00 AM Eastern Time on release mornings, institutional high-frequency trading (HFT) market makers pull passive limit quotes from the Level-2 order book to avoid adverse selection, creating instantaneous liquidity voids.",
+          "When algorithmic sentiment parsers interpret the headline print, aggressive taker orders slice through thin bid/ask tiers, generating rapid 1.5% to 3.5% intraday price spikes within seconds before stabilizing into structural macro trends.",
         ],
       },
     ],
@@ -188,6 +232,14 @@ export const conceptGuides: ConceptGuide[] = [
       {
         question: "What time is US CPI data released?",
         answer: "The US Bureau of Labor Statistics releases CPI data monthly at 8:30 AM Eastern Time (12:30 UTC / 13:30 BST).",
+      },
+      {
+        question: "Why does Bitcoin rally when inflation prints are lower than expected?",
+        answer: "Lower inflation increases the likelihood that the Federal Reserve will lower interest rates and expand balance sheet liquidity, which increases capital availability and lowers the opportunity cost of holding non-yielding scarce assets like Bitcoin.",
+      },
+      {
+        question: "How should crypto traders approach trading during CPI release minutes?",
+        answer: "Prudent risk managers avoid entering market orders immediately at 8:30 AM due to wide bid-ask spreads and severe slippage. Waiting 15 to 30 minutes allows market makers to repopulate resting limit walls and establishes genuine directional conviction.",
       },
     ],
     relatedTools: [
@@ -217,15 +269,37 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "1. Realized Cap: The True Cost Basis of the Network",
         paragraphs: [
-          "Traditional financial markets can only calculate market capitalization based on the last traded price. In blockchain networks, public ledger transparency enables analysts to compute 'Realized Cap'—the aggregate purchase price of all circulating coins based on their on-chain movement timestamps.",
-          "When Market Cap is far above Realized Cap, aggregate network participants sit on massive unrealized gains, increasing the probability of profit taking.",
+          "Traditional financial markets calculate market capitalization based exclusively on the last traded price multiplied by total shares. In blockchain networks, the transparent distributed ledger allows analysts to calculate 'Realized Capitalization'—valuing every UTXO at the precise price when it was last moved between wallets.",
+          "Realized Cap represents the collective on-chain cost basis of all market participants. When Market Cap trades significantly above Realized Cap, network participants hold immense unrealized profits, elevating distribution risk.",
+        ],
+      },
+      {
+        heading: "2. Standard Deviation Normalization & Z-Score Regimes",
+        paragraphs: [
+          "The MVRV Z-Score normalizes the difference between Market Cap and Realized Cap by dividing it by the historical standard deviation of Market Cap. This mathematical scaling transforms raw market value into a statistically bounded oscillator capable of comparing valuations across multiple halving cycles.",
+          "A Z-Score reading below 0.1 indicates that aggregate market value is trading at or below investor cost basis—a condition that has historically coincided with maximum financial pain and generational cycle accumulation bottoms.",
+        ],
+      },
+      {
+        heading: "3. Macro Tops (Z > 6.0) vs. Accumulation Floors (Z < 0.1)",
+        paragraphs: [
+          "Every historical macro cycle top in Bitcoin (2013, 2017, early 2021) saw the MVRV Z-Score penetrate into the extreme red zone above 6.0 to 8.0, indicating unsustainable unrealized profits and speculative euphoria.",
+          "Conversely, during the bear market bottoms of 2015, 2018, and late 2022, the Z-Score dipped into negative territory (Z < 0), signaling capitulation where long-term holders absorbed coins from distressed sellers at deep discounts.",
         ],
       },
     ],
     faq: [
       {
         question: "What is a healthy MVRV Z-Score for buying Bitcoin?",
-        answer: "MVRV Z-Scores between 0.5 and 2.5 represent healthy mid-cycle expansion where buying risk is historically low relative to reward.",
+        answer: "MVRV Z-Scores between 0.5 and 2.5 represent healthy mid-cycle expansion where buying risk is historically low relative to long-term expected value.",
+      },
+      {
+        question: "How do lost coins affect Realized Cap calculations?",
+        answer: "Coins that have not moved in over 10 years (including Satoshi's original blocks) are valued at historical pennies, slightly depressing Realized Cap. Adjusted metrics filter out inactive supply to focus on active economic turnover.",
+      },
+      {
+        question: "Can MVRV Z-Score be used on altcoins like Ethereum and Solana?",
+        answer: "Yes, account-based and UTXO-based chains both support realized capitalization models, though staking contracts and DeFi liquidity locks require specialized accounting adjustments.",
       },
     ],
     relatedTools: [
@@ -255,8 +329,26 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "1. Why Liquidation Clusters Act as Price Magnets",
         paragraphs: [
-          "In high-leverage derivatives trading, hundreds of millions of dollars in stop-losses and liquidation levels accumulate at obvious technical support and resistance levels.",
-          "Because institutional market makers require massive counterparty liquidity to enter large positions without moving the market against themselves, they deliberately drive price into these dense liquidation clusters.",
+          "In perpetual futures markets, hundreds of millions of dollars in resting leverage accumulate around technical inflection points. When isolated or cross-margin positions reach maintenance margin limits, the exchange matching engine forcefully executes market orders to close the positions.",
+          "Because institutional market makers and quantitative funds require vast pools of counterparty liquidity to fill multi-million-dollar orders without excessive slippage, they systematically drive price toward dense liquidation bands to execute large fills.",
+        ],
+        callout: {
+          title: "Cascade Rule",
+          text: "A short liquidation triggers a forced market buy order; a long liquidation triggers a forced market sell order. Cascades occur when triggered market orders consume consecutive order book tiers.",
+        },
+      },
+      {
+        heading: "2. 2D Heatmaps vs. 1D Liquidation Maps",
+        paragraphs: [
+          "A 1D liquidation map displays only estimated liquidation volume at specific price increments. A 2D Liquidation Heatmap plots price against time, color-coding the density and age of accumulated leverage pools.",
+          "High-intensity yellow and white zones represent high-density resting leverage pools that have remained un-swept for days. These un-swept zones act as gravitational magnets, pulling spot prices toward them during low-volatility consolidation regimes.",
+        ],
+      },
+      {
+        heading: "3. Executing the Liquidity Sweep Playbook",
+        paragraphs: [
+          "Professional derivatives traders avoid chasing price into a liquidation spike. Instead, they wait for the liquidity sweep to occur: once the stop cluster is absorbed and Cumulative Volume Delta (CVD) divergence appears, they execute mean-reversion counter-trades.",
+          "Because the forced liquidation flow has exhausted and retail stops have been eliminated, price typically snaps back sharply in the opposite direction, producing high-expectancy risk-to-reward setups.",
         ],
       },
     ],
@@ -264,6 +356,14 @@ export const conceptGuides: ConceptGuide[] = [
       {
         question: "How can I avoid getting liquidated in crypto trading?",
         answer: "Maintain leverage below 3x, use isolated margin, set explicit stop-loss orders with ATR buffer zones, and never risk more than 1-2% of total portfolio equity on a single trade.",
+      },
+      {
+        question: "What is the difference between a short squeeze and a long squeeze?",
+        answer: "A short squeeze occurs when rising prices trigger forced market buy orders from liquidated short sellers, causing vertical upward price spikes. A long squeeze occurs when falling prices trigger forced sell cascades downward.",
+      },
+      {
+        question: "Why do market makers target liquidation levels?",
+        answer: "Market makers require high-volume counterparty flow to enter or exit institutional positions without incurring adverse slippage. Liquidation cascades provide concentrated liquidity at predictable price thresholds.",
       },
     ],
     relatedTools: [
@@ -293,8 +393,22 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "1. The Sovereign Debt Refinancing Dilemma",
         paragraphs: [
-          "With global sovereign debt surpassing record percentages of GDP, central banks cannot permit long-term bond yields to trade at free-market clearing rates without causing fiscal insolvency.",
-          "To keep debt servicing manageable, Treasury departments and central banks orchestrate coordinated yield suppression programs.",
+          "With global sovereign debt surpassing record debt-to-GDP ratios, major finance ministries and central banks cannot permit long-term bond yields to float at purely market-clearing rates without incurring catastrophic fiscal debt-servicing burdens.",
+          "When interest obligations on sovereign debt consume a growing percentage of tax receipts, monetary authorities are mathematically compelled to implement yield suppression strategies to ensure government solvency.",
+        ],
+      },
+      {
+        heading: "2. Stealth Yield Curve Control Mechanics (Reverse Repo & T-Bill Tilt)",
+        paragraphs: [
+          "Modern central banks avoid explicit Yield Curve Control announcements like the Bank of Japan utilized in past decades. Instead, they execute 'Stealth YCC' by shortening the average maturity of debt issuance—relying heavily on 4-week to 6-month Treasury bills while draining trillions from the Overnight Reverse Repo Facility (RRF).",
+          "This dynamic sterilizes bond market supply pressure, suppressing 10-year benchmark Treasury yields while flooding private commercial banks and asset managers with liquid reserves that search for high-beta returns.",
+        ],
+      },
+      {
+        heading: "3. Bitcoin as the Pure Global Monetary Debasement Sponge",
+        paragraphs: [
+          "Gold has historically served as the primary hedge against sovereign monetary inflation. However, Bitcoin's mathematically enforced 21-million unit supply cap, instantaneous digital settlement, and zero physical storage friction make it the ultimate liquidity sponge for fiat currency debasement.",
+          "Empirical market analysis demonstrates that Bitcoin's multi-year price trajectory correlates strongly (r > 0.85) with global central bank M2 liquidity expansion and fiscal balance sheet monetization.",
         ],
       },
     ],
@@ -302,6 +416,14 @@ export const conceptGuides: ConceptGuide[] = [
       {
         question: "Why does Yield Curve Control help Bitcoin?",
         answer: "Yield Curve Control caps bond yields while inflation remains elevated, guaranteeing negative real yields on government debt and forcing global capital into Bitcoin to preserve purchasing power.",
+      },
+      {
+        question: "How does Stealth YCC differ from Quantitative Easing (QE)?",
+        answer: "Traditional QE involves outright purchases of long-term government bonds by the central bank. Stealth YCC achieves identical yield suppression by altering Treasury debt issuance profiles and mobilizing liquidity facilities without expanding the formal central bank balance sheet.",
+      },
+      {
+        question: "What happens to Bitcoin if real interest rates remain positive?",
+        answer: "When real yields on risk-free Treasuries remain positive and rising, speculative crypto demand cools as cash generates low-risk returns. When real yields turn negative, capital systematically flees fiat into scarce hard assets.",
       },
     ],
     relatedTools: [
@@ -331,15 +453,37 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "1. The AI Agent Metabolic Demand",
         paragraphs: [
-          "In the emerging agentic economy, millions of autonomous AI software programs will execute smart contracts, analyze order books, and write software.",
-          "These agents cannot function without access to decentralized, permissionless GPU compute clusters that cannot be censored by centralized cloud monopolies.",
+          "In the emerging autonomous economy, millions of AI agents will execute financial transactions, optimize Level-2 order books, analyze on-chain telemetry, and deploy smart contracts without human intervention.",
+          "These autonomous software entities require continuous floating-point operations per second (FLOPs) as their foundational computational sustenance. Relying exclusively on centralized corporate clouds introduces single points of failure, censorship, and arbitrary API de-platforming.",
+        ],
+      },
+      {
+        heading: "2. Verifiable Inference & Yuma Consensus Architecture",
+        paragraphs: [
+          "Proof of Useful Inference (PoUI) shifts cryptographic consensus from energy-intensive brute-force hashing toward verifiable machine learning validation. Networks like Bittensor utilize specialized subnets governed by Yuma Consensus.",
+          "Miner nodes run machine learning models, fine-tuned LLMs, and quant algorithms to generate inference responses, while validator nodes score the statistical accuracy and latency of outputs, distributing protocol rewards proportionally to highest-performing miners.",
+        ],
+      },
+      {
+        heading: "3. Decentralized GPU Economics vs. Centralized Hyperscalers",
+        paragraphs: [
+          "Decentralized physical infrastructure networks (DePIN) aggregate global GPU hardware—ranging from enterprise H100/H200 data center clusters to consumer gaming rigs—enabling developers to access compute at up to 70% lower cost than traditional cloud providers.",
+          "Smart contracts automate micropayments per token of generated text or inference step, creating permissionless, borderless compute commodity markets backed by cryptoeconomic security.",
         ],
       },
     ],
     faq: [
       {
         question: "How does Bittensor validate AI inference?",
-        answer: "Bittensor uses Yuma Consensus where specialized subnet validators evaluate the quality of responses generated by miners and distribute rewards proportionally.",
+        answer: "Bittensor uses Yuma Consensus where specialized subnet validators evaluate the quality of responses generated by miners and distribute rewards proportionally based on matrix performance benchmarks.",
+      },
+      {
+        question: "How does decentralized AI prevent fraudulent miner responses?",
+        answer: "Validators query miners with benchmark prompt sets and compare output tensors against local ground-truth evaluations, penalizing nodes that submit spoofed or low-fidelity responses through stake slashing.",
+      },
+      {
+        question: "Can decentralized GPU networks compete with AWS and Google Cloud?",
+        answer: "For distributed inference, fine-tuning, and open-source model execution, decentralized networks offer massive cost advantages and zero censorship, though high-bandwidth pre-training clusters still require specialized co-located InfiniBand architecture.",
       },
     ],
     relatedTools: [
@@ -422,8 +566,22 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "1. The 6 Pillars of Market Psychology",
         paragraphs: [
-          "Crypto markets are hyper-reflexive: rising prices breed greed and leverage, while declining prices trigger liquidation cascades and panic selling.",
-          "The Fear & Greed Index quantifies this psychological cycle by tracking structural volatility, volume velocity, social discourse sentiment on X (Twitter), and retail Google search interest.",
+          "Cryptocurrency markets are hyper-reflexive: price appreciation attracts leverage and speculative retail enthusiasm, while declining prices precipitate liquidation cascades and emotional panic selling.",
+          "The Crypto Fear & Greed Index quantifies this emotional pendulum by synthesizing 6 distinct data streams: Volatility (25%), Market Volume and Momentum (25%), Social Media Sentiment on X (15%), Surveys (15%), Bitcoin Dominance (10%), and Google Search Trends (10%).",
+        ],
+      },
+      {
+        heading: "2. Sentiment Extremes as Asymmetric Alpha Signals",
+        paragraphs: [
+          "Billionaire investor Warren Buffett famously advised to 'be fearful when others are greedy, and greedy when others are fearful.' In cryptocurrency, this dynamic operates with magnified statistical precision.",
+          "Historically, purchasing Bitcoin during sustained 'Extreme Fear' regimes (score < 20) has produced an average 12-month forward return exceeding +180%. Conversely, readings above 85 signal euphoric retail leverage that precedes sharp -20% to -35% leverage flushes.",
+        ],
+      },
+      {
+        heading: "3. Constructing a Sentiment-Weighted Allocation Model",
+        paragraphs: [
+          "Quantitative swing traders use the Fear & Greed Index not as an isolated trigger, but as a position sizing multiplier. During Extreme Fear, base DCA accumulation allocations are scaled up by 1.5x to 2.0x.",
+          "When sentiment reaches Extreme Greed, traders systematically trim risk, tighten stop-loss thresholds behind major resting whale walls, or rotate into delta-neutral basis arbitrage to harvest double-digit funding yields without directional market exposure.",
         ],
       },
     ],
@@ -431,6 +589,14 @@ export const conceptGuides: ConceptGuide[] = [
       {
         question: "Is the Fear & Greed Index a reliable timing tool?",
         answer: "While not designed for second-by-second scalping, the index is exceptionally accurate for macro swing positioning, identifying cycle bottoms with over 90% historical strike rate.",
+      },
+      {
+        question: "How often does the Fear & Greed Index update?",
+        answer: "The index updates daily at 00:00 UTC, recalculating trailing 24-hour sentiment, volatility, and volume inputs across global exchanges.",
+      },
+      {
+        question: "What is the difference between Extreme Fear and Extreme Greed?",
+        answer: "Extreme Fear (scores 0-25) indicates severe retail panic and undervaluation. Neutral (46-54) indicates balanced order flow. Extreme Greed (75-100) reflects speculative euphoria, elevated funding rates, and imminent correction risk.",
       },
     ],
     relatedTools: [
@@ -460,8 +626,22 @@ export const conceptGuides: ConceptGuide[] = [
       {
         heading: "1. The Scarcity Anchor: Why Halvings Matter",
         paragraphs: [
-          "Every 210,000 blocks (roughly every 4 years), the block subsidy awarded to Bitcoin miners is mathematically halved. Following the 2024 halving, miner issuance dropped to 3.125 BTC per block.",
-          "This programmatic supply inelasticity ensures that when institutional ETF inflows or sovereign wealth fund demand increases, the entire adjustment must occur through price appreciation.",
+          "Every 210,000 blocks (roughly every 4 years), the block subsidy awarded to Bitcoin miners is mathematically halved. Following the April 2024 halving, miner issuance dropped from 6.25 BTC to 3.125 BTC per block—producing approximately 450 BTC daily.",
+          "This programmatic supply inelasticity ensures that when institutional demand surges via spot ETFs or corporate treasuries, the supply cannot expand in response. The entire economic adjustment must occur through price appreciation.",
+        ],
+      },
+      {
+        heading: "2. Global M2 Liquidity Expansion as the Macro Growth Driver",
+        paragraphs: [
+          "While Stock-to-Flow explains Bitcoin's inelastic supply curve, global fiat monetary expansion explains the demand curve. The combined M2 money supply of major central banks (Federal Reserve, ECB, PBOC, BOJ) currently exceeds $105 Trillion.",
+          "Historical regression analysis reveals an 88% correlation between changes in global M2 and Bitcoin market capitalization tops, with monetary liquidity typically leading crypto price action by 8 to 10 weeks.",
+        ],
+      },
+      {
+        heading: "3. Synthesizing Scarcity and Monetary Expansion into Valuation Corridors",
+        paragraphs: [
+          "By combining the Stock-to-Flow programmatic floor with global fiat liquidity growth trajectories, quantitative analysts construct valuation bands rather than single discrete price targets.",
+          "During the post-2024 halving era, annual supply inflation sits at just 0.83%—more scarce than physical gold. When combined with projected global M2 expansion, this macro framework projects equilibrium cycle targets between $150,000 and $220,000.",
         ],
       },
     ],
@@ -469,6 +649,14 @@ export const conceptGuides: ConceptGuide[] = [
       {
         question: "Does Stock-to-Flow still hold after the ETF era?",
         answer: "Yes, but it is enhanced by institutional liquidity. Scarcity provides the structural supply floor, while Wall Street ETF inflows and global M2 growth provide the demand velocity.",
+      },
+      {
+        question: "How does Bitcoin's Stock-to-Flow compare to physical gold?",
+        answer: "Following the 2024 halving, Bitcoin's Stock-to-Flow ratio is approximately 112 (annual issuance ~0.83%), whereas gold has a Stock-to-Flow ratio of ~60 (annual mining supply ~1.6%), making Bitcoin mathematically twice as scarce as gold.",
+      },
+      {
+        question: "Why does global M2 lead Bitcoin price action?",
+        answer: "Global central bank liquidity injections enter commercial bank reserves and money markets first, expanding institutional risk tolerance before flowing into liquid digital commodities over an 8 to 10-week lag.",
       },
     ],
     relatedTools: [
@@ -496,10 +684,24 @@ export const conceptGuides: ConceptGuide[] = [
     },
     sections: [
       {
-        heading: "1. The Limitations of Candlesticks",
+        heading: "1. The Limitations of Candlesticks & The Internal Auction Tape",
         paragraphs: [
-          "A regular green candlestick can hide massive internal selling, while a red candlestick can hide aggressive limit absorption. Footprint charts eliminate this blindness by displaying the internal auction tape.",
-          "By viewing aggressive market buys on the right side and market sells on the left side, quant traders pinpoint exactly who is in control of every single price tick.",
+          "Standard Japanese candlestick charts display only four data points per interval: Open, High, Low, and Close. A robust green candle can conceal aggressive passive limit selling, while a red candle can mask institutional absorption.",
+          "Footprint (Cluster) charts decompose each candle into granular horizontal price bins, displaying the exact volume of aggressive market orders that hit the bid versus lifted the ask, rendering the internal auction transparent.",
+        ],
+      },
+      {
+        heading: "2. Detecting Stacked Bid/Ask Imbalances",
+        paragraphs: [
+          "A Stacked Imbalance occurs when aggressive market buying or selling exceeds opposing resting limit volume by 300% or more across 3 or more consecutive price levels.",
+          "When a stacked buying imbalance appears at the bottom of a pullback or during a breakout above range resistance, it confirms institutional market orders entering the tape. Traders use the top of the stacked imbalance zone as a high-probability re-test support level.",
+        ],
+      },
+      {
+        heading: "3. Point of Control (POC) Migrations & Value Area Acceptance",
+        paragraphs: [
+          "The Point of Control (POC) represents the single price tier within a candle where the highest volume was transacted. When POCs migrate upward with consecutive candles, it confirms buyer acceptance of higher prices.",
+          "If price pushes to a new high but the POC remains trapped at the bottom of the candle with high delta divergence, it signals that passive limit sellers are absorbing market buys, warning of an imminent reversal.",
         ],
       },
     ],
@@ -507,6 +709,14 @@ export const conceptGuides: ConceptGuide[] = [
       {
         question: "How do Footprint charts improve trading win rates?",
         answer: "By verifying whether a breakout is backed by stacked aggressive market orders or merely low-volume slippage, traders avoid false breakouts and catch explosive continuation moves.",
+      },
+      {
+        question: "What is an Unfinished Auction in footprint analysis?",
+        answer: "An unfinished auction occurs when both bids and asks transact at the extreme high or low of a candle rather than showing a clean zero print, signaling that price must return to test resting depth before trend completion.",
+      },
+      {
+        question: "What timeframe is best for Footprint and Order Flow analysis?",
+        answer: "Order flow footprints are most effective on tick-based, volume-based (e.g. 1000-tick), or low-timeframe (1-minute, 5-minute, and 15-minute) charts where individual institutional execution blocks can be observed in real time.",
       },
     ],
     relatedTools: [

@@ -13,7 +13,8 @@ import {
   ChevronDown,
   Info,
   Sliders,
-  CheckCircle2
+  CheckCircle2,
+  Scale
 } from "lucide-react";
 
 interface CryptoRate {
@@ -242,6 +243,71 @@ export default function CryptoConverterTool() {
         </div>
       </div>
 
+      {/* Institutional FX & Valuation Masterclass */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 max-w-4xl mx-auto">
+        <div className="border-b border-slate-100 dark:border-slate-800 pb-4 space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80">
+            <span>Foreign Exchange &amp; Settlement Guide</span>
+          </div>
+          <h3 className="text-xl font-black text-slate-900 dark:text-white">
+            How Crypto-to-Fiat Valuation &amp; Mid-Market Rates Work
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Understanding volume-weighted index pricing, Forex triangulation, and exchange retail spreads.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+              <Scale className="w-4 h-4 text-amber-500" />
+              <span>1. Mid-Market Spot Pricing</span>
+            </h4>
+            <p>
+              The <strong>Mid-Market Rate</strong> is the exact mathematical midpoint between global best bid and best ask quotes:
+            </p>
+            <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 font-mono text-[11px] text-center font-bold text-slate-900 dark:text-white">
+              P_mid = (Best Bid + Best Ask) / 2
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Retail exchanges and payment apps frequently obscure hidden markups (1.5% to 3.0%) inside inflated exchange rates. Our converter computes unmanipulated mid-market prices.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+              <Layers className="w-4 h-4 text-purple-500" />
+              <span>2. Triangular Cross-Currency FX</span>
+            </h4>
+            <p>
+              Because most crypto order books settle primarily against USD or USDT, fiat conversions into EUR, GBP, JPY, or CAD employ triangular cross-rates:
+            </p>
+            <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 font-mono text-[11px] text-center font-bold text-slate-900 dark:text-white">
+              Price(EUR) = Price(USD) × FX(EUR/USD)
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Institutional FX arbitrageurs continuously close micro-discrepancies between direct crypto/fiat pairs and synthesized synthetic USD cross-rates.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-500" />
+              <span>3. Satoshi &amp; Micro-Units</span>
+            </h4>
+            <p>
+              Bitcoin is divisible to 8 decimal places. The smallest indivisible unit is 1 Satoshi (sat):
+            </p>
+            <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 font-mono text-[11px] text-center font-bold text-slate-900 dark:text-white">
+              1 BTC = 100,000,000 Satoshis
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              When Bitcoin trades at $88,450, $1.00 USD equals approximately <strong>1,130 Satoshis</strong>. In Ethereum, the base unit is Wei (1 ETH = 10^18 Wei), with Gwei (10^9 Wei) standard for gas calculation.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* FAQs */}
       <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 max-w-4xl mx-auto">
         <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
@@ -273,6 +339,26 @@ export default function CryptoConverterTool() {
               )}
             </div>
           ))}
+
+          {/* Additional In-Depth FAQs */}
+          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition">
+            <button
+              onClick={() => setOpenFaq(openFaq === 99 ? null : 99)}
+              className="w-full flex items-center justify-between p-4 text-left font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50"
+            >
+              <span>Why does the price of Bitcoin vary slightly across different exchanges?</span>
+              <ChevronDown
+                className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                  openFaq === 99 ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            {openFaq === 99 && (
+              <div className="p-4 pt-0 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+                Each centralized exchange (Binance, Coinbase, Kraken, OKX) operates an independent matching engine with its own localized resting order book. Microscopic price variations (often 0.01% to 0.05%) occur due to local fiat banking rail fees, differing withdrawal constraints, and transient taker flow imbalances before arbitrageurs realign them.
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

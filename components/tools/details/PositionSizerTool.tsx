@@ -283,11 +283,75 @@ export default function PositionSizerTool() {
         </div>
       </div>
 
+      {/* Institutional Quantitative Risk Masterclass */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        <div className="border-b border-slate-100 dark:border-slate-800 pb-4 space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80">
+            <span>Quantitative Risk Masterclass</span>
+          </div>
+          <h3 className="text-xl font-black text-slate-900 dark:text-white">
+            The Mathematical Science of Capital Preservation &amp; Position Sizing
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            How quantitative hedge funds calculate risk of ruin, dynamic volatility stops, and compounding efficiency.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+              <Scale className="w-4 h-4 text-amber-500" />
+              <span>1. The Kelly Criterion Formula</span>
+            </h4>
+            <p>
+              The Kelly Criterion determines the optimal bet fraction to maximize geometric compounding:
+            </p>
+            <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-mono text-[11px] text-center font-bold text-slate-900 dark:text-white">
+              f* = (p × b - q) / b
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Where <em>p</em> is win probability, <em>b</em> is net payout odds (Reward:Risk ratio), and <em>q = 1 - p</em>. Because full Kelly yields high drawdown volatility, quant desks implement <strong>Half-Kelly (0.5 × f*)</strong> to slash variance by 50% while capturing 75% of peak geometric return.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+              <Zap className="w-4 h-4 text-purple-500" />
+              <span>2. ATR Volatility-Adjusted Stops</span>
+            </h4>
+            <p>
+              Never place stop-losses based on arbitrary percentages. Market noise varies across market regimes.
+            </p>
+            <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 font-mono text-[11px] text-center font-bold text-slate-900 dark:text-white">
+              Stop Distance = k × ATR(14, 1D)
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Using <strong>1.5× to 2.0× daily Average True Range (ATR)</strong> ensures stops sit outside normal statistical intraday fluctuations, preventing premature market-maker stop hunts before directional expansion begins.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+            <h4 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+              <span>3. Monte Carlo Risk of Ruin</span>
+            </h4>
+            <p>
+              In a series of 1,000 trades with a 55% win rate, a trader will mathematically experience a sequence of <strong>6 to 9 consecutive losses</strong>.
+            </p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              • Risking <strong>10% per trade</strong>: 7 losses destroy 52% of equity, requiring a 108% gain just to break even.
+              <br />
+              • Risking <strong>1.5% per trade</strong>: 7 losses draw down only 10% of equity, requiring an easily achievable 11% recovery.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* FAQs */}
       <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
           <Info className="w-5 h-5 text-amber-500" />
-          <span>Position Sizing FAQs</span>
+          <span>Position Sizing &amp; Capital Protection FAQs</span>
         </h3>
 
         <div className="space-y-3 pt-2">
@@ -314,6 +378,45 @@ export default function PositionSizerTool() {
               )}
             </div>
           ))}
+
+          {/* Additional In-Depth FAQs */}
+          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition">
+            <button
+              onClick={() => setOpenFaq(openFaq === 99 ? null : 99)}
+              className="w-full flex items-center justify-between p-4 text-left font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50"
+            >
+              <span>How does leverage impact my real position size risk?</span>
+              <ChevronDown
+                className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                  openFaq === 99 ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            {openFaq === 99 && (
+              <div className="p-4 pt-0 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+                Leverage itself does not dictate your risk dollar amount—your stop loss distance and coin quantity do. Leverage simply determines how much initial collateral (margin) you must deposit to hold that position size. Using 10x leverage with a 1% stop loss carries the exact same dollar risk as 1x spot with a 1% stop loss, provided total position notional is equal.
+              </div>
+            )}
+          </div>
+
+          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition">
+            <button
+              onClick={() => setOpenFaq(openFaq === 100 ? null : 100)}
+              className="w-full flex items-center justify-between p-4 text-left font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50"
+            >
+              <span>What is Slippage and why must it be accounted for in position sizing?</span>
+              <ChevronDown
+                className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
+                  openFaq === 100 ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            {openFaq === 100 && (
+              <div className="p-4 pt-0 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+                Slippage occurs when a market order fills through multiple tiers of the Level-2 order book rather than entirely at the best bid or ask. During volatile market conditions or high-impact news events (e.g. US CPI releases), stops can execute beyond predefined invalidation levels. Prudent traders factor a 0.1% to 0.3% slippage buffer into their position sizing models.
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
