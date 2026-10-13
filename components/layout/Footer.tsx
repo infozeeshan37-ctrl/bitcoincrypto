@@ -170,6 +170,16 @@ export default function Footer() {
                   <GraduationCap className="w-3.5 h-3.5" /> Crypto Learn Masterclass
                 </Link>
               </li>
+              <li>
+                <Link href="/learn/technical" className="hover:text-emerald-400 transition text-emerald-400/90 font-medium flex items-center gap-1">
+                  <span>📈 Technical Analysis Track</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/learn/fundamental" className="hover:text-amber-400 transition text-amber-400/90 font-medium flex items-center gap-1">
+                  <span>🌐 Fundamental Learn Track</span>
+                </Link>
+              </li>
               <li><Link href="/concepts" className="hover:text-white transition">Trading Concepts &amp; Models</Link></li>
               <li><Link href="/blog" className="hover:text-white transition">Research Desk &amp; Analysis</Link></li>
               <li><Link href="/about" className="hover:text-white transition">Architecture &amp; Methodology</Link></li>
@@ -279,14 +289,24 @@ export default function Footer() {
 
         {/* SEO Cross-Linking Directory Section: Crypto Learn Masterclass Chapters */}
         <div className="space-y-3 pt-2 border-b border-slate-800 pb-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
               <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
-              Crypto Learn Masterclass Curriculum (10 Chapters &amp; 100 Comprehensive Lessons):
+              Crypto Learn Curriculum (2 Dedicated Paths • 10 Chapters • 100 Lessons):
             </span>
-            <Link href="/learn" className="text-[11px] text-emerald-400 hover:underline font-mono">
-              View All 100 Lessons &rarr;
-            </Link>
+            <div className="flex items-center gap-3 text-[11px] font-mono flex-wrap">
+              <Link href="/learn/technical" className="text-emerald-400 hover:underline font-bold">
+                📈 Technical Track (60 Lessons)
+              </Link>
+              <span className="text-slate-600">•</span>
+              <Link href="/learn/fundamental" className="text-amber-400 hover:underline font-bold">
+                🌐 Fundamental Track (40 Lessons)
+              </Link>
+              <span className="text-slate-600">•</span>
+              <Link href="/learn" className="text-slate-300 hover:underline">
+                All 10 Chapters &rarr;
+              </Link>
+            </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-[11px]">
             {[

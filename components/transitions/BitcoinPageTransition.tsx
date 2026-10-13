@@ -31,7 +31,9 @@ function getFriendlyTaskLabel(pathname: string, search: string, anchor?: HTMLAnc
     return "CoinGlass Derivatives";
   }
 
-  if (pathname === "/learn") return "Crypto Learn Hub";
+  if (pathname === "/learn/technical") return "Technical Analysis Track";
+  if (pathname === "/learn/fundamental") return "Fundamental Learn Track";
+  if (pathname.startsWith("/learn")) return "Crypto Learn Hub";
   if (pathname === "/blog") return "Research Desk";
   if (pathname.startsWith("/blog/")) return "Research Analysis";
   if (pathname === "/tools") return "Quantitative Tools";

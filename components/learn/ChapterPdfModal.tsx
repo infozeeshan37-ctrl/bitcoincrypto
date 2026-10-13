@@ -15,7 +15,7 @@ import { CourseChapter } from "@/lib/course/types";
 interface ChapterPdfModalProps {
   chapter: CourseChapter;
   allChapters?: CourseChapter[];
-  initialMode?: "chapter" | "all";
+  initialMode?: "chapter" | "fundamental" | "technical" | "all";
   isOpen: boolean;
   onClose: () => void;
 }
@@ -27,7 +27,7 @@ export default function ChapterPdfModal({
   isOpen,
   onClose,
 }: ChapterPdfModalProps) {
-  const [exportMode, setExportMode] = useState<"chapter" | "all">(initialMode);
+  const [exportMode, setExportMode] = useState<"chapter" | "fundamental" | "technical" | "all">(initialMode);
   const [selectedChapterId, setSelectedChapterId] = useState<string>(chapter.id);
   const printRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,10 +43,45 @@ export default function ChapterPdfModal({
       ? allChapters.find((c) => c.id === selectedChapterId)
       : null) || chapter;
 
-  const chaptersToRender = exportMode === "all" && allChapters.length > 0 ? allChapters : [currentChapter];
+  const chaptersToRender =
+    exportMode === "all" && allChapters.length > 0
+      ? allChapters
+      : exportMode === "fundamental" && allChapters.length > 0
+      ? allChapters.slice(0, 4)
+      : exportMode === "technical" && allChapters.length > 0
+      ? allChapters.slice(4, 10)
+      : [currentChapter];
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const getExportTitle = () => {
+    switch (exportMode) {
+      case "all":
+        return "Complete 10-Chapter Masterclass Compendium";
+      case "fundamental":
+        return "Fundamental Analysis Track Compendium (Chapters 1–4)";
+      case "technical":
+        return "Technical Analysis Track Compendium (Chapters 5–10)";
+      case "chapter":
+      default:
+        return `Chapter ${currentChapter.chapterNumber}: ${currentChapter.title}`;
+    }
+  };
+
+  const getExportSubtitle = () => {
+    switch (exportMode) {
+      case "all":
+        return "All 10 Chapters • 100 Authentic Articles • A4 Document Format";
+      case "fundamental":
+        return "4 Chapters • 40 Fundamental Research Articles • A4 Document Format";
+      case "technical":
+        return "6 Chapters • 60 Quantitative Research Articles • A4 Document Format";
+      case "chapter":
+      default:
+        return "10 Research Articles • Formatted for A4 / PDF Export";
+    }
   };
 
   return (
@@ -61,14 +96,10 @@ export default function ChapterPdfModal({
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-black text-white">
-                {exportMode === "all"
-                  ? "Complete 10-Chapter Masterclass Document"
-                  : `Chapter ${currentChapter.chapterNumber}: ${currentChapter.title}`}
+                {getExportTitle()}
               </h3>
               <p className="text-xs text-slate-400 font-mono">
-                {exportMode === "all"
-                  ? "All 10 Chapters • 100 Authentic Articles • A4 Document Format"
-                  : `10 Research Articles • Formatted for A4 / PDF Export`}
+                {getExportSubtitle()}
               </p>
             </div>
           </div>
@@ -93,9 +124,9 @@ export default function ChapterPdfModal({
 
         {/* EXPORT MODE SELECTOR TOOLBAR (PRINT:HIDDEN) */}
         <div className="bg-slate-900 border-b border-slate-800 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono print:hidden">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-slate-400 text-[11px]">Scope:</span>
-            <div className="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800">
+            <div className="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800 flex-wrap gap-1">
               <button
                 onClick={() => setExportMode("chapter")}
                 className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
@@ -107,14 +138,34 @@ export default function ChapterPdfModal({
                 Individual Chapter
               </button>
               <button
-                onClick={() => setExportMode("all")}
+                onClick={() => setExportMode("technical")}
                 className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
-                  exportMode === "all"
+                  exportMode === "technical"
                     ? "bg-emerald-500 text-slate-950 shadow-sm"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
-                All 10 Chapters (Complete 100 Articles)
+                Technical Track (60 Articles)
+              </button>
+              <button
+                onClick={() => setExportMode("fundamental")}
+                className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
+                  exportMode === "fundamental"
+                    ? "bg-amber-400 text-slate-950 shadow-sm"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                Fundamental Track (40 Articles)
+              </button>
+              <button
+                onClick={() => setExportMode("all")}
+                className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
+                  exportMode === "all"
+                    ? "bg-purple-500 text-white shadow-sm"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                All 10 Chapters (100 Articles)
               </button>
             </div>
           </div>

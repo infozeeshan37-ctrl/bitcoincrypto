@@ -57,6 +57,84 @@ export function getChapterById(id: string) {
   return courseChapters.find((c) => c.id === id);
 }
 
+// 2 Dedicated Learning Paths: Fundamental Learn & Technical Analysis Learn
+export type CourseLearningTrack = "all" | "fundamental" | "technical";
+
+export interface LearningTrackInfo {
+  id: "fundamental" | "technical";
+  slug: string;
+  href: string;
+  title: string;
+  shortTitle: string;
+  tagline: string;
+  description: string;
+  chapterCount: number;
+  articleCount: number;
+  estimatedHours: string;
+  badge: string;
+  accentColor: string;
+  chapters: CourseChapter[];
+  keyTopics: string[];
+}
+
+export const fundamentalChapters: CourseChapter[] = courseChapters.slice(0, 4); // Ch 1 to 4 (40 articles)
+export const technicalChapters: CourseChapter[] = courseChapters.slice(4, 10); // Ch 5 to 10 (60 articles)
+
+export const learningTracks: Record<"fundamental" | "technical", LearningTrackInfo> = {
+  fundamental: {
+    id: "fundamental",
+    slug: "fundamental",
+    href: "/learn/fundamental",
+    title: "Fundamental Analysis Track (Fundamental Learn)",
+    shortTitle: "Fundamental Learn",
+    tagline: "Blockchain Architecture, Protocol Economics, Macro Liquidity & On-Chain Cycle Valuation",
+    description:
+      "Deep institutional grounding in the economic and structural foundations of crypto assets. Spanning 4 comprehensive chapters and 40 human-written research articles, master Bitcoin Nakamoto consensus, Ethereum EVM & smart contracts, Federal Reserve macroeconomic liquidity & CPI inflation dynamics, and on-chain valuation cycle ratios (MVRV Z-Score, SOPR, NVT).",
+    chapterCount: 4,
+    articleCount: 40,
+    estimatedHours: "4.5 Hours",
+    badge: "Institutional Macro & On-Chain",
+    accentColor: "amber",
+    chapters: fundamentalChapters,
+    keyTopics: [
+      "Bitcoin Nakamoto Consensus & UTXO Mechanics",
+      "Ethereum EVM, Gas Dynamics & EIP-1559",
+      "Macroeconomic Liquidity, Fed Policy & CPI",
+      "On-Chain MVRV Z-Score & Halving Cycle Models"
+    ]
+  },
+  technical: {
+    id: "technical",
+    slug: "technical",
+    href: "/learn/technical",
+    title: "Technical Analysis Track (Technical Learn)",
+    shortTitle: "Technical Analysis",
+    tagline: "Candlestick Auction Theory, Order Book Depth, Microstructure & Quantitative Risk",
+    description:
+      "Professional quantitative trading and execution methodology. Spanning 6 advanced chapters and 60 human-written research articles, master candlestick price action & Wyckoff auction theory, Level-2 order book depth & CVD order flow, technical indicator confluence, HFT exchange microstructure, CoinGlass liquidation cascades, and Kelly Criterion risk management.",
+    chapterCount: 6,
+    articleCount: 60,
+    estimatedHours: "6.5 Hours",
+    badge: "Quantitative Trading & Execution",
+    accentColor: "emerald",
+    chapters: technicalChapters,
+    keyTopics: [
+      "Candlestick Auction Theory & Market Structure",
+      "Order Flow, CVD & Level-2 Order Book Depth",
+      "Indicator Confluence, RSI, VWAP & Divergences",
+      "Market Microstructure & HFT Matching Engines",
+      "Perpetual Derivatives & CoinGlass Liquidations",
+      "Kelly Criterion & Mathematical Risk Sizing"
+    ]
+  }
+};
+
+export function getChaptersByTrack(track: CourseLearningTrack): CourseChapter[] {
+  if (track === "fundamental") return fundamentalChapters;
+  if (track === "technical") return technicalChapters;
+  return courseChapters;
+}
+
 export const courseGlossary: CourseGlossaryItem[] = [
   { term: "Central Limit Order Book (CLOB)", category: "Microstructure", def: "The deterministic electronic matching engine where resting limit buy and sell orders are queued according to strict price-time (FIFO) priority." },
   { term: "Cumulative Volume Delta (CVD)", category: "Microstructure", def: "The running cumulative difference between aggressive taker market buying volume and aggressive taker market selling volume, used to identify absorption." },

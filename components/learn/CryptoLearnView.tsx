@@ -24,7 +24,9 @@ import {
   Search,
   FileText,
   Sliders,
-  ExternalLink
+  ExternalLink,
+  Globe2,
+  LineChart
 } from "lucide-react";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
@@ -35,11 +37,29 @@ import {
   allArticles,
   courseGlossary,
   CourseChapter,
-  CourseLesson
+  CourseLesson,
+  CourseLearningTrack,
+  learningTracks,
+  fundamentalChapters,
+  technicalChapters,
+  getChaptersByTrack
 } from "@/lib/courseData";
 
-export default function CryptoLearnView() {
-  const [activeChapterId, setActiveChapterId] = useState<string>(courseChapters[0].id);
+interface CryptoLearnViewProps {
+  initialTrack?: CourseLearningTrack;
+  canonicalPath?: string;
+}
+
+export default function CryptoLearnView({
+  initialTrack = "all",
+  canonicalPath = "/learn",
+}: CryptoLearnViewProps) {
+  const [activeTrack, setActiveTrack] = useState<CourseLearningTrack>(initialTrack);
+  const [activeChapterId, setActiveChapterId] = useState<string>(() => {
+    if (initialTrack === "technical") return technicalChapters[0].id;
+    if (initialTrack === "fundamental") return fundamentalChapters[0].id;
+    return courseChapters[0].id;
+  });
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [completedLessons, setCompletedLessons] = useState<Record<string, boolean>>({});
@@ -49,7 +69,23 @@ export default function CryptoLearnView() {
   
   // Modal state
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
-  const [pdfInitialMode, setPdfInitialMode] = useState<"chapter" | "all">("chapter");
+  const [pdfInitialMode, setPdfInitialMode] = useState<"chapter" | "fundamental" | "technical" | "all">("chapter");
+
+  // Read URL params on client side if on /learn
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlTrack = params.get("track") || params.get("path");
+      if (urlTrack === "technical" || urlTrack === "fundamental") {
+        setActiveTrack(urlTrack as CourseLearningTrack);
+        if (urlTrack === "technical" && !technicalChapters.some((c) => c.id === activeChapterId)) {
+          setActiveChapterId(technicalChapters[0].id);
+        } else if (urlTrack === "fundamental" && !fundamentalChapters.some((c) => c.id === activeChapterId)) {
+          setActiveChapterId(fundamentalChapters[0].id);
+        }
+      }
+    }
+  }, []);
 
   // Restore progress from localStorage
   useEffect(() => {
@@ -73,19 +109,75 @@ export default function CryptoLearnView() {
     });
   };
 
-  const activeChapter = useMemo(() => {
-    return courseChapters.find((c) => c.id === activeChapterId) || courseChapters[0];
-  }, [activeChapterId]);
+  const switchTrack = (newTrack: CourseLearningTrack) => {
+    setActiveTrack(newTrack);
+    setActiveCategory("all");
+    if (newTrack === "technical") {
+      if (!technicalChapters.some((c) => c.id === activeChapterId)) {
+        setActiveChapterId(technicalChapters[0].id);
+      }
+    } else if (newTrack === "fundamental") {
+      if (!fundamentalChapters.some((c) => c.id === activeChapterId)) {
+        setActiveChapterId(fundamentalChapters[0].id);
+      }
+    }
+    // Update browser URL query if on /learn
+    if (typeof window !== "undefined" && window.location.pathname === "/learn") {
+      const newUrl = newTrack === "all" ? "/learn" : `/learn?path=${newTrack}`;
+      window.history.replaceState({}, "", newUrl);
+    }
+  };
 
-  const totalArticlesCount = allArticles.length;
-  const completedCount = Object.values(completedLessons).filter(Boolean).length;
-  const progressPercent = Math.min(100, Math.round((completedCount / totalArticlesCount) * 100));
+  const trackChapters = useMemo(() => {
+    return getChaptersByTrack(activeTrack);
+  }, [activeTrack]);
+
+  const activeChapter = useMemo(() => {
+    return courseChapters.find((c) => c.id === activeChapterId) || trackChapters[0] || courseChapters[0];
+  }, [activeChapterId, trackChapters]);
+
+  const trackArticles = useMemo(() => {
+    return allArticles.filter((a) => trackChapters.some((c) => c.id === a.chapterId));
+  }, [trackChapters]);
+
+  const totalArticlesCount = trackArticles.length;
+  const completedCount = trackArticles.filter((a) => completedLessons[a.id]).length;
+  const progressPercent = totalArticlesCount > 0 ? Math.min(100, Math.round((completedCount / totalArticlesCount) * 100)) : 0;
+
+  // Category options scoped by active track
+  const categoryOptions = useMemo(() => {
+    if (activeTrack === "technical") {
+      return [
+        { id: "all", label: "All 6 Technical Chapters" },
+        { id: "technical", label: "Candlestick Auction & Indicators" },
+        { id: "microstructure", label: "Order Flow & Level-2 Depth" },
+        { id: "derivatives", label: "Perpetuals & CoinGlass Liquidations" },
+        { id: "risk", label: "Mathematical Risk & Kelly Criterion" },
+      ];
+    }
+    if (activeTrack === "fundamental") {
+      return [
+        { id: "all", label: "All 4 Fundamental Chapters" },
+        { id: "fundamentals", label: "Bitcoin, Ethereum & On-Chain" },
+        { id: "macro", label: "Macroeconomic Liquidity & Fed Policy" },
+      ];
+    }
+    return [
+      { id: "all", label: "All 10 Chapters" },
+      { id: "fundamentals", label: "Fundamentals & On-Chain" },
+      { id: "macro", label: "Macro & Global Liquidity" },
+      { id: "technical", label: "Technical Analysis & Price Action" },
+      { id: "microstructure", label: "Microstructure & Order Flow" },
+      { id: "derivatives", label: "Derivatives & CoinGlass" },
+      { id: "risk", label: "Risk Management Math" },
+    ];
+  }, [activeTrack]);
 
   // Category filter
   const filteredChapters = useMemo(() => {
-    if (activeCategory === "all") return courseChapters;
-    return courseChapters.filter((c) => c.category === activeCategory);
-  }, [activeCategory]);
+    if (activeCategory === "all") return trackChapters;
+    return trackChapters.filter((c) => c.category === activeCategory);
+  }, [activeCategory, trackChapters]);
 
   // Global search across all 100 articles
   const searchResults = useMemo(() => {
@@ -136,6 +228,11 @@ export default function CryptoLearnView() {
           items={[
             { label: "Home", href: "/" },
             { label: "Crypto Learn Academy", href: "/learn" },
+            ...(activeTrack === "technical"
+              ? [{ label: "Technical Analysis Track", href: "/learn/technical" }]
+              : activeTrack === "fundamental"
+              ? [{ label: "Fundamental Analysis Track", href: "/learn/fundamental" }]
+              : []),
           ]}
         />
 
@@ -148,27 +245,42 @@ export default function CryptoLearnView() {
             <div className="space-y-4 max-w-3xl">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-bold bg-emerald-500/15 border border-emerald-400/30 text-emerald-300">
                 <GraduationCap className="w-4 h-4 text-emerald-400" />
-                <span>BitcoinCrypto Institutional Academy</span>
+                <span>
+                  {activeTrack === "technical"
+                    ? "Path 1 • Technical Analysis Track (6 Chapters • 60 Lessons)"
+                    : activeTrack === "fundamental"
+                    ? "Path 2 • Fundamental Analysis Track (4 Chapters • 40 Lessons)"
+                    : "BitcoinCrypto Institutional Academy (10 Chapters • 100 Lessons)"}
+                </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-                Crypto Learn: Institutional Cryptocurrency Trading Course
+                {activeTrack === "technical"
+                  ? "Technical Analysis: Quantitative Trading, Order Flow & Liquidations"
+                  : activeTrack === "fundamental"
+                  ? "Fundamental Analysis: Protocol Consensus, Macro Liquidity & On-Chain Cycles"
+                  : "Crypto Learn: Institutional Cryptocurrency Trading & Valuation Course"}
               </h1>
 
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                The institutional curriculum for digital asset traders and quantitative analysts. Spanning 10 core chapters and 100 human-written research articles, master on-chain valuation ratios, market structure price action, Level-2 order book depth, CoinGlass liquidation squeeze cascades, and mathematical risk management.
+                {activeTrack === "technical"
+                  ? "The quantitative trading methodology for digital asset operators. Master candlestick auction theory, Level-2 order book depth, Cumulative Volume Delta (CVD), technical indicator confluence, HFT exchange microstructure, CoinGlass liquidation cascading mechanics, and Kelly Criterion risk sizing across 60 original human-written lessons."
+                  : activeTrack === "fundamental"
+                  ? "The institutional grounding in digital asset economics. Master Bitcoin Nakamoto consensus & UTXO mechanics, Ethereum EVM & smart contracts, Federal Reserve macroeconomic liquidity & CPI inflation dynamics, and on-chain valuation cycle ratios (MVRV Z-Score, SOPR, NVT) across 40 original human-written lessons."
+                  : "The institutional curriculum for digital asset traders and quantitative analysts. Choose between the Technical Analysis Track (60 Articles) or Fundamental Analysis Track (40 Articles), spanning 100 human-written research articles, interactive live-crosshair diagrams, and downloadable PDF textbooks."}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-mono text-slate-300">
                 <span className="flex items-center gap-1.5">
-                  <BookOpen className="w-4 h-4 text-emerald-400" /> 10 Chapters (100 Articles)
+                  <BookOpen className="w-4 h-4 text-emerald-400" />
+                  {trackChapters.length} Chapters ({trackArticles.length} Articles)
                 </span>
                 <span className="flex items-center gap-1.5">
                   <BarChart2 className="w-4 h-4 text-purple-400" /> Interactive Crosshair Diagrams
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <FileText className="w-4 h-4 text-amber-400" /> Formatted PDF Research Documents
+                  <FileText className="w-4 h-4 text-amber-400" /> Formatted PDF Textbooks
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Shield className="w-4 h-4 text-cyan-400" /> 100% Free &amp; Open Access
@@ -179,7 +291,13 @@ export default function CryptoLearnView() {
             {/* PROGRESS & SHARING CARD */}
             <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4 lg:w-80 shrink-0">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-400 uppercase font-bold">Curriculum Progress</span>
+                <span className="text-xs font-mono text-slate-400 uppercase font-bold">
+                  {activeTrack === "technical"
+                    ? "Technical Progress"
+                    : activeTrack === "fundamental"
+                    ? "Fundamental Progress"
+                    : "Curriculum Progress"}
+                </span>
                 <span className="text-xs font-mono font-black text-emerald-400">{progressPercent}% Completed</span>
               </div>
 
@@ -204,15 +322,224 @@ export default function CryptoLearnView() {
 
               {/* Clean Quick Export Trigger */}
               <button
-                onClick={() => openPdfForChapter()}
+                onClick={() => {
+                  if (activeTrack === "technical") {
+                    setPdfInitialMode("technical");
+                    setIsPdfModalOpen(true);
+                  } else if (activeTrack === "fundamental") {
+                    setPdfInitialMode("fundamental");
+                    setIsPdfModalOpen(true);
+                  } else {
+                    openPdfForChapter();
+                  }
+                }}
                 className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs font-mono transition shadow-lg shadow-emerald-500/20"
               >
                 <Download className="w-4 h-4" />
-                <span>Export Chapter {activeChapter.chapterNumber} (PDF)</span>
+                <span>
+                  {activeTrack === "technical"
+                    ? "Export Technical Track (PDF)"
+                    : activeTrack === "fundamental"
+                    ? "Export Fundamental Track (PDF)"
+                    : `Export Chapter ${activeChapter.chapterNumber} (PDF)`}
+                </span>
               </button>
             </div>
           </div>
         </section>
+
+        {/* 🚀 2 DISTINCT LEARNING PATHS (TECHNICAL ANALYSIS vs FUNDAMENTAL LEARN GATEWAY) */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-500 dark:text-amber-400 flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5" />
+                Curriculum Learning Paths
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                Choose Your Educational Path
+              </h2>
+            </div>
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 hidden sm:inline">
+              Select path to filter curriculum &amp; progress
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Path 1: Technical Analysis Track */}
+            <div
+              onClick={() => switchTrack("technical")}
+              className={`p-6 sm:p-7 rounded-3xl border transition-all duration-200 cursor-pointer relative overflow-hidden flex flex-col justify-between space-y-4 group ${
+                activeTrack === "technical"
+                  ? "bg-gradient-to-br from-emerald-950/80 via-slate-900 to-slate-950 border-emerald-500 shadow-xl shadow-emerald-500/10 ring-2 ring-emerald-500/20"
+                  : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 shadow-sm"
+              }`}
+            >
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    <span>Path 1 • Technical Analysis Track</span>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-emerald-500">
+                    Ch. 5–10
+                  </span>
+                </div>
+
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-emerald-500 transition">
+                      Technical Analysis (Technical Learn)
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-1">
+                      {learningTracks.technical.description}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center font-black text-xl shrink-0">
+                    📈
+                  </div>
+                </div>
+
+                {/* Key topics pills */}
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {learningTracks.technical.keyTopics.map((topic, i) => (
+                    <span
+                      key={i}
+                      className="text-[10px] font-mono px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                    >
+                      ✓ {topic}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-mono">
+                <span className="text-slate-500 dark:text-slate-400">
+                  <strong>6 Chapters</strong> • <strong>60 Articles</strong> • {learningTracks.technical.estimatedHours}
+                </span>
+                <span
+                  className={`inline-flex items-center gap-1.5 font-bold ${
+                    activeTrack === "technical"
+                      ? "text-emerald-400"
+                      : "text-slate-900 dark:text-white group-hover:text-emerald-500"
+                  }`}
+                >
+                  {activeTrack === "technical" ? "✓ Currently Active" : "Select Technical Path"}
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </div>
+            </div>
+
+            {/* Path 2: Fundamental Analysis Track */}
+            <div
+              onClick={() => switchTrack("fundamental")}
+              className={`p-6 sm:p-7 rounded-3xl border transition-all duration-200 cursor-pointer relative overflow-hidden flex flex-col justify-between space-y-4 group ${
+                activeTrack === "fundamental"
+                  ? "bg-gradient-to-br from-amber-950/80 via-slate-900 to-slate-950 border-amber-500 shadow-xl shadow-amber-500/10 ring-2 ring-amber-500/20"
+                  : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-amber-500/50 shadow-sm"
+              }`}
+            >
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                    <Globe2 className="w-3.5 h-3.5" />
+                    <span>Path 2 • Fundamental Analysis Track</span>
+                  </div>
+                  <span className="text-xs font-mono font-bold text-amber-500">
+                    Ch. 1–4
+                  </span>
+                </div>
+
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white group-hover:text-amber-500 transition">
+                      Fundamental Analysis (Fundamental Learn)
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-1">
+                      {learningTracks.fundamental.description}
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center font-black text-xl shrink-0">
+                    🌐
+                  </div>
+                </div>
+
+                {/* Key topics pills */}
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {learningTracks.fundamental.keyTopics.map((topic, i) => (
+                    <span
+                      key={i}
+                      className="text-[10px] font-mono px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                    >
+                      ✓ {topic}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-mono">
+                <span className="text-slate-500 dark:text-slate-400">
+                  <strong>4 Chapters</strong> • <strong>40 Articles</strong> • {learningTracks.fundamental.estimatedHours}
+                </span>
+                <span
+                  className={`inline-flex items-center gap-1.5 font-bold ${
+                    activeTrack === "fundamental"
+                      ? "text-amber-400"
+                      : "text-slate-900 dark:text-white group-hover:text-amber-500"
+                  }`}
+                >
+                  {activeTrack === "fundamental" ? "✓ Currently Active" : "Select Fundamental Path"}
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TRACK SWITCHER SEGMENTED BAR */}
+        <div className="p-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              onClick={() => switchTrack("all")}
+              className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 ${
+                activeTrack === "all"
+                  ? "bg-slate-900 dark:bg-white text-white dark:text-slate-950 shadow-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>All 10 Chapters (100 Articles)</span>
+            </button>
+            <button
+              onClick={() => switchTrack("technical")}
+              className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 ${
+                activeTrack === "technical"
+                  ? "bg-emerald-500 text-slate-950 shadow-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:text-emerald-500 hover:bg-emerald-500/10"
+              }`}
+            >
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>Technical Analysis Track (Ch. 5–10 • 60 Articles)</span>
+            </button>
+            <button
+              onClick={() => switchTrack("fundamental")}
+              className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition flex items-center gap-1.5 ${
+                activeTrack === "fundamental"
+                  ? "bg-amber-400 text-slate-950 shadow-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:text-amber-500 hover:bg-amber-500/10"
+              }`}
+            >
+              <Globe2 className="w-3.5 h-3.5" />
+              <span>Fundamental Analysis Track (Ch. 1–4 • 40 Articles)</span>
+            </button>
+          </div>
+
+          <div className="text-xs font-mono text-slate-500 dark:text-slate-400 pr-2">
+            Active: <strong className="text-slate-900 dark:text-white">
+              {activeTrack === "technical" ? "Technical Track (60 Lessons)" : activeTrack === "fundamental" ? "Fundamental Track (40 Lessons)" : "Full Masterclass (100 Lessons)"}
+            </strong>
+          </div>
+        </div>
 
         {/* 📑 TOP PROFESSIONAL RESEARCH EXPORT BAR (CLEAN & INSTITUTIONAL) */}
         <section className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-mono shadow-sm">
@@ -225,7 +552,7 @@ export default function CryptoLearnView() {
                 Research Publications &amp; PDF Downloads
               </span>
               <span className="text-slate-500 dark:text-slate-400 text-[11px]">
-                Download individual chapter research papers or the complete 10-chapter compendium for offline study.
+                Download individual chapter research papers or complete track compendiums for offline study.
               </span>
             </div>
           </div>
@@ -242,7 +569,7 @@ export default function CryptoLearnView() {
                 }}
                 className="bg-transparent text-emerald-600 dark:text-emerald-400 font-bold focus:outline-none cursor-pointer text-xs"
               >
-                {courseChapters.map((ch) => (
+                {trackChapters.map((ch) => (
                   <option key={ch.id} value={ch.id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                     Ch. {ch.chapterNumber}: {ch.title.split(":")[0]}
                   </option>
@@ -259,14 +586,42 @@ export default function CryptoLearnView() {
               <span>Chapter {activeChapter.chapterNumber} PDF</span>
             </button>
 
-            {/* Download All 10 Chapters PDF */}
-            <button
-              onClick={openPdfForAllChapters}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black transition shadow-sm"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>All 10 Chapters (Complete)</span>
-            </button>
+            {/* Track-Specific Compendium PDF */}
+            {activeTrack === "technical" && (
+              <button
+                onClick={() => {
+                  setPdfInitialMode("technical");
+                  setIsPdfModalOpen(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black transition shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Technical Track (60 Articles PDF)</span>
+              </button>
+            )}
+
+            {activeTrack === "fundamental" && (
+              <button
+                onClick={() => {
+                  setPdfInitialMode("fundamental");
+                  setIsPdfModalOpen(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black transition shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Fundamental Track (40 Articles PDF)</span>
+              </button>
+            )}
+
+            {activeTrack === "all" && (
+              <button
+                onClick={openPdfForAllChapters}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black transition shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>All 10 Chapters (Complete 100 Articles)</span>
+              </button>
+            )}
           </div>
         </section>
 
@@ -334,15 +689,7 @@ export default function CryptoLearnView() {
 
         {/* CATEGORY FILTER TABS */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800 text-xs font-mono">
-          {[
-            { id: "all", label: "All 10 Chapters" },
-            { id: "fundamentals", label: "Fundamentals & On-Chain" },
-            { id: "macro", label: "Macro & Global Liquidity" },
-            { id: "technical", label: "Technical Analysis & Price Action" },
-            { id: "microstructure", label: "Microstructure & Order Flow" },
-            { id: "derivatives", label: "Derivatives & CoinGlass" },
-            { id: "risk", label: "Risk Management Math" },
-          ].map((cat) => (
+          {categoryOptions.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
@@ -358,7 +705,13 @@ export default function CryptoLearnView() {
         </div>
 
         {/* CHAPTERS GRID SELECTOR (CLEAN & SOPHISTICATED) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${
+          activeTrack === "fundamental"
+            ? "lg:grid-cols-4"
+            : activeTrack === "technical"
+            ? "lg:grid-cols-6"
+            : "lg:grid-cols-5"
+        } gap-3.5`}>
           {filteredChapters.map((chapter) => {
             const isSelected = chapter.id === activeChapterId;
             const completedInChapter = chapter.lessons.filter((l) => completedLessons[l.id]).length;
@@ -735,6 +1088,79 @@ export default function CryptoLearnView() {
               </div>
             </div>
           )}
+
+          {/* CHAPTER NAVIGATION & TRACK BRIDGE */}
+          <div className="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
+            {/* Previous Chapter */}
+            {(() => {
+              const currentIdx = trackChapters.findIndex((c) => c.id === activeChapter.id);
+              const prevCh = currentIdx > 0 ? trackChapters[currentIdx - 1] : null;
+              if (prevCh) {
+                return (
+                  <button
+                    onClick={() => setActiveChapterId(prevCh.id)}
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold transition flex items-center justify-center gap-2"
+                  >
+                    <span>&larr; Previous: Ch. {prevCh.chapterNumber}</span>
+                  </button>
+                );
+              }
+              if (activeTrack === "technical") {
+                return (
+                  <button
+                    onClick={() => switchTrack("fundamental")}
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold transition flex items-center justify-center gap-2 border border-amber-500/30"
+                  >
+                    <span>&larr; Fundamental Track (Ch. 1–4)</span>
+                  </button>
+                );
+              }
+              return <div />;
+            })()}
+
+            {/* Track indicator */}
+            <div className="text-slate-400 text-center text-[11px]">
+              Chapter {activeChapter.chapterNumber} of {trackChapters.length} in{" "}
+              <strong className="text-slate-900 dark:text-white">
+                {activeTrack === "technical" ? "Technical Track" : activeTrack === "fundamental" ? "Fundamental Track" : "Full Masterclass"}
+              </strong>
+            </div>
+
+            {/* Next Chapter or Track Bridge */}
+            {(() => {
+              const currentIdx = trackChapters.findIndex((c) => c.id === activeChapter.id);
+              const nextCh = currentIdx < trackChapters.length - 1 ? trackChapters[currentIdx + 1] : null;
+              if (nextCh) {
+                return (
+                  <button
+                    onClick={() => setActiveChapterId(nextCh.id)}
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black transition flex items-center justify-center gap-2 shadow-sm"
+                  >
+                    <span>Next: Ch. {nextCh.chapterNumber} &rarr;</span>
+                  </button>
+                );
+              }
+              if (activeTrack === "fundamental") {
+                return (
+                  <button
+                    onClick={() => switchTrack("technical")}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-black transition flex items-center justify-center gap-2 shadow-md shadow-emerald-500/20"
+                  >
+                    <span>Begin Technical Track (Ch. 5) &rarr;</span>
+                  </button>
+                );
+              }
+              return (
+                <button
+                  onClick={() => openPdfForAllChapters()}
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black transition flex items-center justify-center gap-2"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Curriculum Complete • Download PDF</span>
+                </button>
+              );
+            })()}
+          </div>
         </section>
 
         {/* GLOSSARY SECTION */}
@@ -772,9 +1198,27 @@ export default function CryptoLearnView() {
 
         {/* CITATION & BACKLINK HUB */}
         <ToolCitationWidget
-          toolName="Crypto Learn: Institutional Cryptocurrency Trading & Valuation Masterclass"
-          toolUrl="https://www.bitcoincrypto.tech/learn"
-          description="Complete 10-Chapter institutional curriculum spanning 100 human-written articles on fundamental on-chain valuation, market microstructure, derivatives liquidations, and capital preservation."
+          toolName={
+            activeTrack === "technical"
+              ? "Crypto Learn: Technical Analysis & Quantitative Execution Course"
+              : activeTrack === "fundamental"
+              ? "Crypto Learn: Fundamental Analysis & On-Chain Valuation Course"
+              : "Crypto Learn: Institutional Cryptocurrency Trading & Valuation Masterclass"
+          }
+          toolUrl={
+            activeTrack === "technical"
+              ? "https://www.bitcoincrypto.tech/learn/technical"
+              : activeTrack === "fundamental"
+              ? "https://www.bitcoincrypto.tech/learn/fundamental"
+              : "https://www.bitcoincrypto.tech/learn"
+          }
+          description={
+            activeTrack === "technical"
+              ? "6-Chapter quantitative curriculum spanning 60 human-written articles on candlestick price action, Level-2 order book depth, CVD, indicators, and Kelly Criterion risk management."
+              : activeTrack === "fundamental"
+              ? "4-Chapter institutional curriculum spanning 40 human-written articles on Bitcoin consensus, Ethereum EVM, macroeconomic liquidity, CPI inflation, and on-chain MVRV Z-Score valuation."
+              : "Complete 10-Chapter institutional curriculum spanning 100 human-written articles on fundamental on-chain valuation, market microstructure, derivatives liquidations, and capital preservation."
+          }
         />
       </div>
 

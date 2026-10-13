@@ -21,7 +21,8 @@ import {
   Fish,
   Brain,
   TrendingUp,
-  Mail
+  Mail,
+  GraduationCap
 } from "lucide-react";
 import LiveTickerBar from "./LiveTickerBar";
 import ThemeToggle from "@/components/theme/ThemeToggle";
@@ -176,6 +177,76 @@ export default function Navbar() {
             <LineChart className="w-4 h-4 text-blue-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
             <span>Research</span>
           </Link>
+
+          {/* 8. Crypto Learn (2 Paths: Technical & Fundamental) */}
+          <div
+            className="relative"
+            onMouseEnter={() => handleMouseEnter("learn")}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Link
+              href="/learn"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/90 border border-transparent hover:border-slate-200 dark:hover:border-slate-700/80 transition-all duration-150 font-black text-[12.5px] tracking-tight group"
+            >
+              <GraduationCap className="w-4 h-4 text-emerald-400 group-hover:scale-110 group-hover:rotate-6 transition-transform" />
+              <span>Learn</span>
+              <span className="text-[9.5px] font-mono font-black px-1.5 py-0.2 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 shadow-xs">
+                2 PATHS
+              </span>
+              <ChevronDown className="w-3 h-3 text-slate-400 group-hover:rotate-180 transition-transform" />
+            </Link>
+
+            {activeDropdown === "learn" && (
+              <div className="absolute top-full right-0 mt-1 w-72 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200 dark:border-slate-800 shadow-2xl p-2 space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <Link
+                  href="/learn/technical"
+                  onClick={() => setActiveDropdown(null)}
+                  className="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+                >
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-500 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">
+                    📈
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 block">
+                      Technical Analysis Track
+                    </span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
+                      6 Chapters • 60 Lessons • Order flow &amp; price action
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/learn/fundamental"
+                  onClick={() => setActiveDropdown(null)}
+                  className="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition group"
+                >
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-500 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">
+                    🌐
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-amber-500 block">
+                      Fundamental Learn Track
+                    </span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
+                      4 Chapters • 40 Lessons • Protocol &amp; on-chain MVRV
+                    </span>
+                  </div>
+                </Link>
+
+                <div className="pt-1 border-t border-slate-100 dark:border-slate-800">
+                  <Link
+                    href="/learn"
+                    onClick={() => setActiveDropdown(null)}
+                    className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold"
+                  >
+                    <span>View All 100 Lessons (Masterclass)</span>
+                    <span>&rarr;</span>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
 
         </div>
 
@@ -420,6 +491,39 @@ export default function Navbar() {
 
           {/* Section 3: Research & Education */}
           <div className="space-y-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <Link
+              href="/learn"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-bold transition text-xs border border-emerald-200/60 dark:border-emerald-800/60"
+            >
+              <div className="flex items-center gap-2.5">
+                <GraduationCap className="w-4 h-4 text-emerald-500" />
+                <span>Crypto Learn Masterclass</span>
+              </div>
+              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-300">
+                100 LESSONS
+              </span>
+            </Link>
+
+            <div className="pl-6 space-y-1 py-1">
+              <Link
+                href="/learn/technical"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs transition"
+              >
+                <span>📈 Technical Analysis Track</span>
+                <span className="text-[10px] text-slate-400 font-mono">60 Lessons</span>
+              </Link>
+              <Link
+                href="/learn/fundamental"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs transition"
+              >
+                <span>🌐 Fundamental Learn Track</span>
+                <span className="text-[10px] text-slate-400 font-mono">40 Lessons</span>
+              </Link>
+            </div>
+
             <Link
               href="/concepts"
               onClick={() => setMobileMenuOpen(false)}
