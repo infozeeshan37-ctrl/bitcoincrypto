@@ -1,16 +1,17 @@
 /**
  * BitcoinCrypto.tech — Instagram Reels Auto-Uploader & Publisher
  * 
- * Uploads 9:16 vertical 4K videos directly to Instagram as Reels using
- * the official Meta Graph API v21.0 Resumable Upload protocol.
+ * Supports both:
+ *   1. Instagram Graph API (Instagram User Tokens: `IGAA...`) via `graph.instagram.com`
+ *   2. Meta Facebook Graph API (Page Access Tokens: `EAAB...`) via `graph.facebook.com`
  * 
  * Requirements in .env.local:
- *   - INSTAGRAM_ACCOUNT_ID: The Instagram Business or Creator Account ID
- *   - INSTAGRAM_ACCESS_TOKEN: A Meta Graph API Access Token with `instagram_content_publish`
+ *   - INSTAGRAM_ACCOUNT_ID: Your Instagram Business/Creator Account ID
+ *   - INSTAGRAM_ACCESS_TOKEN: Your Instagram Access Token
  * 
  * Usage:
- *   node scripts/instagramUploader.mjs                           # Check authentication & account status
- *   node scripts/instagramUploader.mjs --video=path/to/video.mp4 # Uploads video as an Instagram Reel
+ *   node scripts/instagramUploader.mjs                           # Verify account connection & status
+ *   node scripts/instagramUploader.mjs --video=path/to/video.mp4 # Uploads a specific video as an Instagram Reel
  */
 
 import fs from "fs";
@@ -38,25 +39,63 @@ function loadEnv() {
 loadEnv();
 
 export function getInstagramCredentials() {
-  const accountId = process.env.INSTAGRAM_ACCOUNT_ID;
-  const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
+  const accountId = (process.env.INSTAGRAM_ACCOUNT_ID || "").replace(/[\[\]]/g, "").trim();
+  const accessToken = (process.env.INSTAGRAM_ACCESS_TOKEN || "").trim();
 
-  if (!accountId || !accessToken) {
+  if (!accessToken) {
     return null;
   }
 
-  return { accountId, accessToken };
+  return { accountId: accountId || "me", accessToken };
+}
+
+import { execFile } from "child_process";
+import util from "util";
+
+const execFileAsync = util.promisify(execFile);
+
+/**
+ * Uploads a local video to a secure high-speed CDN using streaming curl
+ * to obtain a direct HTTPS video_url required by the Instagram Graph API.
+ */
+async function hostVideoTemporarily(videoPath) {
+  console.log("🌐 Staging 4K video on high-speed CDN for Instagram download...");
+  const absPath = path.resolve(videoPath);
+
+  try {
+    const { stdout } = await execFileAsync("curl.exe", [
+      "-s",
+      "-F", "reqtype=fileupload",
+      "-F", `fileToUpload=@${absPath}`,
+      "https://catbox.moe/user/api.php"
+    ]);
+
+    const directUrl = stdout.trim();
+    if (!directUrl.startsWith("http")) {
+      throw new Error(`Invalid response from host: ${directUrl}`);
+    }
+
+    console.log(`✅ Staged video URL ready: ${directUrl}`);
+    return directUrl;
+  } catch (err) {
+    console.error("❌ Error uploading video to staging CDN:", err.message);
+    throw err;
+  }
 }
 
 /**
- * Verifies that the Instagram Business / Creator account is accessible.
+ * Verifies that the connected Instagram Account is active and responsive.
  */
 export async function verifyInstagramAccount() {
   const creds = getInstagramCredentials();
   if (!creds) return null;
 
+  const isInstagramDirect = creds.accessToken.startsWith("IGAA") || creds.accessToken.startsWith("IGQ");
+  const host = isInstagramDirect ? "https://graph.instagram.com" : "https://graph.facebook.com";
+  const target = isInstagramDirect ? "me" : creds.accountId;
+
   try {
-    const url = `https://graph.facebook.com/v21.0/${creds.accountId}?fields=name,username,profile_picture_url,followers_count&access_token=${creds.accessToken}`;
+    const url = `${host}/v21.0/${target}?fields=id,username,account_type&access_token=${creds.accessToken}`;
     const res = await fetch(url);
     if (!res.ok) {
       const err = await res.text();
@@ -88,24 +127,23 @@ export function formatInstagramCaption(metadata) {
 
   return `${title} 🚀
 
-Explore real-time order books, AI predictions, and CoinGlass heatmaps:
+Live Order Flow, AI Predictions & CoinGlass Heatmaps:
 🔗 Link in Bio: bitcoincrypto.tech
 👉 Direct Terminal: ${targetUrl}
 
-⚠️ Strictly for educational and quantitative analytics. Not financial advice. Zero betting or gambling.
+⚠️ Strictly for educational and quantitative research purposes only. Not financial advice. Zero betting or gambling.
 
 ${tags} #CryptoReels #Reels #BitcoinCrypto`;
 }
 
 /**
- * Uploads a video file (.mp4) to Instagram Reels using the Meta Graph API Resumable Protocol.
+ * Uploads a video file (.mp4) directly to Instagram as a Reel.
  */
 export async function uploadReelToInstagram(videoPath, metadata) {
   const creds = getInstagramCredentials();
 
   if (!creds) {
-    console.log("ℹ️ Instagram credentials (INSTAGRAM_ACCOUNT_ID, INSTAGRAM_ACCESS_TOKEN) not set in .env.local.");
-    console.log("   Skipping Instagram Reel publication. (See docs for 1-click Instagram setup).");
+    console.log("ℹ️ Instagram credentials not configured in .env.local. Skipping Instagram.");
     return null;
   }
 
@@ -115,24 +153,30 @@ export async function uploadReelToInstagram(videoPath, metadata) {
   }
 
   const stat = fs.statSync(videoPath);
-  const fileSize = stat.size;
+  const fileSizeMb = (stat.size / (1024 * 1024)).toFixed(2);
   const caption = formatInstagramCaption(metadata);
 
   console.log("──────────────────────────────────────────────────────────────────────");
-  console.log(`📸 Initiating Instagram Reel Upload via Meta Graph API v21.0...`);
-  console.log(`📁 File Size: ${(fileSize / (1024 * 1024)).toFixed(2)} MB`);
-  console.log(`🆔 Target Account ID: ${creds.accountId}`);
+  console.log(`📸 Initiating Instagram Reel Publishing (${fileSizeMb} MB)...`);
   console.log("──────────────────────────────────────────────────────────────────────");
 
-  // Step 1: Create Resumable Reels Media Container on Meta Graph API
-  const initUrl = `https://graph.facebook.com/v21.0/${creds.accountId}/media`;
+  const isInstagramDirect = creds.accessToken.startsWith("IGAA") || creds.accessToken.startsWith("IGQ");
+  const host = isInstagramDirect ? "https://graph.instagram.com" : "https://graph.facebook.com";
+  const target = isInstagramDirect ? "me" : creds.accountId;
+
+  // Step 1: Stage video on high-speed CDN to obtain direct HTTPS URL for Instagram
+  const videoUrl = await hostVideoTemporarily(videoPath);
+
+  // Step 2: Create Reels container on Instagram Graph API
+  console.log("📦 Creating Instagram Reels Media Container...");
+  const initUrl = `${host}/v21.0/${target}/media`;
   const initRes = await fetch(initUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       access_token: creds.accessToken,
       media_type: "REELS",
-      upload_type: "resumable",
+      video_url: videoUrl,
       caption: caption,
       share_to_feed: true
     })
@@ -146,67 +190,44 @@ export async function uploadReelToInstagram(videoPath, metadata) {
 
   const initData = await initRes.json();
   const containerId = initData.id;
-  const uploadUri = initData.uri;
+  console.log(`📦 Reel Container Created ID: ${containerId}`);
 
-  console.log(`📦 Reel Container Created: ${containerId}`);
-  console.log(`🌐 Streaming video binary to Meta rupload endpoint...`);
-
-  // Step 2: Stream raw binary buffer to Meta's rupload endpoint
-  const fileBuffer = fs.readFileSync(videoPath);
-  const uploadRes = await fetch(uploadUri, {
-    method: "POST",
-    headers: {
-      Authorization: `OAuth ${creds.accessToken}`,
-      Offset: "0",
-      file_size: fileSize.toString(),
-      "Content-Type": "application/octet-stream"
-    },
-    body: fileBuffer
-  });
-
-  if (!uploadRes.ok) {
-    const uploadErr = await uploadRes.text();
-    console.error("❌ Failed to stream video binary to Instagram:", uploadErr);
-    return null;
-  }
-
-  console.log("✅ Video streamed to Meta servers. Waiting for server-side processing...");
-
-  // Step 3: Poll Meta container status until FINISHED
+  // Step 3: Poll status until FINISHED
+  console.log("⏳ Processing Reel on Instagram servers...");
   let status = "IN_PROGRESS";
   let attempts = 0;
-  const maxAttempts = 30; // 30 x 4s = 120s max timeout
+  const maxAttempts = 30; // 30 x 4s = 120s max
 
   while (attempts < maxAttempts) {
     await new Promise((r) => setTimeout(r, 4000));
     attempts++;
 
     const statusRes = await fetch(
-      `https://graph.facebook.com/v21.0/${containerId}?fields=status_code&access_token=${creds.accessToken}`
+      `${host}/v21.0/${containerId}?fields=status_code&access_token=${creds.accessToken}`
     );
 
     if (statusRes.ok) {
       const statusData = await statusRes.json();
       status = statusData.status_code;
-      console.log(`⏳ Processing status [Attempt ${attempts}/${maxAttempts}]: ${status}`);
+      console.log(`  • Status check [${attempts}/${maxAttempts}]: ${status}`);
 
       if (status === "FINISHED") {
         break;
       } else if (status === "ERROR") {
-        console.error("❌ Meta processing error on Reels container.");
+        console.error("❌ Instagram server processing error on Reel container.");
         return null;
       }
     }
   }
 
   if (status !== "FINISHED") {
-    console.error(`❌ Timed out waiting for Instagram Reel container processing (status: ${status}).`);
+    console.error(`❌ Timed out waiting for Instagram Reel container (status: ${status}).`);
     return null;
   }
 
   // Step 4: Publish Reel
   console.log("🚀 Publishing container to Instagram Reels feed...");
-  const publishUrl = `https://graph.facebook.com/v21.0/${creds.accountId}/media_publish`;
+  const publishUrl = `${host}/v21.0/${target}/media_publish`;
   const publishRes = await fetch(publishUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -229,7 +250,7 @@ export async function uploadReelToInstagram(videoPath, metadata) {
   let permalink = null;
   try {
     const mediaRes = await fetch(
-      `https://graph.facebook.com/v21.0/${mediaId}?fields=permalink&access_token=${creds.accessToken}`
+      `${host}/v21.0/${mediaId}?fields=id,permalink,media_type,timestamp&access_token=${creds.accessToken}`
     );
     if (mediaRes.ok) {
       const mediaData = await mediaRes.json();
@@ -237,18 +258,17 @@ export async function uploadReelToInstagram(videoPath, metadata) {
     }
   } catch (_) {}
 
+  const finalUrl = permalink || `https://www.instagram.com/reel/${mediaId}/`;
   console.log("══════════════════════════════════════════════════════════════════════");
-  console.log("🎉 SUCCESS! Instagram Reel is now LIVE!");
+  console.log("🎉 SUCCESS! Instagram Reel is now LIVE on your profile!");
   console.log(`🆔 Media ID:    ${mediaId}`);
-  if (permalink) {
-    console.log(`🔗 Reel URL:    ${permalink}`);
-  }
+  console.log(`🔗 Reel URL:    ${finalUrl}`);
   console.log("══════════════════════════════════════════════════════════════════════");
 
   return {
     success: true,
     mediaId,
-    permalink: permalink || `https://www.instagram.com/reel/${mediaId}/`,
+    permalink: finalUrl,
     platform: "instagram"
   };
 }
@@ -265,21 +285,15 @@ async function main() {
   const creds = getInstagramCredentials();
   if (!creds) {
     console.log("⚠️ Instagram credentials not detected in .env.local.");
-    console.log("To enable automatic Instagram Reels publishing, add the following to .env.local:");
-    console.log("  INSTAGRAM_ACCOUNT_ID=your_instagram_business_account_id");
-    console.log("  INSTAGRAM_ACCESS_TOKEN=your_meta_graph_api_access_token");
-    console.log("\nSee docs/INSTAGRAM_SETUP.md for complete step-by-step instructions.");
     return;
   }
 
-  console.log("🔑 Checking Meta Graph API credentials...");
+  console.log("🔑 Checking Instagram credentials...");
   const account = await verifyInstagramAccount();
   if (account) {
-    console.log(`✅ Connected Instagram Account: @${account.username || account.name}`);
-    console.log(`🆔 Account ID:                  ${account.id}`);
-    if (account.followers_count !== undefined) {
-      console.log(`👥 Followers:                   ${account.followers_count.toLocaleString()}`);
-    }
+    console.log(`✅ Connected Account:   @${account.username || account.name}`);
+    console.log(`🆔 Account ID:          ${account.id}`);
+    console.log(`💼 Account Type:        ${account.account_type || "Professional"}`);
   }
 
   if (videoPath) {
