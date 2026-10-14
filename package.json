@@ -11,7 +11,9 @@
     "youtube:shorts": "node scripts/youtubeShortsGenerator.mjs",
     "youtube:upload": "node scripts/youtubeUploader.mjs",
     "youtube:token": "node scripts/getYoutubeToken.mjs",
-    "youtube:auto": "node scripts/autoPostDailyShort.mjs"
+    "youtube:auto": "node scripts/autoPostDailyShort.mjs",
+    "instagram:check": "node scripts/instagramUploader.mjs",
+    "shorts:schedule": "node scripts/autoPostDailyShort.mjs --schedule --all-slots"
   },
   "dependencies": {
     "@types/three": "^0.185.4",

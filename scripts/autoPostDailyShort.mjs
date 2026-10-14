@@ -24,6 +24,7 @@ import path from "path";
 import { generateDailyShort } from "./youtubeShortsGenerator.mjs";
 import { generateShortVideo } from "./generateShortVideo.mjs";
 import { uploadVideoToYouTube, getAccessToken, verifyChannel } from "./youtubeUploader.mjs";
+import { uploadReelToInstagram, getInstagramCredentials } from "./instagramUploader.mjs";
 
 function loadEnv() {
   const envPath = path.resolve(process.cwd(), ".env.local");
@@ -161,6 +162,14 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publish
     console.log(`💬 Pinned Comment: ${metadata.pinnedComment}`);
     console.log("══════════════════════════════════════════════════════════════════════");
 
+    // Cross-post to Instagram Reels if credentials are configured
+    let instagramResult = null;
+    const igCreds = getInstagramCredentials();
+    if (igCreds) {
+      console.log("📸 Cross-posting video to Instagram Reels...");
+      instagramResult = await uploadReelToInstagram(videoPath, metadata);
+    }
+
     logHistory({
       timestamp: new Date().toISOString(),
       videoId: uploadResult.id,
@@ -169,14 +178,21 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publish
       targetUrl: metadata.targetUrl,
       scheduledAt: metadata.publishAt || null,
       status: metadata.publishAt ? "scheduled" : "public",
-      url: watchUrl
+      url: watchUrl,
+      instagramReel: instagramResult?.permalink || null
     });
 
     if (!keepVideo) {
       try { fs.unlinkSync(videoPath); } catch (_) {}
     }
 
-    return { success: true, videoId: uploadResult.id, watchUrl, metadata };
+    return {
+      success: true,
+      videoId: uploadResult.id,
+      watchUrl,
+      instagram: instagramResult,
+      metadata
+    };
   } else {
     console.error("❌ Upload failed. Video preserved at:", videoPath);
     return { success: false, videoPath, metadata };
