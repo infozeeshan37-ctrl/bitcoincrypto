@@ -10,11 +10,11 @@
  */
 
 const POPULAR_COINS = [
-  { symbol: "BTCUSDT", name: "Bitcoin", ticker: "BTC", target: "$95,000", stop: "$86,400", squeezeCluster: "$380M", wall: "$92,500" },
-  { symbol: "ETHUSDT", name: "Ethereum", ticker: "ETH", target: "$3,100", stop: "$2,450", squeezeCluster: "$190M", wall: "$2,850" },
-  { symbol: "SOLUSDT", name: "Solana", ticker: "SOL", target: "$195", stop: "$152", squeezeCluster: "$95M", wall: "$178" },
-  { symbol: "XRPUSDT", name: "XRP", ticker: "XRP", target: "$1.85", stop: "$1.35", squeezeCluster: "$45M", wall: "$1.62" },
-  { symbol: "SUIUSDT", name: "Sui", ticker: "SUI", target: "$4.50", stop: "$3.10", squeezeCluster: "$35M", wall: "$3.85" }
+  { symbol: "BTCUSDT", name: "Bitcoin", ticker: "BTC", slug: "bitcoin", target: "$95,000", stop: "$86,400", squeezeCluster: "$380M", wall: "$92,500" },
+  { symbol: "ETHUSDT", name: "Ethereum", ticker: "ETH", slug: "ethereum", target: "$3,100", stop: "$2,450", squeezeCluster: "$190M", wall: "$2,850" },
+  { symbol: "SOLUSDT", name: "Solana", ticker: "SOL", slug: "solana", target: "$195", stop: "$152", squeezeCluster: "$95M", wall: "$178" },
+  { symbol: "XRPUSDT", name: "XRP", ticker: "XRP", slug: "xrp", target: "$1.85", stop: "$1.35", squeezeCluster: "$45M", wall: "$1.62" },
+  { symbol: "SUIUSDT", name: "Sui", ticker: "SUI", slug: "sui", target: "$4.50", stop: "$3.10", squeezeCluster: "$35M", wall: "$3.85" }
 ];
 
 async function fetchLiveBinancePrice(symbol, fallback) {
@@ -55,7 +55,7 @@ export async function generateDailyShort(categoryOverride = null) {
     shortPack = {
       category: "AI Predictive Model & Signals",
       title: `🚨 ${coin.name} Next 24 Hours: AI Technical Target! (${coin.ticker}) #Shorts`,
-      targetUrl: `https://www.bitcoincrypto.tech/predictions/${coin.name.toLowerCase()}`,
+      targetUrl: `https://www.bitcoincrypto.tech/predictions/${coin.slug || coin.name.toLowerCase()}`,
       visuals: [
         "[0:00 - 0:08] Hook: Zoom in on live candlestick chart with glowing AI buy/sell signal tag",
         "[0:08 - 0:25] Show L2 Order Book depth & resistance wall at " + coin.wall + " on BitcoinCrypto.tech",
@@ -226,6 +226,6 @@ async function main() {
   console.log("\n══════════════════════════════════════════════════════════════════════\n");
 }
 
-if (process.argv[1].endsWith("youtubeShortsGenerator.mjs")) {
+if (process.argv[1] && process.argv[1].endsWith("youtubeShortsGenerator.mjs")) {
   main().catch(console.error);
 }

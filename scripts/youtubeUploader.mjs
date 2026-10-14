@@ -1,17 +1,8 @@
 /**
- * BitcoinCrypto.tech — YouTube Video Direct Auto-Uploader
+ * BitcoinCrypto.tech — YouTube Video Direct Auto-Uploader & Scheduler
  * 
  * Uploads video files (.mp4) directly to your YouTube Channel
- * using the official YouTube Data API v3.
- * 
- * Requirements in .env.local:
- *   YOUTUBE_CLIENT_ID
- *   YOUTUBE_CLIENT_SECRET
- *   YOUTUBE_REFRESH_TOKEN
- * 
- * Usage:
- *   node scripts/youtubeUploader.mjs                       # Generates today's short content & shows status
- *   node scripts/youtubeUploader.mjs --video=./my_clip.mp4  # Uploads the video file to YouTube
+ * using the official YouTube Data API v3 with scheduled release & comments support.
  */
 
 import fs from "fs";
@@ -90,12 +81,45 @@ export async function verifyChannel(accessToken) {
   }
 }
 
+export async function postPinnedComment(accessToken, videoId, commentText) {
+  if (!commentText) return null;
+  try {
+    const res = await fetch("https://www.googleapis.com/youtube/v3/commentThreads?part=snippet", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        snippet: {
+          videoId: videoId,
+          topLevelComment: {
+            snippet: {
+              textOriginal: commentText
+            }
+          }
+        }
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      console.log(`💬 Clickable pinned link comment posted: https://youtube.com/shorts/${videoId}`);
+      return data;
+    } else {
+      const err = await res.text();
+      console.log("ℹ️ Note on comment posting:", err.includes("disabled") ? "Comments disabled or restricted" : "Skipped");
+      return null;
+    }
+  } catch (_) {
+    return null;
+  }
+}
+
 export async function uploadVideoToYouTube(videoPath, metadata) {
   const accessToken = await getAccessToken();
 
   if (!accessToken) {
     console.log("ℹ️ YouTube API credentials not detected in .env.local.");
-    console.log("ℹ️ You can copy the generated metadata and upload manually or configure API keys.");
     return false;
   }
 
@@ -107,7 +131,25 @@ export async function uploadVideoToYouTube(videoPath, metadata) {
   const stat = fs.statSync(videoPath);
   const fileSize = stat.size;
 
+  const isScheduled = !!metadata.publishAt;
   console.log(`🚀 Initiating YouTube API upload for ${videoPath} (${(fileSize / (1024 * 1024)).toFixed(2)} MB)...`);
+  if (isScheduled) {
+    console.log(`⏰ Scheduled Public Release Time: ${metadata.publishAt}`);
+  }
+
+  // Format description with clickable link at the very top
+  const formattedDescription = `🔥 CLICKABLE DIRECT LINK TO THIS TOOL:\n👉 ${metadata.targetUrl || "https://www.bitcoincrypto.tech"}\n(Tap link above to open free live terminal!)\n\n${metadata.description}`;
+
+  const statusPayload = isScheduled
+    ? {
+        privacyStatus: "private",
+        publishAt: metadata.publishAt,
+        selfDeclaredMadeForKids: false
+      }
+    : {
+        privacyStatus: "public",
+        selfDeclaredMadeForKids: false
+      };
 
   const initialRes = await fetch(
     "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
@@ -122,14 +164,11 @@ export async function uploadVideoToYouTube(videoPath, metadata) {
       body: JSON.stringify({
         snippet: {
           title: metadata.title,
-          description: metadata.description,
+          description: formattedDescription,
           tags: metadata.tags,
           categoryId: "27" // Education / Science & Tech
         },
-        status: {
-          privacyStatus: "public",
-          selfDeclaredMadeForKids: false
-        }
+        status: statusPayload
       })
     }
   );
@@ -163,6 +202,15 @@ export async function uploadVideoToYouTube(videoPath, metadata) {
   const result = await uploadRes.json();
   console.log(`✅ Upload Successful! Video ID: ${result.id}`);
   console.log(`🔗 Watch URL: https://youtube.com/shorts/${result.id}`);
+  if (isScheduled) {
+    console.log(`📅 Status: Scheduled to publish at ${metadata.publishAt}`);
+  }
+
+  // Post clickable link in comments
+  if (metadata.pinnedComment) {
+    await postPinnedComment(accessToken, result.id, metadata.pinnedComment);
+  }
+
   return result;
 }
 
@@ -187,24 +235,11 @@ async function main() {
       if (channel) {
         console.log(`📺 Connected Channel:    ${channel.snippet?.title || "Your Channel"}`);
         console.log(`🆔 Channel ID:            ${channel.id}`);
-        console.log(`👥 Subscribers:           ${channel.statistics?.subscriberCount || "Hidden/0"}`);
-        console.log(`🎥 Total Videos:          ${channel.statistics?.videoCount || "0"}`);
-      } else {
-        console.log("ℹ️ Channel connected, ready to upload.");
       }
-    } else {
-      console.log("🔑 YouTube OAuth Status: ❌ Credentials not configured or token expired.");
     }
-
-    console.log("\n──────────────────────────────────────────────────────────────────────");
-    console.log(`🎬 Today's Short Title:   ${shortMetadata.title}`);
-    console.log(`🔗 Target Website URL:    ${shortMetadata.targetUrl}`);
-    console.log("──────────────────────────────────────────────────────────────────────");
-    console.log("\nTo upload an .mp4 video file to YouTube directly via API, run:");
-    console.log("  node scripts/youtubeUploader.mjs --video=./path_to_video.mp4\n");
   }
 }
 
-if (process.argv[1].endsWith("youtubeUploader.mjs")) {
+if (process.argv[1] && process.argv[1].endsWith("youtubeUploader.mjs")) {
   main().catch(console.error);
 }

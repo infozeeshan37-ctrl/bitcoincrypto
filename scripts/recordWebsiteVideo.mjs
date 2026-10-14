@@ -1,9 +1,9 @@
 /**
  * BitcoinCrypto.tech — 4K UHD Live Website Screen Video Recorder
  * 
- * Uses Puppeteer CDP Screencast to capture high-framerate, authentic
- * recorded video of the live website in motion (smooth scrolling, live charts,
- * order book depth, and interactive tools) rendered at crisp 4K (2160x3840).
+ * Uses Puppeteer CDP Screencast to capture authentic, high-framerate,
+ * kinetic video of the live website in motion (smooth scrolling, live charts,
+ * order book depth, and interactive tools) rendered at native 4K UHD (2160x3840).
  */
 
 import puppeteer from "puppeteer-core";
@@ -20,7 +20,7 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   const framesDir = path.resolve(outputDir, `frames_${Date.now()}`);
   if (!fs.existsSync(framesDir)) fs.mkdirSync(framesDir, { recursive: true });
 
-  console.log(`🎥 Initiating 4K UHD Screen Recording of ${targetUrl}...`);
+  console.log(`🎥 Initiating Native 4K UHD Screen Recording of ${targetUrl}...`);
   console.log(`⏱️ Target Duration: ${targetDuration.toFixed(1)} seconds`);
 
   const browser = await puppeteer.launch({
@@ -37,14 +37,31 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   });
 
   const page = await browser.newPage();
-  // 1080x1920 with scale 2 renders native 2160x3840 (True 4K UHD!)
+  // 1080x1920 with deviceScaleFactor: 2 renders native 2160x3840 (True 4K UHD!)
   await page.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 2 });
+
+  // Suppress popups and force sleek dark mode before navigation
+  await page.evaluateOnNewDocument(() => {
+    try {
+      localStorage.setItem("btc_cookie_consent", "all");
+      localStorage.setItem("btc_theme_mode", "dark");
+      localStorage.setItem("btc_theme_accent", "amber");
+    } catch (_) {}
+  });
 
   console.log(`🌐 Navigating to ${targetUrl}...`);
   await page.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 35000 });
 
-  // Allow real-time charts, WebSocket ticks, and SVG elements to stabilize
-  await new Promise((r) => setTimeout(r, 3000));
+  // Hide scrollbars for a clean cinematic look
+  await page.addStyleTag({
+    content: `
+      ::-webkit-scrollbar { display: none !important; }
+      body { -ms-overflow-style: none; scrollbar-width: none; }
+    `
+  }).catch(() => {});
+
+  // Allow real-time charts, WebSocket ticks, and SVG indicators to load
+  await new Promise((r) => setTimeout(r, 2800));
 
   const client = await page.target().createCDPSession();
 
@@ -62,11 +79,12 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     } catch (_) {}
   });
 
+  // Capture frames at native 4K dimensions (2160x3840)
   await client.send("Page.startScreencast", {
     format: "jpeg",
-    quality: 95,
-    maxWidth: 1080,
-    maxHeight: 1920,
+    quality: 92,
+    maxWidth: 2160,
+    maxHeight: 3840,
     everyNthFrame: 1
   });
 
@@ -75,24 +93,24 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   const startTime = Date.now();
   const totalMs = targetDuration * 1000;
 
-  // Kinetic scrolling script: smoothly scrolls down to showcase features, pauses, and glides back
+  // Kinetic scrolling script: smoothly glides down through the UI, pauses on key charts, and resumes
   while (Date.now() - startTime < totalMs) {
     const elapsed = (Date.now() - startTime) / 1000;
 
     if (elapsed < 3) {
-      // Hold on top hero banner & title for 3s
-      await new Promise((r) => setTimeout(r, 100));
+      // Hold on top hero banner, ticker & sentiment for 3s
+      await new Promise((r) => setTimeout(r, 80));
     } else if (elapsed < 14) {
       // Smooth downward scroll through live charts, order books, and liquidations
-      await page.evaluate(() => window.scrollBy({ top: 12, behavior: "auto" }));
-      await new Promise((r) => setTimeout(r, 40));
+      await page.evaluate(() => window.scrollBy({ top: 14, behavior: "auto" }));
+      await new Promise((r) => setTimeout(r, 35));
     } else if (elapsed < 18) {
       // Pause on mid-page tools (Order book / CVD / Learn chapters)
-      await new Promise((r) => setTimeout(r, 100));
+      await new Promise((r) => setTimeout(r, 80));
     } else {
       // Glide down to paper trading terminal or bottom curriculum callout
-      await page.evaluate(() => window.scrollBy({ top: 14, behavior: "auto" }));
-      await new Promise((r) => setTimeout(r, 40));
+      await page.evaluate(() => window.scrollBy({ top: 16, behavior: "auto" }));
+      await new Promise((r) => setTimeout(r, 35));
     }
   }
 
@@ -109,11 +127,11 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   }
 
   // Calculate actual framerate
-  const fps = Math.max(12, Math.round(frameCount / targetDuration));
+  const fps = Math.max(14, Math.round(frameCount / targetDuration));
   const relFramesPattern = path.relative(process.cwd(), path.join(framesDir, "frame_%06d.jpg")).replace(/\\/g, "/");
 
-  // 4K UHD Upscaling Filter (2160x3840) with Lanczos interpolation & unsharp mask for crystal-clear fidelity
-  const vf = `scale=2160:3840:flags=lanczos,unsharp=3:3:0.6:3:3:0.3`;
+  // 4K UHD Filter with subtle unsharp mask for razor-sharp fidelity
+  const vf = `scale=2160:3840:flags=lanczos,unsharp=3:3:0.5:3:3:0.2`;
 
   const ffmpegArgs = [
     "-framerate", `${fps}`,
@@ -122,7 +140,7 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     "-c:v", "libx264",
     "-preset", "fast",
     "-pix_fmt", "yuv420p",
-    "-crf", "18", // High quality 4K encoding
+    "-crf", "21", // Crisp 4K UHD with optimized file size for fast upload
     "-t", `${targetDuration}`,
     outputPath,
     "-y"

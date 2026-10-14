@@ -70,25 +70,66 @@ function resolveSlotCategory(args) {
   const slotArg = args.find((a) => a.startsWith("--slot="));
   if (slotArg) {
     const slotNum = parseInt(slotArg.split("=")[1], 10);
-    if (slotNum === 1) return "ai_prediction";
-    if (slotNum === 2) return "coinglass_squeeze";
-    if (slotNum === 3) return "crypto_learn";
+    if (slotNum === 1) return { category: "ai_prediction", slotNumber: 1 };
+    if (slotNum === 2) return { category: "coinglass_squeeze", slotNumber: 2 };
+    if (slotNum === 3) return { category: "crypto_learn", slotNumber: 3 };
   }
 
   // If no slot specified, pick based on current UTC hour
   const currentHour = new Date().getUTCHours();
-  if (currentHour < 14) return "ai_prediction";      // Morning window
-  if (currentHour < 19) return "coinglass_squeeze";  // Afternoon window
-  return "crypto_learn";                             // Evening window
+  if (currentHour < 14) return { category: "ai_prediction", slotNumber: 1 };      // Morning window
+  if (currentHour < 19) return { category: "coinglass_squeeze", slotNumber: 2 };  // Afternoon window
+  return { category: "crypto_learn", slotNumber: 3 };                             // Evening window
 }
 
-async function publishSingleShort(categoryOverride, isDryRun, keepVideo) {
+/**
+ * Calculates future scheduled publication time for a given slot.
+ * 
+ * Target peak times (UTC):
+ *   Slot 1: 12:00 UTC (8:00 AM New York / 1:00 PM London) -> AI Prediction Arena
+ *   Slot 2: 16:00 UTC (12:00 PM New York / 5:00 PM London) -> CoinGlass Liquidation Squeeze
+ *   Slot 3: 21:00 UTC (5:00 PM New York / 9:00 PM London) -> Crypto Learn Masterclass
+ */
+export function calculateSlotPublishTime(slotNumber, forceTomorrow = false) {
+  const slotHours = {
+    1: 12, // 12:00 UTC
+    2: 16, // 16:00 UTC
+    3: 21  // 21:00 UTC
+  };
+
+  const targetHour = slotHours[slotNumber] || 12;
+  const now = new Date();
+  const target = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    targetHour,
+    0,
+    0,
+    0
+  ));
+
+  // If forced tomorrow or target is past / within 45 min, bump to tomorrow
+  if (forceTomorrow || (target.getTime() - now.getTime() < 45 * 60 * 1000)) {
+    target.setUTCDate(target.getUTCDate() + 1);
+  }
+
+  return target.toISOString();
+}
+
+async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publishAt = null) {
   console.log("──────────────────────────────────────────────────────────────────────");
   console.log(`🧠 Generating topic for category: [${categoryOverride}]...`);
   const metadata = await generateDailyShort(categoryOverride);
+  if (publishAt) {
+    metadata.publishAt = publishAt;
+  }
   console.log(`📌 Category:      ${metadata.category}`);
   console.log(`🔥 Title:         ${metadata.title}`);
   console.log(`🔗 Target URL:    ${metadata.targetUrl}`);
+  if (metadata.publishAt) {
+    console.log(`⏰ Scheduled At:  ${metadata.publishAt} (UTC)`);
+  }
   console.log("──────────────────────────────────────────────────────────────────────");
 
   console.log("🎬 Synthesizing 9:16 vertical Short (Neural Voiceover + Live Website Screen)...");
@@ -109,8 +150,13 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo) {
   if (uploadResult && uploadResult.id) {
     const watchUrl = `https://youtube.com/shorts/${uploadResult.id}`;
     console.log("══════════════════════════════════════════════════════════════════════");
-    console.log(`🎉 SUCCESS! YouTube Short is now LIVE!`);
+    console.log(`🎉 SUCCESS! YouTube Short successfully uploaded!`);
     console.log(`🔗 Watch URL:      ${watchUrl}`);
+    if (metadata.publishAt) {
+      console.log(`📅 Status:         SCHEDULED for ${metadata.publishAt} (UTC)`);
+    } else {
+      console.log(`📅 Status:         PUBLIC (Live now)`);
+    }
     console.log(`📝 Description:    Includes backlink to ${metadata.targetUrl}`);
     console.log(`💬 Pinned Comment: ${metadata.pinnedComment}`);
     console.log("══════════════════════════════════════════════════════════════════════");
@@ -121,6 +167,8 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo) {
       title: metadata.title,
       category: metadata.category,
       targetUrl: metadata.targetUrl,
+      scheduledAt: metadata.publishAt || null,
+      status: metadata.publishAt ? "scheduled" : "public",
       url: watchUrl
     });
 
@@ -140,6 +188,7 @@ export async function runAutoShortPipeline() {
   const isDryRun = args.includes("--dry-run");
   const keepVideo = args.includes("--keep-video");
   const allSlots = args.includes("--all-slots");
+  const isSchedule = args.includes("--schedule");
 
   console.log("══════════════════════════════════════════════════════════════════════");
   console.log("  🚀 BitcoinCrypto.tech — High-Impact Daily YouTube Shorts Publisher");
@@ -158,23 +207,31 @@ export async function runAutoShortPipeline() {
   console.log(`🆔 Channel ID:        ${channel?.id || "N/A"}`);
 
   if (allSlots) {
-    console.log("🌟 Publishing ALL 3 DAILY SHORTS in sequence (AI Prediction, CoinGlass, Crypto Learn)...");
-    const categories = ["ai_prediction", "coinglass_squeeze", "crypto_learn"];
+    console.log("🌟 Publishing ALL 3 DAILY SHORTS in sequence...");
+    const slotsConfig = [
+      { slotNumber: 1, category: "ai_prediction", label: "Slot 1: AI Prediction Arena (12:00 UTC)" },
+      { slotNumber: 2, category: "coinglass_squeeze", label: "Slot 2: CoinGlass Liquidation Squeeze (16:00 UTC)" },
+      { slotNumber: 3, category: "crypto_learn", label: "Slot 3: Crypto Learn Masterclass (21:00 UTC)" }
+    ];
+
     const results = [];
-    for (const cat of categories) {
-      const res = await publishSingleShort(cat, isDryRun, keepVideo);
+    for (const cfg of slotsConfig) {
+      console.log(`\n⏳ === PROCESSING ${cfg.label} ===`);
+      const scheduledTime = isSchedule ? calculateSlotPublishTime(cfg.slotNumber, true) : null;
+      const res = await publishSingleShort(cfg.category, isDryRun, keepVideo, scheduledTime);
       results.push(res);
       // Brief pause between uploads
       await new Promise((r) => setTimeout(r, 4000));
     }
     return results;
   } else {
-    const category = resolveSlotCategory(args);
-    return await publishSingleShort(category, isDryRun, keepVideo);
+    const { category, slotNumber } = resolveSlotCategory(args);
+    const scheduledTime = isSchedule ? calculateSlotPublishTime(slotNumber, false) : null;
+    return await publishSingleShort(category, isDryRun, keepVideo, scheduledTime);
   }
 }
 
-if (process.argv[1].endsWith("autoPostDailyShort.mjs")) {
+if (process.argv[1] && process.argv[1].endsWith("autoPostDailyShort.mjs")) {
   runAutoShortPipeline().catch((err) => {
     console.error("Fatal error:", err);
     process.exit(1);

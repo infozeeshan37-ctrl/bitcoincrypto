@@ -1,12 +1,13 @@
 /**
- * BitcoinCrypto.tech — 4K UHD YouTube Shorts Video Synthesizer
+ * BitcoinCrypto.tech — 4K UHD Viral YouTube Shorts Video Synthesizer
  * 
  * Features:
- *   - True 4K UHD Resolution: 2160 x 3840 (9:16 vertical)
- *   - Recorded Live Website Video: Actual kinetic video of bitcoincrypto.tech in action
+ *   - Native 4K UHD Resolution: 2160 x 3840 (9:16 vertical)
+ *   - Recorded Live Website Video: Smooth kinetic screencast of bitcoincrypto.tech in action
+ *   - Clean, Uncluttered Screen: NO giant static text blocks covering the website
+ *   - Viral Dynamic Subtitles: 3-5 word punchy animated captions in sync with speech (Hormozi style)
  *   - Real AI Neural Voiceover: High-energy financial narrator (en-US-ChristopherNeural)
- *   - 4K Typography HUD: Cyber gold & cyan neon overlays, badges, and subtitles
- *   - Audio Mastering: Boosted voice + high-tech ambient pulse
+ *   - End Callout: Directs viewers to the clickable link in pinned comments & description
  */
 
 import { spawn } from "child_process";
@@ -15,13 +16,53 @@ import path from "path";
 import { generateVoiceover } from "./generateVoiceover.mjs";
 import { recordWebsiteVideo } from "./recordWebsiteVideo.mjs";
 
-function create4kAssScript(metadata, duration) {
+function formatAssTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  const cs = Math.floor((seconds % 1) * 100);
+  return `0:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}.${String(cs).padStart(2, "0")}`;
+}
+
+/**
+ * Builds viral dynamic captions: breaks narration into punchy 3-5 word cards
+ * synchronized across the audio duration.
+ */
+function createViral4kAssScript(metadata, duration) {
   const title = (metadata.title || "Crypto Alert").replace(/#Shorts/gi, "").trim();
   const category = (metadata.category || "AI Technical Model").toUpperCase();
   const durationSec = Math.ceil(duration);
 
-  // Scaled for 4K UHD: 2160 x 3840
-  // Gold: &H0000D7FF, Cyan: &H00E6D800, White: &H00FFFFFF
+  // Parse voiceover into punchy 3-5 word chunks
+  const voiceoverText = metadata.voiceover || metadata.description || "";
+  const cleanedText = voiceoverText
+    .replace(/#Shorts/gi, "")
+    .replace(/[#*]/g, "")
+    .replace(/bitcoincrypto\.tech/gi, "bitcoincrypto.tech")
+    .trim();
+
+  const words = cleanedText.split(/\s+/).filter(Boolean);
+  const wordsPerChunk = 4;
+  const chunks = [];
+  for (let i = 0; i < words.length; i += wordsPerChunk) {
+    chunks.push(words.slice(i, i + wordsPerChunk).join(" "));
+  }
+
+  // Allocate caption timing (start at 3s to let top hook shine, end 4s before finish for final CTA)
+  const captionStartTime = 3.0;
+  const captionEndTime = Math.max(captionStartTime + 5, duration - 4.5);
+  const totalCaptionTime = captionEndTime - captionStartTime;
+  const chunkDuration = totalCaptionTime / Math.max(1, chunks.length);
+
+  const captionEvents = chunks.map((chunk, idx) => {
+    const start = captionStartTime + (idx * chunkDuration);
+    const end = start + chunkDuration;
+    const safeText = chunk.toUpperCase().replace(/\n/g, " ");
+    return `Dialogue: 1,${formatAssTime(start)},${formatAssTime(end)},ViralCaption,,0,0,0,,{\\fad(120,120)}${safeText}`;
+  }).join("\n");
+
+  const finalCtaStart = formatAssTime(Math.max(0, duration - 4.5));
+  const finalCtaEnd = formatAssTime(durationSec);
+
   return `[Script Info]
 ScriptType: v4.00+
 PlayResX: 2160
@@ -30,24 +71,28 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: HeaderBrand,Arial,76,&H0000D7FF,&H00000000,&H00000000,&HA0000000,1,0,0,0,100,100,3,0,1,6,0,8,80,80,160,1
-Style: CategoryBadge,Arial,64,&H00E6D800,&H00000000,&H00000000,&HA0000000,1,0,0,0,100,100,2,0,1,5,0,8,80,80,280,1
-Style: HookBanner,Arial,96,&H00FFFFFF,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,2,0,1,8,4,8,80,80,390,1
-Style: BottomCta,Arial,84,&H0000D7FF,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,2,0,1,8,4,2,80,80,300,1
-Style: BottomSub,Arial,64,&H00A0AEC0,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,1,0,1,5,0,2,80,80,190,1
+; Subtle top-corner watermark (never blocks content)
+Style: Watermark,Arial,48,&H60FFFFFF,&H00000000,&H00000000,&H60000000,1,0,0,0,100,100,2,0,1,3,0,9,80,80,120,1
+; 3-second opening hook alert badge (fades out at 3s)
+Style: TopHook,Arial,72,&H0000FFFF,&H00000000,&H00000000,&HB0000000,1,0,0,0,100,100,3,0,1,7,3,8,80,80,180,1
+; Viral dynamic captions in lower-third (bold neon yellow with thick outline)
+Style: ViralCaption,Arial Black,94,&H0000FFFF,&H00000000,&H00000000,&HD0000000,1,0,0,0,100,100,2,0,1,9,4,2,80,80,340,1
+; Final call-to-action directing to clickable pinned link
+Style: FinalCta,Arial Black,86,&H0000D7FF,&H00000000,&H00000000,&HE0000000,1,0,0,0,100,100,2,0,1,9,4,2,80,80,320,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-; Top Brand Watermark
-Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,HeaderBrand,,0,0,0,,{\\fad(300,300)}⚡ BITCOINCRYPTO.TECH • 4K LIVE TERMINAL ⚡
-Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,CategoryBadge,,0,0,0,,{\\fad(300,300)}[ ${category} ]
+; Discreet branding in top-right corner
+Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,Watermark,,0,0,0,,bitcoincrypto.tech
 
-; Headline Hook Banner
-Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,HookBanner,,0,0,0,,{\\fad(350,350)}${title}
+; 3-second opening hook alert (Disappears after 3 seconds so the full website is seen!)
+Dialogue: 2,0:00:00.00,0:00:03.20,TopHook,,0,0,0,,{\\fad(200,300)}🚨 ${category} 🚨
 
-; Bottom Call to Action
-Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,BottomCta,,0,0,0,,{\\fad(350,350)}👉 FREE REAL-TIME TERMINAL & 100 LESSONS
-Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,BottomSub,,0,0,0,,{\\fad(350,350)}Link Pinned in Description & Comments
+; Dynamic fast-moving subtitles matching the voice
+${captionEvents}
+
+; Final CTA guiding viewers to clickable link in description & comments
+Dialogue: 2,${finalCtaStart},${finalCtaEnd},FinalCta,,0,0,0,,{\\fad(300,200)}👇 CLICK LINK IN PINNED COMMENT! 👇\\N\\N🔗 bitcoincrypto.tech
 `;
 }
 
@@ -66,19 +111,19 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   const voiceoverText = metadata.voiceover || metadata.description;
   const { duration } = await generateVoiceover(voiceoverText, voicePath);
 
-  // Step 2: Record Live Website Video in 4K UHD
+  // Step 2: Record Live Website Screen Video in 4K UHD
   const targetUrl = metadata.targetUrl || "https://www.bitcoincrypto.tech/predictions";
   await recordWebsiteVideo(targetUrl, duration, rawVideoPath);
 
-  // Step 3: Generate 4K ASS Subtitles
-  const assContent = create4kAssScript(metadata, duration);
+  // Step 3: Generate 4K Dynamic Viral Subtitles (No static text clutter)
+  const assContent = createViral4kAssScript(metadata, duration);
   fs.writeFileSync(assPath, assContent, "utf-8");
 
   const relRawVideo = path.relative(process.cwd(), rawVideoPath).replace(/\\/g, "/");
   const relVoice = path.relative(process.cwd(), voicePath).replace(/\\/g, "/");
   const relAss = path.relative(process.cwd(), assPath).replace(/\\/g, "/");
 
-  console.log(`🎬 Mastering 4K UHD Video (2160x3840, ${duration.toFixed(1)}s)...`);
+  console.log(`🎬 Mastering 4K UHD Viral Short (${duration.toFixed(1)}s, 2160x3840)...`);
 
   const filterComplex = `[0:v]ass='${relAss}'[outv];` +
     `[1:a]volume=1.35[voice];` +
@@ -96,7 +141,7 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     "-c:v", "libx264",
     "-preset", "fast",
     "-pix_fmt", "yuv420p",
-    "-crf", "18", // Crystal-clear 4K UHD
+    "-crf", "20",
     "-c:a", "aac",
     "-b:a", "192k",
     "-t", `${duration}`,
@@ -113,7 +158,7 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     });
 
     proc.on("close", (code) => {
-      // Clean up intermediate files
+      // Clean up intermediate raw recording and subtitle files
       try {
         if (fs.existsSync(voicePath)) fs.unlinkSync(voicePath);
         if (fs.existsSync(rawVideoPath)) fs.unlinkSync(rawVideoPath);
@@ -122,7 +167,7 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
 
       if (code === 0 && fs.existsSync(outputPath)) {
         const mb = (fs.statSync(outputPath).size / (1024 * 1024)).toFixed(2);
-        console.log(`✅ Mastered 4K Short: ${outputPath} (${mb} MB, 2160x3840)`);
+        console.log(`✅ Mastered 4K Viral Short: ${outputPath} (${mb} MB, 2160x3840)`);
         resolve(outputPath);
       } else {
         console.error("❌ FFmpeg error:", stderr.slice(-400));
