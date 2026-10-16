@@ -62,6 +62,25 @@ async function hostVideoTemporarily(videoPath) {
   console.log("🌐 Staging 4K video on high-speed CDN for Instagram download...");
   const absPath = path.resolve(videoPath);
 
+  // Attempt 1: Uguu.se (Fast dedicated CDN, up to 100MB, reliable global endpoints)
+  try {
+    const { stdout } = await execFileAsync("curl.exe", [
+      "-s",
+      "-F", `files[]=@${absPath}`,
+      "https://uguu.se/upload"
+    ]);
+
+    const data = JSON.parse(stdout.trim());
+    if (data.success && data.files && data.files.length > 0) {
+      const directUrl = data.files[0].url;
+      console.log(`✅ Staged video URL ready: ${directUrl}`);
+      return directUrl;
+    }
+  } catch (err) {
+    console.log("ℹ️ Primary CDN stage failed, trying secondary host...", err.message);
+  }
+
+  // Attempt 2: Catbox fallback
   try {
     const { stdout } = await execFileAsync("curl.exe", [
       "-s",
@@ -71,16 +90,16 @@ async function hostVideoTemporarily(videoPath) {
     ]);
 
     const directUrl = stdout.trim();
-    if (!directUrl.startsWith("http")) {
-      throw new Error(`Invalid response from host: ${directUrl}`);
+    if (directUrl.startsWith("http")) {
+      console.log(`✅ Staged video URL ready: ${directUrl}`);
+      return directUrl;
     }
-
-    console.log(`✅ Staged video URL ready: ${directUrl}`);
-    return directUrl;
   } catch (err) {
     console.error("❌ Error uploading video to staging CDN:", err.message);
     throw err;
   }
+
+  throw new Error("Failed to stage video file on any CDN host.");
 }
 
 /**
