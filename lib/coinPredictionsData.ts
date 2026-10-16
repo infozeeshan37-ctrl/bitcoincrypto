@@ -1696,5 +1696,40 @@ export const coinPredictions: CoinPredictionData[] = [
       { type: "Support", price: 0.58, description: "Strong baseline support." },
     ],
   },
+  {
+    slug: "dogwifcoin",
+    symbol: "WIF",
+    name: "dogwifhat (WIF)",
+    category: "Solana Ecosystem / High-Beta Memecoin",
+    currentPriceUsd: 2.35,
+    marketCap: "$2.35 Billion",
+    circulatingSupply: "998.9 Million WIF",
+    maxSupply: "998.9 Million WIF",
+    allTimeHigh: 4.85,
+    allTimeHighDate: "Mar 2024",
+    confluenceScore: 92.5,
+    primarySignal: "BUY",
+    summaryThesis: "The premier high-beta liquidity proxy on Solana. High taker volume and derivatives open interest position WIF for rapid mean-reversion surges whenever SOL expands.",
+    forecasts: {
+      horizon24h: { targetPrice: 2.55, targetRange: [2.20, 2.70], projectedReturn: "+8.51%", confidence: 91.0, supportLevel: 2.15, resistanceLevel: 2.65, primaryDriver: "Intraday Solana ecosystem taker volume surge and short liquidation cascades" },
+      horizon7d: { targetPrice: 3.20, targetRange: [2.60, 3.50], projectedReturn: "+36.17%", confidence: 88.0, supportLevel: 1.95, resistanceLevel: 3.40, primaryDriver: "Bullish divergence on 4-hour RSI and multi-exchange open interest expansion" },
+      horizon30d: { targetPrice: 4.80, targetRange: [3.40, 5.50], projectedReturn: "+104.26%", confidence: 85.0, supportLevel: 1.80, resistanceLevel: 5.00, primaryDriver: "Macro altcoin risk-on rotation testing previous all-time high resistance" },
+    },
+    pillars: {
+      technical: { score: 91, rsi14: 58.4, macdBias: "Bullish Crossover", supertrend: "Bullish", keyNote: "Strong base established above $2.15 support floor." },
+      onChain: { score: 92, mvrvZScore: 1.75, activeAddresses24h: "85,000+", exchangeReserveFlow: "-4.2M WIF", keyNote: "Top whale wallets continuing spot accumulation on Solana DEXs." },
+      derivatives: { score: 94, openInterest: "$420M", fundingRate: "+0.0092%", longShortRatio: 1.22, keyNote: "High negative funding dips consistently triggering short squeeze cascades." },
+      macro: { score: 90, fedCutOdds: 88, cpiYoY: "2.7%", dxyCorrelation: "-0.74", keyNote: "Exceptional beta sensitivity to global cryptocurrency liquidity." },
+    },
+    faq: [
+      { question: "What is dogwifhat (WIF)?", answer: "dogwifhat (WIF) is the leading decentralized memecoin built on the Solana blockchain, known for high liquidity, active retail community, and deep exchange listings." },
+      { question: "What is WIF price prediction for 2026?", answer: "Quantitative cycle models project WIF trading between $3.80 and $6.50 during sustained altcoin expansion phases." },
+    ],
+    keyLevels: [
+      { type: "Resistance", price: 2.65, description: "Intraday resistance ceiling." },
+      { type: "Resistance", price: 4.85, description: "All-time high resistance milestone." },
+      { type: "Support", price: 2.15, description: "Key daily support confluence." },
+    ],
+  },
 ];
 

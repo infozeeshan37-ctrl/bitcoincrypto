@@ -954,7 +954,7 @@ export const articles: Article[] = [
     publishedAt: 'Oct 2026',
     author: 'Dr. Elena Rostova & Derivatives Desk',
     authorRole: 'Chief Quantitative Market Microstructure Strategist',
-    imageUrl: '/images/blog/liquidation-heatmap-guide.jpg',
+    imageUrl: '/images/blog/liquidation-heatmap-guide.svg',
     imageAlt: 'CoinGlass Crypto Liquidation Heatmap and Leverage Squeeze Terminal Guide',
     tags: [
       'CoinGlass',
@@ -1069,7 +1069,7 @@ export const articles: Article[] = [
     publishedAt: 'Oct 2026',
     author: 'Arthur Hayes & Research Desk',
     authorRole: 'Macro & Derivatives Strategist',
-    imageUrl: '/images/blog/crypto-funding-rates-masterclass.jpg',
+    imageUrl: '/images/blog/crypto-funding-rates-masterclass.svg',
     imageAlt: 'Crypto Funding Rates Screener and Cash and Carry Basis Arbitrage Radar',
     tags: [
       'Funding Rates',
@@ -1167,7 +1167,7 @@ export const articles: Article[] = [
     publishedAt: 'Oct 2026',
     author: 'Marcus Vance & Market Microstructure Desk',
     authorRole: 'Lead Order Flow Quantitative Analyst',
-    imageUrl: '/images/blog/order-book-depth-microstructure.jpg',
+    imageUrl: '/images/blog/order-book-depth-microstructure.svg',
     imageAlt: 'Level 2 Order Book Depth Chart and Whale Iceberg Liquidity Radar',
     tags: [
       'Order Book Depth',
@@ -1254,7 +1254,7 @@ export const articles: Article[] = [
     publishedAt: 'Oct 2026',
     author: 'Dr. Alan Turing Quantitative Research Lab',
     authorRole: 'Head of Machine Learning & Algorithmic Systems',
-    imageUrl: '/images/blog/ai-crypto-prediction-models.jpg',
+    imageUrl: '/images/blog/ai-crypto-prediction-models.svg',
     imageAlt: 'AI Quantitative Cryptocurrency Price Prediction Models and Next-Candle Neural Terminal',
     tags: [
       'AI Crypto Prediction',
@@ -1343,7 +1343,7 @@ export const articles: Article[] = [
     publishedAt: 'Oct 2026',
     author: 'Kaelen Ward & Quantitative Strategy Desk',
     authorRole: 'Senior Portfolio Architect',
-    imageUrl: '/images/blog/bitcoin-dca-math-strategy.jpg',
+    imageUrl: '/images/blog/bitcoin-dca-math-strategy.svg',
     imageAlt: 'Bitcoin Dollar Cost Averaging DCA Mathematical Cycle Simulator',
     tags: [
       'Bitcoin DCA',

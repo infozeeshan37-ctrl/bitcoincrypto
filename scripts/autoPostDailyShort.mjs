@@ -118,7 +118,7 @@ export function calculateSlotPublishTime(slotNumber, forceTomorrow = false) {
   return target.toISOString();
 }
 
-async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publishAt = null) {
+async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publishAt = null, existingVideoPath = null) {
   console.log("──────────────────────────────────────────────────────────────────────");
   console.log(`🧠 Generating topic for category: [${categoryOverride}]...`);
   const metadata = await generateDailyShort(categoryOverride);
@@ -133,8 +133,13 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publish
   }
   console.log("──────────────────────────────────────────────────────────────────────");
 
-  console.log("🎬 Synthesizing 9:16 vertical Short (Neural Voiceover + Live Website Screen)...");
-  const videoPath = await generateShortVideo(metadata);
+  let videoPath = existingVideoPath;
+  if (!videoPath || !fs.existsSync(videoPath)) {
+    console.log("🎬 Synthesizing 9:16 vertical Short (Neural Voiceover + Live Website Screen)...");
+    videoPath = await generateShortVideo(metadata);
+  } else {
+    console.log(`🎬 Using pre-rendered 4K Short: ${videoPath}`);
+  }
   const fileSizeMb = (fs.statSync(videoPath).size / (1024 * 1024)).toFixed(2);
   console.log(`📁 Video Ready:   ${videoPath} (${fileSizeMb} MB)`);
   console.log("──────────────────────────────────────────────────────────────────────");
@@ -205,6 +210,8 @@ export async function runAutoShortPipeline() {
   const keepVideo = args.includes("--keep-video");
   const allSlots = args.includes("--all-slots");
   const isSchedule = args.includes("--schedule");
+  const videoArg = args.find((a) => a.startsWith("--video="));
+  const existingVideoPath = videoArg ? videoArg.split("=")[1] : null;
 
   console.log("══════════════════════════════════════════════════════════════════════");
   console.log("  🚀 BitcoinCrypto.tech — High-Impact Daily YouTube Shorts Publisher");
@@ -242,8 +249,9 @@ export async function runAutoShortPipeline() {
     return results;
   } else {
     const { category, slotNumber } = resolveSlotCategory(args);
-    const scheduledTime = isSchedule ? calculateSlotPublishTime(slotNumber, false) : null;
-    return await publishSingleShort(category, isDryRun, keepVideo, scheduledTime);
+    const forceTomorrow = args.includes("--tomorrow") || isSchedule;
+    const scheduledTime = isSchedule ? calculateSlotPublishTime(slotNumber, forceTomorrow) : null;
+    return await publishSingleShort(category, isDryRun, keepVideo, scheduledTime, existingVideoPath);
   }
 }
 

@@ -7,6 +7,7 @@
 
 import fs from "fs";
 import path from "path";
+import { execSync, spawnSync } from "child_process";
 import { generateDailyShort } from "./youtubeShortsGenerator.mjs";
 
 function loadEnv() {
@@ -184,22 +185,43 @@ export async function uploadVideoToYouTube(videoPath, metadata) {
     return false;
   }
 
-  const fileBuffer = fs.readFileSync(videoPath);
-  const uploadRes = await fetch(uploadUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Length": fileSize.toString(),
-      "Content-Type": "video/mp4"
-    },
-    body: fileBuffer
-  });
+  console.log(`📡 Streaming video binary (${(fileSize / (1024 * 1024)).toFixed(2)} MB) to YouTube resumable pipeline...`);
+  let result = null;
 
-  if (!uploadRes.ok) {
-    console.error("❌ Upload chunk failed:", await uploadRes.text());
-    return false;
+  try {
+    // Attempt via curl.exe spawnSync (immune to shell escaping & undici headersTimeout)
+    const curlProc = spawnSync(
+      "curl.exe",
+      ["-s", "-S", "-X", "PUT", "-H", "Content-Type: video/mp4", "-T", videoPath, uploadUrl],
+      { maxBuffer: 50 * 1024 * 1024, timeout: 300000 }
+    );
+    const stdout = curlProc.stdout ? curlProc.stdout.toString("utf-8") : "";
+    if (stdout && stdout.includes('"id":')) {
+      result = JSON.parse(stdout);
+    } else if (curlProc.stderr && curlProc.stderr.length > 0) {
+      console.log(`ℹ️ curl info: ${curlProc.stderr.toString("utf-8").trim()}`);
+    }
+  } catch (curlErr) {
+    console.log(`ℹ️ curl upload notice: ${curlErr.message}. Trying fetch fallback...`);
   }
 
-  const result = await uploadRes.json();
+  if (!result) {
+    const fileBuffer = fs.readFileSync(videoPath);
+    const uploadRes = await fetch(uploadUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Length": fileSize.toString(),
+        "Content-Type": "video/mp4"
+      },
+      body: fileBuffer
+    });
+
+    if (!uploadRes.ok) {
+      console.error("❌ Upload chunk failed:", await uploadRes.text());
+      return false;
+    }
+    result = await uploadRes.json();
+  }
   console.log(`✅ Upload Successful! Video ID: ${result.id}`);
   console.log(`🔗 Watch URL: https://youtube.com/shorts/${result.id}`);
   if (isScheduled) {

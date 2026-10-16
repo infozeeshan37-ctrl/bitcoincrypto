@@ -352,11 +352,11 @@ export default function CPIMacroAIPredictor() {
                 </div>
               </div>
 
-              <div className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">
+              <div className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight" suppressHydrationWarning>
                 {String(countdown.days).padStart(2, "0")}d : {String(countdown.hours).padStart(2, "0")}h : {String(countdown.minutes).padStart(2, "0")}m : {String(countdown.seconds).padStart(2, "0")}s
               </div>
               
-              <div className="text-[11px] font-mono text-slate-300 flex items-center justify-center gap-1.5">
+              <div className="text-[11px] font-mono text-slate-300 flex items-center justify-center gap-1.5" suppressHydrationWarning>
                 <Calendar className="w-3 h-3 text-amber-400" />
                 <span>{NEXT_CPI_RELEASE.date} @ {getActiveReleaseTime()}</span>
               </div>

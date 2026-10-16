@@ -203,7 +203,7 @@ export default function LiveEcosystemOverview() {
 
               {/* Coin list with 1-Second Flashes (Clickable to prediction analysis) */}
               <div className="space-y-2">
-                {coins.map((c) => {
+                {coins.map((c, idx) => {
                   const isBull = c.change24h >= 0;
                   const tick = coinTicks[c.symbol || c.base];
                   const rawBase = (c.base || c.symbol || "").replace(/USDT$/i, "").toUpperCase();
@@ -216,14 +216,14 @@ export default function LiveEcosystemOverview() {
                     DOGE: "dogecoin",
                     ADA: "cardano",
                     SUI: "sui",
-                    AVAX: "avalanche-2",
+                    AVAX: "avalanche",
                     LINK: "chainlink"
                   };
                   const coinHref = slugMap[rawBase] ? `/predictions/${slugMap[rawBase]}` : "/markets";
 
                   return (
                     <Link
-                      key={c.symbol || c.base}
+                      key={`${c.symbol || c.base}-${idx}`}
                       href={coinHref}
                       title={`View ${rawBase} Price Prediction & Quantitative Models`}
                       className={`flex items-center justify-between p-2.5 rounded-xl border transition-all duration-300 text-xs group cursor-pointer ${
@@ -299,15 +299,15 @@ export default function LiveEcosystemOverview() {
               <div className="space-y-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-between">
                   <span className="text-slate-500 dark:text-slate-400">Aggregate Open Interest:</span>
-                  <strong className="font-mono text-amber-600 dark:text-amber-400 font-extrabold">{oiFormatted}</strong>
+                  <strong className="font-mono text-amber-600 dark:text-amber-400 font-extrabold" suppressHydrationWarning>{oiFormatted}</strong>
                 </div>
                 <div className="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-between">
                   <span className="text-slate-500 dark:text-slate-400">24h Liquidations Total:</span>
-                  <strong className="font-mono text-rose-600 dark:text-rose-400 font-extrabold">{liquidationsTotal}</strong>
+                  <strong className="font-mono text-rose-600 dark:text-rose-400 font-extrabold" suppressHydrationWarning>{liquidationsTotal}</strong>
                 </div>
                 <div className="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-between">
                   <span className="text-slate-500 dark:text-slate-400">BTC Long/Short Ratio:</span>
-                  <strong className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold">
+                  <strong className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold" suppressHydrationWarning>
                     {longRatio}% Long / {(100 - longRatio).toFixed(1)}% Short
                   </strong>
                 </div>
@@ -345,7 +345,7 @@ export default function LiveEcosystemOverview() {
               <div className="space-y-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-between">
                   <span className="text-slate-500 dark:text-slate-400">Latest Headline CPI:</span>
-                  <strong className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold">{cpi?.latest?.actualYoY || 2.6}% (Beat Exp)</strong>
+                  <strong className="font-mono text-emerald-600 dark:text-emerald-400 font-extrabold" suppressHydrationWarning>{cpi?.latest?.actualYoY || 2.6}% (Beat Exp)</strong>
                 </div>
 
                 {/* Live Second-by-Second Countdown Timer */}
@@ -355,23 +355,23 @@ export default function LiveEcosystemOverview() {
                       <Clock className="w-3 h-3 text-blue-600 dark:text-blue-400 animate-spin" />
                       <span>Next CPI Countdown:</span>
                     </span>
-                    <span className="text-blue-600 dark:text-blue-400 font-extrabold">{nextCpiEvent.releaseDate}</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-extrabold" suppressHydrationWarning>{nextCpiEvent.releaseDate}</span>
                   </div>
-                  <div className="grid grid-cols-4 gap-1 text-center font-mono pt-0.5">
+                  <div className="grid grid-cols-4 gap-1 text-center font-mono pt-0.5" suppressHydrationWarning>
                     <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <div className="font-black text-xs text-blue-600 dark:text-blue-300">{countdown.days}d</div>
+                      <div className="font-black text-xs text-blue-600 dark:text-blue-300" suppressHydrationWarning>{countdown.days}d</div>
                       <div className="text-[8px] text-slate-400 uppercase">Days</div>
                     </div>
                     <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <div className="font-black text-xs text-blue-600 dark:text-blue-300">{countdown.hours}h</div>
+                      <div className="font-black text-xs text-blue-600 dark:text-blue-300" suppressHydrationWarning>{countdown.hours}h</div>
                       <div className="text-[8px] text-slate-400 uppercase">Hours</div>
                     </div>
                     <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <div className="font-black text-xs text-blue-600 dark:text-blue-300">{countdown.minutes}m</div>
+                      <div className="font-black text-xs text-blue-600 dark:text-blue-300" suppressHydrationWarning>{countdown.minutes}m</div>
                       <div className="text-[8px] text-slate-400 uppercase">Mins</div>
                     </div>
                     <div className="bg-white dark:bg-slate-900 p-1 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <div className="font-black text-xs text-emerald-600 dark:text-emerald-400 animate-pulse">{countdown.seconds}s</div>
+                      <div className="font-black text-xs text-emerald-600 dark:text-emerald-400 animate-pulse" suppressHydrationWarning>{countdown.seconds}s</div>
                       <div className="text-[8px] text-slate-400 uppercase">Secs</div>
                     </div>
                   </div>

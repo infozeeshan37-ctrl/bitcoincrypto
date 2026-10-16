@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#070A14"/>
+  <circle cx="200" cy="150" r="320" fill="#8B5CF6" fill-opacity="0.12" filter="blur(110px)"/>
+  <circle cx="1000" cy="400" r="350" fill="#EC4899" fill-opacity="0.12" filter="blur(120px)"/>
+
+  <!-- AI Neural Network Nodes -->
+  <g stroke="#8B5CF6" stroke-width="1.5" stroke-opacity="0.4">
+    <line x1="780" y1="200" x2="880" y2="150"/>
+    <line x1="780" y1="200" x2="880" y2="250"/>
+    <line x1="780" y1="300" x2="880" y2="250"/>
+    <line x1="780" y1="300" x2="880" y2="350"/>
+    <line x1="880" y1="150" x2="980" y2="220"/>
+    <line x1="880" y1="250" x2="980" y2="220"/>
+    <line x1="880" y1="350" x2="980" y2="220"/>
+    <line x1="980" y1="220" x2="1080" y2="260"/>
+  </g>
+
+  <circle cx="780" cy="200" r="10" fill="#8B5CF6"/>
+  <circle cx="780" cy="300" r="10" fill="#8B5CF6"/>
+  <circle cx="880" cy="150" r="12" fill="#EC4899"/>
+  <circle cx="880" cy="250" r="12" fill="#EC4899"/>
+  <circle cx="880" cy="350" r="12" fill="#EC4899"/>
+  <circle cx="980" cy="220" r="14" fill="#A855F7"/>
+  <circle cx="1080" cy="260" r="18" fill="#10B981" stroke="#34D399" stroke-width="3"/>
+
+  <!-- Accuracy Callout -->
+  <rect x="760" y="420" width="340" height="50" rx="14" fill="#0F172A" stroke="#8B5CF6" stroke-width="1.5"/>
+  <text x="780" y="450" fill="#C084FC" font-family="system-ui, monospace" font-size="14" font-weight="bold">NEXT-CANDLE CLASSIFIER: 93.4% AUC</text>
+
+  <!-- Title Badge -->
+  <rect x="90" y="90" width="320" height="40" rx="12" fill="#8B5CF6" fill-opacity="0.15" stroke="#8B5CF6" stroke-opacity="0.4"/>
+  <text x="110" y="115" fill="#C084FC" font-family="system-ui, monospace" font-size="13" font-weight="bold">QUANTITATIVE MACHINE LEARNING</text>
+
+  <!-- Main Headline -->
+  <text x="90" y="210" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="44" font-weight="900" letter-spacing="-1">AI Crypto Price</text>
+  <text x="90" y="265" fill="#A855F7" font-family="system-ui, sans-serif" font-size="44" font-weight="900" letter-spacing="-1">Prediction Models</text>
+
+  <!-- Subtitle -->
+  <text x="90" y="330" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="20" font-weight="500">Deep Neural Networks, Order Book Ingestion &amp; Backtesting</text>
+
+  <!-- Author Tag -->
+  <circle cx="115" cy="535" r="24" fill="#1E293B" stroke="#8B5CF6" stroke-width="2"/>
+  <text x="115" y="542" fill="#C084FC" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Q</text>
+  <text x="155" y="533" fill="#F1F5F9" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">BitcoinCrypto Quantitative Research Desk</text>
+  <text x="155" y="553" fill="#64748B" font-family="system-ui, sans-serif" font-size="13">Statistical Machine Learning Architecture</text>
+</svg>

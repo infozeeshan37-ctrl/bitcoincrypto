@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import {
   Brain,
@@ -24,18 +24,37 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 import { coinPredictions, CoinPredictionData } from "@/lib/coinPredictionsData";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 
+export const SLUG_ALIASES: Record<string, string> = {
+  "avalanche-2": "avalanche",
+  "render-token": "render",
+  "injective-protocol": "injective",
+  "hedera-hashgraph": "hedera",
+  "sei-network": "sei",
+  "ondo-finance": "ondo",
+  "jupiter-exchange-solana": "jupiter",
+  "the-open-network": "toncoin",
+  "wif": "dogwifcoin",
+  "polygon-ecosystem-token": "polygon",
+  "matic-network": "polygon",
+};
+
 interface PageProps {
   params: Promise<{ coin: string }>;
 }
 
 export async function generateStaticParams() {
-  return coinPredictions.map((coin) => ({
+  const primary = coinPredictions.map((coin) => ({
     coin: coin.slug,
   }));
+  const aliases = Object.keys(SLUG_ALIASES).map((alias) => ({
+    coin: alias,
+  }));
+  return [...primary, ...aliases];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { coin: slug } = await params;
+  const { coin: rawSlug } = await params;
+  const slug = SLUG_ALIASES[rawSlug] || rawSlug;
   const coin = coinPredictions.find((c) => c.slug === slug);
 
   if (!coin) {
@@ -90,8 +109,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CoinPredictionPage({ params }: PageProps) {
-  const { coin: slug } = await params;
-  const coin = coinPredictions.find((c) => c.slug === slug);
+  const { coin: rawSlug } = await params;
+  if (SLUG_ALIASES[rawSlug]) {
+    redirect(`/predictions/${SLUG_ALIASES[rawSlug]}`);
+  }
+  const coin = coinPredictions.find((c) => c.slug === rawSlug);
 
   if (!coin) {
     notFound();

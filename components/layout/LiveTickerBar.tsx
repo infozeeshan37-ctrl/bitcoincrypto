@@ -45,14 +45,14 @@ const COIN_PREDICTION_SLUGS: Record<string, string> = {
   DOGE: "dogecoin",
   ADA: "cardano",
   SUI: "sui",
-  AVAX: "avalanche-2",
+  AVAX: "avalanche",
   LINK: "chainlink",
   NEAR: "near",
   PEPE: "pepe",
   TAO: "bittensor",
-  INJ: "injective-protocol",
+  INJ: "injective",
   KAS: "kaspa",
-  RENDER: "render-token",
+  RENDER: "render",
   FET: "fetch-ai",
   WIF: "dogwifcoin",
   SHIB: "shiba-inu",
@@ -60,35 +60,21 @@ const COIN_PREDICTION_SLUGS: Record<string, string> = {
   TIA: "celestia",
   APT: "aptos",
   LTC: "litecoin",
-  TRX: "tron",
-  ICP: "internet-computer",
-  FIL: "filecoin",
   ARB: "arbitrum",
   OP: "optimism",
   ATOM: "cosmos",
-  XLM: "stellar",
-  HBAR: "hedera-hashgraph",
-  AAVE: "aave",
-  MKR: "maker",
-  UNI: "uniswap",
-  SEI: "sei-network",
+  HBAR: "hedera",
+  SEI: "sei",
   BONK: "bonk",
   FLOKI: "floki",
-  PENDLE: "pendle",
-  ONDO: "ondo-finance",
-  JUP: "jupiter-exchange-solana",
-  TON: "the-open-network",
-  ENA: "ethena",
-  POPCAT: "popcat",
-  RUNE: "thorchain",
-  DYDX: "dydx-chain",
-  GALA: "gala",
+  ONDO: "ondo",
+  JUP: "jupiter",
+  TON: "toncoin",
   FTM: "fantom",
-  CRV: "curve-dao-token",
-  LDO: "lido-dao",
-  PYTH: "pyth-network",
-  JTO: "jito-governance-token",
-  STRK: "starknet"
+  WLD: "worldcoin",
+  XMR: "monero",
+  POL: "polygon",
+  MATIC: "polygon"
 };
 
 export default function LiveTickerBar() {
@@ -365,14 +351,14 @@ export default function LiveTickerBar() {
 
             <Link href="/markets" className="hover:text-amber-300 transition hidden lg:flex items-center gap-1">
               <span className="text-slate-500">24h Vol:</span>
-              <strong className="text-white font-mono">{globalStats.vol24h}</strong>
+              <strong className="text-white font-mono" suppressHydrationWarning>{globalStats.vol24h}</strong>
             </Link>
 
             <span className="text-slate-800 hidden lg:inline">|</span>
 
             <Link href="/markets" className="hover:text-amber-300 transition hidden xl:flex items-center gap-1">
               <span className="text-slate-500">BTC Dom:</span>
-              <strong className="text-amber-400 font-mono font-bold">{globalStats.btcDom}</strong>
+              <strong className="text-amber-400 font-mono font-bold" suppressHydrationWarning>{globalStats.btcDom}</strong>
             </Link>
 
             <span className="text-slate-800 hidden xl:inline">|</span>
@@ -380,7 +366,7 @@ export default function LiveTickerBar() {
             <Link href="/coinglass" className="hover:text-emerald-300 transition hidden 2xl:flex items-center gap-1">
               <Flame className="w-3 h-3 text-amber-500" />
               <span className="text-slate-500">F&amp;G:</span>
-              <strong className="text-emerald-400 font-mono font-bold">{globalStats.fng}</strong>
+              <strong className="text-emerald-400 font-mono font-bold" suppressHydrationWarning>{globalStats.fng}</strong>
             </Link>
           </div>
 
@@ -392,7 +378,7 @@ export default function LiveTickerBar() {
           >
             <Calendar className="w-3 h-3 text-amber-400 shrink-0" />
             <span className="hidden sm:inline">CPI:</span>
-            <strong className="text-white font-bold">{globalStats.nextCpi}</strong>
+            <strong className="text-white font-bold" suppressHydrationWarning>{globalStats.nextCpi}</strong>
           </Link>
         </div>
 
@@ -401,12 +387,12 @@ export default function LiveTickerBar() {
           <div className="animate-marquee-right flex items-center gap-3 hover:[animation-play-state:paused]">
             
             {/* First sequence of live tickers */}
-            {tickers.map((t) => {
+            {tickers.map((t, idx) => {
               const isBull = t.change24h >= 0;
               const tick = lastTickDirection[t.symbol];
               return (
                 <Link
-                  key={`ticker-1-${t.symbol}`}
+                  key={`ticker-1-${t.symbol}-${idx}`}
                   href={getTickerHref(t.base)}
                   title={`View ${t.base} Price Prediction & Analysis`}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition-all duration-300 group shrink-0 border ${
@@ -446,12 +432,12 @@ export default function LiveTickerBar() {
             })}
 
             {/* Seamless duplicate sequence for continuous infinite loop */}
-            {tickers.map((t) => {
+            {tickers.map((t, idx) => {
               const isBull = t.change24h >= 0;
               const tick = lastTickDirection[t.symbol];
               return (
                 <Link
-                  key={`ticker-2-${t.symbol}`}
+                  key={`ticker-2-${t.symbol}-${idx}`}
                   href={getTickerHref(t.base)}
                   title={`View ${t.base} Price Prediction & Analysis`}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition-all duration-300 group shrink-0 border ${

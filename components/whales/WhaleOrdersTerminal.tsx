@@ -378,7 +378,7 @@ export default function WhaleOrdersTerminal() {
                 <span className="flex items-center gap-1">
                   <Radio className="w-3 h-3 text-amber-400 animate-pulse" /> Live Benchmark
                 </span>
-                <span className={`font-mono font-black ${livePriceChange24h >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                <span className={`font-mono font-black ${livePriceChange24h >= 0 ? "text-emerald-400" : "text-rose-400"}`} suppressHydrationWarning>
                   {livePriceChange24h >= 0 ? "+" : ""}{livePriceChange24h.toFixed(2)}%
                 </span>
               </div>
@@ -386,6 +386,7 @@ export default function WhaleOrdersTerminal() {
                 className={`text-lg sm:text-xl font-black font-mono tracking-tight transition-colors duration-300 ${
                   priceTick === "up" ? "text-emerald-400" : priceTick === "down" ? "text-rose-400" : "text-white"
                 }`}
+                suppressHydrationWarning
               >
                 ${formatPrice(liveSpotPrice)}
               </div>

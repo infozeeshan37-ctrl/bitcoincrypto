@@ -158,10 +158,12 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   fs.writeFileSync(assPath, assContent, "utf-8");
 
   // Step 4: Verify Audio Assets (BGM & SFX)
+  const boomPath = path.resolve(process.cwd(), "assets/audio/impact_boom.mp3");
   const bgmPath = path.resolve(process.cwd(), "assets/audio/bgm_tech.mp3");
   const whooshPath = path.resolve(process.cwd(), "assets/audio/whoosh.mp3");
   const chimePath = path.resolve(process.cwd(), "assets/audio/chime.mp3");
 
+  const hasBoom = fs.existsSync(boomPath);
   const hasBgm = fs.existsSync(bgmPath);
   const hasWhoosh = fs.existsSync(whooshPath);
   const hasChime = fs.existsSync(chimePath);
@@ -177,24 +179,24 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     "-i", relVoice
   ];
 
-  let audioInputsCount = 2; // Voice is index 1
+  if (hasBoom) {
+    const relBoom = path.relative(process.cwd(), boomPath).replace(/\\/g, "/");
+    ffmpegInputs.push("-i", relBoom);
+  }
 
   if (hasBgm) {
     const relBgm = path.relative(process.cwd(), bgmPath).replace(/\\/g, "/");
     ffmpegInputs.push("-stream_loop", "-1", "-i", relBgm);
-    audioInputsCount++;
   }
 
   if (hasWhoosh) {
     const relWhoosh = path.relative(process.cwd(), whooshPath).replace(/\\/g, "/");
     ffmpegInputs.push("-i", relWhoosh);
-    audioInputsCount++;
   }
 
   if (hasChime) {
     const relChime = path.relative(process.cwd(), chimePath).replace(/\\/g, "/");
     ffmpegInputs.push("-i", relChime);
-    audioInputsCount++;
   }
 
   // Filter Complex: Video grade (contrast/saturation + vignette) + Subtitles + Multi-track Audio Mix
@@ -204,6 +206,12 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   let mixStreams = "[voice]";
   let currentIdx = 2;
 
+  if (hasBoom) {
+    filterComplex += `[${currentIdx}:a]adelay=10|10,volume=0.85[boom];`;
+    mixStreams += "[boom]";
+    currentIdx++;
+  }
+
   if (hasBgm) {
     filterComplex += `[${currentIdx}:a]volume=0.10[bgm];`;
     mixStreams += "[bgm]";
@@ -211,13 +219,13 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   }
 
   if (hasWhoosh) {
-    filterComplex += `[${currentIdx}:a]adelay=100|100,volume=0.55[whoosh];`;
+    filterComplex += `[${currentIdx}:a]adelay=3200|3200,volume=0.60[whoosh];`;
     mixStreams += "[whoosh]";
     currentIdx++;
   }
 
   if (hasChime) {
-    filterComplex += `[${currentIdx}:a]adelay=3500|3500,volume=0.50[chime];`;
+    filterComplex += `[${currentIdx}:a]adelay=6000|6000,volume=0.55[chime];`;
     mixStreams += "[chime]";
     currentIdx++;
   }

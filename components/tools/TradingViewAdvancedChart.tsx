@@ -306,6 +306,9 @@ function TradingViewAdvancedChartComponent({
 
     return () => {
       isMounted = false;
+      if (script) {
+        script.removeEventListener("load", renderWidget);
+      }
     };
   }, [cleanSymbol, interval, chartStyle, theme, activeIndicators, containerId]);
 

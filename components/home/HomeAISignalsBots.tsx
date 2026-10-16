@@ -605,7 +605,7 @@ export default function HomeAISignalsBots() {
                       <Activity className="w-3.5 h-3.5 text-amber-600" />
                       <span>Technical Confluence Audit</span>
                     </span>
-                    <span className="text-xs font-mono font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
+                    <span className="text-xs font-mono font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md" suppressHydrationWarning>
                       R:R {rrRatioFormatted}
                     </span>
                   </div>
@@ -613,27 +613,27 @@ export default function HomeAISignalsBots() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="p-2.5 rounded-xl bg-white border border-slate-200/80">
                       <div className="text-[10px] text-slate-400 font-mono uppercase">200 EMA Slope</div>
-                      <div className="font-bold text-slate-900 truncate mt-0.5">{activeCoin.emaTrend}</div>
+                      <div className="font-bold text-slate-900 truncate mt-0.5" suppressHydrationWarning>{activeCoin.emaTrend}</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white border border-slate-200/80">
                       <div className="text-[10px] text-slate-400 font-mono uppercase">RSI (14) Momentum</div>
-                      <div className="font-black text-slate-900 mt-0.5">{activeCoin.rsi} Index</div>
+                      <div className="font-black text-slate-900 mt-0.5" suppressHydrationWarning>{activeCoin.rsi} Index</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white border border-slate-200/80">
                       <div className="text-[10px] text-slate-400 font-mono uppercase">CVD Volume Delta</div>
-                      <div className="font-bold text-slate-900 truncate mt-0.5">{activeCoin.volumeDelta}</div>
+                      <div className="font-bold text-slate-900 truncate mt-0.5" suppressHydrationWarning>{activeCoin.volumeDelta}</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white border border-slate-200/80">
                       <div className="text-[10px] text-slate-400 font-mono uppercase">Funding Rate</div>
-                      <div className="font-bold text-slate-900 mt-0.5">{activeCoin.fundingRate}</div>
+                      <div className="font-bold text-slate-900 mt-0.5" suppressHydrationWarning>{activeCoin.fundingRate}</div>
                     </div>
                   </div>
 
                   {/* 24h Range Channel Visualizer */}
                   <div className="space-y-1 p-3 rounded-xl bg-white border border-slate-200/80 text-[11px] font-mono">
                     <div className="flex justify-between items-center text-slate-500 text-[10px]">
-                      <span>24h Low: ${fmt(activeCoin.low24h)}</span>
-                      <span>24h High: ${fmt(activeCoin.high24h)}</span>
+                      <span suppressHydrationWarning>24h Low: ${fmt(activeCoin.low24h)}</span>
+                      <span suppressHydrationWarning>24h High: ${fmt(activeCoin.high24h)}</span>
                     </div>
                     <div className="relative w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                       <div

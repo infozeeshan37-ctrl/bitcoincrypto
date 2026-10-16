@@ -1,0 +1,37 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#090D18"/>
+  <circle cx="200" cy="180" r="320" fill="#F59E0B" fill-opacity="0.12" filter="blur(110px)"/>
+  <circle cx="950" cy="420" r="350" fill="#10B981" fill-opacity="0.12" filter="blur(120px)"/>
+
+  <!-- DCA Growth Curve Visualization -->
+  <path d="M720 480 Q 820 450 900 360 T 1100 160" stroke="#10B981" stroke-width="4" fill="none"/>
+  <path d="M720 480 Q 820 450 900 360 T 1100 160 L 1100 520 L 720 520 Z" fill="#10B981" fill-opacity="0.12"/>
+
+  <!-- Milestone Dots along curve -->
+  <circle cx="720" cy="480" r="7" fill="#F59E0B"/>
+  <circle cx="820" cy="440" r="7" fill="#F59E0B"/>
+  <circle cx="900" cy="360" r="7" fill="#F59E0B"/>
+  <circle cx="990" cy="270" r="7" fill="#F59E0B"/>
+  <circle cx="1100" cy="160" r="9" fill="#10B981" stroke="#FFFFFF" stroke-width="2"/>
+
+  <!-- Compounding ROI Callout -->
+  <rect x="740" y="90" width="360" height="48" rx="12" fill="#0F172A" stroke="#10B981" stroke-width="1.5"/>
+  <text x="760" y="120" fill="#34D399" font-family="system-ui, monospace" font-size="14" font-weight="bold">DYNAMIC VALUE AVERAGING: +214% ROI</text>
+
+  <!-- Title Badge -->
+  <rect x="90" y="90" width="310" height="40" rx="12" fill="#F59E0B" fill-opacity="0.15" stroke="#F59E0B" stroke-opacity="0.4"/>
+  <text x="110" y="115" fill="#FBBF24" font-family="system-ui, monospace" font-size="13" font-weight="bold">HALVING CYCLE ACCUMULATION</text>
+
+  <!-- Main Headline -->
+  <text x="90" y="210" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="44" font-weight="900" letter-spacing="-1">Bitcoin DCA Math &amp;</text>
+  <text x="90" y="265" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="44" font-weight="900" letter-spacing="-1">Dynamic Averaging</text>
+
+  <!-- Subtitle -->
+  <text x="90" y="330" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="20" font-weight="500">Fixed Dollar-Cost Averaging vs. Sentiment-Weighted Horizons</text>
+
+  <!-- Author Tag -->
+  <circle cx="115" cy="535" r="24" fill="#1E293B" stroke="#F59E0B" stroke-width="2"/>
+  <text x="115" y="542" fill="#FBBF24" font-family="system-ui, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Q</text>
+  <text x="155" y="533" fill="#F1F5F9" font-family="system-ui, sans-serif" font-size="16" font-weight="bold">BitcoinCrypto Quantitative Research Desk</text>
+  <text x="155" y="553" fill="#64748B" font-family="system-ui, sans-serif" font-size="13">Long-Term Wealth Compounding Models</text>
+</svg>

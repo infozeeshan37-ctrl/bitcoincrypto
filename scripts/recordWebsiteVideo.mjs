@@ -1,12 +1,12 @@
 /**
- * BitcoinCrypto.tech — 4K UHD Pro-Level Cinematic Live Website Recorder
+ * BitcoinCrypto.tech — Pro 4K UHD Cinematic Website Recorder
  * 
  * Features:
- *   - Native 4K UHD Resolution: 2160 x 3840 (9:16 vertical, deviceScaleFactor: 2)
- *   - Pro Cyber Trading HUD: Injected glassmorphic header with live status & confidence
- *   - Pulsing Animated Target Reticle: High-tech laser scanline highlighting key charts & order books
- *   - Animated Top Progress Bar: Real-time progress bar across the screen
- *   - Kinetic Camera Dynamics: Smooth zoom-ins on tickers, kinetic gliding through order books & heatmaps
+ *   - Localhost 0ms Sub-Frame Acceleration: Loads from localhost:3000 with 0ms latency
+ *   - 3-Second Viral Hook Card: High-contrast alert badge at 0s-3.2s
+ *   - Butter-Smooth Cubic Lerp Scrolling: Continuous requestAnimationFrame gliding
+ *   - Dynamic Target Reticle: Real-time scanline highlighting live candlestick chart & order book
+ *   - Live Top Progress Bar: Neon progress bar tracking video time
  */
 
 import puppeteer from "puppeteer-core";
@@ -23,7 +23,22 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   const framesDir = path.resolve(outputDir, `frames_${Date.now()}`);
   if (!fs.existsSync(framesDir)) fs.mkdirSync(framesDir, { recursive: true });
 
-  console.log(`🎥 Initiating 4K UHD Pro Cinematic Screen Recording of ${targetUrl}...`);
+  // Map to local Next.js server for instant 0ms latency rendering if available
+  let navigationUrl = targetUrl;
+  if (navigationUrl.includes("bitcoincrypto.tech")) {
+    try {
+      const urlObj = new URL(navigationUrl);
+      const localCandidate = `http://localhost:3000${urlObj.pathname}${urlObj.search}`;
+      const res = await fetch("http://localhost:3000", { signal: AbortSignal.timeout(800) }).catch(() => null);
+      if (res && res.status < 500) {
+        navigationUrl = localCandidate;
+      } else {
+        console.log(`⚠️ Local server not responding, falling back to production URL: ${navigationUrl}`);
+      }
+    } catch (_) {}
+  }
+
+  console.log(`🎥 Initiating Pro 4K Cinematic Recording of ${navigationUrl}...`);
   console.log(`⏱️ Target Duration: ${targetDuration.toFixed(1)} seconds`);
 
   const browser = await puppeteer.launch({
@@ -43,7 +58,7 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   // 1080x1920 with deviceScaleFactor: 2 renders native 2160x3840 (True 4K UHD)
   await page.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 2 });
 
-  // Suppress popups and force dark mode
+  // Suppress popups and force sleek dark mode before navigation
   await page.evaluateOnNewDocument(() => {
     try {
       localStorage.setItem("btc_cookie_consent", "all");
@@ -52,53 +67,77 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     } catch (_) {}
   });
 
-  console.log(`🌐 Navigating to ${targetUrl}...`);
-  await page.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 35000 });
+  console.log(`🌐 Loading page with sub-millisecond local latency...`);
+  await page.goto(navigationUrl, { waitUntil: "domcontentloaded", timeout: 25000 });
 
-  // Hide scrollbars & style body
+  // Clean CSS & inject butter-smooth animation engine
   await page.addStyleTag({
     content: `
       ::-webkit-scrollbar { display: none !important; }
       body { -ms-overflow-style: none; scrollbar-width: none; overflow-x: hidden; }
+      html { scroll-behavior: auto !important; }
     `
   }).catch(() => {});
 
-  // Allow real-time charts and WebSockets to load
-  await new Promise((r) => setTimeout(r, 2600));
+  // Wait 1.8s for live candlesticks and order book numbers to render
+  await new Promise((r) => setTimeout(r, 1800));
 
-  // Inject High-Tech Cyber Trading HUD, Target Reticle, and Top Progress Bar
+  // Inject High-Impact Hook Card, Cyber HUD, Progress Bar, and requestAnimationFrame Lerp engine
   await page.evaluate(() => {
     const style = document.createElement("style");
     style.innerHTML = `
       @keyframes scanline {
         0% { transform: translateY(-100%); opacity: 0; }
-        20% { opacity: 1; }
-        80% { opacity: 1; }
+        25% { opacity: 1; }
+        75% { opacity: 1; }
         100% { transform: translateY(400%); opacity: 0; }
       }
       @keyframes pulseGlow {
         0%, 100% {
-          box-shadow: 0 0 25px rgba(0, 255, 200, 0.45), inset 0 0 15px rgba(0, 255, 200, 0.2);
+          box-shadow: 0 0 28px rgba(0, 255, 200, 0.45), inset 0 0 16px rgba(0, 255, 200, 0.2);
           border-color: #00ffc8;
         }
         50% {
-          box-shadow: 0 0 45px rgba(255, 200, 0, 0.75), inset 0 0 25px rgba(255, 200, 0, 0.35);
+          box-shadow: 0 0 48px rgba(255, 200, 0, 0.8), inset 0 0 28px rgba(255, 200, 0, 0.4);
           border-color: #ffc800;
         }
       }
       @keyframes pulseDot {
-        from { opacity: 0.4; transform: scale(0.8); }
+        from { opacity: 0.35; transform: scale(0.85); }
         to { opacity: 1; transform: scale(1.3); }
+      }
+      @keyframes hookPop {
+        0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+        15% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+        25% { transform: translate(-50%, -50%) scale(1.0); }
+        85% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
+        100% { transform: translate(-50%, -60%) scale(0.85); opacity: 0; pointer-events: none; }
+      }
+      .cyber-hook-card {
+        position: fixed;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 88%;
+        background: rgba(11, 15, 25, 0.94);
+        border: 3px solid #ff0055;
+        border-radius: 24px;
+        box-shadow: 0 0 50px rgba(255, 0, 85, 0.65), 0 20px 40px rgba(0,0,0,0.8);
+        backdrop-filter: blur(16px);
+        padding: 24px 20px;
+        text-align: center;
+        z-index: 99999999;
+        animation: hookPop 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
       .cyber-target-box {
         position: fixed;
-        top: 26%;
+        top: 28%;
         left: 4%;
         width: 92%;
         height: 240px;
         border: 2.5px solid #00ffc8;
         border-radius: 20px;
-        background: rgba(10, 18, 30, 0.45);
+        background: rgba(10, 18, 30, 0.42);
         backdrop-filter: blur(8px);
         animation: pulseGlow 2.4s infinite ease-in-out;
         z-index: 99999;
@@ -109,7 +148,7 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
         flex-direction: column;
         justify-content: space-between;
         padding: 16px 20px;
-        transition: top 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+        transition: top 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
       }
       .cyber-scanline {
         position: absolute;
@@ -160,18 +199,27 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
         z-index: 9999999;
         width: 0%;
         box-shadow: 0 0 14px rgba(0, 255, 200, 0.9);
-        transition: width 0.1s linear;
       }
     `;
     document.head.appendChild(style);
 
-    // Add Top Progress Bar
+    // 1. Add Hook Card (3.2s visual hook)
+    const hookCard = document.createElement("div");
+    hookCard.className = "cyber-hook-card";
+    hookCard.innerHTML = `
+      <div style="display:inline-block;background:rgba(255,0,85,0.25);border:1px solid #ff0055;color:#ff3377;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:8px;">⚠️ LIVE ALGORITHM WARNING</div>
+      <div style="color:#ffffff;font-size:26px;font-weight:900;letter-spacing:0.5px;line-height:1.2;margin-bottom:6px;font-family:sans-serif;">24-HOUR BREAKOUT IMMINENT</div>
+      <div style="color:#00ffc8;font-size:13px;font-weight:800;letter-spacing:1px;font-family:monospace;">QUANTITATIVE CONFLUENCE CONFIRMED 🎯</div>
+    `;
+    document.body.appendChild(hookCard);
+
+    // 2. Add Top Progress Bar
     const progressBar = document.createElement("div");
     progressBar.className = "cyber-progress-bar";
     progressBar.id = "cyberProgressBar";
     document.body.appendChild(progressBar);
 
-    // Add Top Cyber HUD
+    // 3. Add Top Cyber HUD
     const hud = document.createElement("div");
     hud.className = "cyber-hud-top";
     hud.innerHTML = `
@@ -186,14 +234,14 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     `;
     document.body.appendChild(hud);
 
-    // Add Pulsing Target Reticle
+    // 4. Add Pulsing Target Reticle
     const targetBox = document.createElement("div");
     targetBox.className = "cyber-target-box";
     targetBox.id = "cyberTargetBox";
     targetBox.innerHTML = `
       <div class="cyber-scanline"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span id="targetHeader" style="color:#00ffc8;font-size:13px;font-weight:800;letter-spacing:1px;font-family:monospace;">[ ⚡ AI LIQUIDITY TARGET DETECTED ]</span>
+        <span id="targetHeader" style="color:#00ffc8;font-size:13px;font-weight:800;letter-spacing:1px;font-family:monospace;">[ ⚡ AI BREAKOUT TARGET DETECTED ]</span>
         <span id="targetSub" style="color:#ffc800;font-size:12px;font-weight:700;font-family:monospace;">ORDER BOOK: ABSORPTION</span>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:flex-end;">
@@ -202,6 +250,21 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
       </div>
     `;
     document.body.appendChild(targetBox);
+
+    // 5. In-Page requestAnimationFrame Smooth Cubic Lerp Engine
+    let currentY = 0;
+    let targetY = 0;
+    window.__setScrollTarget = (y) => { targetY = y; };
+
+    function smoothScrollStep() {
+      const diff = targetY - currentY;
+      if (Math.abs(diff) > 0.5) {
+        currentY += diff * 0.085; // Butter-smooth cubic interpolation
+        window.scrollTo(0, Math.round(currentY));
+      }
+      requestAnimationFrame(smoothScrollStep);
+    }
+    requestAnimationFrame(smoothScrollStep);
   });
 
   const client = await page.target().createCDPSession();
@@ -229,76 +292,76 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     everyNthFrame: 1
   });
 
-  console.log("🎬 Recording pro kinetic camera motion, smooth scrolling & scanning HUD...");
+  console.log("🎬 Recording cinematic camera motion, smooth scrolling & scanning HUD...");
 
   const startTime = Date.now();
   const totalMs = targetDuration * 1000;
 
-  // Kinetic camera & scrolling loop
+  // Cinematic Choreography loop
   while (Date.now() - startTime < totalMs) {
     const elapsed = (Date.now() - startTime) / 1000;
     const progressPct = Math.min(100, (elapsed / targetDuration) * 100);
 
-    // Update Progress Bar
-    await page.evaluate((pct, sec) => {
+    // Dynamic camera target calculations
+    let targetScrollPosition = 0;
+
+    if (elapsed < 3.2) {
+      // 0.0s - 3.2s: The Hook (Hold top position)
+      targetScrollPosition = 0;
+    } else if (elapsed < 16) {
+      // 3.2s - 16s: Live Candlestick Chart Inspection
+      targetScrollPosition = 380;
+    } else if (elapsed < 28) {
+      // 16s - 28s: L2 Order Book & Liquidation Heatmap
+      targetScrollPosition = 780;
+    } else if (elapsed < 38) {
+      // 28s - 38s: CVD & Quantitative Metrics
+      targetScrollPosition = 1200;
+    } else {
+      // 38s - End: Full Terminal Overview
+      targetScrollPosition = 1500;
+    }
+
+    // Execute state updates inside the page
+    await page.evaluate((pct, sec, scrollTarget) => {
+      // Update top progress bar
       const p = document.getElementById("cyberProgressBar");
       if (p) p.style.width = pct + "%";
 
+      // Command smooth lerp scroll
+      if (window.__setScrollTarget) {
+        window.__setScrollTarget(scrollTarget);
+      }
+
+      // Choreograph Target Reticle
       const box = document.getElementById("cyberTargetBox");
       const h = document.getElementById("targetHeader");
       const m = document.getElementById("targetMain");
 
       if (box && h && m) {
-        if (sec < 4) {
-          // Hook: Locked on top price and sentiment
-          box.style.top = "24%";
-          h.innerText = "[ ⚡ AI LIQUIDITY TARGET DETECTED ]";
-          m.innerText = "EXPLOSIVE 24H BREAKOUT 🎯";
+        if (sec < 3.2) {
+          box.style.top = "28%";
+          h.innerText = "[ ⚡ AI BREAKOUT TARGET DETECTED ]";
+          m.innerText = "QUANT TARGET LOCKED 🎯";
         } else if (sec < 16) {
-          // Candlestick Chart Inspection
-          box.style.top = "36%";
+          box.style.top = "34%";
           h.innerText = "[ 📈 LIVE CANDLESTICK AUCTION THEORY ]";
           m.innerText = "AI RESISTANCE BREAKOUT ZONE ⚡";
         } else if (sec < 28) {
-          // L2 Order Book & Liquidation Squeeze
-          box.style.top = "42%";
+          box.style.top = "40%";
           h.innerText = "[ 🔥 INSTITUTIONAL LIQUIDATION POOL ]";
-          m.innerText = "$380M SHORT SQUEEZE CLUSTER 💥";
+          m.innerText = "$380M SHORT SQUEEZE ZONE 💥";
         } else if (sec < 38) {
-          // CVD Taker Delta & Order Flow
           box.style.top = "30%";
           h.innerText = "[ 📊 CUMULATIVE VOLUME DELTA (CVD) ]";
           m.innerText = "AGGRESSIVE BUY ABSORPTION ▲";
         } else {
-          // Fade out for closing Call to Action
           box.style.opacity = "0";
         }
       }
-    }, progressPct, elapsed);
+    }, progressPct, elapsed, targetScrollPosition);
 
-    // Kinetic Scrolling & Smooth Camera Motion
-    if (elapsed < 3.5) {
-      // Hold on top hero banner & ticker for 3.5s
-      await new Promise((r) => setTimeout(r, 65));
-    } else if (elapsed < 16) {
-      // Glide smoothly to the Candlestick chart
-      await page.evaluate(() => window.scrollBy({ top: 12, behavior: "auto" }));
-      await new Promise((r) => setTimeout(r, 35));
-    } else if (elapsed < 20) {
-      // Pause to inspect chart and indicators
-      await new Promise((r) => setTimeout(r, 70));
-    } else if (elapsed < 32) {
-      // Glide down to Order Book & Liquidation Heatmap
-      await page.evaluate(() => window.scrollBy({ top: 16, behavior: "auto" }));
-      await new Promise((r) => setTimeout(r, 35));
-    } else if (elapsed < 36) {
-      // Pause on order book walls
-      await new Promise((r) => setTimeout(r, 70));
-    } else {
-      // Glide smoothly down to interactive demo terminal
-      await page.evaluate(() => window.scrollBy({ top: 14, behavior: "auto" }));
-      await new Promise((r) => setTimeout(r, 35));
-    }
+    await new Promise((r) => setTimeout(r, 45));
   }
 
   isRecording = false;
