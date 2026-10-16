@@ -185,42 +185,61 @@ export async function uploadVideoToYouTube(videoPath, metadata) {
     return false;
   }
 
-  console.log(`📡 Streaming video binary (${(fileSize / (1024 * 1024)).toFixed(2)} MB) to YouTube resumable pipeline...`);
+  console.log(`📡 Uploading ${(fileSize / (1024 * 1024)).toFixed(2)} MB to YouTube resumable pipeline in 8MB chunks...`);
+  const fileBuffer = fs.readFileSync(videoPath);
+  const CHUNK_SIZE = 8 * 1024 * 1024; // 8 MB chunks (multiple of 256 KB)
+  let start = 0;
   let result = null;
 
-  try {
-    // Attempt via curl.exe spawnSync (immune to shell escaping & undici headersTimeout)
-    const curlProc = spawnSync(
-      "curl.exe",
-      ["-s", "-S", "-X", "PUT", "-H", "Content-Type: video/mp4", "-T", videoPath, uploadUrl],
-      { maxBuffer: 50 * 1024 * 1024, timeout: 300000 }
-    );
-    const stdout = curlProc.stdout ? curlProc.stdout.toString("utf-8") : "";
-    if (stdout && stdout.includes('"id":')) {
-      result = JSON.parse(stdout);
-    } else if (curlProc.stderr && curlProc.stderr.length > 0) {
-      console.log(`ℹ️ curl info: ${curlProc.stderr.toString("utf-8").trim()}`);
+  while (start < fileSize) {
+    const end = Math.min(start + CHUNK_SIZE - 1, fileSize - 1);
+    const chunkLength = end - start + 1;
+    const chunkBuffer = fileBuffer.subarray(start, end + 1);
+    const progressPercent = Math.round(((end + 1) / fileSize) * 100);
+
+    console.log(`📤 Uploading chunk: bytes ${start}-${end}/${fileSize} (${progressPercent}%)...`);
+
+    let chunkRes = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        chunkRes = await fetch(uploadUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Length": chunkLength.toString(),
+            "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+            "Content-Type": "video/mp4"
+          },
+          body: chunkBuffer
+        });
+
+        if (chunkRes.status === 308 || chunkRes.status === 200 || chunkRes.status === 201) {
+          break;
+        } else {
+          console.warn(`⚠️ Chunk returned status ${chunkRes.status}. Retrying attempt ${attempt}...`);
+          await new Promise((r) => setTimeout(r, 2000 * attempt));
+        }
+      } catch (err) {
+        console.warn(`⚠️ Network hiccup on chunk (${err.message}). Retrying attempt ${attempt}...`);
+        await new Promise((r) => setTimeout(r, 2000 * attempt));
+      }
     }
-  } catch (curlErr) {
-    console.log(`ℹ️ curl upload notice: ${curlErr.message}. Trying fetch fallback...`);
-  }
 
-  if (!result) {
-    const fileBuffer = fs.readFileSync(videoPath);
-    const uploadRes = await fetch(uploadUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Length": fileSize.toString(),
-        "Content-Type": "video/mp4"
-      },
-      body: fileBuffer
-    });
-
-    if (!uploadRes.ok) {
-      console.error("❌ Upload chunk failed:", await uploadRes.text());
+    if (!chunkRes) {
+      console.error("❌ Failed to upload chunk after 3 attempts.");
       return false;
     }
-    result = await uploadRes.json();
+
+    if (chunkRes.status === 200 || chunkRes.status === 201) {
+      result = await chunkRes.json();
+      break;
+    }
+
+    start = end + 1;
+  }
+
+  if (!result || !result.id) {
+    console.error("❌ Video upload did not return video metadata.");
+    return false;
   }
   console.log(`✅ Upload Successful! Video ID: ${result.id}`);
   console.log(`🔗 Watch URL: https://youtube.com/shorts/${result.id}`);
