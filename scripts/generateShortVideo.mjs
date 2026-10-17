@@ -85,10 +85,10 @@ function createProViralAssScript(metadata, duration) {
         const cleanW = w.toUpperCase();
         const emoji = getWordEmoji(cleanW);
         if (idx === wordIdx) {
-          const highlightColor = (wordIdx % 2 === 0) ? "&H0000FFFF" : "&H0000FF88"; // Alternate yellow and neon green
-          return `{\\c${highlightColor}\\b1}${cleanW}${emoji ? " " + emoji : ""}{\\c&H00FFFFFF\\b0}`;
+          const highlightColor = (wordIdx % 2 === 0) ? "&H0000FFFF" : "&H0000FF88"; // Alternate neon yellow and neon emerald
+          return `{\\c${highlightColor}\\b1\\fscx112\\fscy112}${cleanW}${emoji ? " " + emoji : ""}{\\c&H00FFFFFF\\b0\\fscx100\\fscy100}`;
         } else {
-          return `{\\c&H00FFFFFF}${cleanW}{\\c&H00FFFFFF}`;
+          return `{\\c&H00FFFFFF\\b0\\fscx100\\fscy100}${cleanW}`;
         }
       }).join(" ");
 
@@ -112,11 +112,11 @@ Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour,
 ; Top discreet watermark
 Style: Watermark,Arial,48,&H60FFFFFF,&H00000000,&H00000000,&H60000000,1,0,0,0,100,100,2,0,1,3,0,9,80,80,140,1
 ; 3-second opening hook alert badge
-Style: TopHook,Arial Black,76,&H0000FFFF,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,2,0,1,8,4,8,80,80,180,1
-; Active word viral karaoke subtitles (Lower-third, ultra-bold, thick black stroke with deep shadow)
-Style: ViralKaraoke,Arial Black,104,&H00FFFFFF,&H00000000,&H00000000,&HE0000000,1,0,0,0,100,100,2,0,1,11,6,2,80,80,360,1
+Style: TopHook,Arial Black,78,&H0000FFFF,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,2,0,1,9,4,8,80,80,180,1
+; Active word viral karaoke subtitles (Lower-third, ultra-bold, thick black stroke with deep shadow & scale bounce)
+Style: ViralKaraoke,Arial Black,112,&H00FFFFFF,&H00000000,&H00000000,&HE0000000,1,0,0,0,100,100,2,0,1,12,6,2,80,80,380,1
 ; Final Call to Action
-Style: FinalCta,Arial Black,88,&H0000D7FF,&H00000000,&H00000000,&HF0000000,1,0,0,0,100,100,2,0,1,10,5,2,80,80,340,1
+Style: FinalCta,Arial Black,92,&H0000D7FF,&H00000000,&H00000000,&HF0000000,1,0,0,0,100,100,2,0,1,10,5,2,80,80,340,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -124,13 +124,13 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,Watermark,,0,0,0,,bitcoincrypto.tech
 
 ; 3-second opening hook alert (Disappears after 3.2s)
-Dialogue: 2,0:00:00.00,0:00:03.20,TopHook,,0,0,0,,{\\fad(150,250)}🚨 ${category} 🚨
+Dialogue: 2,0:00:00.00,0:00:03.20,TopHook,,0,0,0,,{\\fad(100,200)}🚨 ${category} 🚨
 
 ; Active Word Karaoke Events
 ${dialogueLines.join("\n")}
 
 ; Final High-CTR Closing Call to Action
-Dialogue: 2,${finalCtaStart},${finalCtaEnd},FinalCta,,0,0,0,,{\\fad(250,150)}👇 CLICK LINK IN BIO & PINNED COMMENT 👇\\N\\N🔥 bitcoincrypto.tech
+Dialogue: 2,${finalCtaStart},${finalCtaEnd},FinalCta,,0,0,0,,{\\fad(200,150)}👇 FREE LIVE TERMINAL LINK IN BIO 👇\\N\\N🔥 bitcoincrypto.tech
 `;
 }
 
@@ -149,23 +149,29 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   const voiceoverText = metadata.voiceover || metadata.description;
   const { duration } = await generateVoiceover(voiceoverText, voicePath);
 
-  // Step 2: Record Live Website Screen Video with Pro Cyber Trading HUD
+  // Step 2: Record Live Website Screen Video with Pro Cyber Trading HUD & Transitions
   const targetUrl = metadata.targetUrl || "https://www.bitcoincrypto.tech/predictions";
   await recordWebsiteVideo(targetUrl, duration, rawVideoPath);
 
-  // Step 3: Generate Active-Word Karaoke Subtitles
+  // Step 3: Generate Active-Word Karaoke Subtitles with Dynamic Scale Bounce
   const assContent = createProViralAssScript(metadata, duration);
   fs.writeFileSync(assPath, assContent, "utf-8");
 
-  // Step 4: Verify Audio Assets (BGM & SFX)
+  // Step 4: Verify Audio Assets (BGM & Multi-layer SFX Suite)
   const boomPath = path.resolve(process.cwd(), "assets/audio/impact_boom.mp3");
+  const riserPath = path.resolve(process.cwd(), "assets/audio/riser.mp3");
   const bgmPath = path.resolve(process.cwd(), "assets/audio/bgm_tech.mp3");
   const whooshPath = path.resolve(process.cwd(), "assets/audio/whoosh.mp3");
+  const glitchPath = path.resolve(process.cwd(), "assets/audio/glitch_transition.mp3");
+  const dingPath = path.resolve(process.cwd(), "assets/audio/ding_cash.mp3");
   const chimePath = path.resolve(process.cwd(), "assets/audio/chime.mp3");
 
   const hasBoom = fs.existsSync(boomPath);
+  const hasRiser = fs.existsSync(riserPath);
   const hasBgm = fs.existsSync(bgmPath);
   const hasWhoosh = fs.existsSync(whooshPath);
+  const hasGlitch = fs.existsSync(glitchPath);
+  const hasDing = fs.existsSync(dingPath);
   const hasChime = fs.existsSync(chimePath);
 
   const relRawVideo = path.relative(process.cwd(), rawVideoPath).replace(/\\/g, "/");
@@ -184,6 +190,11 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     ffmpegInputs.push("-i", relBoom);
   }
 
+  if (hasRiser) {
+    const relRiser = path.relative(process.cwd(), riserPath).replace(/\\/g, "/");
+    ffmpegInputs.push("-i", relRiser);
+  }
+
   if (hasBgm) {
     const relBgm = path.relative(process.cwd(), bgmPath).replace(/\\/g, "/");
     ffmpegInputs.push("-stream_loop", "-1", "-i", relBgm);
@@ -194,38 +205,68 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     ffmpegInputs.push("-i", relWhoosh);
   }
 
+  if (hasGlitch) {
+    const relGlitch = path.relative(process.cwd(), glitchPath).replace(/\\/g, "/");
+    ffmpegInputs.push("-i", relGlitch);
+  }
+
+  if (hasDing) {
+    const relDing = path.relative(process.cwd(), dingPath).replace(/\\/g, "/");
+    ffmpegInputs.push("-i", relDing);
+  }
+
   if (hasChime) {
     const relChime = path.relative(process.cwd(), chimePath).replace(/\\/g, "/");
     ffmpegInputs.push("-i", relChime);
   }
 
-  // Filter Complex: Video grade (contrast/saturation + vignette) + Subtitles + Multi-track Audio Mix
-  let filterComplex = `[0:v]ass='${relAss}',eq=contrast=1.06:saturation=1.12,vignette=PI/5[outv];`;
-  filterComplex += `[1:a]volume=1.45[voice];`;
+  // Filter Complex: Razor-Sharp Video Grade (contrast/saturation + unsharp) + Subtitles + Multi-track SFX Mix
+  let filterComplex = `[0:v]ass='${relAss}',eq=contrast=1.08:saturation=1.20:brightness=0.01,unsharp=5:5:0.8:5:5:0.0[outv];`;
+  filterComplex += `[1:a]volume=1.50[voice];`;
 
   let mixStreams = "[voice]";
   let currentIdx = 2;
 
   if (hasBoom) {
-    filterComplex += `[${currentIdx}:a]adelay=10|10,volume=0.85[boom];`;
+    filterComplex += `[${currentIdx}:a]adelay=10|10,volume=0.90[boom];`;
     mixStreams += "[boom]";
     currentIdx++;
   }
 
+  if (hasRiser) {
+    filterComplex += `[${currentIdx}:a]adelay=0|0,volume=0.85[riser];`;
+    mixStreams += "[riser]";
+    currentIdx++;
+  }
+
   if (hasBgm) {
-    filterComplex += `[${currentIdx}:a]volume=0.10[bgm];`;
+    filterComplex += `[${currentIdx}:a]volume=0.32[bgm];`;
     mixStreams += "[bgm]";
     currentIdx++;
   }
 
   if (hasWhoosh) {
-    filterComplex += `[${currentIdx}:a]adelay=3200|3200,volume=0.60[whoosh];`;
+    filterComplex += `[${currentIdx}:a]adelay=3000|3000,volume=0.95[whoosh];`;
     mixStreams += "[whoosh]";
     currentIdx++;
   }
 
+  if (hasGlitch) {
+    filterComplex += `[${currentIdx}:a]adelay=16000|16000,volume=0.85[glitch];`;
+    mixStreams += "[glitch]";
+    currentIdx++;
+  }
+
+  if (hasDing) {
+    const dingDelay1 = 8000;
+    const dingDelay2 = Math.max(12000, Math.floor((duration - 4.5) * 1000));
+    filterComplex += `[${currentIdx}:a]adelay=${dingDelay1}|${dingDelay1},volume=0.80[ding1];`;
+    mixStreams += "[ding1]";
+    currentIdx++;
+  }
+
   if (hasChime) {
-    filterComplex += `[${currentIdx}:a]adelay=6000|6000,volume=0.55[chime];`;
+    filterComplex += `[${currentIdx}:a]adelay=28000|28000,volume=0.80[chime];`;
     mixStreams += "[chime]";
     currentIdx++;
   }

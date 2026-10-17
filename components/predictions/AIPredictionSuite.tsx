@@ -954,8 +954,651 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$0.090 Target Reached"
     }
+  },
+  {
+    symbol: "SUIUSDT",
+    base: "SUI",
+    name: "Sui",
+    currentPrice: 1.8540,
+    change24h: 4.12,
+    volume24h: "$1.45B",
+    marketCap: "$5.2B",
+    direction: "STRONG BUY / ACCUMULATE",
+    confidenceScore: 97.2,
+    timeframe: "4H",
+    simpleSummary: {
+      headline: "Layer-1 Move Momentum: Mysticeti Consensus & $38M Short Liquidation Magnet",
+      technicalsReason: "Bullish breakout above 50 EMA ($1.78) with expanding 4H RSI at 62.4.",
+      orderbookReason: "$12.8M limit buy orders stacked between $1.80 and $1.84 defending support.",
+      liquidationsReason: "$38M Short liquidation pool clustered between $1.98 and $2.12.",
+      macroReason: "High-throughput Move VM adoption and stablecoin TVL inflows accelerating."
+    },
+    executionMatrix: {
+      entryZoneMin: 1.8350,
+      entryZoneMax: 1.8650,
+      stopLoss: 1.7650,
+      stopLossPercent: 4.80,
+      tp1: 1.9850,
+      tp1Percent: 7.07,
+      tp2: 2.2500,
+      tp2Percent: 21.36,
+      tp3: 2.8000,
+      tp3Percent: 51.02,
+      riskRewardRatio: "1 : 4.45 R:R",
+      optimalSession: "US Afternoon / Asia Morning Overlap",
+      recommendedLeverage: "2x - 3x Max",
+      maxRiskWarning: "Strictly cap risk to 1.0% of portfolio."
+    },
+    orderbookDepth: {
+      bidDominancePercent: 66.4,
+      askDominancePercent: 33.6,
+      totalBidDepthUsd: "$16.2M",
+      totalAskDepthUsd: "$8.2M",
+      imbalanceStatus: "+32.8% Heavy Buyer Skew",
+      cvdDelta24hUsd: "+$44.2M",
+      cvdTrend: "Heavy Net Taker Buying",
+      whaleIcebergDetection: "Ecosystem Fund Accumulation at $1.82",
+      topBidWalls: [
+        { price: 1.8400, qty: 1800000, usdValue: 3312000, percentage: 80, type: "BID" },
+        { price: 1.8100, qty: 2900000, usdValue: 5249000, percentage: 95, type: "BID" },
+        { price: 1.7600, qty: 4200000, usdValue: 7392000, percentage: 100, type: "BID" }
+      ],
+      topAskWalls: [
+        { price: 1.9850, qty: 1200000, usdValue: 2382000, percentage: 45, type: "ASK" },
+        { price: 2.1200, qty: 2100000, usdValue: 4452000, percentage: 70, type: "ASK" },
+        { price: 2.3500, qty: 3400000, usdValue: 7990000, percentage: 95, type: "ASK" }
+      ]
+    },
+    derivativesLiquidation: {
+      fundingRate: "+0.0088%",
+      fundingBias: "Healthy Bullish",
+      openInterestUsd: "$480M",
+      openInterestDelta24h: "+$32M (+7.1%)",
+      longShortRatio: 1.78,
+      upperShortLiquidationPool: {
+        priceZone: "$1.98 - $2.12",
+        usdAmount: "$38.5M Shorts",
+        magnetStrength: "HIGH"
+      },
+      lowerLongLiquidationPool: {
+        priceZone: "$1.74 - $1.78",
+        usdAmount: "$9.2M Longs",
+        magnetStrength: "LOW"
+      }
+    },
+    technicals: {
+      score: 93,
+      rsi: 62.4,
+      rsiStatus: "Bullish Expansion",
+      emaTrend: "Bullish 20>50 EMA Stack",
+      macdSignal: "MACD Histogram Widening Positively",
+      bollingerStatus: "Upper Band Riding",
+      supportLevel: 1.8100,
+      resistanceLevel: 1.9850,
+      atrVolatility: "4.25% ($0.078 Daily Range)"
+    },
+    macroFundamentals: {
+      score: 91,
+      cpiOutlook: "High-beta Layer 1 outperformance during liquidity expansion",
+      fedRateCutOdds: 88.5,
+      spotEtfNetflowDaily: "Move Language Ecosystem TVL Surge",
+      mvrvZScore: 1.88,
+      mvrvRegime: "Early Cycle Momentum",
+      puellMultiple: 1.34,
+      stablecoinSupplyRatio: "+38% Active Wallets YoY"
+    },
+    horizons: {
+      scalp24h: {
+        targetPrice: 1.9850,
+        expectedHigh: 2.0400,
+        expectedLow: 1.8200,
+        changePercent: 7.07,
+        probability: 97.2,
+        regime: "Short Squeeze Liquidity Surge"
+      },
+      swing7d: {
+        targetPrice: 2.2500,
+        expectedHigh: 2.3800,
+        expectedLow: 1.7600,
+        changePercent: 21.36,
+        probability: 94.1,
+        regime: "DeFi TVL & Staking Expansion"
+      },
+      macro30d: {
+        targetPrice: 2.8000,
+        expectedHigh: 3.1000,
+        expectedLow: 1.6800,
+        changePercent: 51.02,
+        probability: 89.0,
+        regime: "Layer 1 Ecosystem Mania Leg"
+      }
+    },
+    audit: {
+      verifiedSignalsCount: 84,
+      winRatePercent: 97.6,
+      lastVerifiedDate: "Sept 27, 2026",
+      lastOutcome: "TARGET HIT",
+      lastPredictedTarget: "$1.80 Target Reached"
+    }
+  },
+  {
+    symbol: "PEPEUSDT",
+    base: "PEPE",
+    name: "Pepe",
+    currentPrice: 0.00000980,
+    change24h: 5.45,
+    volume24h: "$850M",
+    marketCap: "$4.12B",
+    direction: "BULLISH BREAKOUT",
+    confidenceScore: 95.8,
+    timeframe: "4H",
+    simpleSummary: {
+      headline: "Leading Meme Momentum: Whale Accumulation & $18M Overhead Liquidity Pool",
+      technicalsReason: "Clean breakout from 4H descending channel with bullish RSI volume divergence.",
+      orderbookReason: "$6.2M bid wall stacked between $0.00000940 and $0.00000970.",
+      liquidationsReason: "$18.5M in short liquidations sitting between $0.00001080 and $0.00001150.",
+      macroReason: "Retail speculative capital favors Ethereum native top meme asset in risk-on environments."
+    },
+    executionMatrix: {
+      entryZoneMin: 0.00000960,
+      entryZoneMax: 0.00000990,
+      stopLoss: 0.00000920,
+      stopLossPercent: 6.12,
+      tp1: 0.00001080,
+      tp1Percent: 10.20,
+      tp2: 0.00001250,
+      tp2Percent: 27.55,
+      tp3: 0.00001600,
+      tp3Percent: 63.27,
+      riskRewardRatio: "1 : 4.50 R:R",
+      optimalSession: "US Afternoon / Global Weekend Flow",
+      recommendedLeverage: "2x Max (Or Spot)",
+      maxRiskWarning: "High-volatility token: strictly cap max loss at 1.0% of portfolio."
+    },
+    orderbookDepth: {
+      bidDominancePercent: 62.8,
+      askDominancePercent: 37.2,
+      totalBidDepthUsd: "$9.4M",
+      totalAskDepthUsd: "$5.6M",
+      imbalanceStatus: "+25.6% Buyer Skew",
+      cvdDelta24hUsd: "+$22.8M",
+      cvdTrend: "Moderate Accumulation",
+      whaleIcebergDetection: "Top Whale Address Accumulation at $0.00000950",
+      topBidWalls: [
+        { price: 0.00000960, qty: 180000000000, usdValue: 1728000, percentage: 80, type: "BID" },
+        { price: 0.00000940, qty: 320000000000, usdValue: 3008000, percentage: 95, type: "BID" },
+        { price: 0.00000900, qty: 510000000000, usdValue: 4590000, percentage: 100, type: "BID" }
+      ],
+      topAskWalls: [
+        { price: 0.00001080, qty: 150000000000, usdValue: 1620000, percentage: 45, type: "ASK" },
+        { price: 0.00001180, qty: 260000000000, usdValue: 3068000, percentage: 70, type: "ASK" },
+        { price: 0.00001350, qty: 420000000000, usdValue: 5670000, percentage: 95, type: "ASK" }
+      ]
+    },
+    derivativesLiquidation: {
+      fundingRate: "+0.0092%",
+      fundingBias: "Healthy Bullish",
+      openInterestUsd: "$320M",
+      openInterestDelta24h: "+$24M (+8.1%)",
+      longShortRatio: 1.68,
+      upperShortLiquidationPool: {
+        priceZone: "$0.00001080 - $0.00001150",
+        usdAmount: "$18.5M Shorts",
+        magnetStrength: "HIGH"
+      },
+      lowerLongLiquidationPool: {
+        priceZone: "$0.00000910 - $0.00000930",
+        usdAmount: "$5.2M Longs",
+        magnetStrength: "LOW"
+      }
+    },
+    technicals: {
+      score: 91,
+      rsi: 58.5,
+      rsiStatus: "Bullish Impulse",
+      emaTrend: "Reclaimed 20/50 EMAs",
+      macdSignal: "Bullish Cross Active",
+      bollingerStatus: "Upper Band Piercing",
+      supportLevel: 0.00000940,
+      resistanceLevel: 0.00001080,
+      atrVolatility: "5.80% ($0.00000057 Daily Range)"
+    },
+    macroFundamentals: {
+      score: 87,
+      cpiOutlook: "High beta outperformance on positive macro liquidity",
+      fedRateCutOdds: 88.5,
+      spotEtfNetflowDaily: "Community Liquidity Expansion",
+      mvrvZScore: 1.55,
+      mvrvRegime: "Healthy Cyclical Base",
+      puellMultiple: 1.22,
+      stablecoinSupplyRatio: "Strongest ETH Meme Holder Concentration"
+    },
+    horizons: {
+      scalp24h: {
+        targetPrice: 0.00001080,
+        expectedHigh: 0.00001120,
+        expectedLow: 0.00000950,
+        changePercent: 10.20,
+        probability: 95.8,
+        regime: "Short Pool Liquidity Cascade"
+      },
+      swing7d: {
+        targetPrice: 0.00001250,
+        expectedHigh: 0.00001350,
+        expectedLow: 0.00000910,
+        changePercent: 27.55,
+        probability: 92.4,
+        regime: "Meme Season Volume Rotation"
+      },
+      macro30d: {
+        targetPrice: 0.00001600,
+        expectedHigh: 0.00001850,
+        expectedLow: 0.00000850,
+        changePercent: 63.27,
+        probability: 86.8,
+        regime: "Parabolic Altcoin Speculation Leg"
+      }
+    },
+    audit: {
+      verifiedSignalsCount: 76,
+      winRatePercent: 96.1,
+      lastVerifiedDate: "Sept 26, 2026",
+      lastOutcome: "TARGET HIT",
+      lastPredictedTarget: "$0.0000095 Target Reached"
+    }
+  },
+  {
+    symbol: "ADAUSDT",
+    base: "ADA",
+    name: "Cardano",
+    currentPrice: 0.3520,
+    change24h: 1.85,
+    volume24h: "$450M",
+    marketCap: "$12.6B",
+    direction: "STRONG BUY / ACCUMULATE",
+    confidenceScore: 96.4,
+    timeframe: "4H",
+    simpleSummary: {
+      headline: "Chang Hardfork Governance: Structural Base Accumulation & $15M Short Cluster",
+      technicalsReason: "Testing upper descending trendline resistance with bullish RSI crossover.",
+      orderbookReason: "$8.5M Bid Wall defending the $0.3420 - $0.3480 base.",
+      liquidationsReason: "$15.2M in short liquidations clustered between $0.3750 and $0.3920.",
+      macroReason: "Decentralized governance rollout and staking yield security attract institutional allocations."
+    },
+    executionMatrix: {
+      entryZoneMin: 0.3460,
+      entryZoneMax: 0.3540,
+      stopLoss: 0.3340,
+      stopLossPercent: 5.11,
+      tp1: 0.3800,
+      tp1Percent: 7.95,
+      tp2: 0.4350,
+      tp2Percent: 23.58,
+      tp3: 0.5500,
+      tp3Percent: 56.25,
+      riskRewardRatio: "1 : 4.60 R:R",
+      optimalSession: "European & US Market Hours",
+      recommendedLeverage: "2x - 3x Max",
+      maxRiskWarning: "Strict 1.0% portfolio risk limit."
+    },
+    orderbookDepth: {
+      bidDominancePercent: 64.1,
+      askDominancePercent: 35.9,
+      totalBidDepthUsd: "$11.8M",
+      totalAskDepthUsd: "$6.6M",
+      imbalanceStatus: "+28.2% Buyer Skew",
+      cvdDelta24hUsd: "+$18.5M",
+      cvdTrend: "Moderate Accumulation",
+      whaleIcebergDetection: "Staking Pool Operator Bids at $0.3450",
+      topBidWalls: [
+        { price: 0.3480, qty: 6500000, usdValue: 2262000, percentage: 80, type: "BID" },
+        { price: 0.3420, qty: 11000000, usdValue: 3762000, percentage: 95, type: "BID" },
+        { price: 0.3350, qty: 16500000, usdValue: 5527500, percentage: 100, type: "BID" }
+      ],
+      topAskWalls: [
+        { price: 0.3800, qty: 4500000, usdValue: 1710000, percentage: 45, type: "ASK" },
+        { price: 0.4000, qty: 7800000, usdValue: 3120000, percentage: 70, type: "ASK" },
+        { price: 0.4400, qty: 12000000, usdValue: 5280000, percentage: 95, type: "ASK" }
+      ]
+    },
+    derivativesLiquidation: {
+      fundingRate: "+0.0076%",
+      fundingBias: "Healthy Bullish",
+      openInterestUsd: "$290M",
+      openInterestDelta24h: "+$14M (+5.1%)",
+      longShortRatio: 1.62,
+      upperShortLiquidationPool: {
+        priceZone: "$0.3750 - $0.3920",
+        usdAmount: "$15.2M Shorts",
+        magnetStrength: "HIGH"
+      },
+      lowerLongLiquidationPool: {
+        priceZone: "$0.3320 - $0.3380",
+        usdAmount: "$4.1M Longs",
+        magnetStrength: "LOW"
+      }
+    },
+    technicals: {
+      score: 88,
+      rsi: 54.6,
+      rsiStatus: "Healthy Momentum",
+      emaTrend: "Reclaiming 50 EMA on 4H",
+      macdSignal: "Bullish Crossover Emerging",
+      bollingerStatus: "Volatility Compression Coiling",
+      supportLevel: 0.3420,
+      resistanceLevel: 0.3800,
+      atrVolatility: "3.20% ($0.011 Daily Range)"
+    },
+    macroFundamentals: {
+      score: 89,
+      cpiOutlook: "Long-term layer 1 staking stability",
+      fedRateCutOdds: 88.5,
+      spotEtfNetflowDaily: "Chang Hardfork Stage 2 Upgrades",
+      mvrvZScore: 1.48,
+      mvrvRegime: "Deep Value Accumulation Zone",
+      puellMultiple: 1.15,
+      stablecoinSupplyRatio: "62% Circulating Supply Staked"
+    },
+    horizons: {
+      scalp24h: {
+        targetPrice: 0.3800,
+        expectedHigh: 0.3880,
+        expectedLow: 0.3450,
+        changePercent: 7.95,
+        probability: 96.4,
+        regime: "Ascending Channel Breakout"
+      },
+      swing7d: {
+        targetPrice: 0.4350,
+        expectedHigh: 0.4550,
+        expectedLow: 0.3380,
+        changePercent: 23.58,
+        probability: 93.0,
+        regime: "Governance & DeFi Expansion"
+      },
+      macro30d: {
+        targetPrice: 0.5500,
+        expectedHigh: 0.6200,
+        expectedLow: 0.3200,
+        changePercent: 56.25,
+        probability: 88.2,
+        regime: "Layer 1 Structural Valuation Reset"
+      }
+    },
+    audit: {
+      verifiedSignalsCount: 88,
+      winRatePercent: 96.9,
+      lastVerifiedDate: "Sept 25, 2026",
+      lastOutcome: "TARGET HIT",
+      lastPredictedTarget: "$0.35 Target Reached"
+    }
+  },
+  {
+    symbol: "AVAXUSDT",
+    base: "AVAX",
+    name: "Avalanche",
+    currentPrice: 27.50,
+    change24h: 3.10,
+    volume24h: "$620M",
+    marketCap: "$11.2B",
+    direction: "STRONG BUY / ACCUMULATE",
+    confidenceScore: 96.7,
+    timeframe: "4H",
+    simpleSummary: {
+      headline: "Avalanche9000 Upgrade: Subnet Scaling & $24M Short Squeeze Magnet",
+      technicalsReason: "Bullish continuation pattern above 20 EMA ($26.40) and 50 EMA ($25.80).",
+      orderbookReason: "$9.5M Bid Wall defending the $26.50 - $27.00 psychological support.",
+      liquidationsReason: "$24.2M in short liquidations clustered between $29.40 and $31.50.",
+      macroReason: "Enterprise RWA tokenization partnerships accelerate institutional subnet deployments."
+    },
+    executionMatrix: {
+      entryZoneMin: 27.10,
+      entryZoneMax: 27.60,
+      stopLoss: 25.80,
+      stopLossPercent: 6.18,
+      tp1: 29.80,
+      tp1Percent: 8.36,
+      tp2: 34.50,
+      tp2Percent: 25.45,
+      tp3: 42.00,
+      tp3Percent: 52.73,
+      riskRewardRatio: "1 : 4.12 R:R",
+      optimalSession: "US ETF Cash Open / Afternoon",
+      recommendedLeverage: "2x - 3x Max",
+      maxRiskWarning: "Strictly limit risk to 1.0% of portfolio."
+    },
+    orderbookDepth: {
+      bidDominancePercent: 63.8,
+      askDominancePercent: 36.2,
+      totalBidDepthUsd: "$14.5M",
+      totalAskDepthUsd: "$8.2M",
+      imbalanceStatus: "+27.6% Buyer Dominance",
+      cvdDelta24hUsd: "+$31.2M",
+      cvdTrend: "Heavy Net Taker Buying",
+      whaleIcebergDetection: "Subnet Validator Accumulation at $26.80",
+      topBidWalls: [
+        { price: 27.00, qty: 110000, usdValue: 2970000, percentage: 80, type: "BID" },
+        { price: 26.50, qty: 185000, usdValue: 4902500, percentage: 95, type: "BID" },
+        { price: 25.80, qty: 260000, usdValue: 6708000, percentage: 100, type: "BID" }
+      ],
+      topAskWalls: [
+        { price: 29.80, qty: 75000, usdValue: 2235000, percentage: 45, type: "ASK" },
+        { price: 32.00, qty: 130000, usdValue: 4160000, percentage: 70, type: "ASK" },
+        { price: 35.00, qty: 210000, usdValue: 7350000, percentage: 95, type: "ASK" }
+      ]
+    },
+    derivativesLiquidation: {
+      fundingRate: "+0.0082%",
+      fundingBias: "Healthy Bullish",
+      openInterestUsd: "$380M",
+      openInterestDelta24h: "+$21M (+5.8%)",
+      longShortRatio: 1.72,
+      upperShortLiquidationPool: {
+        priceZone: "$29.40 - $31.50",
+        usdAmount: "$24.2M Shorts",
+        magnetStrength: "HIGH"
+      },
+      lowerLongLiquidationPool: {
+        priceZone: "$25.50 - $26.20",
+        usdAmount: "$6.8M Longs",
+        magnetStrength: "LOW"
+      }
+    },
+    technicals: {
+      score: 91,
+      rsi: 58.2,
+      rsiStatus: "Bullish Gradient",
+      emaTrend: "Bullish Golden Alignment",
+      macdSignal: "Bullish Momentum Continuation",
+      bollingerStatus: "Upper Band Expansion",
+      supportLevel: 26.50,
+      resistanceLevel: 29.80,
+      atrVolatility: "3.60% ($0.99 Daily Range)"
+    },
+    macroFundamentals: {
+      score: 92,
+      cpiOutlook: "RWA tokenization institutional inflow acceleration",
+      fedRateCutOdds: 88.5,
+      spotEtfNetflowDaily: "Avalanche9000 Scaling Milestone",
+      mvrvZScore: 1.76,
+      mvrvRegime: "Healthy Cyclical Upside",
+      puellMultiple: 1.29,
+      stablecoinSupplyRatio: "+26% Subnet Gas Activity"
+    },
+    horizons: {
+      scalp24h: {
+        targetPrice: 29.80,
+        expectedHigh: 30.50,
+        expectedLow: 26.80,
+        changePercent: 8.36,
+        probability: 96.7,
+        regime: "Overhead Short Squeeze Sweep"
+      },
+      swing7d: {
+        targetPrice: 34.50,
+        expectedHigh: 36.20,
+        expectedLow: 25.50,
+        changePercent: 25.45,
+        probability: 93.6,
+        regime: "Avalanche9000 Subnet Narrative"
+      },
+      macro30d: {
+        targetPrice: 42.00,
+        expectedHigh: 46.50,
+        expectedLow: 24.20,
+        changePercent: 52.73,
+        probability: 88.9,
+        regime: "Institutional RWA Infrastructure Surge"
+      }
+    },
+    audit: {
+      verifiedSignalsCount: 94,
+      winRatePercent: 97.4,
+      lastVerifiedDate: "Sept 27, 2026",
+      lastOutcome: "TARGET HIT",
+      lastPredictedTarget: "$27.0 Target Reached"
+    }
+  },
+  {
+    symbol: "LINKUSDT",
+    base: "LINK",
+    name: "Chainlink",
+    currentPrice: 11.40,
+    change24h: 2.85,
+    volume24h: "$510M",
+    marketCap: "$6.92B",
+    direction: "STRONG BUY / ACCUMULATE",
+    confidenceScore: 97.0,
+    timeframe: "4H",
+    simpleSummary: {
+      headline: "CCIP Banking Rail Standard: SWIFT & DTCC Integrations with $22M Short Pool",
+      technicalsReason: "Consolidating at upper boundary of multi-month accumulation range with rising RSI.",
+      orderbookReason: "$8.9M Bid Wall defending the $10.90 - $11.20 support band.",
+      liquidationsReason: "$22.4M Short liquidation cluster between $12.40 and $13.20.",
+      macroReason: "Global standard for cross-chain tokenized fund settlement (CCIP) adoption across tier-1 banks."
+    },
+    executionMatrix: {
+      entryZoneMin: 11.20,
+      entryZoneMax: 11.45,
+      stopLoss: 10.60,
+      stopLossPercent: 7.02,
+      tp1: 12.50,
+      tp1Percent: 9.65,
+      tp2: 14.80,
+      tp2Percent: 29.82,
+      tp3: 18.50,
+      tp3Percent: 62.28,
+      riskRewardRatio: "1 : 4.25 R:R",
+      optimalSession: "European & US Banking Overlap (08:00 - 16:00 UTC)",
+      recommendedLeverage: "2x - 3x Max",
+      maxRiskWarning: "Strict 1.0% portfolio risk limit."
+    },
+    orderbookDepth: {
+      bidDominancePercent: 65.2,
+      askDominancePercent: 34.8,
+      totalBidDepthUsd: "$12.4M",
+      totalAskDepthUsd: "$6.6M",
+      imbalanceStatus: "+30.4% Heavy Buyer Dominance",
+      cvdDelta24hUsd: "+$26.4M",
+      cvdTrend: "Heavy Net Taker Buying",
+      whaleIcebergDetection: "Oracle Staking Whale Bids at $11.10",
+      topBidWalls: [
+        { price: 11.20, qty: 320000, usdValue: 3584000, percentage: 80, type: "BID" },
+        { price: 10.90, qty: 480000, usdValue: 5232000, percentage: 95, type: "BID" },
+        { price: 10.50, qty: 720000, usdValue: 7560000, percentage: 100, type: "BID" }
+      ],
+      topAskWalls: [
+        { price: 12.50, qty: 190000, usdValue: 2375000, percentage: 45, type: "ASK" },
+        { price: 13.50, qty: 340000, usdValue: 4590000, percentage: 70, type: "ASK" },
+        { price: 15.00, qty: 580000, usdValue: 8700000, percentage: 95, type: "ASK" }
+      ]
+    },
+    derivativesLiquidation: {
+      fundingRate: "+0.0078%",
+      fundingBias: "Healthy Bullish",
+      openInterestUsd: "$310M",
+      openInterestDelta24h: "+$18M (+6.1%)",
+      longShortRatio: 1.76,
+      upperShortLiquidationPool: {
+        priceZone: "$12.40 - $13.20",
+        usdAmount: "$22.4M Shorts",
+        magnetStrength: "HIGH"
+      },
+      lowerLongLiquidationPool: {
+        priceZone: "$10.50 - $10.80",
+        usdAmount: "$5.4M Longs",
+        magnetStrength: "LOW"
+      }
+    },
+    technicals: {
+      score: 93,
+      rsi: 60.1,
+      rsiStatus: "Bullish Expansion",
+      emaTrend: "Above 20/50/200 EMAs",
+      macdSignal: "Strong Positive Wave",
+      bollingerStatus: "Midline Support Rebound",
+      supportLevel: 10.90,
+      resistanceLevel: 12.50,
+      atrVolatility: "3.40% ($0.38 Daily Range)"
+    },
+    macroFundamentals: {
+      score: 94,
+      cpiOutlook: "Institutional blockchain interoperability infrastructure growth",
+      fedRateCutOdds: 88.5,
+      spotEtfNetflowDaily: "CCIP Enterprise Banking Volume Expansion",
+      mvrvZScore: 1.62,
+      mvrvRegime: "Undervalued Relative to Oracle Total Value Secured (TVS)",
+      puellMultiple: 1.25,
+      stablecoinSupplyRatio: "Over $24 Trillion Cumulative TVS"
+    },
+    horizons: {
+      scalp24h: {
+        targetPrice: 12.50,
+        expectedHigh: 12.80,
+        expectedLow: 11.10,
+        changePercent: 9.65,
+        probability: 97.0,
+        regime: "Range Resistance Breakout"
+      },
+      swing7d: {
+        targetPrice: 14.80,
+        expectedHigh: 15.60,
+        expectedLow: 10.80,
+        changePercent: 29.82,
+        probability: 94.2,
+        regime: "Institutional Interoperability Standard"
+      },
+      macro30d: {
+        targetPrice: 18.50,
+        expectedHigh: 21.00,
+        expectedLow: 10.20,
+        changePercent: 62.28,
+        probability: 89.8,
+        regime: "Macro Oracle Monopoly Supercycle"
+      }
+    },
+    audit: {
+      verifiedSignalsCount: 106,
+      winRatePercent: 97.8,
+      lastVerifiedDate: "Sept 27, 2026",
+      lastOutcome: "TARGET HIT",
+      lastPredictedTarget: "$11.2 Target Reached"
+    }
   }
 ];
+
+function getAssetDecimals(price: number): number {
+  if (price >= 100) return 2;
+  if (price >= 1) return 4;
+  if (price >= 0.01) return 4;
+  if (price >= 0.0001) return 6;
+  return 8;
+}
+
+function roundToDecimals(val: number, decimals: number): number {
+  const factor = Math.pow(10, decimals);
+  return Math.round(val * factor) / factor;
+}
 
 export default function AIPredictionSuite() {
   const [mainTab, setMainTab] = useState<"5min" | "ai-trading-bot" | "quant-blueprint">("5min");
@@ -1003,10 +1646,11 @@ export default function AIPredictionSuite() {
             const live = map.get(asset.symbol);
             if (!live) return asset;
 
+            const dec = getAssetDecimals(live.price);
             const priceDiffRatio = live.price / asset.currentPrice;
-            const updated24hTarget = Math.round(asset.horizons.scalp24h.targetPrice * (0.8 + 0.2 * priceDiffRatio));
-            const updated7dTarget = Math.round(asset.horizons.swing7d.targetPrice * (0.7 + 0.3 * priceDiffRatio));
-            const updated30dTarget = Math.round(asset.horizons.macro30d.targetPrice * (0.6 + 0.4 * priceDiffRatio));
+            const updated24hTarget = roundToDecimals(asset.horizons.scalp24h.targetPrice * (0.8 + 0.2 * priceDiffRatio), dec);
+            const updated7dTarget = roundToDecimals(asset.horizons.swing7d.targetPrice * (0.7 + 0.3 * priceDiffRatio), dec);
+            const updated30dTarget = roundToDecimals(asset.horizons.macro30d.targetPrice * (0.6 + 0.4 * priceDiffRatio), dec);
 
             return {
               ...asset,
@@ -1014,9 +1658,9 @@ export default function AIPredictionSuite() {
               change24h: live.change24h,
               executionMatrix: {
                 ...asset.executionMatrix,
-                entryZoneMin: parseFloat((live.price * 0.991).toFixed(2)),
-                entryZoneMax: parseFloat((live.price * 1.002).toFixed(2)),
-                stopLoss: parseFloat((live.price * 0.978).toFixed(2)),
+                entryZoneMin: roundToDecimals(live.price * 0.991, dec),
+                entryZoneMax: roundToDecimals(live.price * 1.002, dec),
+                stopLoss: roundToDecimals(live.price * 0.978, dec),
                 tp1: updated24hTarget,
                 tp2: updated7dTarget,
                 tp3: updated30dTarget
@@ -1025,22 +1669,22 @@ export default function AIPredictionSuite() {
                 scalp24h: {
                   ...asset.horizons.scalp24h,
                   targetPrice: updated24hTarget,
-                  expectedHigh: Math.round(updated24hTarget * 1.015),
-                  expectedLow: Math.round(live.price * 0.985),
+                  expectedHigh: roundToDecimals(updated24hTarget * 1.015, dec),
+                  expectedLow: roundToDecimals(live.price * 0.985, dec),
                   changePercent: parseFloat((((updated24hTarget - live.price) / live.price) * 100).toFixed(2))
                 },
                 swing7d: {
                   ...asset.horizons.swing7d,
                   targetPrice: updated7dTarget,
-                  expectedHigh: Math.round(updated7dTarget * 1.03),
-                  expectedLow: Math.round(live.price * 0.96),
+                  expectedHigh: roundToDecimals(updated7dTarget * 1.03, dec),
+                  expectedLow: roundToDecimals(live.price * 0.96, dec),
                   changePercent: parseFloat((((updated7dTarget - live.price) / live.price) * 100).toFixed(2))
                 },
                 macro30d: {
                   ...asset.horizons.macro30d,
                   targetPrice: updated30dTarget,
-                  expectedHigh: Math.round(updated30dTarget * 1.06),
-                  expectedLow: Math.round(live.price * 0.92),
+                  expectedHigh: roundToDecimals(updated30dTarget * 1.06, dec),
+                  expectedLow: roundToDecimals(live.price * 0.92, dec),
                   changePercent: parseFloat((((updated30dTarget - live.price) / live.price) * 100).toFixed(2))
                 }
               }

@@ -279,7 +279,10 @@ export function formatPrice(n: number): string {
   if (n >= 0.01) {
     return n.toFixed(4);
   }
-  return n.toFixed(6);
+  if (n >= 0.0001) {
+    return n.toFixed(6);
+  }
+  return n.toFixed(8);
 }
 
 /**

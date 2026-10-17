@@ -23,6 +23,7 @@ import {
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import { coinPredictions, CoinPredictionData } from "@/lib/coinPredictionsData";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
+import { formatPrice } from "@/lib/aiSignalEngine";
 
 export const SLUG_ALIASES: Record<string, string> = {
   "avalanche-2": "avalanche",
@@ -265,17 +266,17 @@ export default async function CoinPredictionPage({ params }: PageProps) {
               </div>
               <div>
                 <div className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tight">
-                  ${coin.currentPriceUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}
+                  ${formatPrice(coin.currentPriceUsd)}
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
-                  All-Time High: <strong className="text-amber-300">${coin.allTimeHigh.toLocaleString()}</strong> ({coin.allTimeHighDate})
+                  All-Time High: <strong className="text-amber-300">${formatPrice(coin.allTimeHigh)}</strong> ({coin.allTimeHighDate})
                 </p>
               </div>
 
               <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs">
                 <span className="text-slate-300">30-Day Target:</span>
                 <span className="font-mono font-bold text-purple-300 text-sm">
-                  ${coin.forecasts.horizon30d.targetPrice.toLocaleString()} ({coin.forecasts.horizon30d.projectedReturn})
+                  ${formatPrice(coin.forecasts.horizon30d.targetPrice)} ({coin.forecasts.horizon30d.projectedReturn})
                 </span>
               </div>
             </div>
@@ -311,7 +312,7 @@ export default async function CoinPredictionPage({ params }: PageProps) {
               <div>
                 <div className="text-xs text-slate-400">Projected Target</div>
                 <div className="text-2xl font-black text-slate-900 dark:text-white font-mono flex items-center gap-2">
-                  ${coin.forecasts.horizon24h.targetPrice.toLocaleString()}
+                  ${formatPrice(coin.forecasts.horizon24h.targetPrice)}
                   <span className="text-xs font-bold text-emerald-500 font-sans">
                     {coin.forecasts.horizon24h.projectedReturn}
                   </span>
@@ -321,16 +322,16 @@ export default async function CoinPredictionPage({ params }: PageProps) {
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Channel Range:</span>
                   <span className="text-slate-900 dark:text-white font-bold">
-                    ${coin.forecasts.horizon24h.targetRange[0].toLocaleString()} - ${coin.forecasts.horizon24h.targetRange[1].toLocaleString()}
+                    ${formatPrice(coin.forecasts.horizon24h.targetRange[0])} - ${formatPrice(coin.forecasts.horizon24h.targetRange[1])}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Dynamic Support:</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">${coin.forecasts.horizon24h.supportLevel.toLocaleString()}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">${formatPrice(coin.forecasts.horizon24h.supportLevel)}</span>
                 </div>
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Resistance Wall:</span>
-                  <span className="text-rose-600 dark:text-rose-400 font-bold">${coin.forecasts.horizon24h.resistanceLevel.toLocaleString()}</span>
+                  <span className="text-rose-600 dark:text-rose-400 font-bold">${formatPrice(coin.forecasts.horizon24h.resistanceLevel)}</span>
                 </div>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
@@ -352,7 +353,7 @@ export default async function CoinPredictionPage({ params }: PageProps) {
               <div>
                 <div className="text-xs text-slate-400">Projected Target</div>
                 <div className="text-2xl font-black text-slate-900 dark:text-white font-mono flex items-center gap-2">
-                  ${coin.forecasts.horizon7d.targetPrice.toLocaleString()}
+                  ${formatPrice(coin.forecasts.horizon7d.targetPrice)}
                   <span className="text-xs font-bold text-emerald-500 font-sans">
                     {coin.forecasts.horizon7d.projectedReturn}
                   </span>
@@ -362,16 +363,16 @@ export default async function CoinPredictionPage({ params }: PageProps) {
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Channel Range:</span>
                   <span className="text-slate-900 dark:text-white font-bold">
-                    ${coin.forecasts.horizon7d.targetRange[0].toLocaleString()} - ${coin.forecasts.horizon7d.targetRange[1].toLocaleString()}
+                    ${formatPrice(coin.forecasts.horizon7d.targetRange[0])} - ${formatPrice(coin.forecasts.horizon7d.targetRange[1])}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Dynamic Support:</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">${coin.forecasts.horizon7d.supportLevel.toLocaleString()}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">${formatPrice(coin.forecasts.horizon7d.supportLevel)}</span>
                 </div>
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Resistance Wall:</span>
-                  <span className="text-rose-600 dark:text-rose-400 font-bold">${coin.forecasts.horizon7d.resistanceLevel.toLocaleString()}</span>
+                  <span className="text-rose-600 dark:text-rose-400 font-bold">${formatPrice(coin.forecasts.horizon7d.resistanceLevel)}</span>
                 </div>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
@@ -396,7 +397,7 @@ export default async function CoinPredictionPage({ params }: PageProps) {
               <div>
                 <div className="text-xs text-slate-400">Projected Target</div>
                 <div className="text-2xl font-black text-purple-600 dark:text-purple-400 font-mono flex items-center gap-2">
-                  ${coin.forecasts.horizon30d.targetPrice.toLocaleString()}
+                  ${formatPrice(coin.forecasts.horizon30d.targetPrice)}
                   <span className="text-xs font-bold text-emerald-500 font-sans">
                     {coin.forecasts.horizon30d.projectedReturn}
                   </span>
@@ -406,16 +407,16 @@ export default async function CoinPredictionPage({ params }: PageProps) {
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Channel Range:</span>
                   <span className="text-slate-900 dark:text-white font-bold">
-                    ${coin.forecasts.horizon30d.targetRange[0].toLocaleString()} - ${coin.forecasts.horizon30d.targetRange[1].toLocaleString()}
+                    ${formatPrice(coin.forecasts.horizon30d.targetRange[0])} - ${formatPrice(coin.forecasts.horizon30d.targetRange[1])}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Macro Support:</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">${coin.forecasts.horizon30d.supportLevel.toLocaleString()}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">${formatPrice(coin.forecasts.horizon30d.supportLevel)}</span>
                 </div>
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
                   <span>Expansion Target:</span>
-                  <span className="text-purple-600 dark:text-purple-400 font-bold">${coin.forecasts.horizon30d.resistanceLevel.toLocaleString()}</span>
+                  <span className="text-purple-600 dark:text-purple-400 font-bold">${formatPrice(coin.forecasts.horizon30d.resistanceLevel)}</span>
                 </div>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">

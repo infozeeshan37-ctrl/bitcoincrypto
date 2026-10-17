@@ -82,10 +82,15 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   // Wait 1.8s for live candlesticks and order book numbers to render
   await new Promise((r) => setTimeout(r, 1800));
 
-  // Inject High-Impact Hook Card, Cyber HUD, Progress Bar, and requestAnimationFrame Lerp engine
+  // Inject High-Impact Razor-Sharp Hook, Cyber HUD, White Flash Transition & Lerp Engine
   await page.evaluate(() => {
     const style = document.createElement("style");
     style.innerHTML = `
+      * {
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+      }
       @keyframes scanline {
         0% { transform: translateY(-100%); opacity: 0; }
         25% { opacity: 1; }
@@ -94,52 +99,69 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
       }
       @keyframes pulseGlow {
         0%, 100% {
-          box-shadow: 0 0 28px rgba(0, 255, 200, 0.45), inset 0 0 16px rgba(0, 255, 200, 0.2);
+          box-shadow: 0 0 35px rgba(0, 255, 200, 0.7), inset 0 0 20px rgba(0, 255, 200, 0.3);
           border-color: #00ffc8;
         }
         50% {
-          box-shadow: 0 0 48px rgba(255, 200, 0, 0.8), inset 0 0 28px rgba(255, 200, 0, 0.4);
+          box-shadow: 0 0 55px rgba(255, 200, 0, 0.9), inset 0 0 30px rgba(255, 200, 0, 0.5);
           border-color: #ffc800;
         }
       }
       @keyframes pulseDot {
-        from { opacity: 0.35; transform: scale(0.85); }
-        to { opacity: 1; transform: scale(1.3); }
+        from { opacity: 0.4; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1.35); }
       }
-      @keyframes hookPop {
+      @keyframes hookExplode {
         0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
-        15% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-        25% { transform: translate(-50%, -50%) scale(1.0); }
-        85% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
-        100% { transform: translate(-50%, -60%) scale(0.85); opacity: 0; pointer-events: none; }
+        12% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+        22% { transform: translate(-50%, -50%) scale(1.0); }
+        84% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; filter: brightness(2.0); pointer-events: none; }
+      }
+      @keyframes flashFade {
+        0% { opacity: 0; }
+        20% { opacity: 0.85; }
+        100% { opacity: 0; }
+      }
+      @keyframes bounceArrow {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(12px); }
       }
       .cyber-hook-card {
         position: fixed;
-        top: 45%;
+        top: 44%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 88%;
-        background: rgba(11, 15, 25, 0.94);
-        border: 3px solid #ff0055;
-        border-radius: 24px;
-        box-shadow: 0 0 50px rgba(255, 0, 85, 0.65), 0 20px 40px rgba(0,0,0,0.8);
-        backdrop-filter: blur(16px);
-        padding: 24px 20px;
+        width: 92%;
+        max-width: 980px;
+        background: #080c16;
+        border: 4px solid #ff0055;
+        border-radius: 28px;
+        box-shadow: 0 0 65px rgba(255, 0, 85, 0.85), 0 30px 80px rgba(0,0,0,0.95);
+        padding: 36px 24px;
         text-align: center;
         z-index: 99999999;
-        animation: hookPop 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation: hookExplode 3.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .cyber-flash-overlay {
+        position: fixed;
+        inset: 0;
+        background: #ffffff;
+        pointer-events: none;
+        z-index: 999999999;
+        opacity: 0;
+        transition: opacity 0.25s ease-out;
       }
       .cyber-target-box {
         position: fixed;
         top: 28%;
         left: 4%;
         width: 92%;
-        height: 240px;
-        border: 2.5px solid #00ffc8;
-        border-radius: 20px;
-        background: rgba(10, 18, 30, 0.42);
-        backdrop-filter: blur(8px);
-        animation: pulseGlow 2.4s infinite ease-in-out;
+        height: 250px;
+        border: 3px solid #00ffc8;
+        border-radius: 22px;
+        background: rgba(8, 14, 25, 0.75);
+        animation: pulseGlow 2.2s infinite ease-in-out;
         z-index: 99999;
         pointer-events: none;
         box-sizing: border-box;
@@ -147,79 +169,112 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 16px 20px;
-        transition: top 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+        padding: 18px 24px;
+        transition: top 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
       }
       .cyber-scanline {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, transparent, #00ffc8, #ffc800, transparent);
-        box-shadow: 0 0 16px #00ffc8;
-        animation: scanline 2.2s infinite linear;
+        height: 5px;
+        background: linear-gradient(90deg, transparent, #00ffc8, #ffc800, #ff0055, transparent);
+        box-shadow: 0 0 20px #00ffc8;
+        animation: scanline 2.0s infinite linear;
       }
       .cyber-hud-top {
         position: fixed;
         top: 14px;
         left: 18px;
         right: 18px;
-        height: 48px;
-        background: rgba(11, 15, 25, 0.88);
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 28px;
-        backdrop-filter: blur(14px);
+        height: 52px;
+        background: #090e1c;
+        border: 1.5px solid rgba(0, 255, 200, 0.45);
+        border-radius: 30px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.85);
         z-index: 999999;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 18px;
+        padding: 0 22px;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         color: #fff;
-        font-size: 13.5px;
-        font-weight: 700;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        font-size: 15px;
+        font-weight: 800;
       }
       .cyber-live-dot {
-        width: 9px;
-        height: 9px;
+        width: 11px;
+        height: 11px;
         border-radius: 50%;
         background: #00ff88;
-        box-shadow: 0 0 14px #00ff88;
-        margin-right: 9px;
-        animation: pulseDot 1s infinite alternate;
+        box-shadow: 0 0 16px #00ff88;
+        margin-right: 10px;
+        animation: pulseDot 0.8s infinite alternate;
       }
       .cyber-progress-bar {
         position: fixed;
         top: 0;
         left: 0;
-        height: 5px;
+        height: 6px;
         background: linear-gradient(90deg, #00ffc8, #ffc800, #ff0055);
         z-index: 9999999;
         width: 0%;
-        box-shadow: 0 0 14px rgba(0, 255, 200, 0.9);
+        box-shadow: 0 0 18px rgba(0, 255, 200, 1.0);
+      }
+      .cyber-cta-card {
+        position: fixed;
+        bottom: 80px;
+        left: 5%;
+        width: 90%;
+        background: #090d1a;
+        border: 3.5px solid #ffe600;
+        border-radius: 28px;
+        box-shadow: 0 0 60px rgba(255, 230, 0, 0.8), 0 20px 60px rgba(0,0,0,0.9);
+        padding: 24px 20px;
+        text-align: center;
+        z-index: 9999999;
+        opacity: 0;
+        transform: translateY(60px);
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
       }
     `;
     document.head.appendChild(style);
 
-    // 1. Add Hook Card (3.2s visual hook)
+    // 1. Add White Flash Transition Overlay
+    const flashOverlay = document.createElement("div");
+    flashOverlay.className = "cyber-flash-overlay";
+    flashOverlay.id = "cyberFlashOverlay";
+    document.body.appendChild(flashOverlay);
+
+    // 2. Add Razor-Sharp Hook Card (3.2s visual hook)
     const hookCard = document.createElement("div");
     hookCard.className = "cyber-hook-card";
+    hookCard.id = "cyberHookCard";
     hookCard.innerHTML = `
-      <div style="display:inline-block;background:rgba(255,0,85,0.25);border:1px solid #ff0055;color:#ff3377;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:8px;">⚠️ LIVE ALGORITHM WARNING</div>
-      <div style="color:#ffffff;font-size:26px;font-weight:900;letter-spacing:0.5px;line-height:1.2;margin-bottom:6px;font-family:sans-serif;">24-HOUR BREAKOUT IMMINENT</div>
-      <div style="color:#00ffc8;font-size:13px;font-weight:800;letter-spacing:1px;font-family:monospace;">QUANTITATIVE CONFLUENCE CONFIRMED 🎯</div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:#ff0055;color:#ffffff;padding:7px 20px;border-radius:30px;font-size:16px;font-weight:900;letter-spacing:1.5px;margin-bottom:14px;box-shadow:0 0 25px rgba(255,0,85,0.9);">
+        <span style="font-size:18px;">🚨</span> CRITICAL VOLATILITY WARNING
+      </div>
+      <div style="color:#ffffff;font-size:44px;font-weight:900;letter-spacing:-0.5px;line-height:1.15;margin-bottom:12px;font-family:'Segoe UI', system-ui, sans-serif;text-shadow:0 4px 20px rgba(0,0,0,0.95);">
+        24-HOUR BREAKOUT IMMINENT
+      </div>
+      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:10px;">
+        <span style="color:#ffe600;font-size:18px;font-weight:900;font-family:monospace;background:rgba(255,230,0,0.18);border:1.5px solid #ffe600;padding:5px 14px;border-radius:12px;">⚡ AI ACCURACY: 98.4%</span>
+        <span style="color:#00ffc8;font-size:18px;font-weight:900;font-family:monospace;background:rgba(0,255,200,0.18);border:1.5px solid #00ffc8;padding:5px 14px;border-radius:12px;">🎯 TARGET: LOCKED</span>
+      </div>
+      <div style="color:#00ff88;font-size:15px;font-weight:800;letter-spacing:1px;font-family:monospace;">
+        INSTITUTIONAL ORDER FLOW CONFLUENCE CONFIRMED
+      </div>
     `;
     document.body.appendChild(hookCard);
 
-    // 2. Add Top Progress Bar
+    // 3. Add Top Progress Bar
     const progressBar = document.createElement("div");
     progressBar.className = "cyber-progress-bar";
     progressBar.id = "cyberProgressBar";
     document.body.appendChild(progressBar);
 
-    // 3. Add Top Cyber HUD
+    // 4. Add Top Cyber HUD
     const hud = document.createElement("div");
     hud.className = "cyber-hud-top";
     hud.innerHTML = `
@@ -228,28 +283,45 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
         <span style="color:#00ff88;letter-spacing:1px;font-weight:800;">LIVE QUANT TERMINAL</span>
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
-        <span style="background:rgba(0,255,200,0.15);color:#00ffc8;padding:3px 10px;border-radius:12px;border:1px solid rgba(0,255,200,0.3);font-size:12px;font-weight:700;">AI ACCURACY: 98.4%</span>
-        <span style="color:#ffd700;font-weight:800;">bitcoincrypto.tech</span>
+        <span style="background:rgba(0,255,200,0.18);color:#00ffc8;padding:4px 12px;border-radius:14px;border:1.5px solid #00ffc8;font-size:13px;font-weight:800;">AI ACCURACY: 98.4%</span>
+        <span style="color:#ffd700;font-weight:800;font-size:14px;">bitcoincrypto.tech</span>
       </div>
     `;
     document.body.appendChild(hud);
 
-    // 4. Add Pulsing Target Reticle
+    // 5. Add Pulsing Target Reticle
     const targetBox = document.createElement("div");
     targetBox.className = "cyber-target-box";
     targetBox.id = "cyberTargetBox";
     targetBox.innerHTML = `
       <div class="cyber-scanline"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span id="targetHeader" style="color:#00ffc8;font-size:13px;font-weight:800;letter-spacing:1px;font-family:monospace;">[ ⚡ AI BREAKOUT TARGET DETECTED ]</span>
-        <span id="targetSub" style="color:#ffc800;font-size:12px;font-weight:700;font-family:monospace;">ORDER BOOK: ABSORPTION</span>
+        <span id="targetHeader" style="color:#00ffc8;font-size:14px;font-weight:800;letter-spacing:1px;font-family:monospace;">[ ⚡ AI BREAKOUT TARGET DETECTED ]</span>
+        <span id="targetSub" style="color:#ffc800;font-size:13px;font-weight:800;font-family:monospace;">ORDER BOOK: ABSORPTION</span>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:flex-end;">
-        <span id="targetMain" style="color:#fff;font-size:17px;font-weight:900;letter-spacing:0.5px;font-family:sans-serif;">QUANT TARGET LOCKED 🎯</span>
-        <span id="targetMeta" style="color:#00ff88;font-size:13.5px;font-weight:800;font-family:monospace;">CVD TAKER DELTA: ▲ STRONG</span>
+        <span id="targetMain" style="color:#fff;font-size:19px;font-weight:900;letter-spacing:0.5px;font-family:sans-serif;">QUANT TARGET LOCKED 🎯</span>
+        <span id="targetMeta" style="color:#00ff88;font-size:14px;font-weight:800;font-family:monospace;">CVD TAKER DELTA: ▲ STRONG</span>
       </div>
     `;
     document.body.appendChild(targetBox);
+
+    // 6. Add End Call to Action Overlay
+    const ctaCard = document.createElement("div");
+    ctaCard.className = "cyber-cta-card";
+    ctaCard.id = "cyberCtaCard";
+    ctaCard.innerHTML = `
+      <div style="font-size:20px;font-weight:900;color:#ffe600;margin-bottom:6px;letter-spacing:0.5px;">
+        👇 ACCESS LIVE TERMINAL NOW 👇
+      </div>
+      <div style="font-size:36px;font-weight:900;color:#ffffff;letter-spacing:1px;font-family:'Segoe UI',sans-serif;margin-bottom:6px;">
+        bitcoincrypto.tech
+      </div>
+      <div style="display:inline-block;background:#00ff88;color:#000000;font-size:16px;font-weight:900;padding:6px 18px;border-radius:20px;">
+        FREE LINK IN BIO & PINNED COMMENT ⚡
+      </div>
+    `;
+    document.body.appendChild(ctaCard);
 
     // 5. In-Page requestAnimationFrame Smooth Cubic Lerp Engine
     let currentY = 0;
@@ -283,10 +355,10 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     } catch (_) {}
   });
 
-  // Capture frames at native 4K dimensions (2160x3840)
+  // Capture frames at native 4K dimensions (2160x3840) with 98 quality
   await client.send("Page.startScreencast", {
     format: "jpeg",
-    quality: 94,
+    quality: 98,
     maxWidth: 2160,
     maxHeight: 3840,
     everyNthFrame: 1
@@ -323,7 +395,7 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     }
 
     // Execute state updates inside the page
-    await page.evaluate((pct, sec, scrollTarget) => {
+    await page.evaluate((pct, sec, scrollTarget, duration) => {
       // Update top progress bar
       const p = document.getElementById("cyberProgressBar");
       if (p) p.style.width = pct + "%";
@@ -331,6 +403,45 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
       // Command smooth lerp scroll
       if (window.__setScrollTarget) {
         window.__setScrollTarget(scrollTarget);
+      }
+
+      // Transition 1: White Flash at 3.0s - 3.35s
+      const flash = document.getElementById("cyberFlashOverlay");
+      if (flash) {
+        if (sec >= 3.0 && sec < 3.35) {
+          flash.style.opacity = "0.75";
+        } else {
+          flash.style.opacity = "0";
+        }
+      }
+
+      // Punch-in Camera Zoom Transitions (Dynamic perspective)
+      if (sec < 3.0) {
+        document.body.style.transform = "scale(1.0)";
+      } else if (sec >= 3.0 && sec < 16) {
+        document.body.style.transform = "scale(1.15)";
+        document.body.style.transformOrigin = "50% 32%";
+        document.body.style.transition = "transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)";
+      } else if (sec >= 16 && sec < 28) {
+        document.body.style.transform = "scale(1.06)";
+        document.body.style.transformOrigin = "50% 45%";
+      } else if (sec >= 28 && sec < duration - 5) {
+        document.body.style.transform = "scale(1.14)";
+        document.body.style.transformOrigin = "50% 58%";
+      } else {
+        document.body.style.transform = "scale(1.0)";
+      }
+
+      // Trigger End Call To Action Card in final 5 seconds
+      const cta = document.getElementById("cyberCtaCard");
+      if (cta) {
+        if (sec >= duration - 5.0) {
+          cta.style.opacity = "1";
+          cta.style.transform = "translateY(0)";
+        } else {
+          cta.style.opacity = "0";
+          cta.style.transform = "translateY(60px)";
+        }
       }
 
       // Choreograph Target Reticle
@@ -359,7 +470,7 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
           box.style.opacity = "0";
         }
       }
-    }, progressPct, elapsed, targetScrollPosition);
+    }, progressPct, elapsed, targetScrollPosition, targetDuration);
 
     await new Promise((r) => setTimeout(r, 45));
   }
@@ -376,21 +487,22 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     throw new Error("No frames captured from website screencast.");
   }
 
-  // Calculate actual framerate
-  const fps = Math.max(14, Math.round(frameCount / targetDuration));
+  // Calculate actual framerate so all frames distribute across the exact duration
+  const exactFps = (frameCount / targetDuration).toFixed(4);
   const relFramesPattern = path.relative(process.cwd(), path.join(framesDir, "frame_%06d.jpg")).replace(/\\/g, "/");
 
-  // 4K UHD Filter with subtle unsharp mask for razor-sharp fidelity
-  const vf = `scale=2160:3840:flags=lanczos,unsharp=3:3:0.5:3:3:0.2`;
+  // 4K UHD Filter with smooth 30fps resampling & unsharp mask for razor-sharp fidelity
+  const vf = `scale=2160:3840:flags=lanczos,fps=30,unsharp=3:3:0.6:3:3:0.2`;
 
   const ffmpegArgs = [
-    "-framerate", `${fps}`,
+    "-framerate", `${exactFps}`,
     "-i", relFramesPattern,
     "-vf", vf,
+    "-r", "30",
     "-c:v", "libx264",
     "-preset", "fast",
     "-pix_fmt", "yuv420p",
-    "-crf", "21",
+    "-crf", "20",
     "-t", `${targetDuration}`,
     outputPath,
     "-y"

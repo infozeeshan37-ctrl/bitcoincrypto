@@ -91,27 +91,28 @@ function resolveSlotCategory(args) {
  *   Slot 2: 16:00 UTC (12:00 PM New York / 5:00 PM London) -> CoinGlass Liquidation Squeeze
  *   Slot 3: 21:00 UTC (5:00 PM New York / 9:00 PM London) -> Crypto Learn Masterclass
  */
-export function calculateSlotPublishTime(slotNumber, forceTomorrow = false) {
+export function calculateSlotPublishTime(slotNumber, dayOffset = 1) {
   const slotHours = {
-    1: 12, // 12:00 UTC
-    2: 16, // 16:00 UTC
-    3: 21  // 21:00 UTC
+    1: 12, // 12:00 UTC (8:00 AM New York / 1:00 PM London)
+    2: 16, // 16:00 UTC (12:00 PM New York / 5:00 PM London)
+    3: 21  // 21:00 UTC (5:00 PM New York / 9:00 PM London)
   };
 
   const targetHour = slotHours[slotNumber] || 12;
   const now = new Date();
+  const offsetDays = typeof dayOffset === "number" ? dayOffset : (dayOffset ? 1 : 0);
+
   const target = new Date(Date.UTC(
     now.getUTCFullYear(),
     now.getUTCMonth(),
-    now.getUTCDate(),
+    now.getUTCDate() + offsetDays,
     targetHour,
     0,
     0,
     0
   ));
 
-  // If forced tomorrow or target is past / within 45 min, bump to tomorrow
-  if (forceTomorrow || (target.getTime() - now.getTime() < 45 * 60 * 1000)) {
+  if (offsetDays === 0 && (target.getTime() - now.getTime() < 45 * 60 * 1000)) {
     target.setUTCDate(target.getUTCDate() + 1);
   }
 
@@ -263,7 +264,31 @@ export async function runAutoShortPipeline() {
     console.log(`🆔 Channel ID:        ${channel?.id || "N/A"}`);
   }
 
-  if (allSlots) {
+  const isTwoDays = args.includes("--two-days") || args.includes("--2days") || args.includes("--schedule-2days");
+
+  if (isTwoDays) {
+    console.log("🌟 Publishing COMPLETE 2-DAY SCHEDULE (6 High-Impact 4K Shorts) in sequence...");
+    const twoDaysConfig = [
+      // Day 1 (Tomorrow)
+      { day: 1, slotNumber: 1, category: "ai_prediction", label: "Day 1 - Slot 1: AI Prediction Arena (Tomorrow 12:00 UTC)" },
+      { day: 1, slotNumber: 2, category: "coinglass_squeeze", label: "Day 1 - Slot 2: CoinGlass Liquidation Squeeze (Tomorrow 16:00 UTC)" },
+      { day: 1, slotNumber: 3, category: "crypto_learn", label: "Day 1 - Slot 3: Crypto Learn Masterclass (Tomorrow 21:00 UTC)" },
+      // Day 2 (Day after tomorrow)
+      { day: 2, slotNumber: 1, category: "whale_radar", label: "Day 2 - Slot 1: Whale Radar & Dark Pool Tape (Day 2 12:00 UTC)" },
+      { day: 2, slotNumber: 2, category: "cpi_macro", label: "Day 2 - Slot 2: US CPI Macro Volatility (Day 2 16:00 UTC)" },
+      { day: 2, slotNumber: 3, category: "ai_prediction", label: "Day 2 - Slot 3: Bitcoin Breakout Target (Day 2 21:00 UTC)" }
+    ];
+
+    const results = [];
+    for (const cfg of twoDaysConfig) {
+      console.log(`\n⏳ === PROCESSING ${cfg.label} ===`);
+      const scheduledTime = calculateSlotPublishTime(cfg.slotNumber, cfg.day);
+      const res = await publishSingleShort(cfg.category, isDryRun, keepVideo, scheduledTime, null, isInstagramOnly);
+      results.push(res);
+      await new Promise((r) => setTimeout(r, 4000));
+    }
+    return results;
+  } else if (allSlots) {
     console.log("🌟 Publishing ALL 3 DAILY SHORTS in sequence...");
     const slotsConfig = [
       { slotNumber: 1, category: "ai_prediction", label: "Slot 1: AI Prediction Arena (12:00 UTC)" },
@@ -274,7 +299,7 @@ export async function runAutoShortPipeline() {
     const results = [];
     for (const cfg of slotsConfig) {
       console.log(`\n⏳ === PROCESSING ${cfg.label} ===`);
-      const scheduledTime = isSchedule ? calculateSlotPublishTime(cfg.slotNumber, true) : null;
+      const scheduledTime = isSchedule ? calculateSlotPublishTime(cfg.slotNumber, 1) : null;
       const res = await publishSingleShort(cfg.category, isDryRun, keepVideo, scheduledTime);
       results.push(res);
       // Brief pause between uploads
