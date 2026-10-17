@@ -118,7 +118,7 @@ export function calculateSlotPublishTime(slotNumber, forceTomorrow = false) {
   return target.toISOString();
 }
 
-async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publishAt = null, existingVideoPath = null) {
+async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publishAt = null, existingVideoPath = null, isInstagramOnly = false) {
   console.log("──────────────────────────────────────────────────────────────────────");
   console.log(`🧠 Generating topic for category: [${categoryOverride}]...`);
   const metadata = await generateDailyShort(categoryOverride);
@@ -148,6 +148,30 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publish
     console.log("⚠️ DRY RUN MODE: Video generated successfully. Upload skipped.");
     console.log(`👉 Video saved at: ${videoPath}`);
     return { success: true, mode: "dry-run", videoPath, metadata };
+  }
+
+  if (isInstagramOnly) {
+    console.log("📸 Uploading directly and immediately to Instagram Reels...");
+    const instagramResult = await uploadReelToInstagram(videoPath, metadata);
+
+    logHistory({
+      timestamp: new Date().toISOString(),
+      title: metadata.title,
+      category: metadata.category,
+      targetUrl: metadata.targetUrl,
+      status: "public",
+      instagramReel: instagramResult?.permalink || null
+    });
+
+    if (!keepVideo) {
+      try { fs.unlinkSync(videoPath); } catch (_) {}
+    }
+
+    return {
+      success: !!instagramResult,
+      instagram: instagramResult,
+      metadata
+    };
   }
 
   console.log("🚀 Uploading directly to YouTube API...");
@@ -212,22 +236,32 @@ export async function runAutoShortPipeline() {
   const isSchedule = args.includes("--schedule");
   const videoArg = args.find((a) => a.startsWith("--video="));
   const existingVideoPath = videoArg ? videoArg.split("=")[1] : null;
+  const isInstagramOnly = args.includes("--instagram-only") || args.includes("--instagram");
 
   console.log("══════════════════════════════════════════════════════════════════════");
-  console.log("  🚀 BitcoinCrypto.tech — High-Impact Daily YouTube Shorts Publisher");
+  console.log("  🚀 BitcoinCrypto.tech — High-Impact Daily Shorts & Reels Publisher");
   console.log("══════════════════════════════════════════════════════════════════════");
 
-  // Step 1: Authentication Check
-  const token = await getAccessToken();
-  if (!token) {
-    console.error("❌ YouTube OAuth credentials missing or invalid in .env.local.");
-    console.error("   Ensure YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN are set.");
-    process.exit(1);
+  if (isInstagramOnly) {
+    const igCreds = getInstagramCredentials();
+    if (!igCreds) {
+      console.error("❌ Instagram credentials missing in .env.local.");
+      process.exit(1);
+    }
+    console.log("📸 Target Platform:   Instagram Reels (@bitcoincrypto.tech)");
+  } else {
+    // Step 1: Authentication Check for YouTube
+    const token = await getAccessToken();
+    if (!token) {
+      console.error("❌ YouTube OAuth credentials missing or invalid in .env.local.");
+      console.error("   Ensure YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN are set.");
+      process.exit(1);
+    }
+
+    const channel = await verifyChannel(token);
+    console.log(`📺 Connected Channel: ${channel?.snippet?.title || "Your YouTube Channel"}`);
+    console.log(`🆔 Channel ID:        ${channel?.id || "N/A"}`);
   }
-
-  const channel = await verifyChannel(token);
-  console.log(`📺 Connected Channel: ${channel?.snippet?.title || "Your YouTube Channel"}`);
-  console.log(`🆔 Channel ID:        ${channel?.id || "N/A"}`);
 
   if (allSlots) {
     console.log("🌟 Publishing ALL 3 DAILY SHORTS in sequence...");
@@ -251,7 +285,7 @@ export async function runAutoShortPipeline() {
     const { category, slotNumber } = resolveSlotCategory(args);
     const forceTomorrow = args.includes("--tomorrow") || isSchedule;
     const scheduledTime = isSchedule ? calculateSlotPublishTime(slotNumber, forceTomorrow) : null;
-    return await publishSingleShort(category, isDryRun, keepVideo, scheduledTime, existingVideoPath);
+    return await publishSingleShort(category, isDryRun, keepVideo, scheduledTime, existingVideoPath, isInstagramOnly);
   }
 }
 
