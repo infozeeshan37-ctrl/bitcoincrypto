@@ -224,6 +224,34 @@ export default function AboutView() {
           </div>
         </div>
 
+        {/* Editorial Board & Verification Card */}
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300">
+              <Award className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>Verified Editorial Leadership</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Meet Our Quantitative Researchers &amp; Analysts</h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+              All tools, articles, and models on BitcoinCrypto.tech are audited by our in-house editorial board led by Zeeshan Ahmed (Founder &amp; Lead Quant Developer) and Elena Rostova (Chief Macroeconomic Lead).
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2.5 shrink-0">
+            <Link
+              href="/authors"
+              className="px-5 py-3 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 transition text-center shadow-sm"
+            >
+              Author Directory →
+            </Link>
+            <Link
+              href="/editorial-policy"
+              className="px-5 py-3 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-center border border-slate-200 dark:border-slate-700"
+            >
+              Editorial Standards
+            </Link>
+          </div>
+        </div>
+
         {/* Contact & Media Desk CTA */}
         <div className="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-3xl p-8 sm:p-10 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center sm:text-left">
