@@ -7,10 +7,12 @@ import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
-  title: "Crypto Order Book Depth Live & L2 CVD Imbalance Scanner | BitcoinCrypto.tech",
+  title: "Crypto Order Flow Live & L2 Depth Scanner | BitcoinCrypto.tech",
   description:
-    "Free Level-2 cryptocurrency order book depth scanner with dynamic stepped curves: real-time Cumulative Volume Delta (CVD) taker flow, bid/ask wall imbalance detector, whale tape, and slippage simulator across Binance, Coinbase, and OKX.",
+    "Free crypto order flow and Level-2 order book depth scanner: real-time Cumulative Volume Delta (CVD), bid/ask walls, whale tape & slippage simulator.",
   keywords: [
+    "crypto order flow",
+    "crypto order flow scanner",
     "crypto order book depth",
     "bitcoin orderbook live",
     "level 2 market data crypto",
@@ -28,9 +30,9 @@ export const metadata: Metadata = {
     canonical: "https://www.bitcoincrypto.tech/orderbook",
   },
   openGraph: {
-    title: "Real-Time Crypto Order Book Depth & CVD Scanner | BitcoinCrypto.tech",
+    title: "Crypto Order Flow Live & L2 Depth Scanner | BitcoinCrypto.tech",
     description:
-      "Analyze institutional liquidity walls, bid/ask depth imbalance ratios, and block taker sweeps in real time.",
+      "Analyze institutional crypto order flow, liquidity walls, bid/ask depth imbalance ratios, and block taker sweeps in real time.",
     url: "https://www.bitcoincrypto.tech/orderbook",
   },
 };

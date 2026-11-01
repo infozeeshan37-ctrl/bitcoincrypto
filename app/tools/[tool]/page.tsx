@@ -122,6 +122,10 @@ const toolConfigs: Record<string, ToolConfig> = {
     description: "Free real-time CoinGlass liquidation heatmap and 2D spectrogram. Analyze resting leverage pools, liquidation cascades, long/short trader positioning, and market maker sweep targets across Binance, Bybit, OKX, and Deribit.",
     keywords: [
       "coinglass liquidation heatmap",
+      "liquidation levels coinglass",
+      "sol liquidation heatmap coinglass",
+      "coinglass liquidation",
+      "coinglass liquidations",
       "coinglass crypto",
       "coinglass bitcoin",
       "coinglass liquidation map",

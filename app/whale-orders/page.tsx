@@ -8,10 +8,12 @@ import AdBanner from "@/components/ads/AdBanner";
 import { WhaleOrdersPageJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Crypto Whale Orders Live & Institutional Liquidity Radar | BitcoinCrypto.tech",
+  title: "Crypto Whale Orders & Large Trades Live | BitcoinCrypto.tech",
   description:
-    "Free real-time cryptocurrency whale order tracking: multi-million dollar institutional block trades, resting limit buy/sell walls, iceberg execution alerts, and CoinGlass-style liquidity radar across Binance, Bybit, and OKX.",
+    "Track live crypto whale orders & large institutional block trades. Real-time resting limit walls, iceberg orders & CoinGlass liquidity radar on Binance & Bybit.",
   keywords: [
+    "whale orders & large trades",
+    "coinglass whale orders today live",
     "crypto whale tracker live",
     "bitcoin whale alert real time",
     "whale orders crypto",
@@ -28,7 +30,7 @@ export const metadata: Metadata = {
     canonical: "https://www.bitcoincrypto.tech/whale-orders",
   },
   openGraph: {
-    title: "Whale Orders & Institutional Liquidity Radar | BitcoinCrypto.tech",
+    title: "Crypto Whale Orders & Large Trades Live | BitcoinCrypto.tech",
     description:
       "Track where crypto whales order: live large block trades, iceberg executions, and resting limit walls across Binance, Coinbase Prime, and CME.",
     url: "https://www.bitcoincrypto.tech/whale-orders",
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Whale Orders & Liquidity Heatmap Radar | BitcoinCrypto.tech",
+    title: "Crypto Whale Orders & Large Trades Live | BitcoinCrypto.tech",
     description:
       "Real-time institutional whale block executions, resting liquidity walls, and plain-English trading masterclasses.",
   },

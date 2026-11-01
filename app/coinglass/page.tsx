@@ -8,16 +8,19 @@ import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import { CoinglassPageJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "CoinGlass Liquidation Heatmap & Crypto Derivatives Tracker | Free Live Heatmap — BitcoinCrypto.tech",
+  title: "CoinGlass Liquidation Heatmap Live [Free] | BitcoinCrypto.tech",
   description:
-    "Free real-time CoinGlass liquidation heatmap tracker: Live Bitcoin & crypto liquidation maps, perpetual futures open interest ($75B+), 24h long/short liquidation cascades, multi-exchange funding rates (Binance, Bybit, OKX), and short squeeze price levels.",
+    "Free live CoinGlass crypto liquidation heatmap. Track real-time Bitcoin & SOL liquidation levels, Binance & Bybit open interest, funding rates & short squeezes.",
   keywords: [
     "coinglass liquidation heatmap",
     "coinglass",
     "coinglass crypto",
-    "coinglass bitcoin",
-    "coinglass liquidation map",
-    "free coinglass alternative",
+    "coinglass liquidation",
+    "coinglass liquidations",
+    "liquidation levels coinglass",
+    "sol liquidation heatmap coinglass",
+    "coinglass whale orders today live",
+    "bitcoin mvrv z-score coinglass",
     "coinglass btc heatmap",
     "crypto liquidation heatmap",
     "binance open interest coinglass",
@@ -34,8 +37,8 @@ export const metadata: Metadata = {
     canonical: "https://www.bitcoincrypto.tech/coinglass",
   },
   openGraph: {
-    title: "CoinGlass Liquidation Heatmap & Crypto Derivatives Tracker | Free Live Heatmap",
-    description: "Free real-time CoinGlass liquidation heatmap tracker, live Bitcoin liquidation map, perpetual futures open interest, and multi-exchange funding rates.",
+    title: "CoinGlass Liquidation Heatmap Live [Free] | BitcoinCrypto.tech",
+    description: "Free real-time CoinGlass crypto liquidation heatmap, live Bitcoin liquidation levels, futures open interest, and funding rates.",
     url: "https://www.bitcoincrypto.tech/coinglass",
     siteName: "BitcoinCrypto.tech",
     locale: "en_US",
@@ -43,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CoinGlass Liquidation Heatmap & Crypto Derivatives Tracker | BitcoinCrypto.tech",
+    title: "CoinGlass Liquidation Heatmap Live [Free] | BitcoinCrypto.tech",
     description: "Free real-time CoinGlass liquidation heatmap, futures open interest, and short squeeze price levels.",
   },
 };
