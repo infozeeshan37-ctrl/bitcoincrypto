@@ -14,6 +14,7 @@
     "youtube:auto": "node scripts/autoPostDailyShort.mjs",
     "instagram:check": "node scripts/instagramUploader.mjs",
     "snapchat:check": "node scripts/snapchatUploader.mjs --check",
+    "snapchat:token": "node scripts/getSnapchatToken.mjs",
     "snapchat:login": "node scripts/snapchatUploader.mjs --login",
     "snapchat:upload": "node scripts/snapchatUploader.mjs",
     "snapchat:auto": "node scripts/autoPostDailyShort.mjs --snapchat-only",

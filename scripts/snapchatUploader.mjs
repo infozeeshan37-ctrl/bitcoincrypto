@@ -576,14 +576,22 @@ export async function checkSnapchatStatus() {
   const browserPath = getBrowserExecutablePath();
   console.log(`🖥️ Browser Binary:      ${browserPath ? `Found (${path.basename(browserPath)})` : "Not found"}`);
 
-  const apiCreds = getSnapchatApiCredentials();
-  if (apiCreds) {
-    console.log("🔑 API Credentials:     CONFIGURED in .env.local");
-    try {
-      const token = await refreshSnapchatApiToken(apiCreds);
-      console.log(`✅ API Token Status:    VALID (OAuth2 Bearer Token generated)`);
-    } catch (e) {
-      console.log(`⚠️ API Token Status:    FAILED (${e.message})`);
+  const rawClientId = (process.env.SNAPCHAT_CLIENT_ID || "").trim();
+  const rawClientSecret = (process.env.SNAPCHAT_CLIENT_SECRET || "").trim();
+  const rawRefreshToken = (process.env.SNAPCHAT_REFRESH_TOKEN || "").trim();
+
+  if (rawClientId && rawClientSecret) {
+    console.log(`🔑 Client ID & Secret:  SAVED in .env.local (${rawClientId.slice(0, 8)}...)`);
+    if (rawRefreshToken) {
+      console.log(`🎟️ Refresh Token:       SAVED in .env.local`);
+      try {
+        const token = await refreshSnapchatApiToken({ clientId: rawClientId, clientSecret: rawClientSecret, refreshToken: rawRefreshToken });
+        console.log(`✅ API Token Status:    VALID & ACTIVE`);
+      } catch (e) {
+        console.log(`⚠️ API Token Status:    ERROR (${e.message})`);
+      }
+    } else {
+      console.log(`🎟️ Refresh Token:       PENDING (Run 'npm run snapchat:token' to generate)`);
     }
   } else {
     console.log("🔑 API Credentials:     Not configured in .env.local (Optional)");
