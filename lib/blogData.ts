@@ -7,6 +7,7 @@ export interface Article {
   publishedAt: string;
   author: string;
   authorRole: string;
+  authorSlug?: string;
   imageUrl?: string;
   imageAlt?: string;
   tags: string[];
@@ -30,12 +31,13 @@ export const articles: Article[] = [
   {
     slug: 'stealth-yield-curve-control-macro-mechanics-crypto',
     title: 'The Macro Mechanics of "Stealth" Yield Curve Control: How Treasury Buybacks Ignite Global Crypto Liquidity',
-    excerpt: 'Deconstructing Arthur Hayes\' monetary thesis: Why US Treasury duration manipulation, bond buybacks funded by T-bills, and Yen stabilization represent de facto Yield Curve Control—and why Bitcoin acts as the ultimate liquidity sponge.',
+    excerpt: 'Deconstructing global sovereign monetary liquidity: Why US Treasury duration manipulation, bond buybacks funded by T-bills, and Yen stabilization represent de facto Yield Curve Control—and why Bitcoin acts as the ultimate liquidity sponge.',
     category: 'Macro Economics',
     readTime: '14 min read',
     publishedAt: 'Aug 2026',
-    author: 'Arthur Hayes & Research Desk',
-    authorRole: 'Chief Macroeconomic Contributor',
+    author: 'Zeeshan Ahmed & Macro Research Desk',
+    authorRole: 'Founder & Lead Quantitative Developer',
+    authorSlug: 'zeeshan-ahmed',
     imageUrl: '/images/blog/stealth-ycc-macro-mechanics.jpg',
     imageAlt: 'Stealth Yield Curve Control Macro Mechanics and Bitcoin Liquidity Terminal',
     tags: ['Macro Liquidity', 'Yield Curve Control', 'Federal Reserve', 'US Treasury', 'Bitcoin', 'Fiat Debasement', 'Debt Monetization'],
@@ -134,12 +136,13 @@ export const articles: Article[] = [
   {
     slug: 'bitcoin-hate-rally-dynamics-150k-target',
     title: 'Deconstructing the $150K Bitcoin "Hate Rally": Market Psychology, Sidelined Capital, and the Wall of Worry',
-    excerpt: 'Why the path to $150,000 will be one of the most despised bull runs in financial history. Analyzing Arthur Hayes\' retired $40K downside thesis, relentless upward grind dynamics, and why timing exact tops is a fool\'s errand.',
+    excerpt: 'Why the path to $150,000 is one of the most structurally misunderstood bull runs in financial history. Analyzing the psychological mechanics of the relentless upward grind, sidelined capital re-entry, and why timing exact tops fails.',
     category: 'Market Psychology & Targets',
     readTime: '13 min read',
     publishedAt: 'Aug 2026',
-    author: 'Arthur Hayes & Research Desk',
-    authorRole: 'Chief Macroeconomic Contributor',
+    author: 'Elena Rostova & Macro Research Desk',
+    authorRole: 'Chief Macroeconomic Research Lead',
+    authorSlug: 'elena-rostova',
     imageUrl: '/images/blog/bitcoin-hate-rally-150k.jpg',
     imageAlt: 'Bitcoin Hate Rally to 150K climbing the Wall of Worry illustration',
     tags: ['Bitcoin', 'Market Psychology', '150K Target', 'Hate Rally', 'Institutional Flow', 'On-Chain Dynamics', 'Macro Cycle'],
@@ -232,12 +235,13 @@ export const articles: Article[] = [
   {
     slug: 'ethereum-coiled-spring-thesis-asymmetric-rotation',
     title: 'The Ethereum "Coiled Spring" Thesis: Why Capital Is Rotating from Past Cycle Winners into Undervalued $ETH',
-    excerpt: 'Why Ethereum is the ultimate asymmetric trade of the cycle. Analyzing Arthur Hayes\' rotation out of Hyperliquid into ETH, the multi-year all-time high disparity, and the explosive spring uncoiling mechanics primed for a 3x to 5x breakout.',
+    excerpt: 'Why Ethereum is one of the most compelling asymmetric setups of the cycle. Analyzing capital rotation dynamics, multi-year all-time high valuation disparity, and the coiled spring mechanics primed for a multi-fold expansion.',
     category: 'Layer 1 Analysis',
     readTime: '15 min read',
     publishedAt: 'Aug 2026',
-    author: 'Arthur Hayes & Research Desk',
-    authorRole: 'Chief Macroeconomic Contributor',
+    author: 'Zeeshan Ahmed & Elena Rostova',
+    authorRole: 'Lead Quantitative Developer & Macro Desk',
+    authorSlug: 'zeeshan-ahmed',
     imageUrl: '/images/blog/ethereum-coiled-spring-thesis.jpg',
     imageAlt: 'Ethereum Coiled Spring Thesis Asymmetric Rotation Breakout 3D Illustration',
     tags: ['Ethereum', 'ETH', 'Hyperliquid', 'Asymmetric Rotation', 'Staking', 'Layer 2', 'DeFi', 'Blob Gas'],
@@ -340,8 +344,9 @@ export const articles: Article[] = [
     category: 'DeFi & Derivatives',
     readTime: '16 min read',
     publishedAt: 'Aug 2026',
-    author: 'Arthur Hayes & Quant Research Desk',
-    authorRole: 'Chief Macroeconomic Contributor',
+    author: 'Marcus Vance & Derivatives Desk',
+    authorRole: 'Senior Market Microstructure Analyst',
+    authorSlug: 'marcus-vance',
     tags: ['Ethena', 'USDe', 'Basis Trading', 'Cash and Carry', 'Derivatives', 'Short Volatility', 'DeFi Yield', 'Funding Rates'],
     keyTakeaways: [
       'The prolonged range-bound bear market trapped algorithmic funds and retail traders in dangerous short-volatility and covered call overwriting strategies.',
@@ -443,12 +448,13 @@ export const articles: Article[] = [
   {
     slug: 'flop-lab-ai-agentic-economy-decentralized-compute',
     title: 'Flop Lab (FLOP) and the AI Agentic Economy: Building the Decentralized Compute Spot Market for Autonomous Intelligence',
-    excerpt: 'Why Arthur Hayes calls decentralized AI agent compute the "Elephant Hunting" trade of the decade. Analyzing Flop Lab\'s Proof of Useful Inference blockchain, the life-force spot market for FLOPs, and revolutionary anti-VC fair-launch tokenomics.',
+    excerpt: 'Examining the frontier architecture of decentralized AI agent compute: Proof of Useful Inference blockchain systems, the life-force spot market for FLOPs, and transparent anti-VC fair-launch tokenomics.',
     category: 'AI & Decentralized Compute',
     readTime: '17 min read',
     publishedAt: 'Aug 2026',
-    author: 'Arthur Hayes & AI Quant Desk',
-    authorRole: 'Chief Macroeconomic Contributor',
+    author: 'Zeeshan Ahmed & AI Quant Desk',
+    authorRole: 'Founder & Lead Quantitative Developer',
+    authorSlug: 'zeeshan-ahmed',
     tags: ['Flop Lab', 'FLOP', 'AI Agents', 'Decentralized Compute', 'Proof of Useful Inference', 'Crypto x AI', 'Tokenomics', 'GPU Clustering'],
     keyTakeaways: [
       'Arthur Hayes equates his excitement for the AI agentic economy today to his groundbreaking 2013-2014 realization that cryptocurrency derivatives would become a trillion-dollar industry.',
@@ -555,6 +561,7 @@ export const articles: Article[] = [
     publishedAt: 'Aug 2026',
     author: 'Elena Rostova',
     authorRole: 'Head of Macro Research',
+    authorSlug: 'elena-rostova',
     tags: ['Bitcoin', 'Supply Dynamics', 'ETFs', 'Halving', 'Macro'],
     keyTakeaways: [
       'Daily miner issuance cut by 50% reduces structural selling pressure on spot books to just 450 BTC daily.',
@@ -616,6 +623,7 @@ export const articles: Article[] = [
     publishedAt: 'Aug 2026',
     author: 'Marcus Vance',
     authorRole: 'Lead Quantitative Strategist',
+    authorSlug: 'marcus-vance',
     tags: ['Order Flow', 'Market Makers', 'Liquidity Pools', 'Slippage', 'Execution'],
     keyTakeaways: [
       'Prices move toward resting liquidity rather than trailing lagging technical indicators.',
@@ -677,6 +685,7 @@ export const articles: Article[] = [
     publishedAt: 'Aug 2026',
     author: 'Marcus Vance',
     authorRole: 'Lead Quantitative Strategist',
+    authorSlug: 'marcus-vance',
     tags: ['Derivatives', 'Funding Rates', 'Perpetuals', 'Open Interest', 'Liquidation'],
     keyTakeaways: [
       'Perpetual funding rates tether derivative contract prices to underlying spot index benchmarks.',
@@ -744,8 +753,9 @@ export const articles: Article[] = [
     category: 'Quantitative Math',
     readTime: '15 min read',
     publishedAt: 'Aug 2026',
-    author: 'Dr. Sarah Chen',
-    authorRole: 'Senior Quantitative Researcher',
+    author: 'Dr. Sarah Chen, Ph.D.',
+    authorRole: 'Senior Quantitative Strategist & Modeling Lead',
+    authorSlug: 'dr-sarah-chen',
     tags: ['Volatility', 'ATR', 'Risk Management', 'Quantitative', 'Market Regimes'],
     keyTakeaways: [
       'Volatility is not constant; high-volatility days cluster together, followed by periods of low-volatility compression.',
@@ -814,6 +824,7 @@ export const articles: Article[] = [
     publishedAt: 'Aug 2026',
     author: 'Elena Rostova',
     authorRole: 'Head of Macro Research',
+    authorSlug: 'elena-rostova',
     tags: ['On-Chain', 'MVRV', 'SOPR', 'Valuation', 'Whale Tracking'],
     keyTakeaways: [
       'On-chain analysis transforms public ledger UTXOs into transparent macroeconomic balance sheets.',
@@ -883,6 +894,7 @@ export const articles: Article[] = [
     publishedAt: 'Aug 2026',
     author: 'Marcus Vance',
     authorRole: 'Lead Quantitative Strategist',
+    authorSlug: 'marcus-vance',
     tags: ['Risk Management', 'Leverage', 'Position Sizing', 'Drawdown', 'Kelly Criterion'],
     keyTakeaways: [
       'Drawdown recovery is exponential: a 50% loss requires a 100% gain just to break even.',
@@ -952,8 +964,9 @@ export const articles: Article[] = [
     category: 'Derivatives & Liquidity',
     readTime: '16 min read',
     publishedAt: 'Oct 2026',
-    author: 'Dr. Elena Rostova & Derivatives Desk',
+    author: 'Elena Rostova & Derivatives Desk',
     authorRole: 'Chief Quantitative Market Microstructure Strategist',
+    authorSlug: 'elena-rostova',
     imageUrl: '/images/blog/liquidation-heatmap-guide.svg',
     imageAlt: 'CoinGlass Crypto Liquidation Heatmap and Leverage Squeeze Terminal Guide',
     tags: [
@@ -1067,8 +1080,9 @@ export const articles: Article[] = [
     category: 'DeFi & Derivatives',
     readTime: '15 min read',
     publishedAt: 'Oct 2026',
-    author: 'Arthur Hayes & Research Desk',
-    authorRole: 'Macro & Derivatives Strategist',
+    author: 'Marcus Vance & Quantitative Research Desk',
+    authorRole: 'Senior Market Microstructure Analyst',
+    authorSlug: 'marcus-vance',
     imageUrl: '/images/blog/crypto-funding-rates-masterclass.svg',
     imageAlt: 'Crypto Funding Rates Screener and Cash and Carry Basis Arbitrage Radar',
     tags: [
@@ -1167,6 +1181,7 @@ export const articles: Article[] = [
     publishedAt: 'Oct 2026',
     author: 'Marcus Vance & Market Microstructure Desk',
     authorRole: 'Lead Order Flow Quantitative Analyst',
+    authorSlug: 'marcus-vance',
     imageUrl: '/images/blog/order-book-depth-microstructure.svg',
     imageAlt: 'Level 2 Order Book Depth Chart and Whale Iceberg Liquidity Radar',
     tags: [
@@ -1252,8 +1267,9 @@ export const articles: Article[] = [
     category: 'AI & Decentralized Compute',
     readTime: '16 min read',
     publishedAt: 'Oct 2026',
-    author: 'Dr. Alan Turing Quantitative Research Lab',
-    authorRole: 'Head of Machine Learning & Algorithmic Systems',
+    author: 'Zeeshan Ahmed & Algorithmic Systems Team',
+    authorRole: 'Founder & Lead Quantitative Developer',
+    authorSlug: 'zeeshan-ahmed',
     imageUrl: '/images/blog/ai-crypto-prediction-models.svg',
     imageAlt: 'AI Quantitative Cryptocurrency Price Prediction Models and Next-Candle Neural Terminal',
     tags: [
@@ -1341,8 +1357,9 @@ export const articles: Article[] = [
     category: 'Investment Strategies',
     readTime: '15 min read',
     publishedAt: 'Oct 2026',
-    author: 'Kaelen Ward & Quantitative Strategy Desk',
-    authorRole: 'Senior Portfolio Architect',
+    author: 'Dr. Sarah Chen, Ph.D. & Quantitative Strategy Desk',
+    authorRole: 'Senior Quantitative Strategist & Modeling Lead',
+    authorSlug: 'dr-sarah-chen',
     imageUrl: '/images/blog/bitcoin-dca-math-strategy.svg',
     imageAlt: 'Bitcoin Dollar Cost Averaging DCA Mathematical Cycle Simulator',
     tags: [

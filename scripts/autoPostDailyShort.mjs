@@ -175,56 +175,66 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publish
     };
   }
 
-  console.log("🚀 Uploading directly to YouTube API...");
-  const uploadResult = await uploadVideoToYouTube(videoPath, metadata);
+  let uploadResult = null;
+  const token = await getAccessToken();
+  if (!isInstagramOnly && token) {
+    console.log("🚀 Uploading directly to YouTube API...");
+    uploadResult = await uploadVideoToYouTube(videoPath, metadata);
 
-  if (uploadResult && uploadResult.id) {
-    const watchUrl = `https://youtube.com/shorts/${uploadResult.id}`;
-    console.log("══════════════════════════════════════════════════════════════════════");
-    console.log(`🎉 SUCCESS! YouTube Short successfully uploaded!`);
-    console.log(`🔗 Watch URL:      ${watchUrl}`);
-    if (metadata.publishAt) {
-      console.log(`📅 Status:         SCHEDULED for ${metadata.publishAt} (UTC)`);
-    } else {
-      console.log(`📅 Status:         PUBLIC (Live now)`);
+    if (uploadResult && uploadResult.id) {
+      const watchUrl = `https://youtube.com/shorts/${uploadResult.id}`;
+      console.log("══════════════════════════════════════════════════════════════════════");
+      console.log(`🎉 SUCCESS! YouTube Short successfully uploaded!`);
+      console.log(`🔗 Watch URL:      ${watchUrl}`);
+      if (metadata.publishAt) {
+        console.log(`📅 Status:         SCHEDULED for ${metadata.publishAt} (UTC)`);
+      } else {
+        console.log(`📅 Status:         PUBLIC (Live now)`);
+      }
+      console.log(`📝 Description:    Includes backlink to ${metadata.targetUrl}`);
+      console.log(`💬 Pinned Comment: ${metadata.pinnedComment}`);
+      console.log("══════════════════════════════════════════════════════════════════════");
     }
-    console.log(`📝 Description:    Includes backlink to ${metadata.targetUrl}`);
-    console.log(`💬 Pinned Comment: ${metadata.pinnedComment}`);
-    console.log("══════════════════════════════════════════════════════════════════════");
+  } else if (!isInstagramOnly) {
+    console.log("ℹ️ YouTube upload skipped (Token expired/revoked).");
+  }
 
-    // Cross-post to Instagram Reels if credentials are configured
-    let instagramResult = null;
-    const igCreds = getInstagramCredentials();
-    if (igCreds) {
-      console.log("📸 Cross-posting video to Instagram Reels...");
-      instagramResult = await uploadReelToInstagram(videoPath, metadata);
-    }
+  // Cross-post to Instagram Reels if credentials are configured
+  let instagramResult = null;
+  const igCreds = getInstagramCredentials();
+  if (igCreds) {
+    console.log("📸 Cross-posting video to Instagram Reels (@bitcoincrypto.tech)...");
+    instagramResult = await uploadReelToInstagram(videoPath, metadata);
+  }
 
-    logHistory({
-      timestamp: new Date().toISOString(),
-      videoId: uploadResult.id,
-      title: metadata.title,
-      category: metadata.category,
-      targetUrl: metadata.targetUrl,
-      scheduledAt: metadata.publishAt || null,
-      status: metadata.publishAt ? "scheduled" : "public",
-      url: watchUrl,
-      instagramReel: instagramResult?.permalink || null
-    });
+  const success = (uploadResult && uploadResult.id) || (instagramResult && instagramResult.success);
 
-    if (!keepVideo) {
-      try { fs.unlinkSync(videoPath); } catch (_) {}
-    }
+  logHistory({
+    timestamp: new Date().toISOString(),
+    videoId: uploadResult?.id || null,
+    title: metadata.title,
+    category: metadata.category,
+    targetUrl: metadata.targetUrl,
+    scheduledAt: metadata.publishAt || null,
+    status: metadata.publishAt ? "scheduled" : "public",
+    url: uploadResult?.id ? `https://youtube.com/shorts/${uploadResult.id}` : null,
+    instagramReel: instagramResult?.permalink || null
+  });
 
+  if (!keepVideo && success) {
+    try { fs.unlinkSync(videoPath); } catch (_) {}
+  }
+
+  if (success) {
     return {
       success: true,
-      videoId: uploadResult.id,
-      watchUrl,
+      videoId: uploadResult?.id || null,
+      watchUrl: uploadResult?.id ? `https://youtube.com/shorts/${uploadResult.id}` : null,
       instagram: instagramResult,
       metadata
     };
   } else {
-    console.error("❌ Upload failed. Video preserved at:", videoPath);
+    console.error("❌ Upload failed on all channels. Video preserved at:", videoPath);
     return { success: false, videoPath, metadata };
   }
 }
@@ -254,14 +264,14 @@ export async function runAutoShortPipeline() {
     // Step 1: Authentication Check for YouTube
     const token = await getAccessToken();
     if (!token) {
-      console.error("❌ YouTube OAuth credentials missing or invalid in .env.local.");
-      console.error("   Ensure YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN are set.");
-      process.exit(1);
+      console.warn("⚠️ YouTube OAuth credentials expired or revoked.");
+      console.warn("   (To refresh YouTube token, run: node scripts/getYoutubeToken.mjs)");
+      console.warn("   Continuing with auto-generation & Instagram Reels publishing...");
+    } else {
+      const channel = await verifyChannel(token);
+      console.log(`📺 Connected Channel: ${channel?.snippet?.title || "Your YouTube Channel"}`);
+      console.log(`🆔 Channel ID:        ${channel?.id || "N/A"}`);
     }
-
-    const channel = await verifyChannel(token);
-    console.log(`📺 Connected Channel: ${channel?.snippet?.title || "Your YouTube Channel"}`);
-    console.log(`🆔 Channel ID:        ${channel?.id || "N/A"}`);
   }
 
   const isTwoDays = args.includes("--two-days") || args.includes("--2days") || args.includes("--schedule-2days");

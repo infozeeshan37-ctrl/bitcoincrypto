@@ -38,14 +38,21 @@ export async function generateVoiceover(text, outputPath) {
   const tempTxtPath = outputPath.replace(/\.[a-z0-9]+$/i, ".txt");
   fs.writeFileSync(tempTxtPath, naturalSpeechText, "utf-8");
 
-  console.log("🎙️ Synthesizing AI Neural Voiceover (en-US-ChristopherNeural)...");
+  console.log("🎙️ Synthesizing Studio-Grade AI Voiceover (en-US-AndrewMultilingualNeural)...");
 
-  // Choose confident, high-converting narrator voice
-  const voice = "en-US-ChristopherNeural";
-  const cmd = `edge-tts --voice ${voice} -f "${tempTxtPath}" --write-media "${outputPath}"`;
+  // Choose conversational, authentic high-converting narrator voice at +15% creator rate
+  const voice = "en-US-AndrewMultilingualNeural";
+  const rawPath = outputPath.replace(/\.mp3$/i, "_raw.mp3");
+  const cmd = `edge-tts --voice ${voice} --rate=+15% -f "${tempTxtPath}" --write-media "${rawPath}"`;
 
   try {
     await execPromise(cmd);
+
+    // Master vocal track with FFmpeg: low-end rumble cut, vocal presence boost, clean compression and loudnorm
+    const masterCmd = `ffmpeg -y -i "${rawPath}" -af "highpass=f=80,equalizer=f=3200:t=q:w=1.2:g=3.5,acompressor=threshold=0.125:ratio=3:attack=15:release=120:makeup=1.5,loudnorm=I=-16:TP=-1.5:LRA=11" -b:a 192k "${outputPath}"`;
+    await execPromise(masterCmd);
+
+    try { if (fs.existsSync(rawPath)) fs.unlinkSync(rawPath); } catch (_) {}
 
     // Measure exact audio duration via ffprobe
     const probeCmd = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${outputPath}"`;
@@ -57,11 +64,14 @@ export async function generateVoiceover(text, outputPath) {
       try { fs.unlinkSync(tempTxtPath); } catch (_) {}
     }
 
-    console.log(`✅ Voiceover generated: ${outputPath} (${duration.toFixed(1)}s)`);
+    console.log(`✅ Studio Voiceover generated: ${outputPath} (${duration.toFixed(1)}s)`);
     return { audioPath: outputPath, duration };
   } catch (err) {
     if (fs.existsSync(tempTxtPath)) {
       try { fs.unlinkSync(tempTxtPath); } catch (_) {}
+    }
+    if (fs.existsSync(rawPath)) {
+      try { fs.unlinkSync(rawPath); } catch (_) {}
     }
     console.error("❌ Voiceover generation failed:", err.message);
     throw err;

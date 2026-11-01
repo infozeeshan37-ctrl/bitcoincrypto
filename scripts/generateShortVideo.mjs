@@ -55,16 +55,16 @@ function createProViralAssScript(metadata, duration) {
     .trim();
 
   const words = cleanedText.split(/\s+/).filter(Boolean);
-  const wordsPerCard = 3;
+  const wordsPerCard = 2; // CapCut high-energy 2 words per card
   const cards = [];
 
   for (let i = 0; i < words.length; i += wordsPerCard) {
     cards.push(words.slice(i, i + wordsPerCard));
   }
 
-  // Allocate timing: start after 3s opening hook, end 4.5s before video ends for final CTA
+  // Allocate timing: start after 3s opening hook, end 4.0s before video ends for final CTA
   const captionStartTime = 3.2;
-  const captionEndTime = Math.max(captionStartTime + 5, duration - 4.2);
+  const captionEndTime = Math.max(captionStartTime + 4, duration - 4.0);
   const totalCaptionTime = captionEndTime - captionStartTime;
   const cardDuration = totalCaptionTime / Math.max(1, cards.length);
 
@@ -80,13 +80,15 @@ function createProViralAssScript(metadata, duration) {
       const stepStart = cardStart + (wordIdx * wordDuration);
       const stepEnd = stepStart + wordDuration;
 
-      // Construct line: inactive words are white (&H00FFFFFF), active word is neon yellow (&H0000FFFF) or neon green (&H0000FF88)
+      // Dynamic CapCut palette: Electric Yellow, Neon Emerald, Cyan
+      const colors = ["&H0000FFFF", "&H0000FF88", "&H00FFFF00"];
+      const highlightColor = colors[(cardIdx + wordIdx) % colors.length];
+
       const renderedCard = cardWords.map((w, idx) => {
         const cleanW = w.toUpperCase();
         const emoji = getWordEmoji(cleanW);
         if (idx === wordIdx) {
-          const highlightColor = (wordIdx % 2 === 0) ? "&H0000FFFF" : "&H0000FF88"; // Alternate neon yellow and neon emerald
-          return `{\\c${highlightColor}\\b1\\fscx112\\fscy112}${cleanW}${emoji ? " " + emoji : ""}{\\c&H00FFFFFF\\b0\\fscx100\\fscy100}`;
+          return `{\\c${highlightColor}\\b1\\fscx122\\fscy122}${cleanW}${emoji ? " " + emoji : ""}{\\c&H00FFFFFF\\b0\\fscx100\\fscy100}`;
         } else {
           return `{\\c&H00FFFFFF\\b0\\fscx100\\fscy100}${cleanW}`;
         }
@@ -98,7 +100,7 @@ function createProViralAssScript(metadata, duration) {
     });
   });
 
-  const finalCtaStart = formatAssTime(Math.max(0, duration - 4.5));
+  const finalCtaStart = formatAssTime(Math.max(0, duration - 4.2));
   const finalCtaEnd = formatAssTime(durationSec);
 
   return `[Script Info]
@@ -112,11 +114,11 @@ Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour,
 ; Top discreet watermark
 Style: Watermark,Arial,48,&H60FFFFFF,&H00000000,&H00000000,&H60000000,1,0,0,0,100,100,2,0,1,3,0,9,80,80,140,1
 ; 3-second opening hook alert badge
-Style: TopHook,Arial Black,78,&H0000FFFF,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,2,0,1,9,4,8,80,80,180,1
+Style: TopHook,Arial Black,82,&H0000FFFF,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,2,0,1,10,4,8,80,80,180,1
 ; Active word viral karaoke subtitles (Lower-third, ultra-bold, thick black stroke with deep shadow & scale bounce)
-Style: ViralKaraoke,Arial Black,112,&H00FFFFFF,&H00000000,&H00000000,&HE0000000,1,0,0,0,100,100,2,0,1,12,6,2,80,80,380,1
+Style: ViralKaraoke,Arial Black,124,&H00FFFFFF,&H00000000,&H00000000,&HE0000000,1,0,0,0,100,100,2,0,1,14,6,2,80,80,410,1
 ; Final Call to Action
-Style: FinalCta,Arial Black,92,&H0000D7FF,&H00000000,&H00000000,&HF0000000,1,0,0,0,100,100,2,0,1,10,5,2,80,80,340,1
+Style: FinalCta,Arial Black,96,&H0000D7FF,&H00000000,&H00000000,&HF0000000,1,0,0,0,100,100,2,0,1,11,5,2,80,80,340,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -157,11 +159,13 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   const assContent = createProViralAssScript(metadata, duration);
   fs.writeFileSync(assPath, assContent, "utf-8");
 
-  // Step 4: Verify Audio Assets (BGM & Multi-layer SFX Suite)
+  // Step 4: Verify Audio Assets (BGM & Multi-layer CapCut SFX Suite)
   const boomPath = path.resolve(process.cwd(), "assets/audio/impact_boom.mp3");
   const riserPath = path.resolve(process.cwd(), "assets/audio/riser.mp3");
   const bgmPath = path.resolve(process.cwd(), "assets/audio/bgm_tech.mp3");
   const whooshPath = path.resolve(process.cwd(), "assets/audio/whoosh.mp3");
+  const shutterPath = path.resolve(process.cwd(), "assets/audio/camera_shutter.mp3");
+  const popPath = path.resolve(process.cwd(), "assets/audio/pop.mp3");
   const glitchPath = path.resolve(process.cwd(), "assets/audio/glitch_transition.mp3");
   const dingPath = path.resolve(process.cwd(), "assets/audio/ding_cash.mp3");
   const chimePath = path.resolve(process.cwd(), "assets/audio/chime.mp3");
@@ -170,6 +174,8 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   const hasRiser = fs.existsSync(riserPath);
   const hasBgm = fs.existsSync(bgmPath);
   const hasWhoosh = fs.existsSync(whooshPath);
+  const hasShutter = fs.existsSync(shutterPath);
+  const hasPop = fs.existsSync(popPath);
   const hasGlitch = fs.existsSync(glitchPath);
   const hasDing = fs.existsSync(dingPath);
   const hasChime = fs.existsSync(chimePath);
@@ -203,6 +209,16 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   if (hasWhoosh) {
     const relWhoosh = path.relative(process.cwd(), whooshPath).replace(/\\/g, "/");
     ffmpegInputs.push("-i", relWhoosh);
+  }
+
+  if (hasShutter) {
+    const relShutter = path.relative(process.cwd(), shutterPath).replace(/\\/g, "/");
+    ffmpegInputs.push("-i", relShutter);
+  }
+
+  if (hasPop) {
+    const relPop = path.relative(process.cwd(), popPath).replace(/\\/g, "/");
+    ffmpegInputs.push("-i", relPop);
   }
 
   if (hasGlitch) {
@@ -240,7 +256,7 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   }
 
   if (hasBgm) {
-    filterComplex += `[${currentIdx}:a]volume=0.32[bgm];`;
+    filterComplex += `[${currentIdx}:a]volume=0.30[bgm];`;
     mixStreams += "[bgm]";
     currentIdx++;
   }
@@ -251,22 +267,36 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     currentIdx++;
   }
 
+  if (hasShutter) {
+    filterComplex += `[${currentIdx}:a]adelay=3100|3100,volume=0.95[shutter];`;
+    mixStreams += "[shutter]";
+    currentIdx++;
+  }
+
+  if (hasPop) {
+    const popDelay = Math.floor(Math.min(6500, duration * 0.35 * 1000));
+    filterComplex += `[${currentIdx}:a]adelay=${popDelay}|${popDelay},volume=0.85[pop];`;
+    mixStreams += "[pop]";
+    currentIdx++;
+  }
+
   if (hasGlitch) {
-    filterComplex += `[${currentIdx}:a]adelay=16000|16000,volume=0.85[glitch];`;
+    const glitchDelay = Math.floor(Math.min(16000, duration * 0.70 * 1000));
+    filterComplex += `[${currentIdx}:a]adelay=${glitchDelay}|${glitchDelay},volume=0.85[glitch];`;
     mixStreams += "[glitch]";
     currentIdx++;
   }
 
   if (hasDing) {
-    const dingDelay1 = 8000;
-    const dingDelay2 = Math.max(12000, Math.floor((duration - 4.5) * 1000));
-    filterComplex += `[${currentIdx}:a]adelay=${dingDelay1}|${dingDelay1},volume=0.80[ding1];`;
-    mixStreams += "[ding1]";
+    const dingDelay = Math.floor(Math.min(12000, duration * 0.52 * 1000));
+    filterComplex += `[${currentIdx}:a]adelay=${dingDelay}|${dingDelay},volume=0.85[ding];`;
+    mixStreams += "[ding]";
     currentIdx++;
   }
 
   if (hasChime) {
-    filterComplex += `[${currentIdx}:a]adelay=28000|28000,volume=0.80[chime];`;
+    const chimeDelay = Math.max(1000, Math.floor((duration - 4.0) * 1000));
+    filterComplex += `[${currentIdx}:a]adelay=${chimeDelay}|${chimeDelay},volume=0.85[chime];`;
     mixStreams += "[chime]";
     currentIdx++;
   }
