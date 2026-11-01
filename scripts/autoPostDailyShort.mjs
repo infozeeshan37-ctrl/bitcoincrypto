@@ -383,8 +383,23 @@ export async function runAutoShortPipeline() {
 
     const results = [];
     for (const cfg of queue) {
-      console.log(`\n⏳ === PROCESSING ${cfg.label} ===`);
       const scheduledTime = calculateSlotPublishTime(cfg.slotNumber, cfg.day);
+
+      // Check if this slot was already successfully scheduled in logs
+      const logFile = path.resolve(process.cwd(), "logs/shorts_history.json");
+      if (fs.existsSync(logFile)) {
+        try {
+          const history = JSON.parse(fs.readFileSync(logFile, "utf-8"));
+          const alreadyScheduled = history.find((h) => h.scheduledAt === scheduledTime && h.videoId);
+          if (alreadyScheduled) {
+            console.log(`⏩ [ALREADY SCHEDULED] ${cfg.label} -> https://youtube.com/shorts/${alreadyScheduled.videoId}`);
+            results.push({ success: true, videoId: alreadyScheduled.videoId, skipped: true });
+            continue;
+          }
+        } catch (_) {}
+      }
+
+      console.log(`\n⏳ === PROCESSING ${cfg.label} ===`);
       const res = await publishSingleShort(cfg.category, isDryRun, keepVideo, scheduledTime, null, isInstagramOnly, isSnapchatOnly);
       results.push(res);
 
