@@ -13,7 +13,15 @@
     "youtube:token": "node scripts/getYoutubeToken.mjs",
     "youtube:auto": "node scripts/autoPostDailyShort.mjs",
     "instagram:check": "node scripts/instagramUploader.mjs",
-    "shorts:schedule": "node scripts/autoPostDailyShort.mjs --schedule --all-slots"
+    "snapchat:check": "node scripts/snapchatUploader.mjs --check",
+    "snapchat:login": "node scripts/snapchatUploader.mjs --login",
+    "snapchat:upload": "node scripts/snapchatUploader.mjs",
+    "snapchat:auto": "node scripts/autoPostDailyShort.mjs --snapchat-only",
+    "shorts:schedule": "node scripts/autoPostDailyShort.mjs --schedule --all-slots",
+    "shorts:schedule-3days": "node scripts/autoPostDailyShort.mjs --schedule-3days",
+    "shorts:schedule-day1": "node scripts/autoPostDailyShort.mjs --schedule --day=1",
+    "shorts:schedule-day2": "node scripts/autoPostDailyShort.mjs --schedule --day=2",
+    "shorts:schedule-day3": "node scripts/autoPostDailyShort.mjs --schedule --day=3"
   },
   "dependencies": {
     "@types/three": "^0.185.4",

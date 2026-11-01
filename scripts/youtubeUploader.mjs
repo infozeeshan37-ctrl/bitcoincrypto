@@ -175,7 +175,13 @@ export async function uploadVideoToYouTube(videoPath, metadata) {
   );
 
   if (!initialRes.ok) {
-    console.error("❌ Failed to initiate resumable upload:", await initialRes.text());
+    const errText = await initialRes.text();
+    if (errText.includes("quotaExceeded")) {
+      console.warn("⚠️ YouTube Daily Upload Quota Limit Reached (10,000 units/day limit).");
+      console.warn("   Google resets the quota at midnight Pacific Time (08:00 UTC).");
+      return { quotaExceeded: true };
+    }
+    console.error("❌ Failed to initiate resumable upload:", errText);
     return false;
   }
 

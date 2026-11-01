@@ -8,3 +8,5 @@ out/
 .vercel
 tmp_shorts/
 logs/
+.snapchat_profile/
+data/
