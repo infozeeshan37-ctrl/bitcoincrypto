@@ -79,8 +79,10 @@ export default function WhaleCvdVolumeChart({
       const pNoise = (Math.sin(i * 0.6) * 0.0035 + Math.cos(i * 0.3) * 0.002) * currentPrice;
       const p = currentPrice + (i === 0 ? 0 : pNoise);
 
-      const buySlice = Math.max(100000, Math.round((whaleBuyVolUsd / pointsCount) * (0.8 + Math.random() * 0.4)));
-      const sellSlice = Math.max(80000, Math.round((whaleSellVolUsd / pointsCount) * (0.8 + Math.random() * 0.4)));
+      // Deterministic pseudo-random variation (sinusoidal) so server SSR and client hydration match 100%
+      const pseudoRand = (Math.sin(i * 3.1415 + 1.2) + 1) / 2;
+      const buySlice = Math.max(100000, Math.round((whaleBuyVolUsd / pointsCount) * (0.8 + pseudoRand * 0.4)));
+      const sellSlice = Math.max(80000, Math.round((whaleSellVolUsd / pointsCount) * (0.8 + (1 - pseudoRand) * 0.4)));
 
       data.push({
         time: t,
@@ -277,6 +279,7 @@ export default function WhaleCvdVolumeChart({
             fontSize="9"
             fontFamily="monospace"
             textAnchor="end"
+            suppressHydrationWarning
           >
             $0 CVD
           </text>
@@ -297,6 +300,7 @@ export default function WhaleCvdVolumeChart({
             fontSize="9"
             fontFamily="monospace"
             textAnchor="end"
+            suppressHydrationWarning
           >
             {formatUsd(maxCvd)}
           </text>
@@ -316,6 +320,7 @@ export default function WhaleCvdVolumeChart({
             fontSize="9"
             fontFamily="monospace"
             textAnchor="end"
+            suppressHydrationWarning
           >
             {formatUsd(minCvd)}
           </text>

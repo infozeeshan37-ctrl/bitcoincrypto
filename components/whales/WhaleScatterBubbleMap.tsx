@@ -209,6 +209,7 @@ export default function WhaleScatterBubbleMap({
                   fontSize="9.5"
                   fontFamily="monospace"
                   textAnchor="end"
+                  suppressHydrationWarning
                 >
                   ${p >= 1 ? p.toLocaleString(undefined, { maximumFractionDigits: 1 }) : p.toFixed(4)}
                 </text>

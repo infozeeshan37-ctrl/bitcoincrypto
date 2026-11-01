@@ -484,13 +484,17 @@ export default function WhaleOrdersTerminal() {
                   ? "text-rose-500 flash-down"
                   : "text-slate-900 dark:text-white"
               }`}
+              suppressHydrationWarning
             >
               ${formatPrice(liveSpotPrice)}
             </div>
           </div>
           <div>
             <div className="text-[10px] text-slate-400 uppercase font-mono font-bold">24h Change</div>
-            <div className={`text-xs sm:text-sm font-black font-mono ${livePriceChange24h >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
+            <div
+              className={`text-xs sm:text-sm font-black font-mono ${livePriceChange24h >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}
+              suppressHydrationWarning
+            >
               {livePriceChange24h >= 0 ? "+" : ""}{livePriceChange24h.toFixed(2)}%
             </div>
           </div>
@@ -636,6 +640,7 @@ export default function WhaleOrdersTerminal() {
                   className={`text-base sm:text-lg font-black font-mono transition-colors ${
                     priceTick === "up" ? "text-emerald-400" : priceTick === "down" ? "text-rose-400" : "text-white"
                   }`}
+                  suppressHydrationWarning
                 >
                   ${formatPrice(liveSpotPrice)}
                 </div>
@@ -771,9 +776,9 @@ export default function WhaleOrdersTerminal() {
                         className="absolute right-0 top-0 bottom-0 bg-rose-500/10 dark:bg-rose-500/20"
                         style={{ width: `${lvl.depth}%` }}
                       />
-                      <span className="text-rose-600 dark:text-rose-400 font-bold z-10">${formatPrice(lvl.price)}</span>
-                      <span className="text-slate-600 dark:text-slate-400 z-10">{lvl.size}</span>
-                      <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
+                      <span className="text-rose-600 dark:text-rose-400 font-bold z-10" suppressHydrationWarning>${formatPrice(lvl.price)}</span>
+                      <span className="text-slate-600 dark:text-slate-400 z-10" suppressHydrationWarning>{lvl.size}</span>
+                      <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10" suppressHydrationWarning>{lvl.total}</span>
                     </div>
                   ))}
                 </div>
@@ -792,6 +797,7 @@ export default function WhaleOrdersTerminal() {
                     className={`font-black transition-colors ${
                       priceTick === "up" ? "text-emerald-400" : priceTick === "down" ? "text-rose-400" : "text-amber-400"
                     }`}
+                    suppressHydrationWarning
                   >
                     ${formatPrice(liveSpotPrice)}
                   </span>
@@ -806,9 +812,9 @@ export default function WhaleOrdersTerminal() {
                         className="absolute left-0 top-0 bottom-0 bg-emerald-500/10 dark:bg-emerald-500/20"
                         style={{ width: `${lvl.depth}%` }}
                       />
-                      <span className="text-emerald-600 dark:text-emerald-400 font-bold z-10">${formatPrice(lvl.price)}</span>
-                      <span className="text-slate-600 dark:text-slate-400 z-10">{lvl.size}</span>
-                      <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10">{lvl.total}</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold z-10" suppressHydrationWarning>${formatPrice(lvl.price)}</span>
+                      <span className="text-slate-600 dark:text-slate-400 z-10" suppressHydrationWarning>{lvl.size}</span>
+                      <span className="text-slate-400 dark:text-slate-500 text-[9px] z-10" suppressHydrationWarning>{lvl.total}</span>
                     </div>
                   ))}
                 </div>
