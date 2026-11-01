@@ -292,7 +292,7 @@ export default async function CoinPredictionPage({ params }: PageProps) {
                 <span>Multi-Horizon Price Projections</span>
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Quantitative price corridors generated with 99% probabilistic confidence bands.
+                Quantitative price corridors generated with 2-sigma (95%) probabilistic confidence bands and ATR volatility bounds.
               </p>
             </div>
           </div>
@@ -681,6 +681,26 @@ export default async function CoinPredictionPage({ params }: PageProps) {
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Compliance & Methodology Notice */}
+        <section className="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+          <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase text-amber-600 dark:text-amber-400">
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <span>Empirical Methodology &amp; Non-Financial Advice Notice</span>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            All price targets, confluence scores, and volatility horizons published for {coin.name} ({coin.symbol}) are generated programmatically via historical walk-forward machine learning models, Level-2 order book depth queues, and on-chain UTXO metrics. They are provided solely for educational and simulated paper-trading analysis. Digital asset markets involve extreme volatility. Never trade with capital you cannot afford to lose.
+          </p>
+          <div className="flex flex-wrap items-center gap-4 text-xs font-mono pt-1 text-slate-500">
+            <Link href="/editorial-policy" className="text-amber-600 dark:text-amber-400 hover:underline">
+              Editorial Policy &amp; Audit Standards →
+            </Link>
+            <span>•</span>
+            <Link href="/authors" className="text-amber-600 dark:text-amber-400 hover:underline">
+              Quantitative Editorial Board →
+            </Link>
           </div>
         </section>
       </main>

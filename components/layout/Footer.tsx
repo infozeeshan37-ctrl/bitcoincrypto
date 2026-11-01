@@ -25,7 +25,8 @@ import {
   BookOpen,
   Landmark,
   Radio,
-  GraduationCap
+  GraduationCap,
+  Users
 } from "lucide-react";
 import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
@@ -72,24 +73,6 @@ export default function Footer() {
                   <span className="font-bold text-xs">𝕏</span>
                 </a>
                 <a
-                  href="https://t.me/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-xl bg-slate-900 hover:bg-sky-950/80 text-slate-300 hover:text-sky-300 border border-slate-800 transition"
-                  title="Join Telegram Channel"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                </a>
-                <a
-                  href="https://www.reddit.com/r/CryptoCurrency/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-xl bg-slate-900 hover:bg-orange-950/80 text-slate-300 hover:text-orange-300 border border-slate-800 transition"
-                  title="Reddit Community"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                </a>
-                <a
                   href="https://github.com/infozeeshan37-ctrl/bitcoincrypto"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -97,6 +80,14 @@ export default function Footer() {
                   title="GitHub Repository"
                 >
                   <span className="font-mono text-xs font-bold">&lt;/&gt;</span>
+                </a>
+                <a
+                  href="mailto:infozeeshan37@gmail.com"
+                  className="p-2 rounded-xl bg-slate-900 hover:bg-amber-950/80 text-slate-300 hover:text-amber-300 border border-slate-800 transition flex items-center gap-1.5 text-xs"
+                  title="Email Editorial Desk"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span className="font-mono text-[11px]">Contact Desk</span>
                 </a>
               </div>
             </div>
@@ -182,6 +173,16 @@ export default function Footer() {
               </li>
               <li><Link href="/concepts" className="hover:text-white transition">Trading Concepts &amp; Models</Link></li>
               <li><Link href="/blog" className="hover:text-white transition">Research Desk &amp; Analysis</Link></li>
+              <li>
+                <Link href="/authors" className="hover:text-amber-400 transition flex items-center gap-1.5 text-amber-300 font-medium">
+                  <Users className="w-3.5 h-3.5 text-amber-400" /> Editorial Board &amp; Authors
+                </Link>
+              </li>
+              <li>
+                <Link href="/editorial-policy" className="hover:text-emerald-400 transition flex items-center gap-1.5 text-emerald-300 font-medium">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Editorial Policy &amp; Standards
+                </Link>
+              </li>
               <li><Link href="/about" className="hover:text-white transition">Architecture &amp; Methodology</Link></li>
               <li>
                 <a
@@ -209,6 +210,16 @@ export default function Footer() {
           <div className="space-y-3">
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Legal &amp; Trust</h4>
             <ul className="space-y-2 text-slate-400">
+              <li>
+                <Link href="/editorial-policy" className="hover:text-emerald-400 transition flex items-center gap-1.5 text-emerald-300 font-semibold">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Editorial Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/authors" className="hover:text-amber-400 transition flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 text-amber-400" /> Author Directory
+                </Link>
+              </li>
               <li>
                 <Link href="/privacy" className="hover:text-amber-400 transition flex items-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-amber-400" /> Privacy Policy

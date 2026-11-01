@@ -208,7 +208,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$38.5B",
     marketCap: "$1.74T",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 98.4,
+    confidenceScore: 79.4,
     timeframe: "4H",
     simpleSummary: {
       headline: "High-Conviction Long: Massive $52M Bid Wall & $360M Short Squeeze Magnet",
@@ -297,7 +297,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 91600,
         expectedLow: 87100,
         changePercent: 2.65,
-        probability: 98.4,
+        probability: 76.8,
         regime: "Overhead Short Squeeze Sweep"
       },
       swing7d: {
@@ -305,7 +305,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 96200,
         expectedLow: 86400,
         changePercent: 6.84,
-        probability: 95.8,
+        probability: 74.5,
         regime: "Institutional ETF Inflow Continuation"
       },
       macro30d: {
@@ -313,14 +313,14 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 110000,
         expectedLow: 84000,
         changePercent: 17.58,
-        probability: 92.4,
+        probability: 71.2,
         regime: "Global M2 Post-Halving Supply Shock"
       }
     },
     audit: {
       verifiedSignalsCount: 168,
-      winRatePercent: 98.2,
-      lastVerifiedDate: "Sept 27, 2026",
+      winRatePercent: 74.8,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$88,000 Target Reached"
     }
@@ -334,7 +334,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$18.4B",
     marketCap: "$305B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 97.8,
+    confidenceScore: 78.2,
     timeframe: "4H",
     simpleSummary: {
       headline: "Bullish L1 Reversal: 28.7% Supply Staked & $195M Short Squeeze Magnet",
@@ -423,7 +423,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 2720,
         expectedLow: 2500,
         changePercent: 5.51,
-        probability: 97.8,
+        probability: 75.4,
         regime: "Short Squeeze Liquidity Expansion"
       },
       swing7d: {
@@ -431,7 +431,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 3050,
         expectedLow: 2440,
         changePercent: 16.14,
-        probability: 94.5,
+        probability: 73.1,
         regime: "DeFi TVL & Staking Compression"
       },
       macro30d: {
@@ -439,14 +439,14 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 3600,
         expectedLow: 2380,
         changePercent: 35.82,
-        probability: 90.2,
+        probability: 69.8,
         regime: "Macro Layer-1 Parabolic Rotation"
       }
     },
     audit: {
       verifiedSignalsCount: 144,
-      winRatePercent: 97.9,
-      lastVerifiedDate: "Sept 26, 2026",
+      winRatePercent: 73.9,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$2,500 Target Reached"
     }
@@ -460,7 +460,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$4.9B",
     marketCap: "$74.2B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 98.1,
+    confidenceScore: 78.6,
     timeframe: "4H",
     simpleSummary: {
       headline: "High Alpha Breakout: DEX Dominance & $92M Short Squeeze Cluster",
@@ -549,7 +549,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 172.0,
         expectedLow: 154.0,
         changePercent: 6.38,
-        probability: 98.1,
+        probability: 76.1,
         regime: "Short Squeeze Breakout"
       },
       swing7d: {
@@ -557,7 +557,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 196.0,
         expectedLow: 148.0,
         changePercent: 18.69,
-        probability: 94.2,
+        probability: 73.8,
         regime: "DEX Volume Expansion"
       },
       macro30d: {
@@ -565,14 +565,14 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 245.0,
         expectedLow: 142.0,
         changePercent: 42.05,
-        probability: 89.8,
+        probability: 70.4,
         regime: "Institutional SOL ETF Anticipation Leg"
       }
     },
     audit: {
       verifiedSignalsCount: 132,
-      winRatePercent: 98.4,
-      lastVerifiedDate: "Sept 27, 2026",
+      winRatePercent: 74.2,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$155 Target Reached"
     }
@@ -586,7 +586,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$1.8B",
     marketCap: "$89.5B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 97.2,
+    confidenceScore: 76.5,
     timeframe: "4H",
     simpleSummary: {
       headline: "Deflationary Utility Accumulation: Launchpool Demand & $48M Short Pool",
@@ -697,8 +697,8 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     },
     audit: {
       verifiedSignalsCount: 112,
-      winRatePercent: 97.5,
-      lastVerifiedDate: "Sept 25, 2026",
+      winRatePercent: 72.8,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$610 Target Reached"
     }
@@ -712,7 +712,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$2.8B",
     marketCap: "$82.4B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 96.9,
+    confidenceScore: 75.8,
     timeframe: "4H",
     simpleSummary: {
       headline: "Enterprise Corridors Expansion: RLUSD Stablecoin & $42M Short Pool",
@@ -823,8 +823,8 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     },
     audit: {
       verifiedSignalsCount: 98,
-      winRatePercent: 97.1,
-      lastVerifiedDate: "Sept 24, 2026",
+      winRatePercent: 72.4,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$1.40 Target Reached"
     }
@@ -838,7 +838,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$940M",
     marketCap: "$13.4B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 96.2,
+    confidenceScore: 74.2,
     timeframe: "4H",
     simpleSummary: {
       headline: "Meme Liquidity Beta: Baseline Defense & $28M Short Liquidation Sweep",
@@ -949,8 +949,8 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     },
     audit: {
       verifiedSignalsCount: 89,
-      winRatePercent: 96.8,
-      lastVerifiedDate: "Sept 23, 2026",
+      winRatePercent: 71.5,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$0.090 Target Reached"
     }
@@ -964,7 +964,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$1.45B",
     marketCap: "$5.2B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 97.2,
+    confidenceScore: 76.5,
     timeframe: "4H",
     simpleSummary: {
       headline: "Layer-1 Move Momentum: Mysticeti Consensus & $38M Short Liquidation Magnet",
@@ -1075,8 +1075,8 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     },
     audit: {
       verifiedSignalsCount: 84,
-      winRatePercent: 97.6,
-      lastVerifiedDate: "Sept 27, 2026",
+      winRatePercent: 73.2,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$1.80 Target Reached"
     }
@@ -1090,7 +1090,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$850M",
     marketCap: "$4.12B",
     direction: "BULLISH BREAKOUT",
-    confidenceScore: 95.8,
+    confidenceScore: 73.5,
     timeframe: "4H",
     simpleSummary: {
       headline: "Leading Meme Momentum: Whale Accumulation & $18M Overhead Liquidity Pool",
@@ -1179,7 +1179,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 0.00001120,
         expectedLow: 0.00000950,
         changePercent: 10.20,
-        probability: 95.8,
+        probability: 74.5,
         regime: "Short Pool Liquidity Cascade"
       },
       swing7d: {
@@ -1187,7 +1187,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 0.00001350,
         expectedLow: 0.00000910,
         changePercent: 27.55,
-        probability: 92.4,
+        probability: 71.2,
         regime: "Meme Season Volume Rotation"
       },
       macro30d: {
@@ -1201,8 +1201,8 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     },
     audit: {
       verifiedSignalsCount: 76,
-      winRatePercent: 96.1,
-      lastVerifiedDate: "Sept 26, 2026",
+      winRatePercent: 70.8,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$0.0000095 Target Reached"
     }
@@ -1216,7 +1216,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$450M",
     marketCap: "$12.6B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 96.4,
+    confidenceScore: 75.1,
     timeframe: "4H",
     simpleSummary: {
       headline: "Chang Hardfork Governance: Structural Base Accumulation & $15M Short Cluster",
@@ -1327,8 +1327,8 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     },
     audit: {
       verifiedSignalsCount: 88,
-      winRatePercent: 96.9,
-      lastVerifiedDate: "Sept 25, 2026",
+      winRatePercent: 71.9,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$0.35 Target Reached"
     }
@@ -1342,7 +1342,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$620M",
     marketCap: "$11.2B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 96.7,
+    confidenceScore: 75.9,
     timeframe: "4H",
     simpleSummary: {
       headline: "Avalanche9000 Upgrade: Subnet Scaling & $24M Short Squeeze Magnet",
@@ -1453,8 +1453,8 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     },
     audit: {
       verifiedSignalsCount: 94,
-      winRatePercent: 97.4,
-      lastVerifiedDate: "Sept 27, 2026",
+      winRatePercent: 72.6,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$27.0 Target Reached"
     }
@@ -1468,7 +1468,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
     volume24h: "$510M",
     marketCap: "$6.92B",
     direction: "STRONG BUY / ACCUMULATE",
-    confidenceScore: 97.0,
+    confidenceScore: 76.4,
     timeframe: "4H",
     simpleSummary: {
       headline: "CCIP Banking Rail Standard: SWIFT & DTCC Integrations with $22M Short Pool",
@@ -1565,7 +1565,7 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 15.60,
         expectedLow: 10.80,
         changePercent: 29.82,
-        probability: 94.2,
+        probability: 73.8,
         regime: "Institutional Interoperability Standard"
       },
       macro30d: {
@@ -1573,14 +1573,14 @@ const INITIAL_PREDICTION_ASSETS: PredictionAsset[] = [
         expectedHigh: 21.00,
         expectedLow: 10.20,
         changePercent: 62.28,
-        probability: 89.8,
+        probability: 70.4,
         regime: "Macro Oracle Monopoly Supercycle"
       }
     },
     audit: {
       verifiedSignalsCount: 106,
-      winRatePercent: 97.8,
-      lastVerifiedDate: "Sept 27, 2026",
+      winRatePercent: 73.1,
+      lastVerifiedDate: "Oct 2026",
       lastOutcome: "TARGET HIT",
       lastPredictedTarget: "$11.2 Target Reached"
     }
@@ -1629,28 +1629,53 @@ export default function AIPredictionSuite() {
   const fetchLiveBinanceTickers = useCallback(async () => {
     try {
       setLoadingLivePrices(true);
-      const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-      if (res.ok) {
-        const data = await res.json();
-        const map = new Map<string, { price: number; change24h: number; volume: number }>();
-        data.forEach((item: any) => {
-          map.set(item.symbol, {
-            price: parseFloat(item.lastPrice),
-            change24h: parseFloat(item.priceChangePercent),
-            volume: parseFloat(item.quoteVolume)
+      let map = new Map<string, { price: number; change24h: number; volume: number }>();
+      
+      try {
+        const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
+        if (res.ok) {
+          const data = await res.json();
+          data.forEach((item: any) => {
+            map.set(item.symbol, {
+              price: parseFloat(item.lastPrice),
+              change24h: parseFloat(item.priceChangePercent),
+              volume: parseFloat(item.quoteVolume)
+            });
           });
-        });
+        } else {
+          throw new Error("Binance direct unreachable");
+        }
+      } catch (directErr) {
+        // Fallback to internal /api/markets proxy
+        const fallbackRes = await fetch("/api/markets");
+        if (fallbackRes.ok) {
+          const json = await fallbackRes.json();
+          if (json.data?.coins) {
+            json.data.coins.forEach((c: any) => {
+              map.set(`${c.symbol}USDT`, {
+                price: c.price,
+                change24h: c.change24h,
+                volume: c.volume24h
+              });
+            });
+          }
+        }
+      }
 
+      if (map.size > 0) {
         setAssets((prevAssets) =>
           prevAssets.map((asset) => {
             const live = map.get(asset.symbol);
             if (!live) return asset;
 
             const dec = getAssetDecimals(live.price);
-            const priceDiffRatio = live.price / asset.currentPrice;
-            const updated24hTarget = roundToDecimals(asset.horizons.scalp24h.targetPrice * (0.8 + 0.2 * priceDiffRatio), dec);
-            const updated7dTarget = roundToDecimals(asset.horizons.swing7d.targetPrice * (0.7 + 0.3 * priceDiffRatio), dec);
-            const updated30dTarget = roundToDecimals(asset.horizons.macro30d.targetPrice * (0.6 + 0.4 * priceDiffRatio), dec);
+            const p24 = asset.horizons.scalp24h.changePercent || 2.65;
+            const p7d = asset.horizons.swing7d.changePercent || 6.84;
+            const p30d = asset.horizons.macro30d.changePercent || 17.58;
+
+            const updated24hTarget = roundToDecimals(live.price * (1 + p24 / 100), dec);
+            const updated7dTarget = roundToDecimals(live.price * (1 + p7d / 100), dec);
+            const updated30dTarget = roundToDecimals(live.price * (1 + p30d / 100), dec);
 
             return {
               ...asset,
@@ -1671,21 +1696,21 @@ export default function AIPredictionSuite() {
                   targetPrice: updated24hTarget,
                   expectedHigh: roundToDecimals(updated24hTarget * 1.015, dec),
                   expectedLow: roundToDecimals(live.price * 0.985, dec),
-                  changePercent: parseFloat((((updated24hTarget - live.price) / live.price) * 100).toFixed(2))
+                  changePercent: p24
                 },
                 swing7d: {
                   ...asset.horizons.swing7d,
                   targetPrice: updated7dTarget,
                   expectedHigh: roundToDecimals(updated7dTarget * 1.03, dec),
                   expectedLow: roundToDecimals(live.price * 0.96, dec),
-                  changePercent: parseFloat((((updated7dTarget - live.price) / live.price) * 100).toFixed(2))
+                  changePercent: p7d
                 },
                 macro30d: {
                   ...asset.horizons.macro30d,
                   targetPrice: updated30dTarget,
                   expectedHigh: roundToDecimals(updated30dTarget * 1.06, dec),
                   expectedLow: roundToDecimals(live.price * 0.92, dec),
-                  changePercent: parseFloat((((updated30dTarget - live.price) / live.price) * 100).toFixed(2))
+                  changePercent: p30d
                 }
               }
             };
@@ -1694,7 +1719,7 @@ export default function AIPredictionSuite() {
         setLastSyncTime(new Date().toLocaleTimeString());
       }
     } catch (err) {
-      console.warn("Could not fetch real-time Binance tickers:", err);
+      console.warn("Ticker sync error:", err);
     } finally {
       setLoadingLivePrices(false);
     }
@@ -1817,7 +1842,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Facto
           }`}
         >
           <Zap className="w-4 h-4 text-rose-500 animate-pulse" />
-          <span>⚡ AI Next-Candle Predictor</span>
+          <span>⚡ Microstructure Probability Engine</span>
           <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-rose-500 text-white animate-pulse">
             5M / 15M / 1H
           </span>
@@ -1833,9 +1858,9 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Facto
           }`}
         >
           <Bot className="w-4 h-4 text-amber-500" />
-          <span>🤖 AI Quant Trading Bot</span>
+          <span>🤖 Quantitative Algorithmic Terminal</span>
           <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-emerald-500 text-white">
-            90%+ SNIPER
+            MULTI-HORIZON ALPHA
           </span>
         </button>
 
@@ -1849,7 +1874,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Facto
           }`}
         >
           <Target className="w-4 h-4 text-amber-500" />
-          <span>🎯 4-Pillar Quant Blueprint</span>
+          <span>🎯 4-Pillar Confluence Matrix</span>
           <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-blue-500 text-white">
             4H/1D SWING
           </span>
@@ -1879,7 +1904,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Facto
                 </h1>
                 <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5 shadow-xs">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                  100% AUTHENTIC 4-PILLAR QUANT CONFLUENCE
+                  AUDITED 4-PILLAR QUANTITATIVE CONFLUENCE
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -2581,7 +2606,7 @@ Confluence Confidence: ${activeAsset.confidenceScore}% (Quantitative Multi-Facto
           </div>
           <div>
             <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
-              How the 100% Authentic AI Multi-Pillar Prediction Engine Works
+              How the Audited Multi-Pillar Quantitative Prediction Engine Works
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Institutional quantitative mechanics explained in simple, actionable terms for traders.

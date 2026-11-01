@@ -233,6 +233,7 @@ export interface ArticleJsonLdProps {
     slug: string;
     publishedAt: string;
     author: string;
+    authorSlug?: string;
     category: string;
     tags: string[];
   };
@@ -241,6 +242,8 @@ export interface ArticleJsonLdProps {
   url?: string;
   publishedAt?: string;
   author?: string;
+  authorSlug?: string;
+  authorUrl?: string;
   category?: string;
   tags?: string[];
 }
@@ -251,6 +254,8 @@ export function ArticleJsonLd(props: ArticleJsonLdProps) {
   const url = props.url || `https://www.bitcoincrypto.tech/blog/${props.article?.slug || ""}`;
   const publishedAt = props.article?.publishedAt || props.publishedAt || new Date().toISOString();
   const author = props.article?.author || props.author || "BitcoinCrypto Research Desk";
+  const authorSlug = props.article?.authorSlug || props.authorSlug;
+  const authorUrl = props.authorUrl || (authorSlug ? `https://www.bitcoincrypto.tech/authors/${authorSlug}` : "https://www.bitcoincrypto.tech/authors");
   const category = props.article?.category || props.category || "Cryptocurrency";
   const tags = props.article?.tags || props.tags || [];
 
@@ -267,6 +272,7 @@ export function ArticleJsonLd(props: ArticleJsonLdProps) {
     author: {
       "@type": "Person",
       name: author,
+      url: authorUrl,
     },
     publisher: {
       "@type": "Organization",
@@ -277,6 +283,62 @@ export function ArticleJsonLd(props: ArticleJsonLdProps) {
       "@type": "WebPage",
       "@id": url,
     },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export interface PersonJsonLdProps {
+  name: string;
+  jobTitle: string;
+  description: string;
+  url: string;
+  image?: string;
+  sameAs?: string[];
+  worksFor?: {
+    name: string;
+    url: string;
+  };
+  knowsAbout?: string[];
+}
+
+export function PersonJsonLd({
+  name,
+  jobTitle,
+  description,
+  url,
+  image,
+  sameAs,
+  worksFor = {
+    name: "BitcoinCrypto.tech",
+    url: "https://www.bitcoincrypto.tech",
+  },
+  knowsAbout,
+}: PersonJsonLdProps) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name,
+    jobTitle,
+    description,
+    url,
+    ...(image ? { image: image.startsWith("http") ? image : `https://www.bitcoincrypto.tech${image}` } : {}),
+    ...(sameAs && sameAs.length > 0 ? { sameAs } : {}),
+    ...(worksFor
+      ? {
+          worksFor: {
+            "@type": "Organization",
+            name: worksFor.name,
+            url: worksFor.url,
+          },
+        }
+      : {}),
+    ...(knowsAbout && knowsAbout.length > 0 ? { knowsAbout } : {}),
   };
 
   return (

@@ -905,6 +905,17 @@ export default function CryptoLearnView({
                     <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 text-xs text-amber-950 dark:text-amber-200 leading-relaxed">
                       <strong>Institutional Pro Tip:</strong> {lesson.proTip}
                     </div>
+
+                    {/* Standalone Lesson Permalink */}
+                    <div className="pt-2 flex items-center justify-between text-xs font-mono border-t border-slate-200/60 dark:border-slate-800/60">
+                      <span className="text-slate-400">Lesson ID: {lesson.slug}</span>
+                      <Link
+                        href={`/learn/${lesson.slug}`}
+                        className="inline-flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400 hover:underline"
+                      >
+                        Read Full Standalone Article →
+                      </Link>
+                    </div>
                   </article>
                 );
               })}

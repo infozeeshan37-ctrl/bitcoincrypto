@@ -2,6 +2,8 @@ import { MetadataRoute } from "next";
 import { articles } from "@/lib/blogData";
 import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
+import { authors } from "@/lib/authorsData";
+import { allArticles } from "@/lib/courseData";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.bitcoincrypto.tech";
@@ -94,6 +96,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${baseUrl}/authors`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/editorial-policy`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
       url: `${baseUrl}/about`,
       lastModified: currentDate,
       changeFrequency: "monthly",
@@ -131,7 +145,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // 2. Dedicated Programmatic Coin AI Price Prediction Pages (15 Cryptos)
+  // 2. Dedicated Programmatic Coin AI Price Prediction Pages
   const predictionRoutes: MetadataRoute.Sitemap = coinPredictions.map((coin) => ({
     url: `${baseUrl}/predictions/${coin.slug}`,
     lastModified: currentDate,
@@ -159,7 +173,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  // 4. Quantitative & Market Structure Concept Guides (8 Guides)
+  // 4. Quantitative & Market Structure Concept Guides
   const conceptRoutes: MetadataRoute.Sitemap = conceptGuides.map((guide) => ({
     url: `${baseUrl}/concepts/${guide.slug}`,
     lastModified: currentDate,
@@ -167,12 +181,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  // 5. Macro Research Desk Articles (11 In-Depth Articles)
+  // 5. Macro Research Desk Articles (16 In-Depth Articles)
   const blogRoutes: MetadataRoute.Sitemap = articles.map((art) => ({
     url: `${baseUrl}/blog/${art.slug}`,
     lastModified: currentDate,
     changeFrequency: "weekly",
+    priority: 0.85,
+  }));
+
+  // 6. Editorial Authors & Researchers (5 Author Profiles)
+  const authorRoutes: MetadataRoute.Sitemap = authors.map((author) => ({
+    url: `${baseUrl}/authors/${author.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "weekly",
     priority: 0.8,
+  }));
+
+  // 7. Complete 100-Article Crypto Learn Masterclass Lessons
+  const lessonRoutes: MetadataRoute.Sitemap = allArticles.map((lesson) => ({
+    url: `${baseUrl}/learn/${lesson.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "weekly",
+    priority: 0.85,
   }));
 
   return [
@@ -181,5 +211,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...toolRoutes,
     ...conceptRoutes,
     ...blogRoutes,
+    ...authorRoutes,
+    ...lessonRoutes,
   ];
 }
