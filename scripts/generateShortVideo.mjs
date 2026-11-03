@@ -111,28 +111,13 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-; Top discreet watermark
-Style: Watermark,Arial,48,&H60FFFFFF,&H00000000,&H00000000,&H60000000,1,0,0,0,100,100,2,0,1,3,0,9,80,80,140,1
-; 3-second opening hook alert badge
-Style: TopHook,Arial Black,82,&H0000FFFF,&H00000000,&H00000000,&HC0000000,1,0,0,0,100,100,2,0,1,10,4,8,80,80,180,1
-; Active word viral karaoke subtitles (Lower-third, ultra-bold, thick black stroke with deep shadow & scale bounce)
-Style: ViralKaraoke,Arial Black,124,&H00FFFFFF,&H00000000,&H00000000,&HE0000000,1,0,0,0,100,100,2,0,1,14,6,2,80,80,410,1
-; Final Call to Action
-Style: FinalCta,Arial Black,96,&H0000D7FF,&H00000000,&H00000000,&HF0000000,1,0,0,0,100,100,2,0,1,11,5,2,80,80,340,1
+; Active word viral karaoke subtitles (Center-middle sweet spot, ultra-bold, thick black stroke with deep shadow & scale bounce)
+Style: ViralKaraoke,Arial Black,136,&H00FFFFFF,&H00000000,&H00000000,&HE0000000,1,0,0,0,100,100,2,0,1,16,6,2,80,80,840,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-; Discreet branding in top right
-Dialogue: 0,0:00:00.00,0:00:${durationSec}.00,Watermark,,0,0,0,,bitcoincrypto.tech
-
-; 3-second opening hook alert (Disappears after 3.2s)
-Dialogue: 2,0:00:00.00,0:00:03.20,TopHook,,0,0,0,,{\\fad(100,200)}🚨 ${category} 🚨
-
 ; Active Word Karaoke Events
 ${dialogueLines.join("\n")}
-
-; Final High-CTR Closing Call to Action
-Dialogue: 2,${finalCtaStart},${finalCtaEnd},FinalCta,,0,0,0,,{\\fad(200,150)}👇 FREE LIVE TERMINAL LINK IN BIO 👇\\N\\N🔥 bitcoincrypto.tech
 `;
 }
 
@@ -153,7 +138,7 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
 
   // Step 2: Record Live Website Screen Video with Pro Cyber Trading HUD & Transitions
   const targetUrl = metadata.targetUrl || "https://www.bitcoincrypto.tech/predictions";
-  await recordWebsiteVideo(targetUrl, duration, rawVideoPath);
+  await recordWebsiteVideo(targetUrl, duration, rawVideoPath, metadata);
 
   // Step 3: Generate Active-Word Karaoke Subtitles with Dynamic Scale Bounce
   const assContent = createProViralAssScript(metadata, duration);

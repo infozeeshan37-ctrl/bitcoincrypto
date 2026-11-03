@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=1.0">
+  <title>BitcoinCrypto.tech Pro 4K Short</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+    }
+    body {
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      background: #03060f;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #ffffff;
+      position: relative;
+    }
+    canvas#mainCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      z-index: 1;
+    }
+    .hud-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 48px;
+    }
+    /* Top Header Branding */
+    .top-brand {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(8, 14, 28, 0.75);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(0, 240, 255, 0.3);
+      border-radius: 40px;
+      padding: 16px 28px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .live-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 16px #00ff88, 0 0 32px #00ff88;
+      animation: pulseDot 1s infinite alternate;
+    }
+    @keyframes pulseDot {
+      0% { opacity: 0.6; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.15); }
+    }
+    .brand-title {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff, #00f0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-badge {
+      background: rgba(0, 255, 136, 0.15);
+      border: 1.5px solid #00ff88;
+      color: #00ff88;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    /* Top Progress Bar */
+    .progress-bar-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 999;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00f0ff, #00ff88, #ffd700);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.9);
+      transition: width 0.05s linear;
+    }
+    /* White Flash Overlay for Punch Transitions */
+    .flash-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      opacity: 0;
+      z-index: 9999;
+      pointer-events: none;
+      transition: opacity 0.15s ease-out;
+    }
+    /* Dynamic Active Scene Container */
+    #sceneContent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      z-index: 5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="flash-overlay" id="flashOverlay"></div>
+  <canvas id="mainCanvas" width="1080" height="1920"></canvas>
+
+  <div class="hud-overlay">
+    <!-- Top Branding Card -->
+    <div class="top-brand">
+      <div class="brand-left">
+        <div class="live-dot"></div>
+        <div class="brand-title">BitcoinCrypto.tech</div>
+      </div>
+      <div class="brand-badge" id="brandPill">QUANT TERMINAL</div>
+    </div>
+    <!-- Bottom Spacer -->
+    <div></div>
+  </div>
+
+  <script>
+    // Configuration & Metadata (Can be overridden by window.__INIT_METADATA)
+    window.SHORT_CONFIG = {
+      coinName: "Solana",
+      coinTicker: "SOL",
+      price: "$184.50",
+      target: "$195.00",
+      squeezeCluster: "$380M",
+      resistance: "$188.00",
+      hookTitle: "WHALES JUST DROPPED $400M",
+      category: "AI QUANT PREDICTION",
+      duration: 25.0
+    };
+
+    window.__INIT_METADATA = function(meta) {
+      if (!meta) return;
+      if (meta.coinName) window.SHORT_CONFIG.coinName = meta.coinName;
+      if (meta.coinTicker) window.SHORT_CONFIG.coinTicker = meta.coinTicker;
+      if (meta.price) window.SHORT_CONFIG.price = meta.price;
+      if (meta.target) window.SHORT_CONFIG.target = meta.target;
+      if (meta.squeezeCluster) window.SHORT_CONFIG.squeezeCluster = meta.squeezeCluster;
+      if (meta.resistance) window.SHORT_CONFIG.resistance = meta.resistance;
+      if (meta.hookTitle) window.SHORT_CONFIG.hookTitle = meta.hookTitle;
+      if (meta.category) window.SHORT_CONFIG.category = meta.category;
+      if (meta.duration) window.SHORT_CONFIG.duration = meta.duration;
+      document.getElementById("brandPill").innerText = (meta.coinTicker || "AI") + " LIVE RADAR";
+    };
+
+    const canvas = document.getElementById("mainCanvas");
+    const ctx = canvas.getContext("2d");
+    const W = 1080;
+    const H = 1920;
+
+    // Background Particles
+    const particles = [];
+    for (let i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        size: Math.random() * 4 + 1.5,
+        speedX: (Math.random() - 0.5) * 0.8,
+        speedY: -Math.random() * 1.5 - 0.5,
+        alpha: Math.random() * 0.7 + 0.3,
+        color: Math.random() > 0.4 ? "#00f0ff" : (Math.random() > 0.5 ? "#ffd700" : "#00ff88")
+      });
+    }
+
+    // Candlestick Data for Chart Scene
+    const candles = [];
+    const candleCount = 14;
+    let basePrice = 175;
+    for (let i = 0; i < candleCount; i++) {
+      const isUp = i === candleCount - 1 || i === candleCount - 2 || Math.random() > 0.4;
+      const open = basePrice;
+      const close = isUp ? open + (Math.random() * 3 + 1.5) : open - (Math.random() * 2.5 + 0.8);
+      const high = Math.max(open, close) + Math.random() * 1.8;
+      const low = Math.min(open, close) - Math.random() * 1.8;
+      candles.push({ open, close, high, low, isUp });
+      basePrice = close;
+    }
+
+    // 3D Coin Render Helper (Rendered mathematically with metallic shading and normal depth)
+    function draw3DCoin(ctx, centerX, centerY, radius, angle, symbol) {
+      ctx.save();
+      ctx.translate(centerX, centerY);
+
+      // 3D Tilt perspective
+      const scaleX = Math.cos(angle);
+      const thickness = 28;
+
+      // Draw 3D Coin Edge (Thickness with golden metallic bands)
+      const edgeSteps = 16;
+      for (let i = thickness; i >= 0; i--) {
+        const offset = (1 - Math.abs(scaleX)) * i * 0.7;
+        const edgeX = -scaleX * offset;
+        ctx.beginPath();
+        ctx.ellipse(edgeX, 0, Math.max(2, Math.abs(scaleX) * radius), radius, 0, 0, Math.PI * 2);
+        const edgeGrad = ctx.createLinearGradient(-radius, -radius, radius, radius);
+        edgeGrad.addColorStop(0, "#8a6508");
+        edgeGrad.addColorStop(0.3, "#e6b800");
+        edgeGrad.addColorStop(0.7, "#fff2a3");
+        edgeGrad.addColorStop(1, "#664700");
+        ctx.fillStyle = edgeGrad;
+        ctx.fill();
+      }
+
+      // Draw Coin Face
+      ctx.beginPath();
+      ctx.ellipse(0, 0, Math.max(2, Math.abs(scaleX) * radius), radius, 0, 0, Math.PI * 2);
+
+      // Gold Metallic Face Gradient
+      const faceGrad = ctx.createRadialGradient(0, -radius * 0.3, radius * 0.1, 0, 0, radius);
+      faceGrad.addColorStop(0, "#fff5cc");
+      faceGrad.addColorStop(0.4, "#ffd700");
+      faceGrad.addColorStop(0.8, "#d4a017");
+      faceGrad.addColorStop(1, "#805500");
+      ctx.fillStyle = faceGrad;
+      ctx.fill();
+
+      // Outer Bevel Rim
+      ctx.lineWidth = 8;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.stroke();
+
+      // Inner Groove
+      ctx.beginPath();
+      ctx.ellipse(0, 0, Math.max(2, Math.abs(scaleX) * (radius - 18)), radius - 18, 0, 0, Math.PI * 2);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "rgba(100, 70, 0, 0.6)";
+      ctx.stroke();
+
+      // Coin Symbol (Front face only)
+      if (scaleX > 0.15) {
+        ctx.save();
+        ctx.scale(scaleX, 1);
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+        ctx.shadowBlur = 12;
+        ctx.font = `900 ${radius * 0.75}px -apple-system, sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(symbol || "₿", 0, 6);
+        ctx.restore();
+      }
+
+      ctx.restore();
+    }
+
+    // Master Render Frame Function
+    window.__renderFrame = function(currentTime) {
+      const cfg = window.SHORT_CONFIG;
+      const duration = cfg.duration || 24.0;
+      const progress = Math.min(1.0, Math.max(0, currentTime / duration));
+
+      // Update Top Progress Bar
+      document.getElementById("progressBar").style.width = (progress * 100) + "%";
+
+      // Clear Frame
+      ctx.fillStyle = "#03060f";
+      ctx.fillRect(0, 0, W, H);
+
+      // 1. Dynamic Cyber Grid Background with Depth Fog
+      ctx.save();
+      const gridOffset = (currentTime * 40) % 80;
+      ctx.strokeStyle = "rgba(0, 240, 255, 0.08)";
+      ctx.lineWidth = 1.5;
+      for (let x = 0; x <= W; x += 80) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, H);
+        ctx.stroke();
+      }
+      for (let y = gridOffset; y <= H; y += 80) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 2. Animated Nebula Ambient Glows
+      ctx.save();
+      const glowGrad1 = ctx.createRadialGradient(W * 0.5, H * 0.35, 50, W * 0.5, H * 0.35, 600);
+      glowGrad1.addColorStop(0, "rgba(0, 240, 255, 0.15)");
+      glowGrad1.addColorStop(0.5, "rgba(0, 255, 136, 0.08)");
+      glowGrad1.addColorStop(1, "transparent");
+      ctx.fillStyle = glowGrad1;
+      ctx.fillRect(0, 0, W, H);
+
+      const glowGrad2 = ctx.createRadialGradient(W * 0.5, H * 0.75, 40, W * 0.5, H * 0.75, 500);
+      glowGrad2.addColorStop(0, "rgba(255, 215, 0, 0.12)");
+      glowGrad2.addColorStop(1, "transparent");
+      ctx.fillStyle = glowGrad2;
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+
+      // 3. Floating Dust & Embers
+      ctx.save();
+      particles.forEach((p) => {
+        p.y += p.speedY;
+        p.x += p.speedX;
+        if (p.y < 0) p.y = H;
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+      });
+      ctx.restore();
+
+      // SCENE TIMELINE:
+      // Scene 1 (Hook): 0.0s -> 3.2s
+      // Scene 2 (Explosion Chart): 3.2s -> 9.0s
+      // Scene 3 (Order Book Heatmap): 9.0s -> 16.5s
+      // Scene 4 (Outro CTA): 16.5s -> End
+
+      const tHook = 3.2;
+      const tChart = 9.0;
+      const tOrderBook = 16.5;
+
+      // Handle White Flash Transition Trigger
+      const flash = document.getElementById("flashOverlay");
+      if ((currentTime >= tHook - 0.12 && currentTime < tHook + 0.15) ||
+          (currentTime >= tChart - 0.12 && currentTime < tChart + 0.15) ||
+          (currentTime >= tOrderBook - 0.12 && currentTime < tOrderBook + 0.15)) {
+        flash.style.opacity = "0.75";
+      } else {
+        flash.style.opacity = "0";
+      }
+
+      // =========================================================================
+      // SCENE 1: THE VIRAL EXPLOSIVE HOOK (0.0s - 3.2s)
+      // =========================================================================
+      if (currentTime < tHook) {
+        ctx.save();
+        const hookProgress = currentTime / tHook;
+        const punchScale = 1.0 + Math.sin(hookProgress * Math.PI) * 0.05;
+        ctx.translate(W / 2, H / 2);
+        ctx.scale(punchScale, punchScale);
+        ctx.translate(-W / 2, -H / 2);
+
+        // Alert Badge
+        ctx.save();
+        const pillY = 280;
+        ctx.fillStyle = "rgba(255, 0, 85, 0.25)";
+        ctx.strokeStyle = "#ff0055";
+        ctx.lineWidth = 3;
+        ctx.shadowColor = "#ff0055";
+        ctx.shadowBlur = 30;
+        ctx.beginPath();
+        ctx.roundRect(W / 2 - 280, pillY, 560, 68, 34);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 28px -apple-system, sans-serif";
+        ctx.textAlign = "center";
+        ctx.shadowColor = "rgba(0,0,0,0.8)";
+        ctx.shadowBlur = 8;
+        ctx.fillText("🚨 EMERGENCY QUANT ALERT 🚨", W / 2, pillY + 44);
+        ctx.restore();
+
+        // Massive Dramatic Headline
+        ctx.save();
+        ctx.textAlign = "center";
+        ctx.font = "900 76px -apple-system, 'Arial Black', sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#00f0ff";
+        ctx.shadowBlur = 40;
+        ctx.fillText("WHALES JUST", W / 2, 450);
+        ctx.fillStyle = "#ffd700";
+        ctx.shadowColor = "#ffd700";
+        ctx.shadowBlur = 45;
+        ctx.fillText("DROPPED " + cfg.squeezeCluster, W / 2, 545);
+        ctx.font = "800 38px -apple-system, sans-serif";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.shadowBlur = 10;
+        ctx.fillText("RETAIL HAS NO IDEA WHAT'S COMING", W / 2, 620);
+        ctx.restore();
+
+        // Central 3D Rotating Gold Coin
+        const coinAngle = currentTime * 3.5;
+        const symbol = cfg.coinTicker === "BTC" ? "₿" : (cfg.coinTicker === "ETH" ? "Ξ" : (cfg.coinTicker === "SOL" ? "◎" : "⚡"));
+        draw3DCoin(ctx, W / 2, 980, 200, coinAngle, symbol);
+
+        // Floating Shockwave Rings around Coin
+        ctx.save();
+        const ringRadius = 240 + ((currentTime * 180) % 200);
+        const ringAlpha = Math.max(0, 1 - (ringRadius - 240) / 200);
+        ctx.beginPath();
+        ctx.arc(W / 2, 980, ringRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(0, 240, 255, ${ringAlpha * 0.8})`;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.restore();
+
+        // Lower Target Beacon
+        ctx.save();
+        const cardY = 1380;
+        ctx.fillStyle = "rgba(10, 18, 36, 0.85)";
+        ctx.strokeStyle = "rgba(255, 215, 0, 0.6)";
+        ctx.lineWidth = 3;
+        ctx.shadowColor = "rgba(255, 215, 0, 0.4)";
+        ctx.shadowBlur = 30;
+        ctx.beginPath();
+        ctx.roundRect(W / 2 - 420, cardY, 840, 160, 32);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#8a9cb8";
+        ctx.font = "800 24px -apple-system, sans-serif";
+        ctx.fillText("ASSET PAIR", W / 2 - 370, cardY + 54);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 46px -apple-system, sans-serif";
+        ctx.fillText(cfg.coinTicker + " / USDT", W / 2 - 370, cardY + 112);
+
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#8a9cb8";
+        ctx.font = "800 24px -apple-system, sans-serif";
+        ctx.fillText("LIVE PRICE", W / 2 + 370, cardY + 54);
+        ctx.fillStyle = "#00ff88";
+        ctx.shadowColor = "#00ff88";
+        ctx.shadowBlur = 20;
+        ctx.font = "900 48px -apple-system, sans-serif";
+        ctx.fillText(cfg.price + " ▲", W / 2 + 370, cardY + 112);
+        ctx.restore();
+
+        ctx.restore();
+      }
+
+      // =========================================================================
+      // SCENE 2: THE QUANTITATIVE SHOCK & CANDLESTICK BREAKOUT (3.2s - 9.0s)
+      // =========================================================================
+      else if (currentTime < tChart) {
+        ctx.save();
+        const sceneTime = currentTime - tHook;
+        const sceneProgress = sceneTime / (tChart - tHook);
+
+        // Header Alert
+        ctx.save();
+        ctx.textAlign = "center";
+        ctx.font = "900 32px -apple-system, sans-serif";
+        ctx.fillStyle = "#ff0055";
+        ctx.fillText("● RESISTANCE BREAKOUT IMMINENT", W / 2, 260);
+        ctx.font = "900 64px -apple-system, 'Arial Black', sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#00ff88";
+        ctx.shadowBlur = 30;
+        ctx.fillText("MASSIVE SHORT SQUEEZE", W / 2, 340);
+        ctx.restore();
+
+        // Chart Card Background
+        const chartX = 60;
+        const chartY = 400;
+        const chartW = W - 120;
+        const chartH = 760;
+
+        ctx.fillStyle = "rgba(7, 12, 24, 0.88)";
+        ctx.strokeStyle = "rgba(0, 240, 255, 0.35)";
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.roundRect(chartX, chartY, chartW, chartH, 28);
+        ctx.fill();
+        ctx.stroke();
+
+        // Resistance Ceiling Line
+        const ceilingY = chartY + 180;
+        ctx.save();
+        ctx.strokeStyle = "#ff0055";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([12, 8]);
+        ctx.shadowColor = "#ff0055";
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        ctx.moveTo(chartX + 20, ceilingY);
+        ctx.lineTo(chartX + chartW - 20, ceilingY);
+        ctx.stroke();
+
+        ctx.fillStyle = "#ff0055";
+        ctx.font = "900 22px -apple-system, sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText("MAJOR RESISTANCE: " + cfg.resistance + " (LIQUIDATION WALL)", chartX + chartW - 30, ceilingY - 14);
+        ctx.restore();
+
+        // Render Dynamic Candlesticks
+        const visibleCandles = Math.min(candles.length, Math.floor(sceneProgress * candles.length) + 6);
+        const candleStep = (chartW - 80) / candleCount;
+
+        for (let i = 0; i < visibleCandles; i++) {
+          const c = candles[i];
+          const cx = chartX + 50 + (i * candleStep);
+          // Scale price to Y coords
+          const minP = 170;
+          const maxP = 200;
+          const scalePrice = (p) => chartY + chartH - 60 - ((p - minP) / (maxP - minP)) * (chartH - 140);
+
+          const yOpen = scalePrice(c.open);
+          const yClose = scalePrice(c.close);
+          const yHigh = scalePrice(c.high);
+          const yLow = scalePrice(c.low);
+
+          const isBull = c.isUp || i >= candleCount - 2;
+          const candleColor = isBull ? "#00ff88" : "#ff3355";
+
+          // Wick
+          ctx.strokeStyle = candleColor;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(cx, yHigh);
+          ctx.lineTo(cx, yLow);
+          ctx.stroke();
+
+          // Body
+          ctx.fillStyle = candleColor;
+          ctx.shadowColor = candleColor;
+          ctx.shadowBlur = isBull ? 20 : 8;
+          const bodyY = Math.min(yOpen, yClose);
+          const bodyH = Math.max(8, Math.abs(yClose - yOpen));
+          ctx.fillRect(cx - 16, bodyY, 32, bodyH);
+
+          // Breakout Explosion Sparks on Final Candle
+          if (i === visibleCandles - 1 && sceneProgress > 0.6) {
+            ctx.beginPath();
+            ctx.arc(cx, yHigh, 14, 0, Math.PI * 2);
+            ctx.fillStyle = "#ffffff";
+            ctx.shadowColor = "#00ff88";
+            ctx.shadowBlur = 35;
+            ctx.fill();
+
+            ctx.fillStyle = "#ffd700";
+            ctx.font = "900 24px -apple-system, sans-serif";
+            ctx.fillText("TARGET: " + cfg.target + " 🚀", cx + 24, yHigh - 12);
+          }
+        }
+
+        // Ticking Liquidation Counter Card
+        const metricY = 1220;
+        ctx.fillStyle = "rgba(10, 18, 38, 0.9)";
+        ctx.strokeStyle = "rgba(255, 0, 85, 0.7)";
+        ctx.lineWidth = 3.5;
+        ctx.shadowColor = "rgba(255, 0, 85, 0.5)";
+        ctx.shadowBlur = 40;
+        ctx.beginPath();
+        ctx.roundRect(chartX, metricY, chartW, 200, 32);
+        ctx.fill();
+        ctx.stroke();
+
+        const currentLiquidated = Math.floor(sceneProgress * 380);
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#ff6688";
+        ctx.font = "800 26px -apple-system, sans-serif";
+        ctx.fillText("🔥 FORCED SHORT LIQUIDATIONS TRIGGERED", W / 2, metricY + 60);
+
+        ctx.fillStyle = "#ffd700";
+        ctx.shadowColor = "#ffd700";
+        ctx.shadowBlur = 30;
+        ctx.font = "900 68px -apple-system, 'Arial Black', sans-serif";
+        ctx.fillText("+$" + currentLiquidated + ",000,000", W / 2, metricY + 140);
+
+        // Buy Pressure Meter
+        const meterY = 1460;
+        ctx.fillStyle = "rgba(7, 14, 28, 0.85)";
+        ctx.strokeStyle = "rgba(0, 255, 136, 0.4)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(chartX, meterY, chartW, 110, 24);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 28px -apple-system, sans-serif";
+        ctx.fillText("INSTITUTIONAL TAKER FLOW", chartX + 36, meterY + 65);
+
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#00ff88";
+        ctx.font = "900 36px -apple-system, sans-serif";
+        ctx.fillText("88% AGGRESSIVE BUY", chartX + chartW - 36, meterY + 68);
+
+        ctx.restore();
+      }
+
+      // =========================================================================
+      // SCENE 3: THE SECRET TERMINAL ORDER BOOK & HEATMAP (9.0s - 16.5s)
+      // =========================================================================
+      else if (currentTime < tOrderBook) {
+        ctx.save();
+        const sceneTime = currentTime - tChart;
+        const sceneProgress = sceneTime / (tOrderBook - tChart);
+
+        // Header Title
+        ctx.save();
+        ctx.textAlign = "center";
+        ctx.font = "900 32px -apple-system, sans-serif";
+        ctx.fillStyle = "#00f0ff";
+        ctx.fillText("⚡ PRO TERMINAL PROOF", W / 2, 250);
+        ctx.font = "900 62px -apple-system, 'Arial Black', sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#00f0ff";
+        ctx.shadowBlur = 30;
+        ctx.fillText("ORDER BOOK DEPTH SCAN", W / 2, 330);
+        ctx.restore();
+
+        // 3D Isometric Styled Terminal Window
+        const termX = 60;
+        const termY = 400;
+        const termW = W - 120;
+        const termH = 1000;
+
+        ctx.fillStyle = "rgba(6, 12, 26, 0.95)";
+        ctx.strokeStyle = "rgba(0, 240, 255, 0.5)";
+        ctx.lineWidth = 3;
+        ctx.shadowColor = "rgba(0, 240, 255, 0.3)";
+        ctx.shadowBlur = 50;
+        ctx.beginPath();
+        ctx.roundRect(termX, termY, termW, termH, 32);
+        ctx.fill();
+        ctx.stroke();
+
+        // Terminal Top Bar
+        ctx.fillStyle = "rgba(12, 24, 48, 0.9)";
+        ctx.beginPath();
+        ctx.roundRect(termX, termY, termW, 70, [32, 32, 0, 0]);
+        ctx.fill();
+
+        // Window Dots
+        ctx.fillStyle = "#ff4444";
+        ctx.beginPath(); ctx.arc(termX + 40, termY + 35, 10, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#ffbb00";
+        ctx.beginPath(); ctx.arc(termX + 70, termY + 35, 10, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#00ff88";
+        ctx.beginPath(); ctx.arc(termX + 100, termY + 35, 10, 0, Math.PI * 2); ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "800 24px -apple-system, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("bitcoincrypto.tech/predictions/" + cfg.coinTicker.toLowerCase(), termX + termW / 2, termY + 44);
+
+        // Live Order Book Buy / Sell Depth Bars
+        const rowY = termY + 110;
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#8a9cb8";
+        ctx.font = "800 24px -apple-system, sans-serif";
+        ctx.fillText("LEVEL 2 ORDER BOOK LADDER", termX + 40, rowY + 30);
+
+        // Draw 5 High-Impact Depth Bars
+        const levels = [
+          { price: "$195.00", qty: "$45.2M", type: "target", width: 0.95 },
+          { price: "$188.00", qty: "$68.4M", type: "wall", width: 0.88 },
+          { price: "$184.50", qty: "$12.8M", type: "current", width: 0.40 },
+          { price: "$180.00", qty: "$94.0M", type: "bid", width: 0.92 },
+          { price: "$175.00", qty: "$120.5M", type: "bid", width: 0.98 }
+        ];
+
+        levels.forEach((lvl, idx) => {
+          const ly = rowY + 70 + (idx * 115);
+          const isCurrent = lvl.type === "current";
+          const isTarget = lvl.type === "target";
+
+          // Bar Background
+          ctx.fillStyle = isCurrent ? "rgba(255, 215, 0, 0.15)" : (isTarget ? "rgba(0, 255, 136, 0.15)" : "rgba(255, 255, 255, 0.05)");
+          ctx.beginPath();
+          ctx.roundRect(termX + 30, ly, termW - 60, 95, 18);
+          ctx.fill();
+
+          // Depth Fill
+          const fillW = (termW - 60) * lvl.width;
+          const barGrad = ctx.createLinearGradient(termX + 30, 0, termX + 30 + fillW, 0);
+          if (isTarget) {
+            barGrad.addColorStop(0, "rgba(0, 255, 136, 0.1)");
+            barGrad.addColorStop(1, "rgba(0, 255, 136, 0.45)");
+          } else if (isCurrent) {
+            barGrad.addColorStop(0, "rgba(255, 215, 0, 0.1)");
+            barGrad.addColorStop(1, "rgba(255, 215, 0, 0.45)");
+          } else {
+            barGrad.addColorStop(0, "rgba(0, 240, 255, 0.05)");
+            barGrad.addColorStop(1, "rgba(0, 240, 255, 0.25)");
+          }
+          ctx.fillStyle = barGrad;
+          ctx.beginPath();
+          ctx.roundRect(termX + 30, ly, fillW, 95, 18);
+          ctx.fill();
+
+          ctx.fillStyle = isTarget ? "#00ff88" : (isCurrent ? "#ffd700" : "#ffffff");
+          ctx.font = "900 36px -apple-system, sans-serif";
+          ctx.textAlign = "left";
+          ctx.fillText(lvl.price, termX + 60, ly + 58);
+
+          ctx.textAlign = "right";
+          ctx.font = "800 32px -apple-system, sans-serif";
+          ctx.fillText(lvl.qty + (isTarget ? " 🎯 TARGET" : (isCurrent ? " 📍 CURRENT" : " LIMIT")), termX + termW - 60, ly + 58);
+        });
+
+        // Laser Reticle Tracking Target
+        const targetReticleY = rowY + 70;
+        ctx.save();
+        ctx.strokeStyle = "#00ff88";
+        ctx.lineWidth = 3.5;
+        ctx.shadowColor = "#00ff88";
+        ctx.shadowBlur = 24;
+        ctx.beginPath();
+        ctx.roundRect(termX + 24, targetReticleY - 6, termW - 48, 107, 22);
+        ctx.stroke();
+
+        ctx.fillStyle = "#00ff88";
+        ctx.font = "900 22px -apple-system, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("⚡ AI QUANT TARGET LOCKED: 92.4% ACCURACY ⚡", W / 2, termY + termH - 60);
+        ctx.restore();
+
+        ctx.restore();
+      }
+
+      // =========================================================================
+      // SCENE 4: THE VIRAL CLOSING CALL TO ACTION (16.5s - End)
+      // =========================================================================
+      else {
+        ctx.save();
+        const outroTime = currentTime - tOrderBook;
+        const outroProgress = outroTime / Math.max(1, duration - tOrderBook);
+
+        // Pulsing Outro Card
+        const cardX = 60;
+        const cardY = 380;
+        const cardW = W - 120;
+        const cardH = 1040;
+
+        ctx.fillStyle = "rgba(7, 14, 30, 0.95)";
+        ctx.strokeStyle = "#ffd700";
+        ctx.lineWidth = 4.5;
+        ctx.shadowColor = "rgba(255, 215, 0, 0.7)";
+        ctx.shadowBlur = 60;
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardW, cardH, 40);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.textAlign = "center";
+
+        // Top Warning
+        ctx.fillStyle = "#ff0055";
+        ctx.font = "900 34px -apple-system, sans-serif";
+        ctx.fillText("⚠️ CRITICAL 4-HOUR WINDOW ⚠️", W / 2, cardY + 110);
+
+        // Core CTA Heading
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 66px -apple-system, 'Arial Black', sans-serif";
+        ctx.shadowColor = "#00f0ff";
+        ctx.shadowBlur = 30;
+        ctx.fillText("DO NOT TRADE BLIND", W / 2, cardY + 220);
+
+        ctx.font = "800 40px -apple-system, sans-serif";
+        ctx.fillStyle = "#8a9cb8";
+        ctx.shadowBlur = 0;
+        ctx.fillText("Track Whale Orders & Liquidation Heatmaps", W / 2, cardY + 300);
+
+        // Glowing Button
+        const btnY = cardY + 410;
+        const bounce = Math.sin(currentTime * 8) * 12;
+
+        ctx.save();
+        ctx.translate(0, bounce);
+        const btnGrad = ctx.createLinearGradient(W / 2 - 380, btnY, W / 2 + 380, btnY + 120);
+        btnGrad.addColorStop(0, "#00ff88");
+        btnGrad.addColorStop(1, "#00c3ff");
+
+        ctx.fillStyle = btnGrad;
+        ctx.shadowColor = "#00ff88";
+        ctx.shadowBlur = 40;
+        ctx.beginPath();
+        ctx.roundRect(W / 2 - 380, btnY, 760, 120, 60);
+        ctx.fill();
+
+        ctx.fillStyle = "#030a16";
+        ctx.font = "900 42px -apple-system, 'Arial Black', sans-serif";
+        ctx.shadowBlur = 0;
+        ctx.fillText("👉 100% FREE QUANT TERMINAL", W / 2, btnY + 75);
+        ctx.restore();
+
+        // Website URL Highlight
+        const urlY = cardY + 670;
+        ctx.font = "900 58px -apple-system, 'Arial Black', sans-serif";
+        ctx.fillStyle = "#ffd700";
+        ctx.shadowColor = "#ffd700";
+        ctx.shadowBlur = 40;
+        ctx.fillText("bitcoincrypto.tech", W / 2, urlY);
+
+        // Bouncing Neon Arrows Pointing to Bio
+        const arrowY = cardY + 840 + (Math.sin(currentTime * 10) * 20);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "900 44px -apple-system, sans-serif";
+        ctx.shadowColor = "#00f0ff";
+        ctx.shadowBlur = 30;
+        ctx.fillText("👇 TAP DIRECT LINK IN BIO 👇", W / 2, arrowY);
+
+        ctx.font = "800 28px -apple-system, sans-serif";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+        ctx.shadowBlur = 0;
+        ctx.fillText("Strictly Educational & Quantitative Research", W / 2, cardY + 980);
+
+        ctx.restore();
+      }
+    };
+
+    // Auto-Run loop if in interactive browser mode
+    window.__RECORDING_CONTROL = false;
+    let startTimestamp = null;
+    function animLoop(ts) {
+      if (window.__RECORDING_CONTROL) return;
+      if (!startTimestamp) startTimestamp = ts;
+      const elapsed = (ts - startTimestamp) / 1000;
+      window.__renderFrame(elapsed);
+      requestAnimationFrame(animLoop);
+    }
+    requestAnimationFrame(animLoop);
+  </script>
+</body>
+</html>

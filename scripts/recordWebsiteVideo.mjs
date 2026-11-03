@@ -16,30 +16,17 @@ import path from "path";
 
 const EDGE_PATH = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 
-export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputPath = "./tmp_shorts/screen_recording.mp4") {
+export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputPath = "./tmp_shorts/screen_recording.mp4", metadata = null) {
   const outputDir = path.dirname(outputPath);
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
   const framesDir = path.resolve(outputDir, `frames_${Date.now()}`);
   if (!fs.existsSync(framesDir)) fs.mkdirSync(framesDir, { recursive: true });
 
-  // Map to local Next.js server for instant 0ms latency rendering if available
-  let navigationUrl = targetUrl;
-  if (navigationUrl.includes("bitcoincrypto.tech")) {
-    try {
-      const urlObj = new URL(navigationUrl);
-      const localCandidate = `http://localhost:3000${urlObj.pathname}${urlObj.search}`;
-      const res = await fetch("http://localhost:3000", { signal: AbortSignal.timeout(800) }).catch(() => null);
-      if (res && res.status < 500) {
-        navigationUrl = localCandidate;
-      } else {
-        console.log(`⚠️ Local server not responding, falling back to production URL: ${navigationUrl}`);
-      }
-    } catch (_) {}
-  }
+  const templatePath = path.resolve(process.cwd(), "scripts/templates/viralShortTemplate.html");
+  const useProTemplate = fs.existsSync(templatePath);
 
-  console.log(`🎥 Initiating Pro 4K Cinematic Recording of ${navigationUrl}...`);
-  console.log(`⏱️ Target Duration: ${targetDuration.toFixed(1)} seconds`);
+  console.log(`🎥 Initiating Pro 4K Motion-Graphics Recording (${targetDuration.toFixed(1)}s, True 4K UHD)...`);
 
   const browser = await puppeteer.launch({
     executablePath: EDGE_PATH,
@@ -58,32 +45,56 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   // 1080x1920 with deviceScaleFactor: 2 renders native 2160x3840 (True 4K UHD)
   await page.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 2 });
 
-  // Suppress popups and force sleek dark mode before navigation
-  await page.evaluateOnNewDocument(() => {
-    try {
-      localStorage.setItem("btc_cookie_consent", "all");
-      localStorage.setItem("btc_theme_mode", "dark");
-      localStorage.setItem("btc_theme_accent", "amber");
-    } catch (_) {}
-  });
+  if (useProTemplate) {
+    const fileUrl = "file://" + templatePath.replace(/\\/g, "/");
+    console.log(`🎬 Loading Pro 4K Motion-Graphics Studio: ${fileUrl}...`);
+    await page.goto(fileUrl, { waitUntil: "domcontentloaded", timeout: 20000 });
 
-  console.log(`🌐 Loading page with sub-millisecond local latency...`);
-  await page.goto(navigationUrl, { waitUntil: "domcontentloaded", timeout: 25000 });
+    await page.evaluate((meta, dur) => {
+      window.__RECORDING_CONTROL = true;
+      if (window.__INIT_METADATA) {
+        window.__INIT_METADATA({
+          coinName: meta?.coinName || "Solana",
+          coinTicker: meta?.coinTicker || "SOL",
+          price: meta?.price || "$184.50",
+          target: meta?.target || "$195.00",
+          squeezeCluster: meta?.squeezeCluster || "$380M",
+          resistance: meta?.resistance || "$188.00",
+          hookTitle: meta?.title || "WHALES JUST DROPPED $400M",
+          category: meta?.category || "AI QUANT PREDICTION",
+          duration: dur
+        });
+      }
+      if (window.__renderFrame) {
+        window.__renderFrame(0);
+      }
+    }, metadata, targetDuration);
 
-  // Clean CSS & inject butter-smooth animation engine
-  await page.addStyleTag({
-    content: `
-      ::-webkit-scrollbar { display: none !important; }
-      body { -ms-overflow-style: none; scrollbar-width: none; overflow-x: hidden; }
-      html { scroll-behavior: auto !important; }
-    `
-  }).catch(() => {});
+    await new Promise((r) => setTimeout(r, 600));
+  } else {
+    // Map to local Next.js server for instant 0ms latency rendering if available
+    let navigationUrl = targetUrl;
+    if (navigationUrl.includes("bitcoincrypto.tech")) {
+      try {
+        const urlObj = new URL(navigationUrl);
+        const localCandidate = `http://localhost:3000${urlObj.pathname}${urlObj.search}`;
+        const res = await fetch("http://localhost:3000", { signal: AbortSignal.timeout(800) }).catch(() => null);
+        if (res && res.status < 500) {
+          navigationUrl = localCandidate;
+        } else {
+          console.log(`⚠️ Local server not responding, falling back to production URL: ${navigationUrl}`);
+        }
+      } catch (_) {}
+    }
 
-  // Wait 1.8s for live candlesticks and order book numbers to render
-  await new Promise((r) => setTimeout(r, 1800));
+    console.log(`🌐 Loading page with sub-millisecond local latency...`);
+    await page.goto(navigationUrl, { waitUntil: "domcontentloaded", timeout: 25000 });
+    await new Promise((r) => setTimeout(r, 1800));
+  }
 
-  // Inject High-Impact Razor-Sharp Hook, Cyber HUD, White Flash Transition & Lerp Engine
-  await page.evaluate(() => {
+  // Inject High-Impact Razor-Sharp Hook, Cyber HUD, White Flash Transition & Lerp Engine (Fallback mode only)
+  if (!useProTemplate) {
+    await page.evaluate(() => {
     const style = document.createElement("style");
     style.innerHTML = `
       * {
@@ -338,6 +349,7 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
     }
     requestAnimationFrame(smoothScrollStep);
   });
+  }
 
   const client = await page.target().createCDPSession();
 
@@ -378,103 +390,115 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
 
   while (Date.now() - startTime < totalMs) {
     const elapsed = (Date.now() - startTime) / 1000;
-    const progressPct = Math.min(100, (elapsed / targetDuration) * 100);
 
-    // Dynamic camera target calculations
-    let targetScrollPosition = 0;
-
-    if (elapsed < hookDuration) {
-      targetScrollPosition = 0;
-    } else if (elapsed < tChartEnd) {
-      targetScrollPosition = 360;
-    } else if (elapsed < tOrderBookEnd) {
-      targetScrollPosition = 760;
+    if (useProTemplate) {
+      try {
+        await page.evaluate((sec) => {
+          if (window.__renderFrame) {
+            window.__renderFrame(sec);
+          }
+        }, elapsed);
+      } catch (_) {}
+      await new Promise((r) => setTimeout(r, 33));
     } else {
-      targetScrollPosition = 1180;
-    }
+      const progressPct = Math.min(100, (elapsed / targetDuration) * 100);
 
-    // Execute state updates inside the page
-    try {
-      await page.evaluate((pct, sec, scrollTarget, duration, tChart, tBook, tHook) => {
-        // Update top progress bar
-        const p = document.getElementById("cyberProgressBar");
-        if (p) p.style.width = pct + "%";
+      // Dynamic camera target calculations
+      let targetScrollPosition = 0;
 
-        // Command smooth lerp scroll
-        if (window.__setScrollTarget) {
-          window.__setScrollTarget(scrollTarget);
-        }
+      if (elapsed < hookDuration) {
+        targetScrollPosition = 0;
+      } else if (elapsed < tChartEnd) {
+        targetScrollPosition = 360;
+      } else if (elapsed < tOrderBookEnd) {
+        targetScrollPosition = 760;
+      } else {
+        targetScrollPosition = 1180;
+      }
 
-        // CapCut White Flash Transition 1 at hook transition (3.0s)
-        const flash = document.getElementById("cyberFlashOverlay");
-        if (flash) {
-          if ((sec >= tHook - 0.15 && sec < tHook + 0.25) || (sec >= tChart - 0.15 && sec < tChart + 0.15)) {
-            flash.style.opacity = "0.85";
-          } else {
-            flash.style.opacity = "0";
+      // Execute state updates inside the page
+      try {
+        await page.evaluate((pct, sec, scrollTarget, duration, tChart, tBook, tHook) => {
+          // Update top progress bar
+          const p = document.getElementById("cyberProgressBar");
+          if (p) p.style.width = pct + "%";
+
+          // Command smooth lerp scroll
+          if (window.__setScrollTarget) {
+            window.__setScrollTarget(scrollTarget);
           }
-        }
 
-        // CapCut Punch-in Camera Zoom Transitions (Dynamic perspective changes)
-        if (sec < tHook) {
-          document.body.style.transform = "scale(1.0)";
-        } else if (sec >= tHook && sec < tChart) {
-          document.body.style.transform = "scale(1.18)";
-          document.body.style.transformOrigin = "50% 28%";
-          document.body.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
-        } else if (sec >= tChart && sec < tBook) {
-          document.body.style.transform = "scale(1.10)";
-          document.body.style.transformOrigin = "50% 46%";
-          document.body.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
-        } else if (sec >= tBook && sec < duration - 4.2) {
-          document.body.style.transform = "scale(1.15)";
-          document.body.style.transformOrigin = "50% 58%";
-        } else {
-          document.body.style.transform = "scale(1.0)";
-        }
-
-        // Trigger End Call To Action Card in final 4.2 seconds
-        const cta = document.getElementById("cyberCtaCard");
-        if (cta) {
-          if (sec >= duration - 4.2) {
-            cta.style.opacity = "1";
-            cta.style.transform = "translateY(0)";
-          } else {
-            cta.style.opacity = "0";
-            cta.style.transform = "translateY(60px)";
+          // CapCut White Flash Transition 1 at hook transition (3.0s)
+          const flash = document.getElementById("cyberFlashOverlay");
+          if (flash) {
+            if ((sec >= tHook - 0.15 && sec < tHook + 0.25) || (sec >= tChart - 0.15 && sec < tChart + 0.15)) {
+              flash.style.opacity = "0.85";
+            } else {
+              flash.style.opacity = "0";
+            }
           }
-        }
 
-        // Choreograph Target Reticle
-        const box = document.getElementById("cyberTargetBox");
-        const h = document.getElementById("targetHeader");
-        const m = document.getElementById("targetMain");
-
-        if (box && h && m) {
+          // CapCut Punch-in Camera Zoom Transitions (Dynamic perspective changes)
           if (sec < tHook) {
-            box.style.top = "28%";
-            h.innerText = "[ ⚡ AI BREAKOUT TARGET DETECTED ]";
-            m.innerText = "QUANT TARGET LOCKED 🎯";
-          } else if (sec < tChart) {
-            box.style.top = "33%";
-            h.innerText = "[ 📈 LIVE CANDLESTICK AUCTION THEORY ]";
-            m.innerText = "AI RESISTANCE BREAKOUT ZONE ⚡";
-          } else if (sec < tBook) {
-            box.style.top = "40%";
-            h.innerText = "[ 🔥 INSTITUTIONAL LIQUIDATION POOL ]";
-            m.innerText = "$380M SHORT SQUEEZE ZONE 💥";
-          } else if (sec < duration - 4.2) {
-            box.style.top = "32%";
-            h.innerText = "[ 📊 CUMULATIVE VOLUME DELTA (CVD) ]";
-            m.innerText = "AGGRESSIVE BUY ABSORPTION ▲";
+            document.body.style.transform = "scale(1.0)";
+          } else if (sec >= tHook && sec < tChart) {
+            document.body.style.transform = "scale(1.18)";
+            document.body.style.transformOrigin = "50% 28%";
+            document.body.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
+          } else if (sec >= tChart && sec < tBook) {
+            document.body.style.transform = "scale(1.10)";
+            document.body.style.transformOrigin = "50% 46%";
+            document.body.style.transition = "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)";
+          } else if (sec >= tBook && sec < duration - 4.2) {
+            document.body.style.transform = "scale(1.15)";
+            document.body.style.transformOrigin = "50% 58%";
           } else {
-            box.style.opacity = "0";
+            document.body.style.transform = "scale(1.0)";
           }
-        }
-      }, progressPct, elapsed, targetScrollPosition, targetDuration, tChartEnd, tOrderBookEnd, hookDuration);
-    } catch (_) {}
 
-    await new Promise((r) => setTimeout(r, 45));
+          // Trigger End Call To Action Card in final 4.2 seconds
+          const cta = document.getElementById("cyberCtaCard");
+          if (cta) {
+            if (sec >= duration - 4.2) {
+              cta.style.opacity = "1";
+              cta.style.transform = "translateY(0)";
+            } else {
+              cta.style.opacity = "0";
+              cta.style.transform = "translateY(60px)";
+            }
+          }
+
+          // Choreograph Target Reticle
+          const box = document.getElementById("cyberTargetBox");
+          const h = document.getElementById("targetHeader");
+          const m = document.getElementById("targetMain");
+
+          if (box && h && m) {
+            if (sec < tHook) {
+              box.style.top = "28%";
+              h.innerText = "[ ⚡ AI BREAKOUT TARGET DETECTED ]";
+              m.innerText = "QUANT TARGET LOCKED 🎯";
+            } else if (sec < tChart) {
+              box.style.top = "33%";
+              h.innerText = "[ 📈 LIVE CANDLESTICK AUCTION THEORY ]";
+              m.innerText = "AI RESISTANCE BREAKOUT ZONE ⚡";
+            } else if (sec < tBook) {
+              box.style.top = "40%";
+              h.innerText = "[ 🔥 INSTITUTIONAL LIQUIDATION POOL ]";
+              m.innerText = "$380M SHORT SQUEEZE ZONE 💥";
+            } else if (sec < duration - 4.2) {
+              box.style.top = "32%";
+              h.innerText = "[ 📊 CUMULATIVE VOLUME DELTA (CVD) ]";
+              m.innerText = "AGGRESSIVE BUY ABSORPTION ▲";
+            } else {
+              box.style.opacity = "0";
+            }
+          }
+        }, progressPct, elapsed, targetScrollPosition, targetDuration, tChartEnd, tOrderBookEnd, hookDuration);
+      } catch (_) {}
+
+      await new Promise((r) => setTimeout(r, 45));
+    }
   }
 
   isRecording = false;

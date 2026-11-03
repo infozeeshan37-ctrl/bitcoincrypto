@@ -57,15 +57,12 @@ export async function generateDailyShort(categoryOverride = null) {
       title: `🚨 ${coin.name} Next 24 Hours: AI Technical Target! (${coin.ticker}) #Shorts`,
       targetUrl: `https://www.bitcoincrypto.tech/predictions/${coin.slug || coin.name.toLowerCase()}`,
       visuals: [
-        "[0:00 - 0:03] Hook: Zoom in on live candlestick chart with glowing AI buy/sell signal tag",
-        "[0:03 - 0:12] Show L2 Order Book depth & resistance wall at " + coin.wall + " on BitcoinCrypto.tech",
-        "[0:12 - 0:18] Display CVD Taker Flow & target trajectory toward " + coin.target,
-        "[0:18 - 0:24] Outro with animated Link In Bio call to action"
+        "[0:00 - 0:03] Hook: 3D rotating gold coin with emergency alert badge and laser shockwave",
+        "[0:03 - 0:09] Animated candlestick chart breakout with ticking short liquidations counter",
+        "[0:09 - 0:16] 3D Cyber Terminal window displaying live order book depth & AI target reticle",
+        "[0:16 - 0:22] High-converting outro card with pulsing button & bouncing bio arrow"
       ],
-      voiceover: `Stop scrolling! Look at this massive breakout signal on ${coin.name}.
-Right now, ${coin.ticker} is trading at ${formatPrice(livePrice)}. Our live order book scanner detects institutional limit buy orders absorbing all sell pressure.
-Our AI quantitative model projects a fast surge toward ${coin.target}, with over ${coin.squeezeCluster} in short liquidations about to get squeezed!
-Track these live AI predictions for free on bitcoincrypto.tech. Link in bio!`,
+      voiceover: `Whales just placed a massive limit buy wall on ${coin.name}, and retail is completely blind to what is coming. Right now, ${coin.ticker} is trading at ${formatPrice(livePrice)}. Our live order book scanner detects smart money absorbing all sell pressure at ${coin.wall}. Our AI quantitative model projects a violent surge toward ${coin.target}, with over ${coin.squeezeCluster} in short liquidations about to get squeezed! Do not trade blind. Scan the live order book and liquidation heatmap for free right now on bitcoincrypto.tech. Tap the link in bio before the four-hour candle closes!`,
       description: `Analyzing live ${coin.name} (${coin.ticker}) market structure, Level-2 Order Book imbalance, CVD taker volume, and AI price prediction targets.
       
 Explore live predictions & paper-trading terminal:
@@ -83,15 +80,12 @@ Explore live predictions & paper-trading terminal:
       title: `🔥 HUGE Liquidation Cascade Incoming?! Crypto Heatmap Alert #Shorts`,
       targetUrl: "https://www.bitcoincrypto.tech/tools/liquidation-heatmap",
       visuals: [
-        "[0:00 - 0:03] Hook: Screen recording of 2D glowing multi-color CoinGlass liquidation heatmap",
-        "[0:03 - 0:12] Highlight dense bright yellow leverage clusters near key support/resistance",
-        "[0:12 - 0:18] Show funding rate comparison chart across Binance, Bybit, and OKX",
-        "[0:18 - 0:24] Outro with animated Link In Bio call to action"
+        "[0:00 - 0:03] Hook: 3D Gold Coin with emergency $380M Liquidation Alert badge",
+        "[0:03 - 0:09] Multi-exchange liquidation heatmap with glowing trapped leverage clusters",
+        "[0:09 - 0:16] Live Level-2 order book depth scanning forced liquidation triggers",
+        "[0:16 - 0:22] High-converting outro card with pulsing bio link CTA"
       ],
-      voiceover: `Warning! Look at this massive 250 million dollar liquidation cluster right now.
-Overleveraged short sellers are completely trapped at current prices.
-When smart money sweeps this wall, forced liquidations will trigger a violent short squeeze!
-Do not trade blind. Scan real-time multi-exchange liquidation heatmaps for 100% free on bitcoincrypto.tech. Link in bio!`,
+      voiceover: `Over 380 million dollars in short sellers are about to get completely wiped out. Look at this massive liquidation cluster right here on the heatmap. Smart money is quietly sweeping support, and when this level triggers, forced liquidations will cause an explosive short squeeze straight to new highs. Stop trading blind. Scan multi-exchange liquidation heatmaps for free on bitcoincrypto.tech. Tap the link in bio now!`,
       description: `Real-time CoinGlass derivatives breakdown: tracking liquidation heatmaps, short squeeze clusters, open interest, and funding rate arbitrage across Binance, Bybit, and OKX.
 
 View the live CoinGlass Liquidation Heatmap:
@@ -109,15 +103,12 @@ View the live CoinGlass Liquidation Heatmap:
       title: `🐋 $10,000,000 WHALE BUY ORDER DETECTED! Crypto Radar Alert #Shorts`,
       targetUrl: "https://www.bitcoincrypto.tech/whale-orders",
       visuals: [
-        "[0:00 - 0:03] Hook: Flashing Whale Orders sub-second block trade terminal with green $1M+ alerts",
-        "[0:03 - 0:12] Highlight the resting limit bid wall ladder ($50M+ absorption pool)",
-        "[0:12 - 0:18] Show institutional cumulative volume delta (CVD) spiking upward",
-        "[0:18 - 0:24] Outro with animated Link In Bio call to action"
+        "[0:00 - 0:03] Hook: Flashing Whale Orders block trade terminal with green $10M+ alerts",
+        "[0:03 - 0:09] 3D depth chart highlighting resting institutional limit bid wall",
+        "[0:09 - 0:16] Cumulative volume delta (CVD) divergence showing smart money absorption",
+        "[0:16 - 0:22] High-converting outro card with pulsing bio link CTA"
       ],
-      voiceover: `Alert! A massive 10 million dollar whale buy order just printed on the live tape!
-While retail was panic selling the dip, smart money stepped in with huge resting limit orders to absorb the entire market.
-Tracking what whales actually do beats retail sentiment every single time.
-Watch the live whale tape for free on bitcoincrypto.tech. Link in bio!`,
+      voiceover: `Alert! A massive 10 million dollar whale buy order just printed on the live tape! While retail was panic selling the dip, smart money stepped in with huge resting limit orders to absorb the entire market. Tracking what whales actually do beats retail sentiment every single time. Watch the live whale tape for free on bitcoincrypto.tech. Link in bio!`,
       description: `Tracking institutional cryptocurrency whale block trades ($100k to $10M+) in real-time. Detect dark pool limit walls and smart money taker flow.
 
 Watch the live Whale Radar:
@@ -136,13 +127,11 @@ Watch the live Whale Radar:
       targetUrl: "https://www.bitcoincrypto.tech/cpi",
       visuals: [
         "[0:00 - 0:03] Hook: US CPI countdown clock & historical volatility candle spikes",
-        "[0:03 - 0:12] Show BLS inflation consensus vs BitcoinCrypto AI neural forecast",
-        "[0:12 - 0:18] Show the Fed rate cut probability gauge (88% odds)",
-        "[0:18 - 0:24] Outro with animated Link In Bio call to action"
+        "[0:03 - 0:09] BLS inflation consensus vs AI neural liquidity forecast",
+        "[0:09 - 0:16] Live Fed rate cut probability gauge with 88% odds",
+        "[0:16 - 0:22] Outro with animated Link In Bio call to action"
       ],
-      voiceover: `Urgent macro alert! The next official inflation report is dropping, and Bitcoin is coiling for a huge move.
-Our quantitative correlation model indicates every point surprise triggers an average 4% volatility wick in digital assets.
-Run the live inflation scenario simulator and check Fed odds right now on bitcoincrypto.tech. Link in bio!`,
+      voiceover: `Urgent macro volatility alert! The next official inflation report is dropping, and Bitcoin is coiling for an explosive 8 percent breakout wick. Historical data confirms smart money uses these exact volatility wicks to liquidate overleveraged retail. Run the live inflation scenario simulator for free right now on bitcoincrypto.tech. Tap the link in bio!`,
       description: `US BLS Consumer Price Index (CPI) countdown, macroeconomic liquidity modeling, and historical Bitcoin volatility correlation matrix.
 
 Run the live US CPI scenario simulator:
@@ -160,14 +149,12 @@ Run the live US CPI scenario simulator:
       title: `🧠 The 1% Risk Rule That Saves Crypto Traders From Ruin #Shorts`,
       targetUrl: "https://www.bitcoincrypto.tech/learn",
       visuals: [
-        "[0:00 - 0:03] Hook: Red drawdown recovery matrix chart showing 80% loss requires 400% gain",
-        "[0:03 - 0:12] Show mathematical position sizing formula: Account * 1% / Distance to Stop",
-        "[0:12 - 0:18] Show why a 35% win rate makes you profitable with 1:3 Risk to Reward",
-        "[0:18 - 0:24] Outro with animated Link In Bio call to action"
+        "[0:00 - 0:03] Hook: Drawdown recovery matrix chart showing 80% loss requires 400% gain",
+        "[0:03 - 0:09] Position sizing formula: Account times 1% divided by distance to stop",
+        "[0:09 - 0:16] Mathematical proof why 35% win rate makes you profitable with 1:3 R:R",
+        "[0:16 - 0:22] Outro with animated Link In Bio call to action"
       ],
-      voiceover: `Stop trading until you know this rule! If you lose 80% of your crypto portfolio, you need a massive 400% gain just to break even!
-That is why pro traders follow the strict 1% risk rule: never risk more than 1% per trade.
-Master real quantitative risk management with 10 free interactive lessons on bitcoincrypto.tech. Link in bio!`,
+      voiceover: `Stop trading until you know this mathematical law! If you lose 80% of your crypto account, you need a massive 400% gain just to break even! That is why pro quantitative traders follow the strict 1% risk rule: never risk more than 1% per trade. Master real risk management with free interactive tools on bitcoincrypto.tech. Tap the link in bio now!`,
       description: `Master the mathematical reality of capital preservation, position sizing formulas, drawdown recovery math, and risk-to-reward ratios.
 
 Start the free 10-chapter Crypto Learn curriculum:
@@ -180,6 +167,14 @@ Start the free 10-chapter Crypto Learn curriculum:
       pinnedComment: `🎓 Complete the 10-chapter interactive Crypto Learn curriculum & download free PDF eBook notes: 👉 https://www.bitcoincrypto.tech/learn`
     };
   }
+
+  // Attach enriched coin and dynamic numerical metadata for motion graphics
+  shortPack.coinName = coin.name;
+  shortPack.coinTicker = coin.ticker;
+  shortPack.price = formatPrice(livePrice);
+  shortPack.target = coin.target;
+  shortPack.squeezeCluster = coin.squeezeCluster;
+  shortPack.resistance = coin.wall;
 
   return shortPack;
 }
