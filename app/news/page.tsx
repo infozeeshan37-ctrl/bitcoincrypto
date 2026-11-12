@@ -6,7 +6,7 @@ import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 
 export const metadata: Metadata = {
-  title: "Latest Crypto News Live: Bitcoin $100K Breakout, ETF Inflows, Fed Rate Cuts & Whale Alerts",
+  title: "Latest Crypto News and Macroeconomic Updates",
   description:
     "Real-time cryptocurrency news wire. Breaking Bitcoin ETF net inflows, Federal Reserve FOMC interest rate cuts, US CPI inflation prints, Ethereum Pectra upgrade, Solana DEX volumes, Ripple XRP SEC settlement, and whale wallet movements.",
   keywords: [

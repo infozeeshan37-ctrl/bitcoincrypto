@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+# Disallow internal API routes
+Disallow: /api/
+Sitemap: https://www.bitcoincrypto.tech/sitemap.xml

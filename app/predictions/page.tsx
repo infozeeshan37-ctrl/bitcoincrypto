@@ -9,7 +9,7 @@ import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import { AIPredictionAppJsonLd, FAQJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "AI Crypto Price Prediction Engine | Quantitative Technical & Fundamental Models | BitcoinCrypto.tech",
+  title: "AI Crypto Price Prediction Engine – Quantitative Technical & Fundamental Models",
   description:
     "Institutional cryptocurrency AI price prediction engine. Deterministic multi-horizon forecasts synthesizing Level-2 Order Book Imbalance (OBI), Cumulative Volume Delta (CVD), CoinGlass Liquidation Magnets, and Macro US CPI disinflation. 100% educational paper-trading and walk-forward backtested research.",
   keywords: [
