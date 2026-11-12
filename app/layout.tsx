@@ -82,9 +82,6 @@ export const metadata: Metadata = {
   creator: "BitcoinCrypto.tech",
   publisher: "BitcoinCrypto.tech",
   metadataBase: new URL("https://www.bitcoincrypto.tech"),
-  alternates: {
-    canonical: "/",
-  },
   robots: {
     index: true,
     follow: true,

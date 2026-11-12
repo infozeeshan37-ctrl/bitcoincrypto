@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { articles } from "@/lib/blogData";
 import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
+import { allArticles } from "@/lib/courseData";
+import { authors } from "@/lib/authorsData";
 
 export const dynamic = "force-dynamic";
 
@@ -24,13 +26,18 @@ function getAllSiteUrls(): string[] {
     `${baseUrl}/news`,
     `${baseUrl}/concepts`,
     `${baseUrl}/learn`,
+    `${baseUrl}/learn/technical`,
+    `${baseUrl}/learn/fundamental`,
     `${baseUrl}/blog`,
+    `${baseUrl}/authors`,
+    `${baseUrl}/editorial-policy`,
     `${baseUrl}/about`,
     `${baseUrl}/contact`,
     `${baseUrl}/privacy`,
     `${baseUrl}/terms`,
     `${baseUrl}/disclaimer`,
     `${baseUrl}/cookie-policy`,
+    `${baseUrl}/sitemap`,
   ];
 
   const predictionRoutes = coinPredictions.map((c) => `${baseUrl}/predictions/${c.slug}`);
@@ -53,12 +60,18 @@ function getAllSiteUrls(): string[] {
 
   const blogRoutes = articles.map((a) => `${baseUrl}/blog/${a.slug}`);
 
+  const authorRoutes = authors.map((au) => `${baseUrl}/authors/${au.slug}`);
+
+  const lessonRoutes = allArticles.map((l) => `${baseUrl}/learn/${l.slug}`);
+
   return [
     ...staticRoutes,
     ...predictionRoutes,
     ...toolRoutes,
     ...conceptRoutes,
     ...blogRoutes,
+    ...authorRoutes,
+    ...lessonRoutes,
   ];
 }
 

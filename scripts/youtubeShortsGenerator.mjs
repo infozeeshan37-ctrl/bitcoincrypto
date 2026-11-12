@@ -36,6 +36,7 @@ function formatPrice(val) {
 
 export async function generateDailyShort(categoryOverride = null) {
   const categories = [
+    "five_minute_arena",
     "ai_prediction",
     "coinglass_squeeze",
     "whale_radar",
@@ -43,15 +44,46 @@ export async function generateDailyShort(categoryOverride = null) {
     "cpi_macro"
   ];
 
-  const chosenCategory = categoryOverride && categories.includes(categoryOverride)
-    ? categoryOverride
+  const chosenCategory = categoryOverride && (categories.includes(categoryOverride) || categoryOverride === "five_minute" || categoryOverride === "5min")
+    ? (categoryOverride === "five_minute" || categoryOverride === "5min" ? "five_minute_arena" : categoryOverride)
     : categories[Math.floor(Math.random() * categories.length)];
   const coin = POPULAR_COINS[Math.floor(Math.random() * POPULAR_COINS.length)];
   const livePrice = await fetchLiveBinancePrice(coin.symbol, 88500);
 
   let shortPack = {};
 
-  if (chosenCategory === "ai_prediction") {
+  if (chosenCategory === "five_minute_arena") {
+    shortPack = {
+      category: "5-Minute AI Prediction Arena & Website Showcase",
+      title: "🚨 CAN AI PREDICT THE NEXT 5 MINUTES? New Free Tool! ⏱️ #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/predictions",
+      template: "five_minute",
+      visuals: [
+        "[0:00 - 0:04] Hook: Emergency Quant Alert with pulsing 5-Minute scalp clock",
+        "[0:04 - 0:13] Live 5-Minute Prediction Arena with BTC, ETH, SOL targets and 95% AI confidence",
+        "[0:13 - 0:21] Multi-Tab Website Tour: CoinGlass liquidations, whale tape, and AI trading bot",
+        "[0:21 - 0:28] High-converting outro with pulsating bio link CTA & domain highlight"
+      ],
+      voiceover: "Stop trading blind in crypto. What if an artificial intelligence could predict the exact next five-minute price target before the candle even moves? Look at this: on BitcoinCrypto dot tech, our brand-new Five-Minute Prediction Arena calculates live scalp targets for Bitcoin, Ethereum, and Solana with up to ninety-five percent quantitative confidence! It scans real-time volatility, Level-Two order book walls, and whale volume delta every single second. And that is just one tab on the site! You get live liquidation heatmaps, whale dark pools, and real-time AI long and short signals—one hundred percent free with zero signup required. Tap the link in bio right now to test the Five-Minute AI live on BitcoinCrypto dot tech before the next candle prints!",
+      description: `Can AI predict the next 5-minute crypto price move? 🚀
+      
+Explore our brand-new 5-Minute AI Prediction Arena & Free Quant Trading Suite:
+👉 https://www.bitcoincrypto.tech/predictions
+
+🔥 What's inside BitcoinCrypto.tech:
+1. ⏱️ 5-Minute Prediction Arena (Scalp Targets & ATR Volatility)
+2. 🎯 Multi-Timeframe AI Price Targets (5M, 15M, 1H, 4H, 1D)
+3. 🔥 CoinGlass Liquidation Heatmaps & Short Squeeze Radar
+4. 🐋 Whale Dark Pool & Order Book Depth Scanner
+5. 🤖 Autonomous AI Trading Bot (Unbiased LONG & SHORT signals)
+
+⚠️ Strictly for educational and informational research purposes only. Not financial advice. Zero gambling.
+
+#Bitcoin #Crypto #CryptoTrading #CryptoPredictions #Ethereum #Solana #DayTrading #Scalping #TradingView #Shorts`,
+      tags: ["Crypto Prediction", "5 Minute Scalping", "AI Trading", "Bitcoin", "Ethereum", "Solana", "Crypto Signals", "BitcoinCrypto Tech", "Order Book", "Shorts"],
+      pinnedComment: `⏱️ Test the 5-Minute AI Prediction Arena & Live Institutional Suite for 100% Free: 👉 https://www.bitcoincrypto.tech/predictions`
+    };
+  } else if (chosenCategory === "ai_prediction") {
     shortPack = {
       category: "AI Predictive Model & Signals",
       title: `🚨 ${coin.name} Next 24 Hours: AI Technical Target! (${coin.ticker}) #Shorts`,

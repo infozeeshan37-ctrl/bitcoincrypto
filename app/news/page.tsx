@@ -8,7 +8,7 @@ import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 export const metadata: Metadata = {
   title: "Latest Crypto News and Macroeconomic Updates",
   description: "Real‑time cryptocurrency news wire covering Bitcoin ETF inflows, Federal Reserve rate cuts, US CPI releases, Ethereum upgrades, Solana DEX volume, and whale wallet activity.",
-    "Real-time cryptocurrency news wire. Breaking Bitcoin ETF net inflows, Federal Reserve FOMC interest rate cuts, US CPI inflation prints, Ethereum Pectra upgrade, Solana DEX volumes, Ripple XRP SEC settlement, and whale wallet movements.",
+
   keywords: [
     "crypto news live",
     "bitcoin news today",
@@ -31,7 +31,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Latest Crypto News Live: Bitcoin ETF Inflows, Fed Rate Cuts & Whale Alerts",
     description: "Real‑time cryptocurrency news wire covering Bitcoin ETF inflows, Federal Reserve rate cuts, US CPI releases, Ethereum upgrades, Solana DEX volume, and whale wallet activity.",
-      "Real-time cryptocurrency news wire and macroeconomic tracker. Breaking headlines on Bitcoin, Ethereum, Solana, Fed FOMC interest rates, and US CPI inflation releases.",
     url: "https://www.bitcoincrypto.tech/news",
     type: "website",
     siteName: "BitcoinCrypto.tech",
@@ -48,7 +47,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Latest Crypto News Live: Bitcoin ETF Inflows, Fed Rate Cuts & Whale Alerts",
     description: "Real‑time cryptocurrency news wire covering Bitcoin ETF inflows, Federal Reserve rate cuts, US CPI releases, Ethereum upgrades, Solana DEX volume, and whale wallet activity.",
-      "Real-time cryptocurrency news wire. Breaking Bitcoin, Ethereum, Solana, Fed rate cuts, and US CPI inflation releases.",
     creator: "@bitcoincrypto",
   },
 };

@@ -3,6 +3,7 @@ import HomeTradingSuiteHero from "@/components/home/HomeTradingSuiteHero";
 import LiveEcosystemOverview from "@/components/home/LiveEcosystemOverview";
 import TrustSecurity from "@/components/home/TrustSecurity";
 import NewsletterCTA from "@/components/home/NewsletterCTA";
+import HomeEditorialGuide from "@/components/home/HomeEditorialGuide";
 import { HomePageJsonLd } from "@/components/seo/JsonLd";
 import Link from "next/link";
 import {
@@ -225,10 +226,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Institutional Trust & Security Protocol */}
+      {/* 5. In-Depth Educational Guide & Quantitative Methodology (AdSense High-Value Content) */}
+      <HomeEditorialGuide />
+
+      {/* 6. Institutional Trust & Security Protocol */}
       <TrustSecurity />
 
-      {/* 6. Intelligence Newsletter Subscription */}
+      {/* 7. Intelligence Newsletter Subscription */}
       <NewsletterCTA />
     </div>
   );

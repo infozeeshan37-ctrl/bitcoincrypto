@@ -78,6 +78,12 @@ export const SIX_SLOT_HOURS = {
 };
 
 function resolveSlotCategory(args) {
+  const catArg = args.find((a) => a.startsWith("--category="));
+  if (catArg) {
+    const customCat = catArg.split("=")[1];
+    return { category: customCat, slotNumber: 1 };
+  }
+
   const slotArg = args.find((a) => a.startsWith("--slot="));
   if (slotArg) {
     const slotNum = parseInt(slotArg.split("=")[1], 10);

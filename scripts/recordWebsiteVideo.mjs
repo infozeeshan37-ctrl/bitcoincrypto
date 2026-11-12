@@ -24,9 +24,21 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   if (!fs.existsSync(framesDir)) fs.mkdirSync(framesDir, { recursive: true });
 
   const isCpi = (metadata?.category || "").toLowerCase().includes("cpi") || (metadata?.targetUrl || "").includes("/cpi");
+  const isFiveMin = (metadata?.category || "").toLowerCase().includes("5min") ||
+                    (metadata?.category || "").toLowerCase().includes("arena") ||
+                    (metadata?.category || "").toLowerCase().includes("five_min") ||
+                    (metadata?.template || "") === "five_minute";
+
   const cpiTemplate = path.resolve(process.cwd(), "scripts/templates/cpiFeatureShort.html");
+  const fiveMinTemplate = path.resolve(process.cwd(), "scripts/templates/fiveMinutePredictionShowcase.html");
   const defaultTemplate = path.resolve(process.cwd(), "scripts/templates/viralShortTemplate.html");
-  const templatePath = (isCpi && fs.existsSync(cpiTemplate)) ? cpiTemplate : defaultTemplate;
+
+  let templatePath = defaultTemplate;
+  if (isFiveMin && fs.existsSync(fiveMinTemplate)) {
+    templatePath = fiveMinTemplate;
+  } else if (isCpi && fs.existsSync(cpiTemplate)) {
+    templatePath = cpiTemplate;
+  }
   const useProTemplate = fs.existsSync(templatePath);
 
   console.log(`🎥 Initiating Pro 4K Motion-Graphics Recording (${targetDuration.toFixed(1)}s, True 4K UHD)...`);

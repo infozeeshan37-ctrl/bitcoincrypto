@@ -250,6 +250,11 @@ export default function Footer() {
                   <Info className="w-3.5 h-3.5 text-blue-400" /> About Us
                 </Link>
               </li>
+              <li>
+                <Link href="/sitemap" className="hover:text-amber-400 transition flex items-center gap-1.5 text-amber-300 font-semibold">
+                  <Compass className="w-3.5 h-3.5 text-amber-400" /> HTML Sitemap (All 220+ Pages)
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -430,6 +435,8 @@ export default function Footer() {
               <Link href="/contact" className="hover:text-white transition">Contact Us</Link>
               <span>•</span>
               <Link href="/about" className="hover:text-white transition">About Us</Link>
+              <span>•</span>
+              <Link href="/sitemap" className="text-amber-400 hover:text-amber-300 transition font-bold">HTML Sitemap</Link>
             </div>
             <div>
               &copy; {new Date().getFullYear()} <strong>BitcoinCrypto.tech</strong>. All rights reserved.

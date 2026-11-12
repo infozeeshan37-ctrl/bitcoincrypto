@@ -143,6 +143,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/sitemap`,
+      lastModified: currentDate,
+      changeFrequency: "daily",
+      priority: 0.85,
+    },
   ];
 
   // 2. Dedicated Programmatic Coin AI Price Prediction Pages

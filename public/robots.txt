@@ -1,5 +1,53 @@
+# Official Robots.txt for BitcoinCrypto.tech
+# Allowed for Googlebot, Mediapartners-Google (AdSense), and major search engines
+
 User-agent: *
 Allow: /
-# Disallow internal API routes
+Allow: /ads.txt
+Allow: /sitemap.xml
+Allow: /llms.txt
 Disallow: /api/
+
+# Google Search & Googlebot
+User-agent: Googlebot
+Allow: /
+Allow: /ads.txt
+Disallow: /api/
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Google AdSense Crawlers (Critical for AdSense Monetization & Site Reviews)
+User-agent: Mediapartners-Google
+Allow: /
+Allow: /ads.txt
+
+User-agent: AdsBot-Google
+Allow: /
+Allow: /ads.txt
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+Allow: /ads.txt
+
+# Microsoft Bing & Search Indexing
+User-agent: Bingbot
+Allow: /
+Allow: /ads.txt
+Disallow: /api/
+
+# AI Search & LLM Engines
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
 Sitemap: https://www.bitcoincrypto.tech/sitemap.xml
+Host: www.bitcoincrypto.tech
