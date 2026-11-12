@@ -123,25 +123,25 @@ Watch the live Whale Radar:
   } else if (chosenCategory === "cpi_macro") {
     shortPack = {
       category: "US CPI Macro Liquidity",
-      title: `🏛️ US CPI INFLATION ALERT: Bitcoin Volatility Countdown! #Shorts`,
+      title: `🚨 How To Predict Bitcoin Before US CPI Inflation Drops! #Shorts`,
       targetUrl: "https://www.bitcoincrypto.tech/cpi",
       visuals: [
-        "[0:00 - 0:03] Hook: US CPI countdown clock & historical volatility candle spikes",
-        "[0:03 - 0:09] BLS inflation consensus vs AI neural liquidity forecast",
-        "[0:09 - 0:16] Live Fed rate cut probability gauge with 88% odds",
-        "[0:16 - 0:22] Outro with animated Link In Bio call to action"
+        "[0:00 - 0:03] Hook: Live US BLS inflation countdown clock & historical volatility alerts",
+        "[0:03 - 0:09] Website Feature: Live Wall Street consensus & 88% Fed rate cut odds gauge",
+        "[0:09 - 0:16] AI Simulator: Bullish +4.8% pump target vs -5.2% liquidation flush projection",
+        "[0:16 - 0:22] Outro: Pulsing button directing to free CPI simulator & bio link"
       ],
-      voiceover: `Urgent macro volatility alert! The next official inflation report is dropping, and Bitcoin is coiling for an explosive 8 percent breakout wick. Historical data confirms smart money uses these exact volatility wicks to liquidate overleveraged retail. Run the live inflation scenario simulator for free right now on bitcoincrypto.tech. Tap the link in bio!`,
-      description: `US BLS Consumer Price Index (CPI) countdown, macroeconomic liquidity modeling, and historical Bitcoin volatility correlation matrix.
-
-Run the live US CPI scenario simulator:
+      voiceover: `Did you know you can predict Bitcoin volatility before the US inflation report drops? Head to the CPI tab on bitcoincrypto.tech. First, track the live countdown clock and the Wall Street consensus. Next, check the AI Scenario Simulator. If inflation cools below expectations, our quantitative model projects an immediate 4.8% Bitcoin breakout rally! If inflation comes in hot, forced liquidations trigger an immediate flush to support. Stop trading macro news blind. Run the free live CPI scenario simulator right now on bitcoincrypto.tech. Tap the link in bio!`,
+      description: `Learn how to forecast Bitcoin crypto volatility before the US Bureau of Labor Statistics (BLS) Consumer Price Index (CPI) inflation report drops.
+      
+Explore the live US CPI scenario simulator & volatility radar for 100% free:
 👉 https://www.bitcoincrypto.tech/cpi
 
-⚠️ Strictly educational macro analysis. Not investment advice.
+⚠️ Strictly educational quantitative research and macroeconomic modeling. Not financial advice.
 
-#CPI #Inflation #Bitcoin #FederalReserve #MacroEconomics #CryptoNews #CryptoTrading #Shorts`,
-      tags: ["US CPI", "Inflation", "Bitcoin CPI", "Macroeconomics", "Federal Reserve", "Crypto Volatility", "Shorts"],
-      pinnedComment: `🏛️ Run the live US CPI Inflation & Bitcoin Volatility Scenario Simulator: 👉 https://www.bitcoincrypto.tech/cpi`
+#CPI #Bitcoin #Crypto #CryptoTrading #Inflation #FederalReserve #MacroEconomics #Shorts`,
+      tags: ["CPI", "Bitcoin CPI", "Inflation Crypto", "Crypto Volatility", "Macroeconomics", "Bitcoin Trading", "Federal Reserve", "Shorts"],
+      pinnedComment: `🏛️ Run the free real-time US CPI Inflation & Bitcoin Volatility Scenario Simulator: 👉 https://www.bitcoincrypto.tech/cpi`
     };
   } else {
     shortPack = {

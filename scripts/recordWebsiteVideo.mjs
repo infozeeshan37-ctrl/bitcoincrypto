@@ -23,7 +23,10 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
   const framesDir = path.resolve(outputDir, `frames_${Date.now()}`);
   if (!fs.existsSync(framesDir)) fs.mkdirSync(framesDir, { recursive: true });
 
-  const templatePath = path.resolve(process.cwd(), "scripts/templates/viralShortTemplate.html");
+  const isCpi = (metadata?.category || "").toLowerCase().includes("cpi") || (metadata?.targetUrl || "").includes("/cpi");
+  const cpiTemplate = path.resolve(process.cwd(), "scripts/templates/cpiFeatureShort.html");
+  const defaultTemplate = path.resolve(process.cwd(), "scripts/templates/viralShortTemplate.html");
+  const templatePath = (isCpi && fs.existsSync(cpiTemplate)) ? cpiTemplate : defaultTemplate;
   const useProTemplate = fs.existsSync(templatePath);
 
   console.log(`🎥 Initiating Pro 4K Motion-Graphics Recording (${targetDuration.toFixed(1)}s, True 4K UHD)...`);

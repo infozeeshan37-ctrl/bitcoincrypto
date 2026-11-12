@@ -52,18 +52,37 @@ export async function getAccessToken() {
       })
     });
 
-    if (!res.ok) {
+    if (res.ok) {
+      const data = await res.json();
+      if (data.access_token) return data.access_token;
+    } else {
       const err = await res.text();
-      console.error("❌ Failed to refresh YouTube OAuth token:", err);
-      return null;
+      console.warn("⚠️ Fetch token refresh non-200:", err);
     }
-
-    const data = await res.json();
-    return data.access_token;
   } catch (error) {
-    console.error("❌ Error fetching YouTube access token:", error.message);
-    return null;
+    console.warn("⚠️ Fetch failed for YouTube access token, attempting curl fallback...");
   }
+
+  // Resilient curl fallback for Windows network stack
+  try {
+    const params = new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      refresh_token: refreshToken,
+      grant_type: "refresh_token"
+    }).toString();
+    const stdout = execSync(`curl.exe -s -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "${params}" "https://oauth2.googleapis.com/token"`, { encoding: "utf-8" });
+    const data = JSON.parse(stdout);
+    if (data.access_token) {
+      return data.access_token;
+    } else {
+      console.error("❌ Google OAuth curl response:", stdout);
+    }
+  } catch (err) {
+    console.error("❌ Curl fallback error:", err.message);
+  }
+
+  return null;
 }
 
 export async function verifyChannel(accessToken) {

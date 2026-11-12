@@ -144,47 +144,32 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
   const assContent = createProViralAssScript(metadata, duration);
   fs.writeFileSync(assPath, assContent, "utf-8");
 
-  // Step 4: Verify Audio Assets (BGM & Multi-layer CapCut SFX Suite)
-  const boomPath = path.resolve(process.cwd(), "assets/audio/impact_boom.mp3");
-  const riserPath = path.resolve(process.cwd(), "assets/audio/riser.mp3");
-  const bgmPath = path.resolve(process.cwd(), "assets/audio/bgm_tech.mp3");
+  // Step 4: Verify Audio Assets (BGM & Pro Sound Design)
+  const bgmCyberpunk = path.resolve(process.cwd(), "assets/audio/bgm_cyberpunk.mp3");
+  const bgmRetrowave = path.resolve(process.cwd(), "assets/audio/bgm_retrowave.mp3");
+  const bgmTech = path.resolve(process.cwd(), "assets/audio/bgm_tech.mp3");
+  const bgmPath = fs.existsSync(bgmCyberpunk) ? bgmCyberpunk : (fs.existsSync(bgmRetrowave) ? bgmRetrowave : bgmTech);
+
   const whooshPath = path.resolve(process.cwd(), "assets/audio/whoosh.mp3");
-  const shutterPath = path.resolve(process.cwd(), "assets/audio/camera_shutter.mp3");
   const popPath = path.resolve(process.cwd(), "assets/audio/pop.mp3");
-  const glitchPath = path.resolve(process.cwd(), "assets/audio/glitch_transition.mp3");
-  const dingPath = path.resolve(process.cwd(), "assets/audio/ding_cash.mp3");
   const chimePath = path.resolve(process.cwd(), "assets/audio/chime.mp3");
 
-  const hasBoom = fs.existsSync(boomPath);
-  const hasRiser = fs.existsSync(riserPath);
   const hasBgm = fs.existsSync(bgmPath);
   const hasWhoosh = fs.existsSync(whooshPath);
-  const hasShutter = fs.existsSync(shutterPath);
   const hasPop = fs.existsSync(popPath);
-  const hasGlitch = fs.existsSync(glitchPath);
-  const hasDing = fs.existsSync(dingPath);
   const hasChime = fs.existsSync(chimePath);
 
   const relRawVideo = path.relative(process.cwd(), rawVideoPath).replace(/\\/g, "/");
   const relVoice = path.relative(process.cwd(), voicePath).replace(/\\/g, "/");
   const relAss = path.relative(process.cwd(), assPath).replace(/\\/g, "/");
 
-  console.log(`🎬 Mastering Pro 4K UHD Short with Sound Design (${duration.toFixed(1)}s, 2160x3840)...`);
+  console.log(`🎬 Mastering Pro 4K UHD Short with Modern Sound Design (${duration.toFixed(1)}s, 2160x3840)...`);
+  console.log(`🎵 Selected Pro Sound Track: ${path.basename(bgmPath)}`);
 
   const ffmpegInputs = [
     "-i", relRawVideo,
     "-i", relVoice
   ];
-
-  if (hasBoom) {
-    const relBoom = path.relative(process.cwd(), boomPath).replace(/\\/g, "/");
-    ffmpegInputs.push("-i", relBoom);
-  }
-
-  if (hasRiser) {
-    const relRiser = path.relative(process.cwd(), riserPath).replace(/\\/g, "/");
-    ffmpegInputs.push("-i", relRiser);
-  }
 
   if (hasBgm) {
     const relBgm = path.relative(process.cwd(), bgmPath).replace(/\\/g, "/");
@@ -196,24 +181,9 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     ffmpegInputs.push("-i", relWhoosh);
   }
 
-  if (hasShutter) {
-    const relShutter = path.relative(process.cwd(), shutterPath).replace(/\\/g, "/");
-    ffmpegInputs.push("-i", relShutter);
-  }
-
   if (hasPop) {
     const relPop = path.relative(process.cwd(), popPath).replace(/\\/g, "/");
     ffmpegInputs.push("-i", relPop);
-  }
-
-  if (hasGlitch) {
-    const relGlitch = path.relative(process.cwd(), glitchPath).replace(/\\/g, "/");
-    ffmpegInputs.push("-i", relGlitch);
-  }
-
-  if (hasDing) {
-    const relDing = path.relative(process.cwd(), dingPath).replace(/\\/g, "/");
-    ffmpegInputs.push("-i", relDing);
   }
 
   if (hasChime) {
@@ -221,67 +191,35 @@ export async function generateShortVideo(metadata, outputDir = "./tmp_shorts") {
     ffmpegInputs.push("-i", relChime);
   }
 
-  // Filter Complex: Razor-Sharp Video Grade (contrast/saturation + unsharp) + Subtitles + Multi-track SFX Mix
-  let filterComplex = `[0:v]ass='${relAss}',eq=contrast=1.08:saturation=1.20:brightness=0.01,unsharp=5:5:0.8:5:5:0.0[outv];`;
-  filterComplex += `[1:a]volume=1.50[voice];`;
+  // Filter Complex: Razor-Sharp Video Grade (contrast/saturation + unsharp) + Subtitles + Balanced Audio Mix
+  let filterComplex = `[0:v]ass='${relAss}',eq=contrast=1.06:saturation=1.18:brightness=0.01,unsharp=5:5:0.7:5:5:0.0[outv];`;
+  filterComplex += `[1:a]volume=1.55,alimiter=limit=0.95[voice];`;
 
   let mixStreams = "[voice]";
   let currentIdx = 2;
 
-  if (hasBoom) {
-    filterComplex += `[${currentIdx}:a]adelay=10|10,volume=0.90[boom];`;
-    mixStreams += "[boom]";
-    currentIdx++;
-  }
-
-  if (hasRiser) {
-    filterComplex += `[${currentIdx}:a]adelay=0|0,volume=0.85[riser];`;
-    mixStreams += "[riser]";
-    currentIdx++;
-  }
-
   if (hasBgm) {
-    filterComplex += `[${currentIdx}:a]volume=0.30[bgm];`;
+    // Pro audio ducking: balanced background music level so voice is always crisp and prominent
+    filterComplex += `[${currentIdx}:a]volume=0.12[bgm];`;
     mixStreams += "[bgm]";
     currentIdx++;
   }
 
   if (hasWhoosh) {
-    filterComplex += `[${currentIdx}:a]adelay=3000|3000,volume=0.95[whoosh];`;
+    filterComplex += `[${currentIdx}:a]adelay=3200|3200,volume=0.35[whoosh];`;
     mixStreams += "[whoosh]";
     currentIdx++;
   }
 
-  if (hasShutter) {
-    filterComplex += `[${currentIdx}:a]adelay=3100|3100,volume=0.95[shutter];`;
-    mixStreams += "[shutter]";
-    currentIdx++;
-  }
-
   if (hasPop) {
-    const popDelay = Math.floor(Math.min(6500, duration * 0.35 * 1000));
-    filterComplex += `[${currentIdx}:a]adelay=${popDelay}|${popDelay},volume=0.85[pop];`;
+    filterComplex += `[${currentIdx}:a]adelay=9500|9500,volume=0.30[pop];`;
     mixStreams += "[pop]";
     currentIdx++;
   }
 
-  if (hasGlitch) {
-    const glitchDelay = Math.floor(Math.min(16000, duration * 0.70 * 1000));
-    filterComplex += `[${currentIdx}:a]adelay=${glitchDelay}|${glitchDelay},volume=0.85[glitch];`;
-    mixStreams += "[glitch]";
-    currentIdx++;
-  }
-
-  if (hasDing) {
-    const dingDelay = Math.floor(Math.min(12000, duration * 0.52 * 1000));
-    filterComplex += `[${currentIdx}:a]adelay=${dingDelay}|${dingDelay},volume=0.85[ding];`;
-    mixStreams += "[ding]";
-    currentIdx++;
-  }
-
   if (hasChime) {
-    const chimeDelay = Math.max(1000, Math.floor((duration - 4.0) * 1000));
-    filterComplex += `[${currentIdx}:a]adelay=${chimeDelay}|${chimeDelay},volume=0.85[chime];`;
+    const chimeDelay = Math.max(1000, Math.floor((duration - 3.8) * 1000));
+    filterComplex += `[${currentIdx}:a]adelay=${chimeDelay}|${chimeDelay},volume=0.38[chime];`;
     mixStreams += "[chime]";
     currentIdx++;
   }
