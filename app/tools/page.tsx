@@ -150,29 +150,8 @@ function ToolsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-10 sm:py-16 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-
-        <Breadcrumbs items={[{ label: "Trading Tools & Signal Terminal", href: "/tools" }]} />
-
-        {/* Page Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-2.5">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/30 text-amber-700 dark:text-amber-300 shadow-xs">
-            <Cpu className="w-3.5 h-3.5 text-amber-500" />
-            <span>Quantitative Trading &amp; Algorithmic Intelligence</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            Cryptocurrency Trading Suite &amp;{" "}
-            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-              Signals Engine
-            </span>
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
-            Real-time algorithmic trading signals, multi-coin market scanner, live TradingView charts, and risk execution calculators.
-          </p>
-        </div>
-
-        {/* Navigation Tabs Bar */}
+    <div className="space-y-10">
+      {/* Navigation Tabs Bar */}
         <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm max-w-3xl mx-auto">
           <a
             href="/tools?tab=bot"
@@ -718,14 +697,45 @@ function ToolsContent() {
         />
 
       </div>
-    </div>
   );
 }
 
 export default function ToolsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-8 text-sm font-bold text-slate-500">Loading Trading Suite...</div>}>
-      <ToolsContent />
-    </Suspense>
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-10 sm:py-16 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <Breadcrumbs items={[{ label: "Trading Tools & Signal Terminal", href: "/tools" }]} />
+
+        {/* Page Header (Server-Rendered for SEO & H1 Compliance) */}
+        <div className="text-center max-w-2xl mx-auto space-y-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 dark:border-amber-400/30 text-amber-700 dark:text-amber-300 shadow-xs">
+            <Cpu className="w-3.5 h-3.5 text-amber-500" />
+            <span>Quantitative Trading &amp; Algorithmic Intelligence</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            Cryptocurrency Trading Suite &amp;{" "}
+            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              Signals Engine
+            </span>
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+            Real-time algorithmic trading signals, multi-coin market scanner, live TradingView charts, and risk execution calculators.
+          </p>
+        </div>
+
+        <Suspense
+          fallback={
+            <div className="min-h-[50vh] bg-white dark:bg-slate-900 rounded-3xl p-12 flex flex-col items-center justify-center space-y-4 border border-slate-200 dark:border-slate-800 shadow-xs">
+              <div className="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin" />
+              <p className="text-sm font-mono font-bold text-slate-600 dark:text-slate-400">
+                Loading Trading Suite &amp; Algorithmic Indicators...
+              </p>
+            </div>
+          }
+        >
+          <ToolsContent />
+        </Suspense>
+      </div>
+    </div>
   );
 }

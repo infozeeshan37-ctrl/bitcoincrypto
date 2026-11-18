@@ -44,13 +44,9 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const primary = coinPredictions.map((coin) => ({
+  return coinPredictions.map((coin) => ({
     coin: coin.slug,
   }));
-  const aliases = Object.keys(SLUG_ALIASES).map((alias) => ({
-    coin: alias,
-  }));
-  return [...primary, ...aliases];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -111,10 +107,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CoinPredictionPage({ params }: PageProps) {
   const { coin: rawSlug } = await params;
-  if (SLUG_ALIASES[rawSlug]) {
-    redirect(`/predictions/${SLUG_ALIASES[rawSlug]}`);
-  }
-  const coin = coinPredictions.find((c) => c.slug === rawSlug);
+  const targetSlug = SLUG_ALIASES[rawSlug] || rawSlug;
+  const coin = coinPredictions.find((c) => c.slug === targetSlug);
 
   if (!coin) {
     notFound();

@@ -47,6 +47,14 @@ export default function OrderbookPage() {
             { label: "Order Book Depth Terminal", href: "/orderbook" }
           ]}
         />
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            Level-2 Order Book Depth &amp; Real-Time CVD Scanner
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Real-time aggregated market microstructure depth, institutional bid/ask liquidity walls, cumulative volume delta (CVD) absorption, and execution slippage modeling.
+          </p>
+        </div>
         <Suspense
           fallback={
             <div className="min-h-[60vh] bg-white dark:bg-slate-900 rounded-3xl p-12 flex flex-col items-center justify-center space-y-4 border border-slate-200 dark:border-slate-800">
