@@ -36,23 +36,124 @@ function formatPrice(val) {
 
 export async function generateDailyShort(categoryOverride = null) {
   const categories = [
+    "website_intro",
     "five_minute_arena",
+    "whale_radar",
+    "cpi_macro",
+    "news_sentiment",
+    "technical_fundamental",
     "ai_prediction",
     "coinglass_squeeze",
-    "whale_radar",
-    "crypto_learn",
-    "cpi_macro"
+    "crypto_learn"
   ];
 
-  const chosenCategory = categoryOverride && (categories.includes(categoryOverride) || categoryOverride === "five_minute" || categoryOverride === "5min")
-    ? (categoryOverride === "five_minute" || categoryOverride === "5min" ? "five_minute_arena" : categoryOverride)
-    : categories[Math.floor(Math.random() * categories.length)];
+  let chosenCategory = categories[Math.floor(Math.random() * categories.length)];
+  if (categoryOverride) {
+    const lower = categoryOverride.toLowerCase();
+    if (lower === "intro" || lower === "website" || lower === "website_intro") {
+      chosenCategory = "website_intro";
+    } else if (lower === "five_minute" || lower === "5min" || lower === "five_minute_arena" || lower === "tab_predictions_5min") {
+      chosenCategory = "five_minute_arena";
+    } else if (lower === "whale" || lower === "whale_radar" || lower === "tab_whale_orders") {
+      chosenCategory = "whale_radar";
+    } else if (lower === "cpi" || lower === "cpi_macro" || lower === "tab_cpi_macro") {
+      chosenCategory = "cpi_macro";
+    } else if (lower === "news" || lower === "news_sentiment" || lower === "tab_news_sentiment") {
+      chosenCategory = "news_sentiment";
+    } else if (lower === "tech" || lower === "technical" || lower === "fundamental" || lower === "technical_fundamental" || lower === "tab_technical_fundamental") {
+      chosenCategory = "technical_fundamental";
+    } else if (categories.includes(categoryOverride)) {
+      chosenCategory = categoryOverride;
+    }
+  }
+
   const coin = POPULAR_COINS[Math.floor(Math.random() * POPULAR_COINS.length)];
   const livePrice = await fetchLiveBinancePrice(coin.symbol, 88500);
 
   let shortPack = {};
 
-  if (chosenCategory === "five_minute_arena") {
+  if (chosenCategory === "website_intro") {
+    shortPack = {
+      category: "Website Introduction & All Tabs Tour",
+      title: "🌐 THE ULTIMATE FREE CRYPTO SUITE: Whale Orders, CPI, 5-Min AI & Signals! #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech",
+      template: "website_intro",
+      visuals: [
+        "[0:00 - 0:04] Hook: Holographic 3D Gold Bitcoin with emergency Quant Suite HUD",
+        "[0:04 - 0:13] Tab Tour 1: Live Whale Orders limit wall tape, US CPI simulator & News sentiment",
+        "[0:13 - 0:22] Tab Tour 2: 5-Minute AI Prediction Arena & Tri-Pillar Technical/Fundamental Bot",
+        "[0:22 - 0:28] High-converting Outro card directing viewers to 100% free terminal & bio link"
+      ],
+      voiceover: "Stop paying for expensive crypto tools. What if you had institutional whale orders, US CPI inflation data, breaking market news, and artificial intelligence predictions all inside one free website? Welcome to BitcoinCrypto dot tech—your complete quantitative trading suite. On the Whale Radar tab, track multi-million dollar institutional buy walls before retail notices. On the CPI tab, run live inflation and Federal Reserve rate cut volatility simulators. On the Predictions tab, check our brand-new Five-Minute Scalp Arena to see exact next-candle targets for Bitcoin and Ethereum with over ninety-four percent quantitative confidence! Plus, get real-time technical indicators, on-chain fundamentals, and unbiased AI long and short signals. Every single tool is one hundred percent free with zero sign-up required. Tap the link in bio right now to explore the full terminal on BitcoinCrypto dot tech!",
+      description: `Meet the ultimate free cryptocurrency research & quantitative trading platform: BitcoinCrypto.tech! 🚀
+      
+Explore all powerhouse tabs 100% free (No signup required):
+👉 https://www.bitcoincrypto.tech
+
+🔥 What you can find on BitcoinCrypto.tech:
+1. 🐋 Whale Orders & Tape: Track resting $10M+ limit buy walls & dark pool absorption
+2. 🏛️ US CPI & Macro Radar: Live inflation countdown & Fed rate cut volatility simulator
+3. 📰 Breaking News & Sentiment: Real-time news velocity & ETF institutional flows
+4. ⏱️ 5-Minute AI Prediction Arena: High-precision next-candle scalp targets (BTC, ETH, SOL)
+5. 🎯 AI Price Predictions Suite: Multi-timeframe trend forecasts & confidence ratings
+6. 📊 Technical & Fundamental Analysis: RSI(14), EMA ribbons, MACD & ATR volatility
+7. 🤖 AI Trading Bot Terminal: Unbiased LONG & SHORT blueprints with exact SL & TP levels
+
+⚠️ Strictly for educational and informational research purposes only. Not financial advice. Zero gambling.
+
+#Bitcoin #Crypto #CryptoTrading #CryptoNews #CryptoPredictions #Ethereum #Solana #WhaleAlert #CPI #Shorts`,
+      tags: ["Crypto Website", "Whale Orders", "CPI Data", "AI Crypto Prediction", "5 Minute Scalping", "Technical Analysis", "Fundamental Analysis", "BitcoinCrypto Tech", "Bitcoin", "Shorts"],
+      pinnedComment: `🌐 Explore the full free quantitative crypto terminal (Whales, CPI, 5-Min AI & Signals): 👉 https://www.bitcoincrypto.tech`
+    };
+  } else if (chosenCategory === "news_sentiment") {
+    shortPack = {
+      category: "Live Crypto News & Macro Sentiment",
+      title: "📰 BREAKING CRYPTO NEWS: How Market Sentiment Moves Bitcoin! #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/news",
+      template: "viral",
+      visuals: [
+        "[0:00 - 0:03] Hook: Breaking News Cyber Alert with flashing market ticker",
+        "[0:03 - 0:09] Live headline scanner with positive/negative sentiment heat scoring",
+        "[0:09 - 0:16] Correlation matrix showing news sentiment impact on live Bitcoin price",
+        "[0:16 - 0:22] Outro with animated Link In Bio call to action"
+      ],
+      voiceover: `Breaking crypto news moves billions in seconds, but retail always reacts too late. On the News tab at bitcoincrypto.tech, our live AI sentiment engine scans breaking headlines, ETF flows, and macroeconomic news in real-time. It calculates instant bullish or bearish sentiment scores before the market reacts. Stop getting caught off guard by volatility. Track live institutional crypto news for free on bitcoincrypto.tech. Tap the link in bio!`,
+      description: `Track real-time cryptocurrency news sentiment, institutional ETF flow trends, and macroeconomic headlines.
+      
+Read live breaking crypto news & sentiment for free:
+👉 https://www.bitcoincrypto.tech/news
+
+⚠️ Strictly educational analytics. Not financial advice.
+
+#CryptoNews #Bitcoin #Ethereum #CryptoMarket #BreakingNews #MacroEconomics #TradingView #Shorts`,
+      tags: ["Crypto News", "Bitcoin News", "Market Sentiment", "Crypto Trading", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `📰 Scan breaking crypto headlines and live AI sentiment scoring for 100% free: 👉 https://www.bitcoincrypto.tech/news`
+    };
+  } else if (chosenCategory === "technical_fundamental") {
+    shortPack = {
+      category: "Technical & Fundamental Tri-Pillar Engine",
+      title: "📈 Master Technical & Fundamental Analysis in 60 Seconds! #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/tools",
+      template: "viral",
+      visuals: [
+        "[0:00 - 0:03] Hook: Tri-Pillar quantitative HUD spinning into alignment",
+        "[0:03 - 0:09] Technical indicators: Real RSI(14), EMA ribbons, and MACD divergence",
+        "[0:09 - 0:16] Fundamental order book flow: Live taker CVD and liquidation magnetic pools",
+        "[0:16 - 0:22] Outro with pulsing Link in Bio button"
+      ],
+      voiceover: `Most crypto traders lose money because they only look at one chart. Pro quantitative traders use Tri-Pillar confluence: technical price action, on-chain order flow, and live fundamentals. On bitcoincrypto.tech, our AI Trading Bot combines real RSI, EMA ribbons, and CoinGlass derivatives to give you completely unbiased LONG and SHORT trade blueprints with exact stop-loss and take-profit targets! Stop guessing. Check the live technical terminal for free on bitcoincrypto.tech. Link in bio!`,
+      description: `Learn how the Tri-Pillar AI Trading Engine combines technical indicators, on-chain derivatives order flow, and fundamental sentiment.
+      
+Explore the free AI Trading Bot & Technical Terminal:
+👉 https://www.bitcoincrypto.tech/tools
+
+⚠️ Strictly for educational and informational research purposes only. Not financial advice.
+
+#TechnicalAnalysis #FundamentalAnalysis #TradingStrategy #Bitcoin #CryptoSignals #DayTrading #Shorts`,
+      tags: ["Technical Analysis", "Fundamental Analysis", "Crypto Trading", "AI Trading Bot", "Trading Strategy", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `🤖 Access the free Tri-Pillar Technical Analysis & AI Trading Bot Terminal: 👉 https://www.bitcoincrypto.tech/tools`
+    };
+  } else if (chosenCategory === "five_minute_arena") {
     shortPack = {
       category: "5-Minute AI Prediction Arena & Website Showcase",
       title: "🚨 CAN AI PREDICT THE NEXT 5 MINUTES? New Free Tool! ⏱️ #Shorts",

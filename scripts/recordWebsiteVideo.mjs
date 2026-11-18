@@ -28,13 +28,19 @@ export async function recordWebsiteVideo(targetUrl, targetDuration = 25, outputP
                     (metadata?.category || "").toLowerCase().includes("arena") ||
                     (metadata?.category || "").toLowerCase().includes("five_min") ||
                     (metadata?.template || "") === "five_minute";
+  const isIntro = (metadata?.category || "").toLowerCase().includes("intro") ||
+                  (metadata?.category || "").toLowerCase().includes("website") ||
+                  (metadata?.template || "") === "website_intro";
 
   const cpiTemplate = path.resolve(process.cwd(), "scripts/templates/cpiFeatureShort.html");
   const fiveMinTemplate = path.resolve(process.cwd(), "scripts/templates/fiveMinutePredictionShowcase.html");
+  const introTemplate = path.resolve(process.cwd(), "scripts/templates/websiteIntroShowcase.html");
   const defaultTemplate = path.resolve(process.cwd(), "scripts/templates/viralShortTemplate.html");
 
   let templatePath = defaultTemplate;
-  if (isFiveMin && fs.existsSync(fiveMinTemplate)) {
+  if (isIntro && fs.existsSync(introTemplate)) {
+    templatePath = introTemplate;
+  } else if (isFiveMin && fs.existsSync(fiveMinTemplate)) {
     templatePath = fiveMinTemplate;
   } else if (isCpi && fs.existsSync(cpiTemplate)) {
     templatePath = cpiTemplate;
