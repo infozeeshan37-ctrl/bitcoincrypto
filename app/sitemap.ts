@@ -4,6 +4,7 @@ import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
 import { authors } from "@/lib/authorsData";
 import { allArticles } from "@/lib/courseData";
+import { getUniqueNewsArticles } from "@/lib/newsArchive";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.bitcoincrypto.tech";
@@ -211,6 +212,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
+  // 8. Individual News Wire & Macro Analysis Articles (130+ Articles)
+  const newsRoutes: MetadataRoute.Sitemap = getUniqueNewsArticles().map((article) => ({
+    url: `${baseUrl}/news/${article.slug}`,
+    lastModified: article.publishedAt || currentDate,
+    changeFrequency: "daily",
+    priority: 0.85,
+  }));
+
   return [
     ...staticRoutes,
     ...predictionRoutes,
@@ -219,5 +228,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogRoutes,
     ...authorRoutes,
     ...lessonRoutes,
+    ...newsRoutes,
   ];
 }

@@ -18,7 +18,8 @@ import {
   ExternalLink,
   Share2,
   Terminal,
-  FileCode
+  FileCode,
+  ArrowRight
 } from "lucide-react";
 import Link from "next/link";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
@@ -224,47 +225,129 @@ export default function AboutView() {
           </div>
         </div>
 
-        {/* Editorial Board & Verification Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300">
-              <Award className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              <span>Verified Editorial Leadership</span>
+        {/* Editorial Board & Team Leadership Showcase */}
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300">
+                <Award className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                <span>Verified Editorial &amp; Quantitative Leadership</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+                Meet Our Quantitative Researchers &amp; Architects
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+                All algorithmic models, research papers, and market intelligence published on BitcoinCrypto.tech are engineered, audited, and backtested by our dedicated human research desk.
+              </p>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Meet Our Quantitative Researchers &amp; Analysts</h3>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
-              All tools, articles, and models on BitcoinCrypto.tech are audited by our in-house editorial board led by Zeeshan Ahmed (Founder &amp; Lead Quant Developer) and Elena Rostova (Chief Macroeconomic Lead).
-            </p>
+            <div className="flex gap-2.5 shrink-0">
+              <Link
+                href="/authors"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition shadow-xs"
+              >
+                Full Author Directory →
+              </Link>
+              <Link
+                href="/editorial-policy"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition border border-slate-200 dark:border-slate-700"
+              >
+                Editorial Standards
+              </Link>
+            </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2.5 shrink-0">
-            <Link
-              href="/authors"
-              className="px-5 py-3 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 transition text-center shadow-sm"
-            >
-              Author Directory →
-            </Link>
-            <Link
-              href="/editorial-policy"
-              className="px-5 py-3 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-center border border-slate-200 dark:border-slate-700"
-            >
-              Editorial Standards
-            </Link>
+
+          {/* Team Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Zeeshan Ahmed */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 font-black flex items-center justify-center text-lg shadow-sm">
+                  Z
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Zeeshan Ahmed</h3>
+                  <p className="text-xs font-mono font-semibold text-amber-600 dark:text-amber-400">Founder &amp; Lead Quantitative Developer</p>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Specializes in low-latency exchange data streaming, order book microstructure analytics, and quantitative trading bot architecture.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
+                <Link
+                  href="/authors/zeeshan-ahmed"
+                  className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1"
+                >
+                  <span>View Author Profile &amp; Bio</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Elena Rostova */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500 text-white font-black flex items-center justify-center text-lg shadow-sm">
+                  E
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Elena Rostova</h3>
+                  <p className="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400">Chief Macroeconomic Research Lead</p>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Specializes in central bank liquidity transmission, US CPI disinflation dynamics, Treasury General Account flows, and global debt cycles.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
+                <Link
+                  href="/authors/elena-rostova"
+                  className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                >
+                  <span>View Author Profile &amp; Bio</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Marcus Vance */}
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-purple-500 text-white font-black flex items-center justify-center text-lg shadow-sm">
+                  M
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Marcus Vance</h3>
+                  <p className="text-xs font-mono font-semibold text-purple-600 dark:text-purple-400">Senior Derivatives &amp; Microstructure Analyst</p>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Specializes in perpetual futures funding rates, basis arbitrage, and multi-exchange CoinGlass liquidation cascade heatmaps.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
+                <Link
+                  href="/authors/marcus-vance"
+                  className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1"
+                >
+                  <span>View Author Profile &amp; Bio</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Contact & Media Desk CTA */}
-        <div className="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-3xl p-8 sm:p-10 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+        {/* Contact & Inquiries CTA */}
+        <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-8 sm:p-10 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
           <div className="space-y-2 text-center sm:text-left">
-            <h3 className="text-xl sm:text-2xl font-bold">Have Research Questions or Tool Inquiries?</h3>
-            <p className="text-xs sm:text-sm text-slate-400">
-              Our quantitative research team is always open to collaborative inquiries and AI tool directory integrations.
+            <h3 className="text-xl sm:text-2xl font-bold">Have Research Questions or Institutional Inquiries?</h3>
+            <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
+              Our quantitative desk welcomes inquiries from academic researchers, journalists, and developers. Reach out to our team directly.
             </p>
           </div>
           <Link
-            href="/predictions"
-            className="px-6 py-3.5 rounded-xl text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 transition shadow-sm whitespace-nowrap"
+            href="/contact"
+            className="px-6 py-3.5 rounded-xl text-xs font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 transition shadow-sm whitespace-nowrap"
           >
-            Launch 5-Minute AI Prediction Arena
+            Contact Research Desk →
           </Link>
         </div>
 

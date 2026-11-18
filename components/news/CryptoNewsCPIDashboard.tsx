@@ -123,13 +123,17 @@ const SEO_NEWS_FAQS = [
   }
 ];
 
-export default function CryptoNewsCPIDashboard() {
-  const [news, setNews] = useState<NewsItem[]>([]);
+interface CryptoNewsCPIDashboardProps {
+  initialNews?: NewsItem[];
+}
+
+export default function CryptoNewsCPIDashboard({ initialNews = [] }: CryptoNewsCPIDashboardProps) {
+  const [news, setNews] = useState<NewsItem[]>(initialNews);
   const [macroBattles, setMacroBattles] = useState<MacroBattle[]>([]);
   const [centralBankPolicies, setCentralBankPolicies] = useState<CentralBankPolicy[]>([]);
   const [cpi, setCpi] = useState<CPIOverview | null>(null);
   const [macroFed, setMacroFed] = useState<MacroFedData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialNews.length === 0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedCoin, setSelectedCoin] = useState<string>("ALL");
@@ -693,7 +697,9 @@ export default function CryptoNewsCPIDashboard() {
                       </div>
 
                       <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug line-clamp-3">
-                        {item.title}
+                        <Link href={`/news/${item.slug}`} className="hover:underline">
+                          {item.title}
+                        </Link>
                       </h3>
 
                       <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
@@ -715,10 +721,13 @@ export default function CryptoNewsCPIDashboard() {
                         <span className="truncate">Source: <strong className="text-slate-900 dark:text-white">{item.source}</strong></span>
                       </div>
 
-                      <span className="text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1 text-[11px] group-hover:underline shrink-0">
+                      <Link
+                        href={`/news/${item.slug}`}
+                        className="text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1 text-[11px] group-hover:underline shrink-0"
+                      >
                         <span>Read Full Analysis</span>
                         <ArrowRight className="w-3 h-3" />
-                      </span>
+                      </Link>
                     </div>
                   </article>
                 );

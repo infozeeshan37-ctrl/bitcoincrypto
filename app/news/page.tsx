@@ -4,11 +4,11 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AdBanner from "@/components/ads/AdBanner";
 import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import { HISTORICAL_NEWS_ARCHIVE } from "@/lib/newsArchive";
 
 export const metadata: Metadata = {
   title: "Latest Crypto News and Macroeconomic Updates",
   description: "Real‑time cryptocurrency news wire covering Bitcoin ETF inflows, Federal Reserve rate cuts, US CPI releases, Ethereum upgrades, Solana DEX volume, and whale wallet activity.",
-
   keywords: [
     "crypto news live",
     "bitcoin news today",
@@ -29,8 +29,9 @@ export const metadata: Metadata = {
     canonical: "https://www.bitcoincrypto.tech/news",
   },
   openGraph: {
-    title: "Latest Crypto News Live: Bitcoin ETF Inflows, Fed Rate Cuts & Whale Alerts",
-    description: "Real‑time cryptocurrency news wire covering Bitcoin ETF inflows, Federal Reserve rate cuts, US CPI releases, Ethereum upgrades, Solana DEX volume, and whale wallet activity.",
+    title: "Latest Crypto News and Macroeconomic Updates | BitcoinCrypto.tech",
+    description:
+      "Real-time cryptocurrency news wire and macroeconomic tracker. Breaking headlines on Bitcoin, Ethereum, Solana, Fed FOMC interest rates, and US CPI inflation releases.",
     url: "https://www.bitcoincrypto.tech/news",
     type: "website",
     siteName: "BitcoinCrypto.tech",
@@ -45,13 +46,16 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Latest Crypto News Live: Bitcoin ETF Inflows, Fed Rate Cuts & Whale Alerts",
-    description: "Real‑time cryptocurrency news wire covering Bitcoin ETF inflows, Federal Reserve rate cuts, US CPI releases, Ethereum upgrades, Solana DEX volume, and whale wallet activity.",
+    title: "Latest Crypto News and Macroeconomic Updates | BitcoinCrypto.tech",
+    description:
+      "Real-time cryptocurrency news wire. Breaking Bitcoin, Ethereum, Solana, Fed rate cuts, and US CPI inflation releases.",
     creator: "@bitcoincrypto",
   },
 };
 
 export default function NewsPage() {
+  const topNews = HISTORICAL_NEWS_ARCHIVE.slice(0, 36);
+
   const jsonLdSchema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -69,38 +73,12 @@ export default function NewsPage() {
       {
         "@type": "ItemList",
         "name": "Breaking Cryptocurrency News Headlines",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Bitcoin $100K Breakout: Spot ETF Daily Inflows Top $850M as Supply Squeeze Escalates",
-            "url": "https://www.bitcoincrypto.tech/news"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Federal Reserve Confirms Rate Cut Cycle: Why Crypto Historically Surges After FOMC Easing",
-            "url": "https://www.bitcoincrypto.tech/news"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "US CPI Inflation Drops to Multi-Year Low: How Macro Liquidity Drives Bitcoin Bull Markets",
-            "url": "https://www.bitcoincrypto.tech/news"
-          },
-          {
-            "@type": "ListItem",
-            "position": 4,
-            "name": "Ethereum Pectra Upgrade Countdown: Vitalik Reveals Major Gas Fee Cuts and Staking Enhancements",
-            "url": "https://www.bitcoincrypto.tech/news"
-          },
-          {
-            "@type": "ListItem",
-            "position": 5,
-            "name": "Solana Flips Ethereum in 24h DEX Volume as Firedancer Validator Testnet Surpasses 1M TPS",
-            "url": "https://www.bitcoincrypto.tech/news"
-          }
-        ]
+        "itemListElement": topNews.slice(0, 10).map((item, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "name": item.title,
+          "url": `https://www.bitcoincrypto.tech/news/${item.slug}`
+        }))
       },
       {
         "@type": "FAQPage",
@@ -142,7 +120,7 @@ export default function NewsPage() {
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Crypto News & Macroeconomic Wire", href: "/news" }]} />
-        <CryptoNewsCPIDashboard />
+        <CryptoNewsCPIDashboard initialNews={topNews as any} />
         
         {/* Authoritative Outbound Links & E-E-A-T Verification Grid */}
         <AuthoritativeCitations

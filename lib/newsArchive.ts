@@ -28378,3 +28378,20 @@ export const HISTORICAL_NEWS_ARCHIVE: HistoricalNewsItem[] = [
     "isHistorical": true
   }
 ];
+
+export function getUniqueNewsArticles(): HistoricalNewsItem[] {
+  const seen = new Set<string>();
+  const unique: HistoricalNewsItem[] = [];
+  for (const item of HISTORICAL_NEWS_ARCHIVE) {
+    if (!seen.has(item.slug)) {
+      seen.add(item.slug);
+      unique.push(item);
+    }
+  }
+  return unique;
+}
+
+export function getNewsArticleBySlug(slug: string): HistoricalNewsItem | undefined {
+  return HISTORICAL_NEWS_ARCHIVE.find((item) => item.slug === slug);
+}
+

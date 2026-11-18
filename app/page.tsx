@@ -114,9 +114,9 @@ export default function HomePage() {
               <Zap className="w-3.5 h-3.5 text-amber-500" />
               <span>Official Platform Hub • BitcoinCrypto.tech</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
               Educational Cryptocurrency Market Intelligence &amp; AI Quantitative Suite
-            </h2>
+            </h1>
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
               <strong>BitcoinCrypto.tech</strong> is an open-access educational cryptocurrency research terminal providing real-time market telemetry, quantitative Technical Analysis models, Fundamental macroeconomic indicators (US CPI), L2 order book depth, Coinglass liquidation heatmaps, and simulated paper trading. <strong>Strictly educational, zero betting or gambling, and non-financial advice.</strong>
             </p>
