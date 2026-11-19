@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CryptoLearnView from "@/components/learn/CryptoLearnView";
+import MasterclassCrawlIndex from "@/components/learn/MasterclassCrawlIndex";
 import { courseChapters } from "@/lib/courseData";
 
 export const metadata: Metadata = {
@@ -114,6 +115,7 @@ export default function LearnPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <CryptoLearnView />
+      <MasterclassCrawlIndex chapters={courseChapters} />
     </>
   );
 }

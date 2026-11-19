@@ -25,6 +25,7 @@ import { generateDailyShort } from "./youtubeShortsGenerator.mjs";
 import { generateShortVideo } from "./generateShortVideo.mjs";
 import { uploadVideoToYouTube, getAccessToken, verifyChannel } from "./youtubeUploader.mjs";
 import { uploadReelToInstagram, getInstagramCredentials } from "./instagramUploader.mjs";
+import { queueScheduledReel } from "./instagramScheduler.mjs";
 import { uploadToSnapchat, isSnapchatConfigured } from "./snapchatUploader.mjs";
 
 function loadEnv() {
@@ -224,16 +225,26 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publish
   }
 
   if (isInstagramOnly) {
-    console.log("📸 Uploading directly and immediately to Instagram Reels...");
-    const instagramResult = await uploadReelToInstagram(videoPath, metadata);
+    let instagramResult = null;
+    const isFutureSchedule = metadata.publishAt && new Date(metadata.publishAt) > new Date();
+
+    if (isFutureSchedule) {
+      console.log(`📅 Scheduling Instagram Reel for: ${metadata.publishAt} (UTC)...`);
+      const queuedItem = queueScheduledReel(videoPath, metadata, metadata.publishAt);
+      instagramResult = { success: true, scheduled: true, scheduledAt: metadata.publishAt, id: queuedItem?.id };
+    } else {
+      console.log("📸 Uploading directly and immediately to Instagram Reels...");
+      instagramResult = await uploadReelToInstagram(videoPath, metadata);
+    }
 
     logHistory({
       timestamp: new Date().toISOString(),
       title: metadata.title,
       category: metadata.category,
       targetUrl: metadata.targetUrl,
-      status: "public",
-      instagramReel: instagramResult?.permalink || null
+      status: isFutureSchedule ? "scheduled" : "public",
+      scheduledAt: metadata.publishAt || null,
+      instagramReel: instagramResult?.permalink || (isFutureSchedule ? "Scheduled in Queue" : null)
     });
 
     if (!keepVideo) {
@@ -280,8 +291,15 @@ async function publishSingleShort(categoryOverride, isDryRun, keepVideo, publish
   let instagramResult = null;
   const igCreds = getInstagramCredentials();
   if (igCreds) {
-    console.log("📸 Cross-posting video to Instagram Reels (@bitcoincrypto.tech)...");
-    instagramResult = await uploadReelToInstagram(videoPath, metadata);
+    const isFutureSchedule = metadata.publishAt && new Date(metadata.publishAt) > new Date();
+    if (isFutureSchedule) {
+      console.log(`📅 Scheduling Instagram Reel for: ${metadata.publishAt} (UTC)...`);
+      const queuedItem = queueScheduledReel(videoPath, metadata, metadata.publishAt);
+      instagramResult = { success: true, scheduled: true, scheduledAt: metadata.publishAt, id: queuedItem?.id };
+    } else {
+      console.log("📸 Cross-posting video to Instagram Reels (@bitcoincrypto.tech)...");
+      instagramResult = await uploadReelToInstagram(videoPath, metadata);
+    }
   }
 
   // Cross-post to Snapchat Spotlight if configured
@@ -419,6 +437,33 @@ export async function runAutoShortPipeline() {
       await new Promise((r) => setTimeout(r, 4000));
     }
     return results;
+  }
+
+  const isScheduleTabs = args.includes("--schedule-tabs") || args.includes("--tabs-schedule");
+  if (isScheduleTabs) {
+    console.log("🌟 Scheduling ALL 6 WEBSITE TAB SHORTS across different daily peak trading slots...");
+    const tabSlots = [
+      { slotNumber: 1, category: "five_minute_arena", label: "Slot 1 (02:00 UTC): 5-Minute AI Prediction Arena" },
+      { slotNumber: 2, category: "whale_radar", label: "Slot 2 (06:00 UTC): Whale Orders & Order Book Depth" },
+      { slotNumber: 3, category: "coinglass_squeeze", label: "Slot 3 (10:00 UTC): CoinGlass Liquidation Heatmaps" },
+      { slotNumber: 4, category: "cpi_macro", label: "Slot 4 (14:00 UTC): US CPI Inflation & Fed Rate Odds" },
+      { slotNumber: 5, category: "news_sentiment", label: "Slot 5 (18:00 UTC): Live Breaking News & Sentiment" },
+      { slotNumber: 6, category: "technical_fundamental", label: "Slot 6 (22:00 UTC): Tri-Pillar Technical & Fundamental Signals" }
+    ];
+
+    const results = [];
+    for (const cfg of tabSlots) {
+      const scheduledTime = calculateSlotPublishTime(cfg.slotNumber, 1);
+      console.log(`\n⏳ === SCHEDULING ${cfg.label} for ${scheduledTime} ===`);
+      const res = await publishSingleShort(cfg.category, isDryRun, keepVideo, scheduledTime, null, isInstagramOnly, isSnapchatOnly);
+      results.push(res);
+      if (res && res.quotaExceeded) {
+        console.warn("\n🛑 Reached YouTube daily upload quota limit.");
+        break;
+      }
+      await new Promise((r) => setTimeout(r, 4000));
+    }
+    return results;
   } else if (allSlots) {
     console.log("🌟 Publishing ALL 6 DAILY PEAK SHORTS for Tomorrow...");
     const slotsConfig = [
@@ -446,7 +491,9 @@ export async function runAutoShortPipeline() {
   } else {
     const { category, slotNumber } = resolveSlotCategory(args);
     const forceTomorrow = args.includes("--tomorrow") || isSchedule;
-    const scheduledTime = isSchedule ? calculateSlotPublishTime(slotNumber, forceTomorrow) : null;
+    const publishAtArg = args.find((a) => a.startsWith("--publish-at=") || a.startsWith("--publishAt="));
+    const customPublishAt = publishAtArg ? publishAtArg.split("=")[1] : null;
+    const scheduledTime = customPublishAt || (isSchedule ? calculateSlotPublishTime(slotNumber, forceTomorrow) : null);
     return await publishSingleShort(category, isDryRun, keepVideo, scheduledTime, existingVideoPath, isInstagramOnly, isSnapchatOnly);
   }
 }

@@ -326,16 +326,16 @@ export default function Footer() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-[11px]">
             {[
-              { label: "Ch 1: Bitcoin Foundations & Consensus", href: "/learn#bitcoin-foundations" },
-              { label: "Ch 2: Ethereum EVM & Smart Contracts", href: "/learn#ethereum-smart-contracts" },
-              { label: "Ch 3: Macro Liquidity & Fed Policy", href: "/learn#macro-economics-crypto" },
-              { label: "Ch 4: On-Chain Valuation & MVRV", href: "/learn#onchain-metrics-valuation" },
-              { label: "Ch 5: Candlestick & Auction Theory", href: "/learn#candlesticks-market-structure" },
-              { label: "Ch 6: Order Flow, CVD & Depth", href: "/learn#order-flow-liquidity-orderbook" },
-              { label: "Ch 7: Technical Confluence & Indicators", href: "/learn#technical-indicators-strategies" },
-              { label: "Ch 8: Market Microstructure & HFT", href: "/learn#crypto-market-microstructure" },
-              { label: "Ch 9: Derivatives, Funding & Greeks", href: "/learn#derivatives-futures-options" },
-              { label: "Ch 10: Quantitative Risk & Kelly", href: "/learn#risk-management-psychology" },
+              { label: "Ch 1: Bitcoin Foundations", href: "/learn/what-is-bitcoin-monetary-revolution" },
+              { label: "Ch 2: Ethereum & EVM Specs", href: "/learn/what-is-ethereum-smart-contracts" },
+              { label: "Ch 3: Macro Liquidity & M2", href: "/learn/macroeconomic-liquidity-m2-central-banks" },
+              { label: "Ch 4: On-Chain MVRV Ratios", href: "/learn/mvrv-z-score-valuation" },
+              { label: "Ch 5: Candlestick Auction", href: "/learn/candlestick-anatomy-auction-theory" },
+              { label: "Ch 6: Order Flow, CVD & Depth", href: "/learn/order-book-depth-bid-ask-spread" },
+              { label: "Ch 7: Technical Confluence", href: "/learn/exponential-moving-averages-ema-ribbons" },
+              { label: "Ch 8: Market Microstructure", href: "/learn/central-limit-order-book-clob-matching" },
+              { label: "Ch 9: Perpetual Futures & Funding", href: "/learn/perpetual-futures-funding-rate-mechanics" },
+              { label: "Ch 10: Kelly Risk Management", href: "/learn/kelly-criterion-position-sizing" },
             ].map((ch) => (
               <Link
                 key={ch.label}
@@ -345,6 +345,33 @@ export default function Footer() {
                 {ch.label} &rarr;
               </Link>
             ))}
+          </div>
+
+          {/* High-Intent Keyword-Rich Masterclass Deep Links for Googlebot Crawling */}
+          <div className="pt-2">
+            <span className="text-[10px] font-mono uppercase text-slate-500 font-bold block mb-1.5">
+              High-Priority Masterclass Reference Lessons:
+            </span>
+            <div className="flex flex-wrap gap-2 text-[11px]">
+              {[
+                { title: "Bitcoin Halving Mechanics", slug: "bitcoin-halving-supply-shock" },
+                { title: "Order Book Depth & Slippage", slug: "order-book-depth-bid-ask-spread" },
+                { title: "CoinGlass Liquidation Cascades", slug: "coinglass-liquidation-heatmaps" },
+                { title: "CVD Delta Absorption", slug: "cumulative-volume-delta-cvd-absorption" },
+                { title: "MVRV Z-Score Model", slug: "mvrv-z-score-valuation" },
+                { title: "US CPI & Crypto Cycles", slug: "cpi-inflation-fomc-crypto" },
+                { title: "Perpetual Funding Rate Arbitrage", slug: "perpetual-futures-funding-rate-mechanics" },
+                { title: "Kelly Criterion Risk Sizing", slug: "kelly-criterion-position-sizing" },
+              ].map((item) => (
+                <Link
+                  key={item.slug}
+                  href={`/learn/${item.slug}`}
+                  className="px-2.5 py-1 rounded-md bg-slate-900/90 hover:bg-slate-850 hover:text-amber-300 text-slate-400 border border-slate-800 text-[11px] transition"
+                >
+                  {item.title}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CryptoLearnView from "@/components/learn/CryptoLearnView";
+import MasterclassCrawlIndex from "@/components/learn/MasterclassCrawlIndex";
 import { fundamentalChapters, learningTracks } from "@/lib/courseData";
 
 export const metadata: Metadata = {
@@ -106,6 +107,11 @@ export default function FundamentalLearnPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <CryptoLearnView initialTrack="fundamental" canonicalPath="/learn/fundamental" />
+      <MasterclassCrawlIndex
+        chapters={fundamentalChapters}
+        title="Fundamental Analysis Curriculum Index (40 Lessons)"
+        description="Comprehensive fundamental lessons covering Bitcoin monetary economics, Ethereum smart contracts, macroeconomic liquidity, and on-chain valuation metrics."
+      />
     </>
   );
 }

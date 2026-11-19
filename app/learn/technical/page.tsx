@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CryptoLearnView from "@/components/learn/CryptoLearnView";
+import MasterclassCrawlIndex from "@/components/learn/MasterclassCrawlIndex";
 import { technicalChapters, learningTracks } from "@/lib/courseData";
 
 export const metadata: Metadata = {
@@ -105,6 +106,11 @@ export default function TechnicalLearnPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <CryptoLearnView initialTrack="technical" canonicalPath="/learn/technical" />
+      <MasterclassCrawlIndex
+        chapters={technicalChapters}
+        title="Technical Analysis Curriculum Index (60 Lessons)"
+        description="Comprehensive technical lessons covering candlestick price action, order flow CVD, Level-2 order book depth, CoinGlass liquidation cascades, and quantitative risk management."
+      />
     </>
   );
 }

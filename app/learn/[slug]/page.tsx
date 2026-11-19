@@ -98,10 +98,13 @@ export default async function LearnLessonPage({
     headline: article.title,
     description: article.content[0] || article.title,
     url: articleUrl,
+    inLanguage: "en-US",
     datePublished: "2026-08-01T00:00:00Z",
     dateModified: "2026-11-01T00:00:00Z",
     articleSection: chapter?.title || "Cryptocurrency Education",
     keywords: article.keyConcepts.join(", "),
+    proficiencyLevel: article.chapterLevel,
+    educationalLevel: article.chapterLevel,
     author: {
       "@type": "Organization",
       name: "BitcoinCrypto.tech Quantitative Research Desk",
@@ -124,11 +127,51 @@ export default async function LearnLessonPage({
     },
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.bitcoincrypto.tech",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Crypto Learn",
+        item: "https://www.bitcoincrypto.tech/learn",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: chapter ? `Chapter ${chapter.chapterNumber}: ${chapter.title}` : "Masterclass",
+        item: "https://www.bitcoincrypto.tech/learn",
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: article.title,
+        item: articleUrl,
+      },
+    ],
+  };
+
+  // Cross-chapter related lessons for internal linking equity (prevents orphan pages)
+  const crossChapterLessons = allArticles
+    .filter((a) => a.slug !== article.slug && a.chapterId !== article.chapterId)
+    .slice((currentIndex * 2) % 30, ((currentIndex * 2) % 30) + 4);
+
   return (
     <article className="py-10 sm:py-16 bg-white dark:bg-slate-950 transition-colors">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(lessonSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -435,6 +478,80 @@ export default async function LearnLessonPage({
             </div>
           </div>
         )}
+
+        {/* Cross-Chapter Internal Links & Quantitative Tools (Passes Crawl Equity & PageRank) */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-slate-50/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                Interconnected Knowledge Base
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-0.5">
+                Related Research Lessons Across Other Chapters
+              </h3>
+            </div>
+            <Link
+              href="/learn"
+              className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline shrink-0"
+            >
+              View 100 Lessons →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {crossChapterLessons.map((relLesson) => (
+              <Link
+                key={relLesson.slug}
+                href={`/learn/${relLesson.slug}`}
+                className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-amber-400 transition group space-y-1"
+              >
+                <div className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase">
+                  Chapter {relLesson.chapterNumber} • {relLesson.chapterLevel}
+                </div>
+                <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition line-clamp-2">
+                  {relLesson.title}
+                </div>
+                <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1">
+                  <span>{relLesson.duration}</span>
+                  <span className="font-mono text-amber-500 group-hover:translate-x-0.5 transition-transform">Read Lesson →</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Connected Live Quantitative Tools */}
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80">
+            <span className="text-[11px] font-mono uppercase text-slate-400 font-bold block mb-3">
+              Apply Theory to Live Real-Time Market Telemetry:
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <Link
+                href="/coinglass"
+                className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-rose-400 font-medium text-slate-700 dark:text-slate-300 transition text-center"
+              >
+                CoinGlass Heatmap
+              </Link>
+              <Link
+                href="/orderbook"
+                className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 font-medium text-slate-700 dark:text-slate-300 transition text-center"
+              >
+                L2 Order Book
+              </Link>
+              <Link
+                href="/cpi"
+                className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-400 font-medium text-slate-700 dark:text-slate-300 transition text-center"
+              >
+                US CPI Macro
+              </Link>
+              <Link
+                href="/predictions"
+                className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-purple-400 font-medium text-slate-700 dark:text-slate-300 transition text-center"
+              >
+                AI Price Models
+              </Link>
+            </div>
+          </div>
+        </div>
 
       </div>
     </article>
