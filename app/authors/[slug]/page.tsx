@@ -42,6 +42,10 @@ export async function generateMetadata({
   return {
     title: `${author.name} - ${author.role} | BitcoinCrypto.tech`,
     description: author.bio,
+    robots: {
+      index: false,
+      follow: true,
+    },
     alternates: {
       canonical: `/authors/${author.slug}`,
     },

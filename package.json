@@ -15,6 +15,7 @@
     "instagram:check": "node scripts/instagramUploader.mjs",
     "instagram:schedule": "node scripts/instagramScheduler.mjs --status",
     "instagram:process": "node scripts/instagramScheduler.mjs --process-now",
+    "instagram:publish-now": "node scripts/instagramScheduler.mjs --publish-all-now",
     "instagram:worker": "node scripts/instagramScheduler.mjs --worker",
     "snapchat:check": "node scripts/snapchatUploader.mjs --check",
     "snapchat:token": "node scripts/getSnapchatToken.mjs",

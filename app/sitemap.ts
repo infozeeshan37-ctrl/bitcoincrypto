@@ -2,7 +2,6 @@ import { MetadataRoute } from "next";
 import { articles } from "@/lib/blogData";
 import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
-import { authors } from "@/lib/authorsData";
 import { allArticles } from "@/lib/courseData";
 import { getUniqueNewsArticles } from "@/lib/newsArchive";
 
@@ -126,30 +125,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/terms`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/disclaimer`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/cookie-policy`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/sitemap`,
-      lastModified: currentDate,
-      changeFrequency: "daily",
-      priority: 0.85,
-    },
   ];
 
   // 2. Dedicated Programmatic Coin AI Price Prediction Pages
@@ -196,15 +171,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  // 6. Editorial Authors & Researchers (5 Author Profiles)
-  const authorRoutes: MetadataRoute.Sitemap = authors.map((author) => ({
-    url: `${baseUrl}/authors/${author.slug}`,
-    lastModified: currentDate,
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
-
-  // 7. Complete 100-Article Crypto Learn Masterclass Lessons
+  // 6. Complete 100-Article Crypto Learn Masterclass Lessons
   const lessonRoutes: MetadataRoute.Sitemap = allArticles.map((lesson) => ({
     url: `${baseUrl}/learn/${lesson.slug}`,
     lastModified: currentDate,
@@ -212,7 +179,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  // 8. Individual News Wire & Macro Analysis Articles (130+ Articles)
+  // 7. Individual News Wire & Macro Analysis Articles (130+ Articles)
   const newsRoutes: MetadataRoute.Sitemap = getUniqueNewsArticles().map((article) => ({
     url: `${baseUrl}/news/${article.slug}`,
     lastModified: article.publishedAt || currentDate,
@@ -226,7 +193,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...toolRoutes,
     ...conceptRoutes,
     ...blogRoutes,
-    ...authorRoutes,
     ...lessonRoutes,
     ...newsRoutes,
   ];

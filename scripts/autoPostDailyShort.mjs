@@ -452,8 +452,9 @@ export async function runAutoShortPipeline() {
     ];
 
     const results = [];
+    const dayOffset = targetDay !== null ? targetDay : 1;
     for (const cfg of tabSlots) {
-      const scheduledTime = calculateSlotPublishTime(cfg.slotNumber, 1);
+      const scheduledTime = calculateSlotPublishTime(cfg.slotNumber, dayOffset);
       console.log(`\n⏳ === SCHEDULING ${cfg.label} for ${scheduledTime} ===`);
       const res = await publishSingleShort(cfg.category, isDryRun, keepVideo, scheduledTime, null, isInstagramOnly, isSnapchatOnly);
       results.push(res);

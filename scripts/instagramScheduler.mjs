@@ -109,20 +109,25 @@ export function queueScheduledReel(videoPath, metadata, scheduledAt) {
 
 /**
  * Checks queue and publishes any due Instagram Reels.
+ * When forceNow is true, it publishes all pending items immediately.
  */
-export async function processScheduledReelsQueue() {
+export async function processScheduledReelsQueue(forceNow = false) {
   const queue = getQueue();
   const now = new Date();
   let updated = false;
 
-  console.log(`🔎 Checking Instagram Reels queue at ${now.toISOString()}...`);
+  console.log(`🔎 Checking Instagram Reels queue at ${now.toISOString()} (forceNow: ${forceNow})...`);
 
-  for (const item of queue) {
+  for (let i = 0; i < queue.length; i++) {
+    const item = queue[i];
     if (item.status === "pending") {
       const scheduledTime = new Date(item.scheduledAt);
 
-      if (now >= scheduledTime) {
-        console.log(`🚀 [DUE FOR RELEASE] Publishing: "${item.title}" (Scheduled for: ${item.scheduledAt})...`);
+      if (forceNow || now >= scheduledTime) {
+        console.log(`\n🚀 [PUBLISHING REEL ${i + 1}/${queue.length}] "${item.title}"...`);
+        if (forceNow) {
+          console.log(`⚡ Immediate publish requested (bypassing schedule ${item.scheduledAt})`);
+        }
 
         if (!fs.existsSync(item.videoPath)) {
           console.error(`❌ Video file missing on disk: ${item.videoPath}`);
@@ -137,13 +142,20 @@ export async function processScheduledReelsQueue() {
             item.status = "published";
             item.publishedAt = new Date().toISOString();
             item.instagramReel = result.permalink || `https://www.instagram.com/reel/${result.id}/`;
-            console.log(`🎉 Published Instagram Reel: ${item.instagramReel}`);
+            console.log(`🎉 Successfully Published Instagram Reel: ${item.instagramReel}`);
 
             // Clean up temporary scheduled file
             try { fs.unlinkSync(item.videoPath); } catch (_) {}
             updated = true;
+            saveQueue(queue); // save state immediately after each successful post
+
+            // Polite cooldown between consecutive uploads to prevent API rate-limits
+            if (forceNow && i < queue.length - 1) {
+              console.log("⏳ Cooling down 8 seconds before processing next Reel...");
+              await new Promise((r) => setTimeout(r, 8000));
+            }
           } else {
-            console.error(`⚠️ Upload failed for item ${item.id}. Will retry on next tick.`);
+            console.error(`⚠️ Upload failed or incomplete for item ${item.id}. Will remain in queue.`);
           }
         } catch (err) {
           console.error(`❌ Error publishing scheduled Reel ${item.id}:`, err.message);
@@ -199,8 +211,11 @@ async function main() {
 
   if (args.includes("--worker") || args.includes("-w")) {
     await startInstagramWorker(60);
+  } else if (args.includes("--publish-all-now") || args.includes("--now") || args.includes("--force")) {
+    console.log("⚡ [FORCE MODE] Publishing all pending Instagram Reels immediately...");
+    await processScheduledReelsQueue(true);
   } else if (args.includes("--process-now") || args.includes("-p")) {
-    await processScheduledReelsQueue();
+    await processScheduledReelsQueue(false);
   } else {
     // Status display
     const queue = getQueue();
