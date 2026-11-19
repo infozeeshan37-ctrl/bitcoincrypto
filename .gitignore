@@ -10,3 +10,4 @@ tmp_shorts/
 logs/
 .snapchat_profile/
 data/
+*.tsbuildinfo

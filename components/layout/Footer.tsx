@@ -326,16 +326,16 @@ export default function Footer() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-[11px]">
             {[
-              { label: "Ch 1: Bitcoin Foundations", href: "/learn/what-is-bitcoin-monetary-revolution" },
-              { label: "Ch 2: Ethereum & EVM Specs", href: "/learn/what-is-ethereum-smart-contracts" },
-              { label: "Ch 3: Macro Liquidity & M2", href: "/learn/macroeconomic-liquidity-m2-central-banks" },
-              { label: "Ch 4: On-Chain MVRV Ratios", href: "/learn/mvrv-z-score-valuation" },
-              { label: "Ch 5: Candlestick Auction", href: "/learn/candlestick-anatomy-auction-theory" },
-              { label: "Ch 6: Order Flow, CVD & Depth", href: "/learn/order-book-depth-bid-ask-spread" },
-              { label: "Ch 7: Technical Confluence", href: "/learn/exponential-moving-averages-ema-ribbons" },
-              { label: "Ch 8: Market Microstructure", href: "/learn/central-limit-order-book-clob-matching" },
-              { label: "Ch 9: Perpetual Futures & Funding", href: "/learn/perpetual-futures-funding-rate-mechanics" },
-              { label: "Ch 10: Kelly Risk Management", href: "/learn/kelly-criterion-position-sizing" },
+              { label: "Ch 1: Bitcoin Foundations", href: "/learn/satoshi-byzantine-consensus" },
+              { label: "Ch 2: Ethereum & EVM Specs", href: "/learn/evm-state-machine-gas" },
+              { label: "Ch 3: Macro Liquidity & M2", href: "/learn/global-m2-master-driver" },
+              { label: "Ch 4: On-Chain MVRV Ratios", href: "/learn/mvrv-zscore-macro-channel" },
+              { label: "Ch 5: Candlestick Auction", href: "/learn/candlestick-anatomy-wick-rejections" },
+              { label: "Ch 6: Smart Money Price Action", href: "/learn/swing-highs-swing-lows-integrity" },
+              { label: "Ch 7: Oscillators & Indicators", href: "/learn/rsi-momentum-velocity-thresholds" },
+              { label: "Ch 8: Order Flow & CLOB", href: "/learn/clob-architecture-matching-engines" },
+              { label: "Ch 9: Perpetual Futures & Funding", href: "/learn/perpetual-futures-funding-mechanics" },
+              { label: "Ch 10: Kelly Risk Management", href: "/learn/mathematics-of-ruin-asymmetric-drawdown" },
             ].map((ch) => (
               <Link
                 key={ch.label}
@@ -354,14 +354,14 @@ export default function Footer() {
             </span>
             <div className="flex flex-wrap gap-2 text-[11px]">
               {[
-                { title: "Bitcoin Halving Mechanics", slug: "bitcoin-halving-supply-shock" },
-                { title: "Order Book Depth & Slippage", slug: "order-book-depth-bid-ask-spread" },
+                { title: "Bitcoin Halving Mechanics", slug: "halving-cycles-and-supply-shock" },
+                { title: "Order Book Depth & Spoofing", slug: "level2-depth-charts-spoofing" },
                 { title: "CoinGlass Liquidation Cascades", slug: "coinglass-liquidation-heatmaps" },
-                { title: "CVD Delta Absorption", slug: "cumulative-volume-delta-cvd-absorption" },
-                { title: "MVRV Z-Score Model", slug: "mvrv-z-score-valuation" },
-                { title: "US CPI & Crypto Cycles", slug: "cpi-inflation-fomc-crypto" },
-                { title: "Perpetual Funding Rate Arbitrage", slug: "perpetual-futures-funding-rate-mechanics" },
-                { title: "Kelly Criterion Risk Sizing", slug: "kelly-criterion-position-sizing" },
+                { title: "CVD Delta Absorption", slug: "cvd-cumulative-volume-delta" },
+                { title: "MVRV Z-Score Model", slug: "mvrv-zscore-macro-channel" },
+                { title: "US CPI & Crypto Volatility", slug: "cpi-pce-macro-volatility-releases" },
+                { title: "Perpetual Funding Mechanics", slug: "perpetual-futures-funding-mechanics" },
+                { title: "Kelly Criterion Risk Sizing", slug: "kelly-criterion-optimal-capital-allocation" },
               ].map((item) => (
                 <Link
                   key={item.slug}

@@ -14,8 +14,8 @@ export const chapter3: CourseChapter = {
   overview:
     "Cryptocurrency does not trade in a vacuum. Learn how global central bank liquidity (M2), Federal Reserve Quantitative Tightening (QT) vs Quantitative Easing (QE), real interest rates, and foreign exchange currency carry trades dictate macro bull and bear regimes across all digital assets.",
   linkedTool: {
-    name: "Macro Battles Dashboard",
-    href: "/tools/macro-battles",
+    name: "CPI & Macro Volatility Radar",
+    href: "/cpi",
     actionText: "Track Macro Economic Indicators →"
   },
   references: [

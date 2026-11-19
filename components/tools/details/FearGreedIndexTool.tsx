@@ -445,7 +445,7 @@ export default function FearGreedIndexTool() {
                 <span>Market Sentiment Zones & Action Matrix</span>
               </h4>
               <Link
-                href="/concepts/fear-and-greed-index-math"
+                href="/concepts/crypto-fear-and-greed-index-math-and-cycle-timing"
                 className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1"
               >
                 <span>Read Formula Guide</span>

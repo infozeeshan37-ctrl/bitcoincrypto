@@ -14,8 +14,8 @@ export const chapter4: CourseChapter = {
   overview:
     "Unlike legacy equities where insider order flow is hidden, every single transaction on a public blockchain is auditable in real time. Master the institutional discipline of On-Chain Analysis: tracking investor cost basis, realized profit/loss, long-term holder accumulation, and miner distress to time macro market tops and bottoms with precision.",
   linkedTool: {
-    name: "MVRV Z-Score Tracker",
-    href: "/tools/macro-battles",
+    name: "MVRV Z-Score Cycle Radar",
+    href: "/concepts/mvrv-z-score-onchain-cycle-tops-bottoms",
     actionText: "Analyze Live On-Chain Valuation →"
   },
   references: [

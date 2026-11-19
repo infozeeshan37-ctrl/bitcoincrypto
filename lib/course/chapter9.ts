@@ -15,7 +15,7 @@ export const chapter9: CourseChapter = {
     "Over 75% of daily cryptocurrency trading volume takes place in derivatives markets rather than spot. Master the mechanics of Perpetual Futures: how 8-hour funding rates anchor perp contracts to spot prices, how Open Interest (OI) measures systemic leverage, how CoinGlass liquidation heatmaps reveal institutional liquidity magnets, and how to profit from forced liquidation cascades.",
   linkedTool: {
     name: "CoinGlass Liquidation Heatmap",
-    href: "/tools/macro-battles",
+    href: "/tools/liquidation-heatmap",
     actionText: "View Live Liquidation Heatmaps →"
   },
   references: [

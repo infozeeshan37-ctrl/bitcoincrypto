@@ -245,7 +245,7 @@ export default function DCACalculator() {
           </p>
         </div>
         <Link
-          href="/blog/the-mathematics-of-dca-in-crypto"
+          href="/blog/bitcoin-dca-strategy-math-dynamic-value-averaging-halving-cycles"
           className="text-amber-600 dark:text-amber-400 font-bold hover:underline shrink-0 flex items-center gap-1"
         >
           <span>Read Quant Proof</span>

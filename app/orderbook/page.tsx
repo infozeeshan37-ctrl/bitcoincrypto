@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import OrderbookTerminal from "@/components/orderbook/OrderbookTerminal";
+import OrderbookEditorialGuide from "@/components/orderbook/OrderbookEditorialGuide";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
@@ -67,6 +68,9 @@ export default function OrderbookPage() {
         >
           <OrderbookTerminal />
         </Suspense>
+
+        {/* Level-2 Order Book Microstructure & CVD Quantitative Masterclass (AdSense & SEO Rich Content) */}
+        <OrderbookEditorialGuide />
 
         {/* Primary Data Verification & Outbound Links */}
         <AuthoritativeCitations
