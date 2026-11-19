@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import CPIMacroAIPredictor from "@/components/macro/CPIMacroAIPredictor";
+import CPIEditorialGuide from "@/components/macro/CPIEditorialGuide";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
@@ -52,6 +53,9 @@ export default function CPIPage() {
         >
           <CPIMacroAIPredictor />
         </Suspense>
+
+        {/* US CPI Inflation & Federal Reserve Monetary Policy Masterclass (AdSense & SEO Rich Content) */}
+        <CPIEditorialGuide />
 
         {/* Primary External Sources & Institutional Citation */}
         <AuthoritativeCitations

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import WhaleOrdersTerminal from "@/components/whales/WhaleOrdersTerminal";
+import WhaleOrdersEditorialGuide from "@/components/whales/WhaleOrdersEditorialGuide";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
@@ -67,6 +68,9 @@ export default function WhaleOrdersPage() {
         >
           <WhaleOrdersTerminal />
         </Suspense>
+
+        {/* Whale Orders & Institutional Order Flow Quantitative Masterclass (AdSense & SEO Rich Content) */}
+        <WhaleOrdersEditorialGuide />
 
         {/* Primary Outbound Links & E-E-A-T Data Verification */}
         <AuthoritativeCitations

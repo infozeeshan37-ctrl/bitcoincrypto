@@ -735,6 +735,111 @@ export default function ToolsPage() {
         >
           <ToolsContent />
         </Suspense>
+
+        {/* Dedicated Standalone Tool Directory (Server-Rendered for Indexing & E-E-A-T) */}
+        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+          <div className="space-y-2 border-b border-slate-100 dark:border-slate-800 pb-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-700/80">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Full Trading Utilities Directory</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+              Institutional Cryptocurrency Trading &amp; Research Terminals
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-3xl">
+              Explore our full suite of 10 standalone quantitative trading utilities, risk calculators, order book visualizers, and simulated paper-trading copilots.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              {
+                slug: "trading-bot",
+                name: "AI Trading Signals & Copilot Terminal",
+                desc: "Autonomous algorithmic momentum scoring with dynamic entry, stop-loss, and multi-tier take-profit targets.",
+                tag: "Algorithmic Bot"
+              },
+              {
+                slug: "chart-terminal",
+                name: "TradingView Pro Chart & Technical Radar",
+                desc: "High-frequency multi-timeframe candlestick terminal with RSI, MACD, Bollinger Bands, and volume profile.",
+                tag: "Technical Chart"
+              },
+              {
+                slug: "dca-simulator",
+                name: "Dollar-Cost Averaging Multi-Asset Simulator",
+                desc: "Simulate systematic accumulation schedules across historical Bitcoin, Ethereum, and Solana market cycles.",
+                tag: "Backtest Model"
+              },
+              {
+                slug: "position-sizer",
+                name: "Risk & Position Sizing Calculator",
+                desc: "Kelly Criterion and ATR stop-loss calculator to enforce maximum drawdown limits under 1.5% per position.",
+                tag: "Risk Management"
+              },
+              {
+                slug: "crypto-converter",
+                name: "Real-Time Crypto Currency & Fiat Converter",
+                desc: "Instant sub-second exchange rate conversions between 50+ cryptocurrencies and major global fiat currencies.",
+                tag: "Currency Oracle"
+              },
+              {
+                slug: "liquidation-heatmap",
+                name: "CoinGlass Liquidation Heatmap & Squeeze Radar",
+                desc: "2D spectrogram liquidation heatmap mapping resting leverage pools across Binance, Bybit, OKX, and Deribit.",
+                tag: "Derivatives Radar"
+              },
+              {
+                slug: "fear-greed-index",
+                name: "Crypto Fear & Greed Index Sentiment Radar",
+                desc: "Multi-factor composite scoring tracking volatility, social sentiment, volume momentum, and macro cycle bottoms.",
+                tag: "Sentiment Index"
+              },
+              {
+                slug: "profit-calculator",
+                name: "Profit / Loss & Leverage ROI Calculator",
+                desc: "Calculate net return on investment, fee deductions, liquidation thresholds, and break-even targets.",
+                tag: "ROI Calculator"
+              },
+              {
+                slug: "funding-rate-screener",
+                name: "Perpetual Funding Rate Screener & Basis Arbitrage",
+                desc: "Cross-exchange 8-hour funding rates, annualized APY yield comparisons, and delta-neutral cash-and-carry basis.",
+                tag: "Basis Arbitrage"
+              },
+              {
+                slug: "whale-tracker",
+                name: "Institutional Whale Orders & Large Trades Radar",
+                desc: "Real-time institutional block trade monitoring ($100K+ to $10M+) and resting limit wall absorption ladders.",
+                tag: "Smart Money"
+              }
+            ].map((toolItem) => (
+              <a
+                key={toolItem.slug}
+                href={`/tools/${toolItem.slug}`}
+                className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-400 transition group flex flex-col justify-between space-y-3"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300">
+                      {toolItem.tag}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition">
+                    {toolItem.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">
+                    {toolItem.desc}
+                  </p>
+                </div>
+                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 group-hover:underline inline-flex items-center gap-1 pt-1">
+                  Launch Standalone Terminal &rarr;
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
