@@ -42,6 +42,21 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/cp",
+        destination: "/cpi",
+        permanent: true,
+      },
+      {
+        source: "/cp/:path*",
+        destination: "/cpi",
+        permanent: true,
+      },
+      {
+        source: "/$",
+        destination: "/",
+        permanent: true,
+      },
+      {
         source: "/learnvv",
         destination: "/learn",
         permanent: true,
