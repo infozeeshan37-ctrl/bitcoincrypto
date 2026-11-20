@@ -23,42 +23,30 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "BitcoinCrypto.tech | #1 Free CoinGlass Liquidation Heatmap, AI Crypto Predictions & Whale Radar",
+  title: "BitcoinCrypto.tech | Educational Cryptocurrency Research & Quantitative Intelligence Suite",
   description:
-    "Official BitcoinCrypto.tech platform - The leading cryptocurrency market intelligence terminal with real-time CoinGlass liquidation heatmaps, Binance 5-minute AI price predictions, Level-2 order book depth, institutional whale orders, and perpetual futures funding rates.",
+    "BitcoinCrypto.tech is an open-access educational cryptocurrency research terminal and market intelligence suite. Explore Level-2 order book depth, CoinGlass liquidation heatmaps, algorithmic momentum models, US CPI macro telemetry, and simulated paper trading.",
   keywords: [
     "bitcoincrypto.tech",
-    "bitcoincrypto",
-    "bitcoincrypto tech",
-    "bitcoin crypto",
-    "bitcoin crypto ai",
+    "cryptocurrency research terminal",
+    "crypto educational platform",
     "coinglass liquidation heatmap",
-    "coinglass",
-    "coinglass crypto",
-    "coinglass alternative free",
-    "coinglass btc heatmap",
-    "ai crypto trading bot",
-    "ai crypto prediction",
-    "binance 5 minute price prediction",
-    "crypto market intelligence",
-    "whale orders",
-    "crypto whale tracker live",
-    "bitcoin price prediction",
-    "crypto signals btc eth sol",
-    "binance 5 minute next candle prediction",
-    "crypto order book depth",
-    "crypto funding rates live",
-    "bitcoin liquidation levels",
-    "short squeeze heatmap",
-    "crypto dca simulator"
+    "crypto market microstructure",
+    "level 2 order book depth",
+    "cumulative volume delta cvd",
+    "bitcoin macro liquidity",
+    "us cpi crypto correlation",
+    "crypto paper trading simulator",
+    "quantitative technical analysis",
+    "crypto risk management"
   ],
   alternates: {
     canonical: "https://www.bitcoincrypto.tech",
   },
   openGraph: {
-    title: "BitcoinCrypto.tech | #1 AI Crypto Trading Signals & Market Intelligence Suite",
+    title: "BitcoinCrypto.tech | Educational Cryptocurrency Research & Quantitative Intelligence",
     description:
-      "Official BitcoinCrypto.tech platform - Institutional cryptocurrency market intelligence suite with real-time AI trading signals, Binance 5-minute price predictions, Coinglass liquidation heatmaps, and whale orders.",
+      "Open-access educational cryptocurrency research terminal and market intelligence suite featuring Level-2 order book depth, CoinGlass liquidation heatmaps, and simulated paper trading.",
     url: "https://www.bitcoincrypto.tech",
     siteName: "BitcoinCrypto.tech",
     images: [
@@ -66,7 +54,7 @@ export const metadata: Metadata = {
         url: "https://www.bitcoincrypto.tech/og-image.png",
         width: 1200,
         height: 630,
-        alt: "BitcoinCrypto.tech AI Trading Suite & Market Intelligence",
+        alt: "BitcoinCrypto.tech Educational Cryptocurrency Research & Market Intelligence Suite",
       },
     ],
     type: "website",
@@ -74,9 +62,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BitcoinCrypto.tech | #1 AI Crypto Trading Signals & Market Intelligence",
+    title: "BitcoinCrypto.tech | Educational Cryptocurrency Research & Quantitative Suite",
     description:
-      "Real-time AI trading signals, Binance 5-minute price predictions, Coinglass liquidation heatmaps, and institutional whale orders.",
+      "Educational cryptocurrency research terminal: Level-2 order book depth, CoinGlass liquidation heatmaps, and simulated paper-trading models.",
     creator: "@bitcoincrypto",
     images: ["https://www.bitcoincrypto.tech/og-image.png"],
   },

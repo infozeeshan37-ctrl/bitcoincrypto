@@ -5,6 +5,7 @@ import CoinGlassLiquidationTool from "@/components/tools/details/CoinGlassLiquid
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
+import EducationalDisclaimerBanner from "@/components/common/EducationalDisclaimerBanner";
 import { CoinglassPageJsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
@@ -66,6 +67,9 @@ export default function CoinglassPage() {
         <section className="pt-6 border-t border-slate-200 dark:border-slate-800">
           <CoinGlassLiquidationTool />
         </section>
+
+        {/* Educational Disclaimer Banner */}
+        <EducationalDisclaimerBanner toolName="CoinGlass liquidation heatmaps and derivatives indicators" />
 
         {/* Verified Primary Sources & Authority Citation Grid */}
         <AuthoritativeCitations

@@ -5,6 +5,7 @@ import OrderbookEditorialGuide from "@/components/orderbook/OrderbookEditorialGu
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
+import EducationalDisclaimerBanner from "@/components/common/EducationalDisclaimerBanner";
 import AdBanner from "@/components/ads/AdBanner";
 
 export const metadata: Metadata = {
@@ -71,6 +72,9 @@ export default function OrderbookPage() {
 
         {/* Level-2 Order Book Microstructure & CVD Quantitative Masterclass (AdSense & SEO Rich Content) */}
         <OrderbookEditorialGuide />
+
+        {/* Educational Disclaimer Banner */}
+        <EducationalDisclaimerBanner toolName="Level-2 Order Book and CVD metrics" />
 
         {/* Primary Data Verification & Outbound Links */}
         <AuthoritativeCitations

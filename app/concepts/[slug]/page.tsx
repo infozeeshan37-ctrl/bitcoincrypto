@@ -19,6 +19,7 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AdBanner from "@/components/ads/AdBanner";
 import AuthoritativeCitations from "@/components/common/AuthoritativeCitations";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import AuthorBioBox from "@/components/common/AuthorBioBox";
 import { conceptGuides, ConceptGuide } from "@/lib/conceptsData";
 
 interface PageProps {
@@ -298,6 +299,22 @@ export default async function ConceptDetailPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Verified Author & Research Desk E-E-A-T Bio Box */}
+        <AuthorBioBox
+          authorSlug={
+            guide.category === "Order Flow" || guide.category === "Derivatives"
+              ? "marcus-vance"
+              : guide.category === "Macroeconomics"
+              ? "elena-rostova"
+              : guide.category === "Risk Management" || guide.category === "On-Chain"
+              ? "dr-sarah-chen"
+              : "zeeshan-ahmed"
+          }
+          reviewedBySlug={
+            guide.category === "Macroeconomics" ? "zeeshan-ahmed" : "elena-rostova"
+          }
+        />
 
         {/* FAQ Section for Google Rich Snippets */}
         <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">

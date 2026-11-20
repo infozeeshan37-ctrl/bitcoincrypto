@@ -32,6 +32,7 @@ import PositionSizerTool from "@/components/tools/details/PositionSizerTool";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
 import AdBanner from "@/components/ads/AdBanner";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import EducationalDisclaimerBanner from "@/components/common/EducationalDisclaimerBanner";
 
 interface ToolConfig {
   slug: string;
@@ -401,6 +402,9 @@ export default async function DedicatedToolPage({ params }: PageProps) {
 
           {tool.slug === "whale-tracker" && <WhaleTrackerTool />}
         </section>
+
+        {/* Educational Disclaimer Banner */}
+        <EducationalDisclaimerBanner toolName={tool.name} />
 
         {/* Google AdSense Compliant Banner Slot */}
         <AdBanner format="auto" />

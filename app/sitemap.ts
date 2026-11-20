@@ -4,6 +4,7 @@ import { coinPredictions } from "@/lib/coinPredictionsData";
 import { conceptGuides } from "@/lib/conceptsData";
 import { allArticles } from "@/lib/courseData";
 import { getUniqueNewsArticles } from "@/lib/newsArchive";
+import { authors } from "@/lib/authorsData";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.bitcoincrypto.tech";
@@ -125,7 +126,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/disclaimer`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/cookie-policy`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
   ];
+
+  // 1b. Verified Quantitative Researcher & Author Profile Pages
+  const authorRoutes: MetadataRoute.Sitemap = authors.map((author) => ({
+    url: `${baseUrl}/authors/${author.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
 
   // 2. Dedicated Programmatic Coin AI Price Prediction Pages
   const predictionRoutes: MetadataRoute.Sitemap = coinPredictions.map((coin) => ({
@@ -189,6 +216,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...staticRoutes,
+    ...authorRoutes,
     ...predictionRoutes,
     ...toolRoutes,
     ...conceptRoutes,

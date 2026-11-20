@@ -43,8 +43,15 @@ export async function generateMetadata({
     title: `${author.name} - ${author.role} | BitcoinCrypto.tech`,
     description: author.bio,
     robots: {
-      index: false,
+      index: true,
       follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
     alternates: {
       canonical: `/authors/${author.slug}`,

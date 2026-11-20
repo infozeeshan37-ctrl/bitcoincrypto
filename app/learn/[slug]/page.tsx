@@ -20,6 +20,7 @@ import {
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AdBanner from "@/components/ads/AdBanner";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
+import AuthorBioBox from "@/components/common/AuthorBioBox";
 
 export async function generateStaticParams() {
   return allArticles.map((article) => ({
@@ -162,6 +163,30 @@ export default async function LearnLessonPage({
   const crossChapterLessons = allArticles
     .filter((a) => a.slug !== article.slug && a.chapterId !== article.chapterId)
     .slice((currentIndex * 2) % 30, ((currentIndex * 2) % 30) + 4);
+
+  const getChapterAuthor = (chNum: string) => {
+    switch (chNum) {
+      case "01":
+      case "02":
+        return { author: "zeeshan-ahmed", reviewer: "elena-rostova" };
+      case "03":
+        return { author: "elena-rostova", reviewer: "zeeshan-ahmed" };
+      case "04":
+        return { author: "dr-sarah-chen", reviewer: "elena-rostova" };
+      case "05":
+      case "06":
+      case "07":
+      case "08":
+      case "09":
+        return { author: "marcus-vance", reviewer: "zeeshan-ahmed" };
+      case "10":
+        return { author: "dr-sarah-chen", reviewer: "zeeshan-ahmed" };
+      default:
+        return { author: "zeeshan-ahmed", reviewer: "marcus-vance" };
+    }
+  };
+
+  const chapterCredit = getChapterAuthor(article.chapterNumber);
 
   return (
     <article className="py-10 sm:py-16 bg-white dark:bg-slate-950 transition-colors">
@@ -387,6 +412,9 @@ export default async function LearnLessonPage({
           toolUrl={articleUrl}
           description={article.content[0] || article.title}
         />
+
+        {/* Verified Author & Research Desk E-E-A-T Bio Box */}
+        <AuthorBioBox authorSlug={chapterCredit.author} reviewedBySlug={chapterCredit.reviewer} />
 
         {/* Sequential Next / Previous Lesson Navigation */}
         <div className="pt-8 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
