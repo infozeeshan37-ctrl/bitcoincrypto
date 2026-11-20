@@ -21,6 +21,7 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 import AdBanner from "@/components/ads/AdBanner";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import AuthorBioBox from "@/components/common/AuthorBioBox";
+import LessonMasterclassExpansion from "@/components/learn/LessonMasterclassExpansion";
 
 export async function generateStaticParams() {
   return allArticles.map((article) => ({
@@ -348,6 +349,9 @@ export default async function LearnLessonPage({
             </p>
           </div>
         )}
+
+        {/* Masterclass Teacher's In-Depth Pedagogical Breakdown (AdSense High-Value Content) */}
+        <LessonMasterclassExpansion article={article} chapter={chapter} />
 
         {/* Interactive Tool Integration */}
         {chapter?.linkedTool && (

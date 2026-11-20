@@ -30,6 +30,7 @@ import WhaleTrackerTool from "@/components/tools/details/WhaleTrackerTool";
 import CryptoConverterTool from "@/components/tools/details/CryptoConverterTool";
 import PositionSizerTool from "@/components/tools/details/PositionSizerTool";
 import AIPredictionSuite from "@/components/predictions/AIPredictionSuite";
+import AITradingBotEducationalGuide from "@/components/tools/details/AITradingBotEducationalGuide";
 import AdBanner from "@/components/ads/AdBanner";
 import ToolCitationWidget from "@/components/common/ToolCitationWidget";
 import EducationalDisclaimerBanner from "@/components/common/EducationalDisclaimerBanner";
@@ -378,7 +379,12 @@ export default async function DedicatedToolPage({ params }: PageProps) {
 
         {/* Dedicated Tool Interactive Component */}
         <section className="space-y-6">
-          {tool.slug === "trading-bot" && <AITradingBotTerminal />}
+          {tool.slug === "trading-bot" && (
+            <div className="space-y-8">
+              <AITradingBotTerminal />
+              <AITradingBotEducationalGuide />
+            </div>
+          )}
 
           {tool.slug === "chart-terminal" && <ChartTerminalTool />}
 

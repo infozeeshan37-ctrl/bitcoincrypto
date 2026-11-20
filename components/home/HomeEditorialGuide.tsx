@@ -157,6 +157,158 @@ export default function HomeEditorialGuide() {
 
         </div>
 
+        {/* Core Educational Disciplines Taught on the Platform */}
+        <div className="space-y-8 pt-4">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300/60 dark:border-amber-700/60">
+              <GraduationCap className="w-3.5 h-3.5 text-amber-500" />
+              <span>Core Quantitative Curriculum</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              What You Learn at BitcoinCrypto.tech
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              We replace speculative social media commentary with structured, academic-grade market intelligence. Master the six quantitative disciplines that govern modern digital asset valuation:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {/* Discipline 1: Bitcoin Market Structure & Halvings */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between hover:border-amber-400 transition">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">
+                  Discipline 1 • Monetary Fundamentals
+                </span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                  Bitcoin Halving Cycles &amp; Market Structure
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Understand how programmatic 50% cuts to miner block subsidies enforce absolute digital scarcity, how the stock-to-flow ratio models supply inelasticity, and how spot ETFs accelerate cyclical supply shocks.
+                </p>
+              </div>
+              <Link
+                href="/blog/bitcoin-halving-cycles-and-market-structure-explained"
+                className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline pt-2 border-t border-slate-100 dark:border-slate-800"
+              >
+                <span>Read Halving Masterclass</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+            {/* Discipline 2: Order Flow & CVD */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between hover:border-blue-400 transition">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider block">
+                  Discipline 2 • Market Microstructure
+                </span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                  Order Flow &amp; Cumulative Volume Delta (CVD)
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Dissect the Central Limit Order Book (CLOB). Learn how aggressive market takers consume resting liquidity, how to detect institutional absorption, and how to spot divergence exhaustion before trend reversals.
+                </p>
+              </div>
+              <Link
+                href="/blog/understanding-cumulative-volume-delta-cvd-for-beginners"
+                className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline pt-2 border-t border-slate-100 dark:border-slate-800"
+              >
+                <span>Read CVD Beginner Guide</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+            {/* Discipline 3: Liquidation Cascades & CoinGlass */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between hover:border-rose-400 transition">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider block">
+                  Discipline 3 • Derivatives Mechanics
+                </span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                  Liquidation Cascades &amp; CoinGlass Heatmaps
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Learn how exchange liquidation engines forcefully close bankrupt leveraged positions, why high-density liquidation pools act as price magnets for smart money, and how to read 2D spectrogram heatmaps.
+                </p>
+              </div>
+              <Link
+                href="/blog/how-bitcoin-liquidation-cascades-work-coinglass-guide"
+                className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline pt-2 border-t border-slate-100 dark:border-slate-800"
+              >
+                <span>Read Liquidation Guide</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+            {/* Discipline 4: Order Book Depth & Manipulation */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between hover:border-purple-400 transition">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider block">
+                  Discipline 4 • Execution Anatomy
+                </span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                  Order Book Depth, Spoofing &amp; Iceberg Orders
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Discover how high-frequency algorithms place fake limit walls to manipulate sentiment, how whales accumulate through hidden iceberg tranches, and how to protect yourself from liquidity sweeps.
+                </p>
+              </div>
+              <Link
+                href="/blog/order-book-depth-and-how-institutions-manipulate-liquidity"
+                className="inline-flex items-center gap-1 text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline pt-2 border-t border-slate-100 dark:border-slate-800"
+              >
+                <span>Read Order Book Guide</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+            {/* Discipline 5: Macroeconomics & US CPI */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between hover:border-emerald-400 transition">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
+                  Discipline 5 • Monetary Policy
+                </span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                  US CPI Inflation &amp; Central Bank Liquidity
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Analyze how US Bureau of Labor Statistics CPI reports dictate Federal Reserve interest rate odds, how the US Dollar Index (DXY) inverse beta operates, and how macro liquidity cycles drive crypto bull runs.
+                </p>
+              </div>
+              <Link
+                href="/blog/how-us-cpi-data-affects-bitcoin-price-complete-guide"
+                className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline pt-2 border-t border-slate-100 dark:border-slate-800"
+              >
+                <span>Read Macro CPI Playbook</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+            {/* Discipline 6: Risk Management & Position Sizing */}
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 flex flex-col justify-between hover:border-amber-400 transition">
+              <div className="space-y-2">
+                <span className="text-[10px] font-mono font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">
+                  Discipline 6 • Capital Preservation
+                </span>
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">
+                  Mathematical Position Sizing &amp; Kelly Criterion
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Master the geometry of drawdowns. Learn why a 50% loss requires a 100% gain to recover, how to size positions backward from stop-loss distances, and how to apply the Half-Kelly formula safely.
+                </p>
+              </div>
+              <Link
+                href="/blog/risk-management-and-position-sizing-in-crypto-kelly-criterion"
+                className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline pt-2 border-t border-slate-100 dark:border-slate-800"
+              >
+                <span>Read Risk Management Guide</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+          </div>
+        </div>
+
         {/* 100-Article Masterclass Showcase Banner */}
         <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-8 sm:p-12 border border-slate-800 text-white space-y-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">

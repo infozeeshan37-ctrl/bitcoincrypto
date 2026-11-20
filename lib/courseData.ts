@@ -12,6 +12,7 @@ import { chapter10 } from "./course/chapter10";
 
 export type { CourseChapter, CourseLesson, QuizQuestion, CourseGlossaryItem };
 export type CourseModule = CourseChapter;
+export type CourseArticle = (typeof allArticles)[number];
 
 // Aggregated 10 Comprehensive Chapters (100 Articles total)
 export const courseChapters: CourseChapter[] = [
