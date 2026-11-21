@@ -5,8 +5,12 @@
  * on-screen visual cues, optimized high-CTR titles, descriptions, and hashtags.
  * 
  * Usage:
- *   node scripts/youtubeShortsGenerator.mjs            # Generates today's YouTube Short pack
- *   npm run youtube:shorts                            # Convenience npm script
+ *   node scripts/youtubeShortsGenerator.mjs                         # Generates a random high-converting short
+ *   node scripts/youtubeShortsGenerator.mjs --category=how_to_find_predictions # Generates Bitcoin prediction tutorial
+ *   node scripts/youtubeShortsGenerator.mjs --category=website_intro # Generates full website & all tabs tour
+ *   node scripts/youtubeShortsGenerator.mjs --list                  # Lists all available short categories
+ *   node scripts/youtubeShortsGenerator.mjs --all                   # Generates short packs for all categories
+ *   npm run youtube:shorts                                         # Convenience npm script
  */
 
 const POPULAR_COINS = [
@@ -14,7 +18,10 @@ const POPULAR_COINS = [
   { symbol: "ETHUSDT", name: "Ethereum", ticker: "ETH", slug: "ethereum", target: "$3,100", stop: "$2,450", squeezeCluster: "$190M", wall: "$2,850" },
   { symbol: "SOLUSDT", name: "Solana", ticker: "SOL", slug: "solana", target: "$195", stop: "$152", squeezeCluster: "$95M", wall: "$178" },
   { symbol: "XRPUSDT", name: "XRP", ticker: "XRP", slug: "xrp", target: "$1.85", stop: "$1.35", squeezeCluster: "$45M", wall: "$1.62" },
-  { symbol: "SUIUSDT", name: "Sui", ticker: "SUI", slug: "sui", target: "$4.50", stop: "$3.10", squeezeCluster: "$35M", wall: "$3.85" }
+  { symbol: "SUIUSDT", name: "Sui", ticker: "SUI", slug: "sui", target: "$4.50", stop: "$3.10", squeezeCluster: "$35M", wall: "$3.85" },
+  { symbol: "DOGEUSDT", name: "Dogecoin", ticker: "DOGE", slug: "dogecoin", target: "$0.42", stop: "$0.32", squeezeCluster: "$60M", wall: "$0.38" },
+  { symbol: "BNBUSDT", name: "BNB", ticker: "BNB", slug: "binancecoin", target: "$720", stop: "$610", squeezeCluster: "$55M", wall: "$660" },
+  { symbol: "ADAUSDT", name: "Cardano", ticker: "ADA", slug: "cardano", target: "$0.95", stop: "$0.72", squeezeCluster: "$28M", wall: "$0.84" }
 ];
 
 async function fetchLiveBinancePrice(symbol, fallback) {
@@ -34,270 +41,464 @@ function formatPrice(val) {
   return `$${val.toFixed(4)}`;
 }
 
-export async function generateDailyShort(categoryOverride = null) {
-  const categories = [
-    "website_intro",
-    "five_minute_arena",
-    "whale_radar",
-    "cpi_macro",
-    "news_sentiment",
-    "technical_fundamental",
-    "ai_prediction",
-    "coinglass_squeeze",
-    "crypto_learn"
-  ];
+export const ALL_SHORT_CATEGORIES = [
+  "website_intro",
+  "how_to_find_predictions",
+  "bitcoin_predictions",
+  "five_minute_arena",
+  "whale_radar",
+  "coinglass_squeeze",
+  "cpi_macro",
+  "ai_trading_bot",
+  "orderbook_depth",
+  "crypto_learn",
+  "dca_simulator",
+  "news_sentiment"
+];
 
-  let chosenCategory = categories[Math.floor(Math.random() * categories.length)];
+export async function generateDailyShort(categoryOverride = null, coinOverride = null) {
+  let chosenCategory = ALL_SHORT_CATEGORIES[Math.floor(Math.random() * ALL_SHORT_CATEGORIES.length)];
+
   if (categoryOverride) {
-    const lower = categoryOverride.toLowerCase();
-    if (lower === "intro" || lower === "website" || lower === "website_intro") {
+    const lower = categoryOverride.toLowerCase().trim();
+    if (lower === "intro" || lower === "website" || lower === "website_intro" || lower === "tour") {
       chosenCategory = "website_intro";
-    } else if (lower === "five_minute" || lower === "5min" || lower === "five_minute_arena" || lower === "tab_predictions_5min") {
+    } else if (lower === "find" || lower === "how_to_find" || lower === "how_to_find_predictions" || lower === "tutorial") {
+      chosenCategory = "how_to_find_predictions";
+    } else if (lower === "btc" || lower === "bitcoin" || lower === "bitcoin_predictions") {
+      chosenCategory = "bitcoin_predictions";
+    } else if (lower === "five_minute" || lower === "5min" || lower === "five_minute_arena" || lower === "arena") {
       chosenCategory = "five_minute_arena";
     } else if (lower === "whale" || lower === "whale_radar" || lower === "tab_whale_orders") {
       chosenCategory = "whale_radar";
-    } else if (lower === "cpi" || lower === "cpi_macro" || lower === "tab_cpi_macro") {
+    } else if (lower === "cpi" || lower === "cpi_macro" || lower === "tab_cpi_macro" || lower === "macro") {
       chosenCategory = "cpi_macro";
+    } else if (lower === "bot" || lower === "trading_bot" || lower === "ai_trading_bot" || lower === "paper_trading") {
+      chosenCategory = "ai_trading_bot";
+    } else if (lower === "orderbook" || lower === "depth" || lower === "clob" || lower === "orderbook_depth") {
+      chosenCategory = "orderbook_depth";
+    } else if (lower === "learn" || lower === "masterclass" || lower === "curriculum" || lower === "crypto_learn") {
+      chosenCategory = "crypto_learn";
+    } else if (lower === "dca" || lower === "dca_simulator" || lower === "simulator") {
+      chosenCategory = "dca_simulator";
     } else if (lower === "news" || lower === "news_sentiment" || lower === "tab_news_sentiment") {
       chosenCategory = "news_sentiment";
-    } else if (lower === "tech" || lower === "technical" || lower === "fundamental" || lower === "technical_fundamental" || lower === "tab_technical_fundamental") {
-      chosenCategory = "technical_fundamental";
-    } else if (categories.includes(categoryOverride)) {
-      chosenCategory = categoryOverride;
+    } else if (lower === "coinglass" || lower === "squeeze" || lower === "coinglass_squeeze" || lower === "liquidations") {
+      chosenCategory = "coinglass_squeeze";
+    } else if (ALL_SHORT_CATEGORIES.includes(lower)) {
+      chosenCategory = lower;
     }
   }
 
-  const coin = POPULAR_COINS[Math.floor(Math.random() * POPULAR_COINS.length)];
-  const livePrice = await fetchLiveBinancePrice(coin.symbol, 88500);
+  let coin = POPULAR_COINS[Math.floor(Math.random() * POPULAR_COINS.length)];
+  if (coinOverride) {
+    const found = POPULAR_COINS.find(c => c.ticker.toLowerCase() === coinOverride.toLowerCase() || c.slug.toLowerCase() === coinOverride.toLowerCase());
+    if (found) coin = found;
+  }
+  if (chosenCategory === "bitcoin_predictions" || chosenCategory === "how_to_find_predictions") {
+    coin = POPULAR_COINS[0]; // Always Bitcoin for BTC specific shorts
+  }
+
+  const livePrice = await fetchLiveBinancePrice(coin.symbol, coin.ticker === "BTC" ? 91200 : (coin.ticker === "ETH" ? 3100 : 185));
 
   let shortPack = {};
 
+  // 1. Full Website & All Tabs Tour
   if (chosenCategory === "website_intro") {
     shortPack = {
       category: "Website Introduction & All Tabs Tour",
-      title: "🌐 THE ULTIMATE FREE CRYPTO SUITE: Whale Orders, CPI, 5-Min AI & Signals! #Shorts",
+      title: "🌐 STOP Paying For Crypto Tools! The Ultimate Free Trading Suite 🚀 #Shorts",
       targetUrl: "https://www.bitcoincrypto.tech",
       template: "website_intro",
       visuals: [
-        "[0:00 - 0:04] Hook: Holographic 3D Gold Bitcoin with emergency Quant Suite HUD",
-        "[0:04 - 0:13] Tab Tour 1: Live Whale Orders limit wall tape, US CPI simulator & News sentiment",
-        "[0:13 - 0:22] Tab Tour 2: 5-Minute AI Prediction Arena & Tri-Pillar Technical/Fundamental Bot",
-        "[0:22 - 0:28] High-converting Outro card directing viewers to 100% free terminal & bio link"
+        "[0:00 - 0:04] Hook: Holographic 3D Bitcoin with emergency alert: 'STOP PAYING FOR TRADING TOOLS'",
+        "[0:04 - 0:11] Screen Glide: Top navigation showing Whale Orders, CPI Macro, Predictions & Heatmaps",
+        "[0:11 - 0:18] Live Demo: Flipping through the 5-Minute Scalp Arena and $10k Paper Trading Bot",
+        "[0:18 - 0:24] 100-Lesson Crypto Learn Masterclass preview with zero paywalls",
+        "[0:24 - 0:28] High-CTR Outro card: '100% Free • No Signup Required • Link in Bio'"
       ],
-      voiceover: "Stop paying for expensive crypto tools. What if you had institutional whale orders, US CPI inflation data, breaking market news, and artificial intelligence predictions all inside one free website? Welcome to BitcoinCrypto dot tech—your complete quantitative trading suite. On the Whale Radar tab, track multi-million dollar institutional buy walls before retail notices. On the CPI tab, run live inflation and Federal Reserve rate cut volatility simulators. On the Predictions tab, check our brand-new Five-Minute Scalp Arena to see exact next-candle targets for Bitcoin and Ethereum with over ninety-four percent quantitative confidence! Plus, get real-time technical indicators, on-chain fundamentals, and unbiased AI long and short signals. Every single tool is one hundred percent free with zero sign-up required. Tap the link in bio right now to explore the full terminal on BitcoinCrypto dot tech!",
-      description: `Meet the ultimate free cryptocurrency research & quantitative trading platform: BitcoinCrypto.tech! 🚀
-      
-Explore all powerhouse tabs 100% free (No signup required):
+      voiceover: "Stop paying fifty dollars a month for crypto trading subscriptions! What if you had institutional whale orders, US CPI inflation forecasts, real-time AI price predictions, and CoinGlass liquidation heatmaps all inside one single website for free? Welcome to BitcoinCrypto dot tech—your complete quantitative crypto terminal. Look at all the tabs at the top: track multi-million dollar whale buy walls, test live scalp predictions in our five-minute arena, run automated AI paper-trading strategies, and study our 100-lesson university curriculum from beginner to quant. Every single tool is one hundred percent free with zero signup required. Tap the link in bio right now to explore BitcoinCrypto dot tech!",
+      description: `Meet BitcoinCrypto.tech — the 100% free quantitative cryptocurrency research and intelligence platform! 🚀
+
+Explore all powerhouse tabs completely free (Zero signup required):
 👉 https://www.bitcoincrypto.tech
 
 🔥 What you can find on BitcoinCrypto.tech:
-1. 🐋 Whale Orders & Tape: Track resting $10M+ limit buy walls & dark pool absorption
-2. 🏛️ US CPI & Macro Radar: Live inflation countdown & Fed rate cut volatility simulator
-3. 📰 Breaking News & Sentiment: Real-time news velocity & ETF institutional flows
-4. ⏱️ 5-Minute AI Prediction Arena: High-precision next-candle scalp targets (BTC, ETH, SOL)
-5. 🎯 AI Price Predictions Suite: Multi-timeframe trend forecasts & confidence ratings
-6. 📊 Technical & Fundamental Analysis: RSI(14), EMA ribbons, MACD & ATR volatility
-7. 🤖 AI Trading Bot Terminal: Unbiased LONG & SHORT blueprints with exact SL & TP levels
+1. 🎯 Predictions Tab: AI trend forecasts & 5-Minute Scalp Arena
+2. 🐋 Whale Orders Tab: Live tape of $1M-$10M+ block trades & resting walls
+3. 🏛️ CPI Tab: US inflation countdown & Fed interest rate volatility simulator
+4. 🔥 Heatmap Tab: Multi-exchange CoinGlass liquidation short squeeze clusters
+5. 🤖 Trading Bot Tab: DeepQuant Tri-Pillar engine with $10k paper demo money
+6. 📚 Learn Tab: Complete 10-chapter, 100-lesson crypto masterclass
+7. 📰 News Tab: Breaking crypto news with real-time AI sentiment scoring
 
 ⚠️ Strictly for educational and informational research purposes only. Not financial advice. Zero gambling.
 
-#Bitcoin #Crypto #CryptoTrading #CryptoNews #CryptoPredictions #Ethereum #Solana #WhaleAlert #CPI #Shorts`,
-      tags: ["Crypto Website", "Whale Orders", "CPI Data", "AI Crypto Prediction", "5 Minute Scalping", "Technical Analysis", "Fundamental Analysis", "BitcoinCrypto Tech", "Bitcoin", "Shorts"],
-      pinnedComment: `🌐 Explore the full free quantitative crypto terminal (Whales, CPI, 5-Min AI & Signals): 👉 https://www.bitcoincrypto.tech`
+#Bitcoin #Crypto #CryptoTrading #CryptoTools #CryptoPredictions #Ethereum #WhaleAlert #DayTrading #Shorts`,
+      tags: ["Crypto Website", "Free Crypto Tools", "Bitcoin Predictions", "Whale Orders", "Trading Strategy", "BitcoinCrypto Tech", "Day Trading", "Shorts"],
+      pinnedComment: `🌐 Explore the full free quantitative crypto terminal (Whales, CPI, AI & Heatmaps): 👉 https://www.bitcoincrypto.tech`
     };
-  } else if (chosenCategory === "news_sentiment") {
+  }
+
+  // 2. How to Find Bitcoin Predictions Step-by-Step
+  else if (chosenCategory === "how_to_find_predictions") {
+    shortPack = {
+      category: "Step-by-Step Tutorial: How to Find Bitcoin Predictions",
+      title: "🎯 How To Find Bitcoin AI Predictions in Under 10 Seconds! 📈 #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/predictions/bitcoin",
+      template: "five_minute",
+      visuals: [
+        "[0:00 - 0:04] Hook: Finger tapping smartphone screen with neon prompt: 'HOW TO FIND BITCOIN PREDICTIONS'",
+        "[0:04 - 0:10] Step 1: Cursor clicks 'Predictions' in the top header menu",
+        "[0:10 - 0:16] Step 2: Clicks 'Bitcoin (BTC)' — page smoothly loads live order book & AI target reticle",
+        "[0:16 - 0:22] Step 3: Zoom into 5-Minute, 1-Hour & 24-Hour targets, stop-loss and 94% AI confidence score",
+        "[0:22 - 0:28] Outro: Animated finger pointing to Link in Bio with pulsing 'Try Free Now' badge"
+      ],
+      voiceover: "Want to know where Bitcoin is heading before the next candle prints? Here is how to find AI predictions on BitcoinCrypto dot tech in under ten seconds. Step one: open BitcoinCrypto dot tech on your phone or PC. Step two: click the Predictions tab in the top menu. Step three: select Bitcoin. That is it! Right on your screen, our quantitative model calculates the next five-minute, one-hour, and twenty-four-hour price targets, dynamic stop-loss levels, and live order book imbalance scores! You can see whether smart money is accumulating or distributing before retail even notices. Try it completely free right now on BitcoinCrypto dot tech. Link in bio!",
+      description: `Step-by-step tutorial: How to find live Bitcoin AI price predictions, next-candle targets, and quantitative confidence scores on BitcoinCrypto.tech! 🎯
+
+Check live Bitcoin AI predictions 100% free:
+👉 https://www.bitcoincrypto.tech/predictions/bitcoin
+
+📌 Quick 3-Step Walkthrough:
+1. Open https://www.bitcoincrypto.tech
+2. Click the "Predictions" tab in the top navigation bar
+3. Select "Bitcoin (BTC)" to view 5M, 15M, 1H, 4H, and 24H target levels + Order Book Imbalance!
+
+⚠️ Strictly educational quantitative research. Not financial advice. Zero gambling.
+
+#Bitcoin #BitcoinPrediction #CryptoPrediction #BTC #TradingTips #CryptoTrading #DayTrading #Shorts`,
+      tags: ["Bitcoin Prediction", "How to Predict Bitcoin", "Crypto Predictions", "Bitcoin Price Target", "Day Trading", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `🎯 View real-time Bitcoin AI targets, stop-loss zones & confidence scores for free: 👉 https://www.bitcoincrypto.tech/predictions/bitcoin`
+    };
+  }
+
+  // 3. Bitcoin AI Prediction Deep-Dive
+  else if (chosenCategory === "bitcoin_predictions") {
+    shortPack = {
+      category: "Bitcoin AI Price Forecast & Order Book Imbalance",
+      title: `🚨 BITCOIN NEXT CANDLE: AI Signals Massive Move! (${formatPrice(livePrice)}) #Shorts`,
+      targetUrl: "https://www.bitcoincrypto.tech/predictions/bitcoin",
+      template: "viral",
+      visuals: [
+        "[0:00 - 0:04] Hook: 3D Gold Bitcoin with emergency flashing HUD: 'CRITICAL TARGET UNLOCKED'",
+        "[0:04 - 0:11] Live Bitcoin candlestick chart with order book depth walls absorbing volume",
+        "[0:11 - 0:18] AI Model Projection displaying next 24-hour target and short liquidation squeeze zone",
+        "[0:18 - 0:25] Order Book Imbalance gauge showing 78% institutional buyer dominance",
+        "[0:25 - 0:28] Outro: Pulsing button directing viewers to check live Bitcoin forecast in bio link"
+      ],
+      voiceover: `Bitcoin is trading right now at ${formatPrice(livePrice)}, and our AI order book model just flagged a massive quantitative signal! Smart money is quietly stacking resting limit buy orders at support, while short sellers have piled over 380 million dollars in liquidations right above current resistance. When price taps this level, forced liquidations will fuel a violent short squeeze cascade toward our next target! Do not trade Bitcoin blind. Head to the Predictions tab on BitcoinCrypto dot tech to see live multi-timeframe targets and confidence scores for free. Tap the link in bio!`,
+      description: `Analyzing live Bitcoin (BTC) market structure, Level-2 order book depth, CVD taker volume, and AI price prediction targets.
+
+Check live Bitcoin AI predictions 100% free:
+👉 https://www.bitcoincrypto.tech/predictions/bitcoin
+
+⚠️ Strictly educational research and quantitative market modeling. Not financial advice.
+
+#Bitcoin #BTC #BitcoinNews #CryptoPredictions #CryptoTrading #ShortSqueeze #TradingView #Shorts`,
+      tags: ["Bitcoin", "BTC", "Bitcoin Prediction", "Crypto Signals", "Order Book", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `📊 Track live Bitcoin next-candle targets and order book imbalance for free: 👉 https://www.bitcoincrypto.tech/predictions/bitcoin`
+    };
+  }
+
+  // 4. 5-Minute AI Prediction Arena
+  else if (chosenCategory === "five_minute_arena") {
+    shortPack = {
+      category: "5-Minute AI Scalp Arena",
+      title: "⏱️ Can AI Predict The Next 5-Minute Candle? Testing Live! 🚨 #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/predictions",
+      template: "five_minute",
+      visuals: [
+        "[0:00 - 0:04] Hook: Ticking 5-minute digital countdown clock with neon alert: 'CAN AI SCALP CRYPTO?'",
+        "[0:04 - 0:12] 5-Minute Arena Interface showing BTC, ETH, SOL scalp targets with 95% AI confidence",
+        "[0:12 - 0:19] Real-time ATR volatility band and Level-2 order book micro-flow updates",
+        "[0:19 - 0:25] Next-candle breakout verification with exact take-profit execution",
+        "[0:25 - 0:28] Outro: High-contrast card: 'Test the 5-Minute Arena Free • Link in Bio'"
+      ],
+      voiceover: "Can an artificial intelligence predict the next five-minute crypto candle? Let's test it live! On BitcoinCrypto dot tech, open the Predictions tab and scroll down to the brand-new Five-Minute Arena. Every five minutes, our quantitative engine analyzes Level-Two order book imbalance, tick-by-tick taker volume, and ATR volatility to give you ultra-short-term scalp targets for Bitcoin, Ethereum, and Solana with up to ninety-five percent confidence! Whether you are a day trader or just learning market microstructure, this tool is a game changer. Test the Five-Minute AI live for free on BitcoinCrypto dot tech. Link in bio!",
+      description: `Can AI predict the next 5-minute crypto move? ⏱️ Test our brand-new 5-Minute AI Prediction Arena for scalp traders!
+
+Test the 5-Minute Scalp Arena 100% free:
+👉 https://www.bitcoincrypto.tech/predictions
+
+🔥 What the 5-Minute Arena calculates:
+- High-precision next-candle scalp targets (BTC, ETH, SOL)
+- Dynamic Average True Range (ATR) volatility channels
+- Instant Order Book Imbalance (OBI) directional bias
+- Live quantitative confidence ratings
+
+⚠️ Strictly educational quantitative analytics. Not financial advice. Zero gambling.
+
+#Scalping #DayTrading #5MinuteScalp #Bitcoin #Ethereum #CryptoPredictions #CryptoTrading #Shorts`,
+      tags: ["5 Minute Scalping", "Crypto Day Trading", "AI Crypto Prediction", "Bitcoin Scalping", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `⏱️ Test the live 5-Minute AI Prediction Arena for free: 👉 https://www.bitcoincrypto.tech/predictions`
+    };
+  }
+
+  // 5. Whale Radar & Dark Pool Tape
+  else if (chosenCategory === "whale_radar") {
+    shortPack = {
+      category: "Whale Radar & Dark Pool Tape",
+      title: "🐋 SPY ON $10,000,000 WHALE ORDERS FOR FREE! (Secret Tool) #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/whale-orders",
+      template: "viral",
+      visuals: [
+        "[0:00 - 0:04] Hook: Massive flashing radar sweep with green text: '$10M WHALE BUY WALL DETECTED'",
+        "[0:04 - 0:11] Live Whale Orders tape displaying real-time block trades over $500,000",
+        "[0:11 - 0:18] Order book visualization showing resting institutional iceberg limit orders",
+        "[0:18 - 0:24] Cumulative Volume Delta (CVD) divergence showing whales absorbing retail panic selling",
+        "[0:24 - 0:28] Outro: Link in Bio CTA card with glowing radar icon"
+      ],
+      voiceover: "Retail traders look at candlestick charts, but smart money looks at whale orders. Look at this: on the Whale Radar tab at BitcoinCrypto dot tech, you can see multi-million-dollar institutional orders in real time. Just now, a ten million dollar limit buy wall printed on the tape. While retail was panic selling the dip, institutions were quietly placing massive resting orders to absorb all the selling pressure! Stop trading against the whales and start tracking what they actually do. Watch the live whale tape for free on BitcoinCrypto dot tech. Tap the link in bio!",
+      description: `Track real-time institutional cryptocurrency whale block trades ($500k to $10M+) and dark pool limit orders.
+
+Watch the live Whale Orders Radar 100% free:
+👉 https://www.bitcoincrypto.tech/whale-orders
+
+🐋 Why Whale Orders matter:
+- Detect institutional limit bid/ask walls before retail notices
+- Spot dark pool absorption during market panics
+- Confirm genuine trend reversals with Cumulative Volume Delta (CVD)
+
+⚠️ Strictly educational analytics. Zero financial advice.
+
+#WhaleAlert #CryptoWhales #SmartMoney #Bitcoin #Ethereum #OrderBook #TradingStrategy #Shorts`,
+      tags: ["Whale Alert", "Crypto Whales", "Whale Orders", "Smart Money", "Order Book", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `🐋 Watch real-time institutional whale block orders and resting limit walls: 👉 https://www.bitcoincrypto.tech/whale-orders`
+    };
+  }
+
+  // 6. CoinGlass Liquidation Heatmap & Short Squeeze
+  else if (chosenCategory === "coinglass_squeeze") {
+    shortPack = {
+      category: "CoinGlass Liquidation Heatmap & Short Squeeze",
+      title: "🔥 HOW TO PREDICT BITCOIN SHORT SQUEEZES! (Liquidation Heatmap) #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/coinglass",
+      template: "viral",
+      visuals: [
+        "[0:00 - 0:04] Hook: Neon thermal heatmap glowing bright yellow with alert: '$380M TRAPPED LIQUIDATIONS'",
+        "[0:04 - 0:11] Multi-exchange CoinGlass heatmap spectrogram showing dense leverage clusters",
+        "[0:11 - 0:18] Price sweeping upward into the bright cluster, triggering forced market buy orders",
+        "[0:18 - 0:24] Short squeeze explosion with live profit targets printing on screen",
+        "[0:24 - 0:28] Outro: Animated pulsing bio link button"
+      ],
+      voiceover: "Over three hundred and eighty million dollars in short sellers are about to get liquidated! Look at this bright glowing cluster on the heatmap. In crypto, over seventy-five percent of volume is leveraged perpetual futures. When too many traders short the market with high leverage, their liquidation prices create dense liquidity pools. Market makers love to drive price right into these clusters to trigger forced buy liquidations and spark a massive short squeeze! You can track live liquidation heatmaps across Binance, Bybit, and OKX for free on BitcoinCrypto dot tech. Tap the link in bio now!",
+      description: `Learn how to read CoinGlass cryptocurrency liquidation heatmaps to predict explosive short squeeze cascades!
+
+Explore the live CoinGlass Liquidation Heatmap for free:
+👉 https://www.bitcoincrypto.tech/coinglass
+
+🔥 Heatmap Secrets:
+- Bright yellow/purple spectrogram zones show where leveraged traders get liquidated
+- High-density liquidation clusters act as magnets for institutional market makers
+- Breaking through clusters triggers cascading forced market orders
+
+⚠️ Strictly educational derivatives research. Not financial advice.
+
+#CoinGlass #LiquidationHeatmap #ShortSqueeze #Bitcoin #CryptoTrading #FuturesTrading #Shorts`,
+      tags: ["CoinGlass", "Liquidation Heatmap", "Short Squeeze", "Bitcoin Futures", "Crypto Trading", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `🗺️ Access the free real-time CoinGlass Liquidation Heatmap & Squeeze Scanner: 👉 https://www.bitcoincrypto.tech/coinglass`
+    };
+  }
+
+  // 7. US CPI Macro Volatility Simulator
+  else if (chosenCategory === "cpi_macro") {
+    shortPack = {
+      category: "US CPI Macro Volatility Simulator",
+      title: "🏛️ Predict Bitcoin Volatility Before US CPI Inflation Drops! 🚨 #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/cpi",
+      template: "cpi",
+      visuals: [
+        "[0:00 - 0:04] Hook: Live US BLS inflation countdown timer ticking down to 00:00:00",
+        "[0:04 - 0:11] CPI Dashboard showing Wall Street consensus vs Federal Reserve rate cut odds gauge",
+        "[0:11 - 0:18] AI Scenario Simulator: Toggling 'Cool CPI (-0.2%)' showing +5.4% Bitcoin pump forecast",
+        "[0:18 - 0:24] Toggling 'Hot CPI (+0.3%)' showing liquidation flush target",
+        "[0:24 - 0:28] Outro: Animated card pointing to CPI simulator in bio link"
+      ],
+      voiceover: "Did you know you can forecast Bitcoin price swings before the US inflation report drops? Head to the CPI tab on BitcoinCrypto dot tech. First, check the live countdown clock to the next Bureau of Labor Statistics release. Next, inspect the Wall Street consensus and Federal Reserve rate cut odds. Then, run our AI Scenario Simulator: if inflation cools below expectations, our model projects an immediate five point four percent Bitcoin breakout as the US Dollar weakens! If inflation prints hot, you see the exact downside support levels. Stop trading macro news blind. Test the free CPI simulator on BitcoinCrypto dot tech. Link in bio!",
+      description: `Learn how to forecast Bitcoin volatility before the US Bureau of Labor Statistics (BLS) Consumer Price Index (CPI) inflation report drops.
+
+Explore the live US CPI scenario simulator & volatility radar 100% free:
+👉 https://www.bitcoincrypto.tech/cpi
+
+🏛️ Features on the CPI Tab:
+- Real-time countdown to next BLS inflation release
+- Wall Street consensus forecast & Fed rate cut probability gauge
+- Interactive AI Scenario Simulator for bullish vs bearish prints
+
+⚠️ Strictly educational quantitative macroeconomic modeling. Not investment advice.
+
+#CPI #Bitcoin #Inflation #FederalReserve #MacroEconomics #CryptoTrading #CryptoNews #Shorts`,
+      tags: ["CPI", "Bitcoin CPI", "Inflation Crypto", "Federal Reserve", "Crypto Volatility", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `🏛️ Run the free real-time US CPI Inflation & Bitcoin Volatility Scenario Simulator: 👉 https://www.bitcoincrypto.tech/cpi`
+    };
+  }
+
+  // 8. AI Trading Bot & Free $10,000 Paper Trading Demo
+  else if (chosenCategory === "ai_trading_bot") {
+    shortPack = {
+      category: "AI Trading Bot & $10k Paper Trading Demo",
+      title: "🤖 Test An AI Crypto Trading Bot With $10,000 FREE Demo Money! #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/tools/trading-bot",
+      template: "viral",
+      visuals: [
+        "[0:00 - 0:04] Hook: Cyber robotic interface booting up: '10,000 USDT SIMULATED BALANCE READY'",
+        "[0:04 - 0:11] AI Trading Bot dashboard showing live LONG and SHORT signal confluence",
+        "[0:11 - 0:18] DeepQuant Tri-Pillar Engine breakdown: Technical RSI + Order Book Depth + Macro News",
+        "[0:18 - 0:24] Automated paper execution with exact Entry, Stop-Loss, and TP1/TP2 targets",
+        "[0:24 - 0:28] Outro: High-converting CTA: 'Test Bot Free • No Real Money • Link in Bio'"
+      ],
+      voiceover: "Never risk your hard-earned money testing a new crypto strategy! On BitcoinCrypto dot tech, you can test our autonomous AI Trading Bot with a free ten-thousand-dollar simulated paper-trading account. Look at how it works: our DeepQuant Tri-Pillar Engine combines technical momentum indicators, Level-Two order book imbalance, and macroeconomic sentiment to formulate completely unbiased LONG and SHORT trade blueprints with exact stop-loss and take-profit targets! You can practice execution risk-free with zero deposit required. Check out the AI Trading Bot for free on BitcoinCrypto dot tech. Tap the link in bio!",
+      description: `Test our DeepQuant Tri-Pillar AI Trading Bot with a free $10,000 simulated paper-trading balance! 🤖
+
+Access the free AI Trading Bot terminal:
+👉 https://www.bitcoincrypto.tech/tools/trading-bot
+
+🔥 What the DeepQuant Engine provides:
+- Unbiased algorithmic LONG & SHORT trade setups
+- Multi-pillar confluence: Technical Indicators + Order Book Flow + Macro Sentiment
+- Dynamic Entry, Stop-Loss, and tiered Take-Profit targets (TP1, TP2, TP3)
+- 100% Free virtual demo wallet stored locally in your browser
+
+⚠️ Strictly for educational and research simulation purposes. Not financial advice. Zero real money.
+
+#AITrading #TradingBot #PaperTrading #CryptoBot #CryptoTrading #DayTrading #Bitcoin #Shorts`,
+      tags: ["AI Trading Bot", "Crypto Trading Bot", "Paper Trading", "Crypto Signals", "Trading Strategy", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `🤖 Test the free DeepQuant AI Trading Bot & $10k virtual paper simulator: 👉 https://www.bitcoincrypto.tech/tools/trading-bot`
+    };
+  }
+
+  // 9. Level-2 Order Book Depth & CVD
+  else if (chosenCategory === "orderbook_depth") {
+    shortPack = {
+      category: "Level-2 Order Book Depth & CVD Absorption",
+      title: "📊 What The Order Book Reveals That Normal Charts HIDE! 👁️ #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/orderbook",
+      template: "viral",
+      visuals: [
+        "[0:00 - 0:04] Hook: Normal candlestick chart compared side-by-side with Level-2 depth ladder",
+        "[0:04 - 0:11] Live bid and ask depth ladder displaying resting orders and real-time spread",
+        "[0:11 - 0:18] Cumulative Volume Delta (CVD) indicator showing negative delta while price holds support",
+        "[0:18 - 0:24] Institutional absorption revealed: whale limit wall preventing price from falling",
+        "[0:24 - 0:28] Outro: Link in Bio card with Order Book icon"
+      ],
+      voiceover: "Normal candlestick charts only show you what already happened in the past. But the Central Limit Order Book shows you what is about to happen next! On the Order Book tab at BitcoinCrypto dot tech, you can see live resting bids and asks across the market. Look right here: when aggressive market sellers dump millions into the market, but the price refuses to drop, that is institutional absorption! A whale limit wall is eating all the supply before price explodes higher. Master real order flow for free on BitcoinCrypto dot tech. Tap the link in bio!",
+      description: `Discover how Central Limit Order Books (CLOB) and Cumulative Volume Delta (CVD) reveal institutional market manipulation and liquidity absorption.
+
+Explore the live Level-2 Order Book Terminal:
+👉 https://www.bitcoincrypto.tech/orderbook
+
+📊 Key Order Flow Concepts:
+- Passive limit orders (makers) vs Aggressive market orders (takers)
+- Cumulative Volume Delta (CVD) divergences
+- Spotting fake spoofing walls before they cancel
+
+⚠️ Strictly educational market microstructure research. Not financial advice.
+
+#OrderBook #OrderFlow #CVD #TradingMicrostructure #DayTrading #CryptoTrading #Bitcoin #Shorts`,
+      tags: ["Order Book", "Order Flow", "CVD", "Market Microstructure", "Crypto Trading", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `📊 Inspect real-time Level-2 order book depth and CVD absorption for free: 👉 https://www.bitcoincrypto.tech/orderbook`
+    };
+  }
+
+  // 10. Crypto Learn 100-Lesson Masterclass
+  else if (chosenCategory === "crypto_learn") {
+    shortPack = {
+      category: "Crypto Learn 100-Lesson Masterclass",
+      title: "🎓 STOP Buying Courses! Free 100-Lesson Crypto University 📚 #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/learn",
+      template: "website_intro",
+      visuals: [
+        "[0:00 - 0:04] Hook: Stacks of expensive trading courses with a big red stamp: 'STOP PAYING FOR COURSES'",
+        "[0:04 - 0:11] Smooth scroll through the 10 chapters on the /learn curriculum",
+        "[0:11 - 0:18] Chapter preview: Satoshi Consensus, Proof-of-Work thermodynamics, and Kelly Criterion risk math",
+        "[0:18 - 0:24] Student FAQs and interactive pedagogical breakdowns on every lesson page",
+        "[0:24 - 0:28] Outro: Animated graduation cap with '100% Free Forever • Link in Bio'"
+      ],
+      voiceover: "Crypto influencers charge hundreds of dollars for courses that just teach basic candlestick patterns. We built a complete 10-chapter, 100-lesson quantitative crypto masterclass, and it is one hundred percent free forever! Head to the Learn tab on BitcoinCrypto dot tech. You will master everything from Satoshi consensus and Proof-of-Work thermodynamics to perpetual futures funding rates, order flow CVD analysis, and the Kelly Criterion risk management formula. Every lesson has practical steps, retail trap warnings, and student FAQs. Start learning for free on BitcoinCrypto dot tech. Link in bio!",
+      description: `Complete 10-chapter, 100-lesson quantitative cryptocurrency curriculum from beginner fundamentals to advanced derivatives and risk management.
+
+Start the free Crypto Learn curriculum:
+👉 https://www.bitcoincrypto.tech/learn
+
+📚 What you will learn:
+- Chapter 1: Bitcoin Architecture & Satoshi Consensus
+- Chapter 2: Cryptographic Hashing & SHA-256
+- Chapter 3: Proof-of-Work Thermodynamics
+- Chapters 4-7: Market Microstructure, CVD & Liquidation Cascades
+- Chapters 8-10: Macroeconomics, Kelly Criterion & Capital Preservation
+
+⚠️ Strictly educational curriculum. Zero investment advice.
+
+#CryptoEducation #FreeCourse #CryptoTrading #Bitcoin #Blockchain #RiskManagement #Shorts`,
+      tags: ["Crypto Education", "Free Crypto Course", "Bitcoin Course", "Blockchain Education", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `🎓 Complete the 100-lesson interactive Crypto Learn curriculum for 100% free: 👉 https://www.bitcoincrypto.tech/learn`
+    };
+  }
+
+  // 11. Free DCA Accumulation Simulator
+  else if (chosenCategory === "dca_simulator") {
+    shortPack = {
+      category: "DCA Accumulation Simulator",
+      title: "💰 The Secret DCA Strategy That Beats 99% Of Day Traders! #Shorts",
+      targetUrl: "https://www.bitcoincrypto.tech/tools/dca-simulator",
+      template: "website_intro",
+      visuals: [
+        "[0:00 - 0:04] Hook: Frustrated day trader versus relaxed investor stacking Bitcoin with DCA",
+        "[0:04 - 0:11] Interactive DCA Simulator on BitcoinCrypto.tech showing $100/week accumulation curve",
+        "[0:11 - 0:18] Historical backtest across previous 4-year halving cycles showing 400%+ compound returns",
+        "[0:18 - 0:24] Drawdown comparison proving DCA eliminates emotional timing errors",
+        "[0:24 - 0:28] Outro: Link in Bio card with 'Run Free DCA Simulator'"
+      ],
+      voiceover: "Ninety percent of day traders lose money, but this simple mathematical strategy consistently beats the market over every four-year cycle! It is called Dollar-Cost Averaging, or DCA. On the DCA Simulator tab at BitcoinCrypto dot tech, you can simulate investing fifty or one hundred dollars a week into Bitcoin, Ethereum, or Solana. Watch the backtest: by systematically buying dips without emotional timing, your average cost basis stays protected against wild volatility. Test your own custom accumulation schedule for free on BitcoinCrypto dot tech. Link in bio!",
+      description: `Test dollar-cost averaging (DCA) accumulation schedules versus lump-sum investing across Bitcoin's historical 4-year halving cycles.
+
+Run the free interactive DCA Simulator:
+👉 https://www.bitcoincrypto.tech/tools/dca-simulator
+
+💰 Why DCA works:
+- Removes emotional stress and panic selling
+- Automatically buys more coins when prices are depressed
+- Maximizes compound geometric growth across multi-year cycles
+
+⚠️ Strictly educational simulation tool. Not financial advice.
+
+#DollarCostAveraging #DCA #Bitcoin #InvestingStrategy #CryptoInvesting #WealthBuilding #Shorts`,
+      tags: ["DCA", "Dollar Cost Averaging", "Bitcoin Investing", "Crypto Strategy", "DCA Simulator", "BitcoinCrypto Tech", "Shorts"],
+      pinnedComment: `💰 Run the free interactive Dollar-Cost Averaging (DCA) Simulator: 👉 https://www.bitcoincrypto.tech/tools/dca-simulator`
+    };
+  }
+
+  // 12. Real-Time News & AI Sentiment Scoring
+  else {
     shortPack = {
       category: "Live Crypto News & Macro Sentiment",
-      title: "📰 BREAKING CRYPTO NEWS: How Market Sentiment Moves Bitcoin! #Shorts",
+      title: "📰 BEAT THE MARKET NEWS: Real-Time AI Sentiment Scoring! 🚨 #Shorts",
       targetUrl: "https://www.bitcoincrypto.tech/news",
       template: "viral",
       visuals: [
-        "[0:00 - 0:03] Hook: Breaking News Cyber Alert with flashing market ticker",
-        "[0:03 - 0:09] Live headline scanner with positive/negative sentiment heat scoring",
-        "[0:09 - 0:16] Correlation matrix showing news sentiment impact on live Bitcoin price",
-        "[0:16 - 0:22] Outro with animated Link In Bio call to action"
+        "[0:00 - 0:04] Hook: Breaking News Cyber Alert with flashing market ticker and sentiment meter",
+        "[0:04 - 0:11] Live headline scanner with automated green bullish and red bearish sentiment scoring",
+        "[0:11 - 0:18] Institutional ETF net inflow tracker showing daily BlackRock and Fidelity flows",
+        "[0:18 - 0:24] Correlation matrix showing news sentiment impact on live Bitcoin price moves",
+        "[0:24 - 0:28] Outro: Link in Bio call to action with News icon"
       ],
-      voiceover: `Breaking crypto news moves billions in seconds, but retail always reacts too late. On the News tab at bitcoincrypto.tech, our live AI sentiment engine scans breaking headlines, ETF flows, and macroeconomic news in real-time. It calculates instant bullish or bearish sentiment scores before the market reacts. Stop getting caught off guard by volatility. Track live institutional crypto news for free on bitcoincrypto.tech. Tap the link in bio!`,
+      voiceover: "Breaking crypto news moves billions of dollars in seconds, but retail traders always hear about it too late! On the News tab at BitcoinCrypto dot tech, our real-time AI sentiment engine scans breaking headlines, ETF institutional flows, and macroeconomic releases 24/7. It calculates instant bullish or bearish sentiment heat scores before the market finishes reacting! Stop getting caught off guard by volatility wicks. Track live institutional crypto news and sentiment for free on BitcoinCrypto dot tech. Tap the link in bio!",
       description: `Track real-time cryptocurrency news sentiment, institutional ETF flow trends, and macroeconomic headlines.
-      
+
 Read live breaking crypto news & sentiment for free:
 👉 https://www.bitcoincrypto.tech/news
+
+📰 What you can find on the News Tab:
+- Instant AI positive/negative sentiment scoring
+- Institutional Spot Bitcoin & Ethereum ETF net inflow trackers
+- Curated macroeconomic monetary policy headlines
 
 ⚠️ Strictly educational analytics. Not financial advice.
 
 #CryptoNews #Bitcoin #Ethereum #CryptoMarket #BreakingNews #MacroEconomics #TradingView #Shorts`,
-      tags: ["Crypto News", "Bitcoin News", "Market Sentiment", "Crypto Trading", "BitcoinCrypto Tech", "Shorts"],
+      tags: ["Crypto News", "Bitcoin News", "Market Sentiment", "Crypto Trading", "ETF Inflows", "BitcoinCrypto Tech", "Shorts"],
       pinnedComment: `📰 Scan breaking crypto headlines and live AI sentiment scoring for 100% free: 👉 https://www.bitcoincrypto.tech/news`
-    };
-  } else if (chosenCategory === "technical_fundamental") {
-    shortPack = {
-      category: "Technical & Fundamental Tri-Pillar Engine",
-      title: "📈 Master Technical & Fundamental Analysis in 60 Seconds! #Shorts",
-      targetUrl: "https://www.bitcoincrypto.tech/tools",
-      template: "viral",
-      visuals: [
-        "[0:00 - 0:03] Hook: Tri-Pillar quantitative HUD spinning into alignment",
-        "[0:03 - 0:09] Technical indicators: Real RSI(14), EMA ribbons, and MACD divergence",
-        "[0:09 - 0:16] Fundamental order book flow: Live taker CVD and liquidation magnetic pools",
-        "[0:16 - 0:22] Outro with pulsing Link in Bio button"
-      ],
-      voiceover: `Most crypto traders lose money because they only look at one chart. Pro quantitative traders use Tri-Pillar confluence: technical price action, on-chain order flow, and live fundamentals. On bitcoincrypto.tech, our AI Trading Bot combines real RSI, EMA ribbons, and CoinGlass derivatives to give you completely unbiased LONG and SHORT trade blueprints with exact stop-loss and take-profit targets! Stop guessing. Check the live technical terminal for free on bitcoincrypto.tech. Link in bio!`,
-      description: `Learn how the Tri-Pillar AI Trading Engine combines technical indicators, on-chain derivatives order flow, and fundamental sentiment.
-      
-Explore the free AI Trading Bot & Technical Terminal:
-👉 https://www.bitcoincrypto.tech/tools
-
-⚠️ Strictly for educational and informational research purposes only. Not financial advice.
-
-#TechnicalAnalysis #FundamentalAnalysis #TradingStrategy #Bitcoin #CryptoSignals #DayTrading #Shorts`,
-      tags: ["Technical Analysis", "Fundamental Analysis", "Crypto Trading", "AI Trading Bot", "Trading Strategy", "BitcoinCrypto Tech", "Shorts"],
-      pinnedComment: `🤖 Access the free Tri-Pillar Technical Analysis & AI Trading Bot Terminal: 👉 https://www.bitcoincrypto.tech/tools`
-    };
-  } else if (chosenCategory === "five_minute_arena") {
-    shortPack = {
-      category: "5-Minute AI Prediction Arena & Website Showcase",
-      title: "🚨 CAN AI PREDICT THE NEXT 5 MINUTES? New Free Tool! ⏱️ #Shorts",
-      targetUrl: "https://www.bitcoincrypto.tech/predictions",
-      template: "five_minute",
-      visuals: [
-        "[0:00 - 0:04] Hook: Emergency Quant Alert with pulsing 5-Minute scalp clock",
-        "[0:04 - 0:13] Live 5-Minute Prediction Arena with BTC, ETH, SOL targets and 95% AI confidence",
-        "[0:13 - 0:21] Multi-Tab Website Tour: CoinGlass liquidations, whale tape, and AI trading bot",
-        "[0:21 - 0:28] High-converting outro with pulsating bio link CTA & domain highlight"
-      ],
-      voiceover: "Stop trading blind in crypto. What if an artificial intelligence could predict the exact next five-minute price target before the candle even moves? Look at this: on BitcoinCrypto dot tech, our brand-new Five-Minute Prediction Arena calculates live scalp targets for Bitcoin, Ethereum, and Solana with up to ninety-five percent quantitative confidence! It scans real-time volatility, Level-Two order book walls, and whale volume delta every single second. And that is just one tab on the site! You get live liquidation heatmaps, whale dark pools, and real-time AI long and short signals—one hundred percent free with zero signup required. Tap the link in bio right now to test the Five-Minute AI live on BitcoinCrypto dot tech before the next candle prints!",
-      description: `Can AI predict the next 5-minute crypto price move? 🚀
-      
-Explore our brand-new 5-Minute AI Prediction Arena & Free Quant Trading Suite:
-👉 https://www.bitcoincrypto.tech/predictions
-
-🔥 What's inside BitcoinCrypto.tech:
-1. ⏱️ 5-Minute Prediction Arena (Scalp Targets & ATR Volatility)
-2. 🎯 Multi-Timeframe AI Price Targets (5M, 15M, 1H, 4H, 1D)
-3. 🔥 CoinGlass Liquidation Heatmaps & Short Squeeze Radar
-4. 🐋 Whale Dark Pool & Order Book Depth Scanner
-5. 🤖 Autonomous AI Trading Bot (Unbiased LONG & SHORT signals)
-
-⚠️ Strictly for educational and informational research purposes only. Not financial advice. Zero gambling.
-
-#Bitcoin #Crypto #CryptoTrading #CryptoPredictions #Ethereum #Solana #DayTrading #Scalping #TradingView #Shorts`,
-      tags: ["Crypto Prediction", "5 Minute Scalping", "AI Trading", "Bitcoin", "Ethereum", "Solana", "Crypto Signals", "BitcoinCrypto Tech", "Order Book", "Shorts"],
-      pinnedComment: `⏱️ Test the 5-Minute AI Prediction Arena & Live Institutional Suite for 100% Free: 👉 https://www.bitcoincrypto.tech/predictions`
-    };
-  } else if (chosenCategory === "ai_prediction") {
-    shortPack = {
-      category: "AI Predictive Model & Signals",
-      title: `🚨 ${coin.name} Next 24 Hours: AI Technical Target! (${coin.ticker}) #Shorts`,
-      targetUrl: `https://www.bitcoincrypto.tech/predictions/${coin.slug || coin.name.toLowerCase()}`,
-      visuals: [
-        "[0:00 - 0:03] Hook: 3D rotating gold coin with emergency alert badge and laser shockwave",
-        "[0:03 - 0:09] Animated candlestick chart breakout with ticking short liquidations counter",
-        "[0:09 - 0:16] 3D Cyber Terminal window displaying live order book depth & AI target reticle",
-        "[0:16 - 0:22] High-converting outro card with pulsing button & bouncing bio arrow"
-      ],
-      voiceover: `Whales just placed a massive limit buy wall on ${coin.name}, and retail is completely blind to what is coming. Right now, ${coin.ticker} is trading at ${formatPrice(livePrice)}. Our live order book scanner detects smart money absorbing all sell pressure at ${coin.wall}. Our AI quantitative model projects a violent surge toward ${coin.target}, with over ${coin.squeezeCluster} in short liquidations about to get squeezed! Do not trade blind. Scan the live order book and liquidation heatmap for free right now on bitcoincrypto.tech. Tap the link in bio before the four-hour candle closes!`,
-      description: `Analyzing live ${coin.name} (${coin.ticker}) market structure, Level-2 Order Book imbalance, CVD taker volume, and AI price prediction targets.
-      
-Explore live predictions & paper-trading terminal:
-👉 https://www.bitcoincrypto.tech/predictions/${coin.slug || coin.name.toLowerCase()}
-
-⚠️ Strictly for educational and informational research purposes only. Not financial advice. Zero betting or gambling.
-
-#${coin.ticker} #${coin.name} #Crypto #Bitcoin #Trading #CryptoNews #CryptoPredictions #Shorts`,
-      tags: [coin.ticker, coin.name, "Crypto Prediction", "BitcoinCrypto Tech", "Crypto Trading", "Order Book", "Altcoins", "Technical Analysis", "Shorts"],
-      pinnedComment: `📊 Track real-time ${coin.name} order book depth & AI predictions for 100% free: 👉 https://www.bitcoincrypto.tech/predictions/${coin.slug || coin.name.toLowerCase()}`
-    };
-  } else if (chosenCategory === "coinglass_squeeze") {
-    shortPack = {
-      category: "CoinGlass Liquidation Squeeze",
-      title: `🔥 HUGE Liquidation Cascade Incoming?! Crypto Heatmap Alert #Shorts`,
-      targetUrl: "https://www.bitcoincrypto.tech/tools/liquidation-heatmap",
-      visuals: [
-        "[0:00 - 0:03] Hook: 3D Gold Coin with emergency $380M Liquidation Alert badge",
-        "[0:03 - 0:09] Multi-exchange liquidation heatmap with glowing trapped leverage clusters",
-        "[0:09 - 0:16] Live Level-2 order book depth scanning forced liquidation triggers",
-        "[0:16 - 0:22] High-converting outro card with pulsing bio link CTA"
-      ],
-      voiceover: `Over 380 million dollars in short sellers are about to get completely wiped out. Look at this massive liquidation cluster right here on the heatmap. Smart money is quietly sweeping support, and when this level triggers, forced liquidations will cause an explosive short squeeze straight to new highs. Stop trading blind. Scan multi-exchange liquidation heatmaps for free on bitcoincrypto.tech. Tap the link in bio now!`,
-      description: `Real-time CoinGlass derivatives breakdown: tracking liquidation heatmaps, short squeeze clusters, open interest, and funding rate arbitrage across Binance, Bybit, and OKX.
-
-View the live CoinGlass Liquidation Heatmap:
-👉 https://www.bitcoincrypto.tech/tools/liquidation-heatmap
-
-⚠️ Strictly educational analytics. Not investment advice.
-
-#CoinGlass #Liquidation #ShortSqueeze #Bitcoin #CryptoTrading #Futures #TradingView #Shorts`,
-      tags: ["CoinGlass", "Liquidation Heatmap", "Short Squeeze", "Bitcoin", "Crypto Futures", "Open Interest", "Funding Rates", "Shorts"],
-      pinnedComment: `🗺️ Access the free real-time CoinGlass Liquidation Heatmap & Squeeze Scanner: 👉 https://www.bitcoincrypto.tech/tools/liquidation-heatmap`
-    };
-  } else if (chosenCategory === "whale_radar") {
-    shortPack = {
-      category: "Whale Radar & Dark Pool Flow",
-      title: `🐋 $10,000,000 WHALE BUY ORDER DETECTED! Crypto Radar Alert #Shorts`,
-      targetUrl: "https://www.bitcoincrypto.tech/whale-orders",
-      visuals: [
-        "[0:00 - 0:03] Hook: Flashing Whale Orders block trade terminal with green $10M+ alerts",
-        "[0:03 - 0:09] 3D depth chart highlighting resting institutional limit bid wall",
-        "[0:09 - 0:16] Cumulative volume delta (CVD) divergence showing smart money absorption",
-        "[0:16 - 0:22] High-converting outro card with pulsing bio link CTA"
-      ],
-      voiceover: `Alert! A massive 10 million dollar whale buy order just printed on the live tape! While retail was panic selling the dip, smart money stepped in with huge resting limit orders to absorb the entire market. Tracking what whales actually do beats retail sentiment every single time. Watch the live whale tape for free on bitcoincrypto.tech. Link in bio!`,
-      description: `Tracking institutional cryptocurrency whale block trades ($100k to $10M+) in real-time. Detect dark pool limit walls and smart money taker flow.
-
-Watch the live Whale Radar:
-👉 https://www.bitcoincrypto.tech/whale-orders
-
-⚠️ Educational quantitative analytics only. Zero financial advice.
-
-#WhaleAlert #CryptoWhales #SmartMoney #Bitcoin #Ethereum #OrderBook #TradingStrategy #Shorts`,
-      tags: ["Whale Alert", "Crypto Whales", "Whale Orders", "Smart Money", "Order Book Depth", "BitcoinCrypto Tech", "Shorts"],
-      pinnedComment: `🐋 Watch institutional whale block orders and limit wall ladders in real-time: 👉 https://www.bitcoincrypto.tech/whale-orders`
-    };
-  } else if (chosenCategory === "cpi_macro") {
-    shortPack = {
-      category: "US CPI Macro Liquidity",
-      title: `🚨 How To Predict Bitcoin Before US CPI Inflation Drops! #Shorts`,
-      targetUrl: "https://www.bitcoincrypto.tech/cpi",
-      visuals: [
-        "[0:00 - 0:03] Hook: Live US BLS inflation countdown clock & historical volatility alerts",
-        "[0:03 - 0:09] Website Feature: Live Wall Street consensus & 88% Fed rate cut odds gauge",
-        "[0:09 - 0:16] AI Simulator: Bullish +4.8% pump target vs -5.2% liquidation flush projection",
-        "[0:16 - 0:22] Outro: Pulsing button directing to free CPI simulator & bio link"
-      ],
-      voiceover: `Did you know you can predict Bitcoin volatility before the US inflation report drops? Head to the CPI tab on bitcoincrypto.tech. First, track the live countdown clock and the Wall Street consensus. Next, check the AI Scenario Simulator. If inflation cools below expectations, our quantitative model projects an immediate 4.8% Bitcoin breakout rally! If inflation comes in hot, forced liquidations trigger an immediate flush to support. Stop trading macro news blind. Run the free live CPI scenario simulator right now on bitcoincrypto.tech. Tap the link in bio!`,
-      description: `Learn how to forecast Bitcoin crypto volatility before the US Bureau of Labor Statistics (BLS) Consumer Price Index (CPI) inflation report drops.
-      
-Explore the live US CPI scenario simulator & volatility radar for 100% free:
-👉 https://www.bitcoincrypto.tech/cpi
-
-⚠️ Strictly educational quantitative research and macroeconomic modeling. Not financial advice.
-
-#CPI #Bitcoin #Crypto #CryptoTrading #Inflation #FederalReserve #MacroEconomics #Shorts`,
-      tags: ["CPI", "Bitcoin CPI", "Inflation Crypto", "Crypto Volatility", "Macroeconomics", "Bitcoin Trading", "Federal Reserve", "Shorts"],
-      pinnedComment: `🏛️ Run the free real-time US CPI Inflation & Bitcoin Volatility Scenario Simulator: 👉 https://www.bitcoincrypto.tech/cpi`
-    };
-  } else {
-    shortPack = {
-      category: "Crypto Learn Masterclass",
-      title: `🧠 The 1% Risk Rule That Saves Crypto Traders From Ruin #Shorts`,
-      targetUrl: "https://www.bitcoincrypto.tech/learn",
-      visuals: [
-        "[0:00 - 0:03] Hook: Drawdown recovery matrix chart showing 80% loss requires 400% gain",
-        "[0:03 - 0:09] Position sizing formula: Account times 1% divided by distance to stop",
-        "[0:09 - 0:16] Mathematical proof why 35% win rate makes you profitable with 1:3 R:R",
-        "[0:16 - 0:22] Outro with animated Link In Bio call to action"
-      ],
-      voiceover: `Stop trading until you know this mathematical law! If you lose 80% of your crypto account, you need a massive 400% gain just to break even! That is why pro quantitative traders follow the strict 1% risk rule: never risk more than 1% per trade. Master real risk management with free interactive tools on bitcoincrypto.tech. Tap the link in bio now!`,
-      description: `Master the mathematical reality of capital preservation, position sizing formulas, drawdown recovery math, and risk-to-reward ratios.
-
-Start the free 10-chapter Crypto Learn curriculum:
-👉 https://www.bitcoincrypto.tech/learn
-
-⚠️ Strictly educational trading masterclass. Zero investment advice.
-
-#CryptoEducation #RiskManagement #TradingRules #CryptoStrategy #DayTrading #Bitcoin #Shorts`,
-      tags: ["Crypto Education", "Risk Management", "Trading Strategy", "Position Sizing", "Crypto Masterclass", "Shorts"],
-      pinnedComment: `🎓 Complete the 10-chapter interactive Crypto Learn curriculum & download free PDF eBook notes: 👉 https://www.bitcoincrypto.tech/learn`
     };
   }
 
@@ -312,21 +513,63 @@ Start the free 10-chapter Crypto Learn curriculum:
   return shortPack;
 }
 
-// CLI Execution
+// CLI Execution & Argument Parsing
 async function main() {
+  const args = process.argv.slice(2);
+
+  if (args.includes("--list") || args.includes("-l")) {
+    console.log("══════════════════════════════════════════════════════════════════════");
+    console.log("  📚 BitcoinCrypto.tech — Available YouTube Shorts Topics (12 Categories)");
+    console.log("══════════════════════════════════════════════════════════════════════\n");
+    ALL_SHORT_CATEGORIES.forEach((cat, idx) => {
+      console.log(`  ${(idx + 1).toString().padStart(2, " ")}. --category=${cat}`);
+    });
+    console.log("\nUsage examples:");
+    console.log("  node scripts/youtubeShortsGenerator.mjs --category=how_to_find_predictions");
+    console.log("  node scripts/youtubeShortsGenerator.mjs --category=website_intro");
+    console.log("  node scripts/youtubeShortsGenerator.mjs --category=whale_radar");
+    console.log("  node scripts/youtubeShortsGenerator.mjs --all\n");
+    return;
+  }
+
+  if (args.includes("--all")) {
+    console.log("══════════════════════════════════════════════════════════════════════");
+    console.log("  🎬 Generating Complete 12-Topic YouTube Shorts Pack for BitcoinCrypto.tech");
+    console.log("══════════════════════════════════════════════════════════════════════\n");
+    for (const cat of ALL_SHORT_CATEGORIES) {
+      const pack = await generateDailyShort(cat);
+      console.log(`\n======================================================================`);
+      console.log(`📌 TOPIC: ${pack.category.toUpperCase()}`);
+      console.log(`🔥 TITLE: ${pack.title}`);
+      console.log(`🔗 URL:   ${pack.targetUrl}`);
+      console.log(`🎙️ VOICEOVER:\n${pack.voiceover}\n`);
+    }
+    return;
+  }
+
+  let catArg = null;
+  const foundCat = args.find(a => a.startsWith("--category="));
+  if (foundCat) catArg = foundCat.split("=")[1];
+
+  let coinArg = null;
+  const foundCoin = args.find(a => a.startsWith("--coin="));
+  if (foundCoin) coinArg = foundCoin.split("=")[1];
+
   console.log("══════════════════════════════════════════════════════════════════════");
   console.log("  🎬 BitcoinCrypto.tech — Automated Daily YouTube Shorts Generator");
   console.log("══════════════════════════════════════════════════════════════════════\n");
 
-  const pack = await generateDailyShort();
+  const pack = await generateDailyShort(catArg, coinArg);
 
   console.log(`📌 CATEGORY:      ${pack.category}`);
-  console.log(`🔥 SHORT TITLE:   ${pack.title}\n`);
+  console.log(`🔥 SHORT TITLE:   ${pack.title}`);
+  console.log(`🌐 TARGET URL:    ${pack.targetUrl}\n`);
 
   console.log("──────────────────────────────────────────────────────────────────────");
   console.log("🎙️ 60-SECOND VOICE-OVER SCRIPT (Record voice or paste into ElevenLabs/TTS):");
   console.log("──────────────────────────────────────────────────────────────────────");
   console.log(pack.voiceover);
+
   console.log("\n──────────────────────────────────────────────────────────────────────");
   console.log("👁️ VISUAL & SCREEN RECORDING DIRECTIONS:");
   console.log("──────────────────────────────────────────────────────────────────────");

@@ -89,24 +89,24 @@ function resolveSlotCategory(args) {
   if (slotArg) {
     const slotNum = parseInt(slotArg.split("=")[1], 10);
     const map = {
-      1: "ai_prediction",
-      2: "coinglass_squeeze",
+      1: "website_intro",
+      2: "how_to_find_predictions",
       3: "whale_radar",
       4: "cpi_macro",
-      5: "ai_prediction",
-      6: "crypto_learn"
+      5: "five_minute_arena",
+      6: "ai_trading_bot"
     };
-    return { category: map[slotNum] || "ai_prediction", slotNumber: slotNum };
+    return { category: map[slotNum] || "website_intro", slotNumber: slotNum };
   }
 
   // If no slot specified, pick based on current UTC hour
   const currentHour = new Date().getUTCHours();
-  if (currentHour < 5) return { category: "ai_prediction", slotNumber: 1 };
-  if (currentHour < 9) return { category: "coinglass_squeeze", slotNumber: 2 };
+  if (currentHour < 5) return { category: "website_intro", slotNumber: 1 };
+  if (currentHour < 9) return { category: "how_to_find_predictions", slotNumber: 2 };
   if (currentHour < 13) return { category: "whale_radar", slotNumber: 3 };
   if (currentHour < 17) return { category: "cpi_macro", slotNumber: 4 };
-  if (currentHour < 21) return { category: "ai_prediction", slotNumber: 5 };
-  return { category: "crypto_learn", slotNumber: 6 };
+  if (currentHour < 21) return { category: "five_minute_arena", slotNumber: 5 };
+  return { category: "ai_trading_bot", slotNumber: 6 };
 }
 
 /**
