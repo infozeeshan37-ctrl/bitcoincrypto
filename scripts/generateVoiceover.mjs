@@ -38,12 +38,12 @@ export async function generateVoiceover(text, outputPath) {
   const tempTxtPath = outputPath.replace(/\.[a-z0-9]+$/i, ".txt");
   fs.writeFileSync(tempTxtPath, naturalSpeechText, "utf-8");
 
-  console.log("🎙️ Synthesizing Studio-Grade AI Voiceover (en-US-AndrewMultilingualNeural)...");
+  console.log("🎙️ Synthesizing Studio-Grade AI Voiceover (en-US-ChristopherNeural)...");
 
-  // Choose conversational, authentic high-converting narrator voice at +15% creator rate
-  const voice = "en-US-AndrewMultilingualNeural";
+  // Choose conversational, authentic high-converting narrator voice at +12% creator rate
+  const voice = "en-US-ChristopherNeural";
   const rawPath = outputPath.replace(/\.mp3$/i, "_raw.mp3");
-  const cmd = `edge-tts --voice ${voice} --rate=+15% -f "${tempTxtPath}" --write-media "${rawPath}"`;
+  const cmd = `edge-tts --voice ${voice} --rate=+12% -f "${tempTxtPath}" --write-media "${rawPath}"`;
 
   try {
     await execPromise(cmd);

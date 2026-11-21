@@ -32,6 +32,9 @@ function loadEnv() {
 loadEnv();
 
 export async function getAccessToken() {
+  if (process.env.YOUTUBE_ACCESS_TOKEN) {
+    return process.env.YOUTUBE_ACCESS_TOKEN;
+  }
   const clientId = process.env.YOUTUBE_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_CLIENT_SECRET;
   const refreshToken = process.env.YOUTUBE_REFRESH_TOKEN;
@@ -285,7 +288,9 @@ async function main() {
   const videoArg = args.find((a) => a.startsWith("--video="));
   const videoPath = videoArg ? videoArg.split("=")[1] : null;
 
-  const shortMetadata = await generateDailyShort();
+  const catArg = args.find((a) => a.startsWith("--category="));
+  const category = catArg ? catArg.split("=")[1] : "how_to_find_predictions";
+  const shortMetadata = await generateDailyShort(category);
 
   if (videoPath) {
     await uploadVideoToYouTube(videoPath, shortMetadata);
